@@ -1,5 +1,4 @@
-
-= People Availabilities =
+= Availabilities =
 
 Everyone can list their availabilities on here.  This is when you're most likely to be on IRC and can talk.  You can update this whenever you want as needed.  Everything is in USA Eastern Time (New York) using a 24-hour clock.
 
