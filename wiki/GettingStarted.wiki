@@ -19,3 +19,11 @@ The most important thing is to set up IRC for faster communication.
   * IDE: Eclipse
   * Scanner generator: JLex
   * Parser generator: CUP
+
+= Plan = 
+
+  * Scanner/Parser
+  * Semantics
+  * Code Generation
+  * Dataflow Optimization
+  * Low-level Optimization
