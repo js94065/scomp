@@ -2,7 +2,15 @@ package jlex.demos.integerlistscanner;
 /**
  * @author js94065 (creation 2010-05-28)
  */
-class Yytoken { int field; Yytoken(int f) { field=f; } } 
+class Yytoken {
+	private final int intValue;
+	Yytoken(final int intValue) {
+		this.intValue = intValue;
+	}
+	public final int getIntValue() {
+		return this.intValue;
+	}
+}
 
 
 class Yylex {
@@ -194,20 +202,19 @@ class Yylex {
 		return res;
 	}
 	private int yy_acpt[] = {
-		/* 0 */ YY_NO_ANCHOR,
+		/* 0 */ YY_NOT_ACCEPT,
 		/* 1 */ YY_NO_ANCHOR,
 		/* 2 */ YY_NO_ANCHOR,
-		/* 3 */ YY_NO_ANCHOR,
-		/* 4 */ YY_NO_ANCHOR
+		/* 3 */ YY_NO_ANCHOR
 	};
 	private int yy_cmap[] = unpackFromString(1,130,
-"3:10,0,3:2,0,3:18,2,3:15,1:10,3:70,4:2")[0];
+"0:32,2,0:15,1:10,0:70,3:2")[0];
 
-	private int yy_rmap[] = unpackFromString(1,5,
-"0,1,2:2,3")[0];
+	private int yy_rmap[] = unpackFromString(1,4,
+"0,1,2,3")[0];
 
-	private int yy_nxt[][] = unpackFromString(4,5,
-"-1,1,4,2,3,-1,1,-1:10,4,-1:2");
+	private int yy_nxt[][] = unpackFromString(4,4,
+"-1,1,2,3,-1,1,-1:4,2,-1:5");
 
 	public Yytoken yylex ()
 		throws java.io.IOException {
@@ -253,25 +260,17 @@ class Yylex {
 					}
 					yy_to_mark();
 					switch (yy_last_accept_state) {
-					case 0:
-						{ /* Input list is separated by spaces */}
+					case 1:
+						{ return new Yytoken(Integer.parseInt(yytext()))/* TODO */; }
 					case -2:
 						break;
-					case 1:
-						{ return yylex(); }
-					case -3:
-						break;
 					case 2:
-						{ /* Ignore all other characters */ }
-					case -4:
+						{ /* Input list is separated by spaces */}
+					case -3:
 						break;
 					case 3:
 						
-					case -5:
-						break;
-					case 4:
-						{ /* Input list is separated by spaces */}
-					case -6:
+					case -4:
 						break;
 					default:
 						yy_error(YY_E_INTERNAL,false);

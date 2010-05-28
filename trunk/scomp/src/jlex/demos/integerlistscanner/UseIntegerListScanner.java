@@ -2,6 +2,7 @@ package jlex.demos.integerlistscanner;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * 
@@ -17,22 +18,19 @@ public class UseIntegerListScanner {
     public static final void main(final String[] arguments) {
         try {
             System.out.println("Scanning correct input");
-            ByteArrayInputStream y = new ByteArrayInputStream("1 2 3 4".getBytes());
-            Object x = new Yylex(y).yylex();
-            while (x != null) {
-                System.out.println(x);
-                ((Yylex) x).yylex();
-            }
             
+            final Yylex lexer =  new Yylex(new ByteArrayInputStream("1 2 3 4 5".getBytes()));
+            Yytoken x = lexer.yylex();
+            ArrayList<Integer> res = new ArrayList<Integer>();
+
+            while (x != null) {
+                res.add(x.getIntValue());
+                x = lexer.yylex();
+            }
+            System.out.println(res);
         } catch (final IOException exception) {
             exception.printStackTrace();
         }
         
-        try {
-            System.out.println("Scanning arbitrary input");
-            new Yylex(new ByteArrayInputStream("hell".getBytes())).yylex();
-        } catch (final IOException exception) {
-            exception.printStackTrace();
-        }
     }
 }
