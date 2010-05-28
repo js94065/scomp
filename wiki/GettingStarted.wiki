@@ -1,8 +1,4 @@
-#summary Getting Started on compiler project.
-
-= Introduction =
-
-Here are some preliminary steps for getting started:
+#summary Steps for getting started on the compiler project.
 
 1) Get IRC (if you don't have it).  It is very simple.  The client I use is mIRC, but there are a lot of other free ones on there.  Let me know when you have IRC set up or if you run into any problems.  Once you have IRC we will set up our first meeting to discuss the plan.  I am also open to other forms of communication (AIM, gtalk, skype).  I'll probably leave IRC open for the next few days so you can find me.
 
@@ -21,9 +17,3 @@ Stanford CS143: http://www.stanford.edu/class/cs143/
 
 4) If you have suggestions for other things we can do then let me know.  
 
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
