@@ -1,3 +1,7 @@
+#sidebar TableOfContents
+
+<wiki:toc max_depth="2" />
+
 = Intro = 
 
 Here are some preliminary steps for getting started.
