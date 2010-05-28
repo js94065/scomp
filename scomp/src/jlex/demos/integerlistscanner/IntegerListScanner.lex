@@ -19,5 +19,5 @@ class Yytoken {
 
 %%
 %%
-[0-9]+ { return new Yytoken(Integer.parseInt(yytext()))/* TODO */; }
+[0-9]+ { return new Yytoken(Integer.parseInt(yytext())); }
 " "+   { /* Input list is separated by spaces */}
