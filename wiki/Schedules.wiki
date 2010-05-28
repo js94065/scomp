@@ -1,0 +1,7 @@
+
+= People Availabilities =
+
+Everyone can list their availabilities on here.  This is when you're most likely to be on IRC and can talk.  You can update this whenever you want as needed.  Everything is in USA Eastern Time (New York) using a 24-hour clock.
+
+  * js94065: I'm on summer vacation so I will mostly be available.
+    ** Monday-Sunday: 9:00 - 18:00
