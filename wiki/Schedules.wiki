@@ -4,3 +4,5 @@ Everyone can list their availabilities on here.  This is when you're most likely
 
   * js94065. I'm on summer vacation so I will mostly be available.
     ** Monday-Sunday: 9:00-18:00, probably 22:00-24:00
+
+We might have official meetings later, which are always voluntary.  Also, we might create a mailing list or a forum using Google Groups.  You're free to add stuff as needed, just let the other developers know.
