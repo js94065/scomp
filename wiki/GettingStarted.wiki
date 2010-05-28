@@ -17,7 +17,7 @@ The most important thing is to set up IRC for faster communication.
   * Language: Java
   * Forum: We will use the Wiki tab from above
   * Tasks: Tasks are from the Issues tab from above
-  * Source: The source code can be found from the Source tab above, this uses SVN.
+  * Source: The source code can be found from the Source tab above, or using SVN: https://scomp.googlecode.com/svn/trunk/scomp/
   * IDE: Eclipse
   * Scanner generator: JLex
   * Parser generator: CUP
