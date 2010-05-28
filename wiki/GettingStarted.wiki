@@ -22,8 +22,12 @@ The most important thing is to set up IRC for faster communication.
 
 = Plan = 
 
-  * Scanner/Parser
-  * Semantics
-  * Code Generation
-  * Dataflow Optimization
-  * Low-level Optimization
+== Scanner/Parser ==
+
+== Semantics ==
+
+== Code Generation ==
+
+== Dataflow Optimization ==
+
+== Low-level Optimization ==
