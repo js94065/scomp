@@ -12,7 +12,7 @@ Project host: http://code.google.com/p/scomp/
 
 3) My original idea was to just do the assignments from the MIT compilers class from open courseware.  This is available at the link below.  We can also follow a book or other online resources.
 
-MIT OpenCourseWare: http://ocw.mit.edu/OcwWeb/Electrical-Engineering-and-Computer-Science/6-035Fall-2005/CourseHome/index.htm.
+MIT Open CourseWare: http://ocw.mit.edu/OcwWeb/Electrical-Engineering-and-Computer-Science/6-035Fall-2005/CourseHome/index.htm.
 Stanford CS143: http://www.stanford.edu/class/cs143/
 
 4) If you have suggestions for other things we can do then let me know.  
