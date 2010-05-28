@@ -1,3 +1,5 @@
+= Intro = 
+
 Here are some preliminary steps for getting started.
 
   #1 Get IRC (if you don't have it).  It is very simple.  The client I use is mIRC, but there are a lot of other free ones out there.  Let me know when you have IRC set up or if you run into any problems.  I am also open to other forms of communication (AIM, gtalk, skype).  I'll probably leave IRC open for the next few days so you can find me. <br> <br> IRC meeting place: server: chat.freenode.net (port 6667), channel: scompiler <br> Download mIRC: http://www.mirc.com/ <br> <br>
@@ -6,3 +8,14 @@ Here are some preliminary steps for getting started.
   # If you have suggestions for other things we can do then let me know.  
 
 The most important thing is to set up IRC for faster communication.
+
+= Work Tools = 
+
+Project Files: http://ocw.mit.edu/OcwWeb/Electrical-Engineering-and-Computer-Science/6-035Fall-2005/Projects/index.htm
+Language: Java
+Forum: We will use the Wiki tab from above
+Tasks: Tasks are from the Issues tab from above
+Source: The source code can be found from the Source tab above, this uses SVN.
+
+
+
