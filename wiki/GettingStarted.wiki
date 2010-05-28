@@ -5,4 +5,4 @@ Here are some preliminary steps for getting started.
   # My original idea was to just do the assignments from the MIT compilers class from opencourseware.  This is available at the link below.  We can also follow a book or other online resources. <br> <br> MIT opencourseware: http://ocw.mit.edu/OcwWeb/Electrical-Engineering-and-Computer-Science/6-035Fall-2005/CourseHome/index.htm. <br> Stanford CS143: http://www.stanford.edu/class/cs143/ <br> <br>
   # If you have suggestions for other things we can do then let me know.  
 
-The most important thing is to set up IRC or some other form of IM for faster communication.
+The most important thing is to set up IRC for faster communication.
