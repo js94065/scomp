@@ -3,19 +3,16 @@ Here are some preliminary steps for getting started.
 1) Get IRC (if you don't have it).  It is very simple.  The client I use is mIRC, but there are a lot of other free ones on there.  Let me know when you have IRC set up or if you run into any problems.  Once you have IRC we will set up our first meeting to discuss the plan.  I am also open to other forms of communication (AIM, gtalk, skype).  I'll probably leave IRC open for the next few days so you can find me.
 
 IRC meeting place: server: chat.freenode.net (port 6667), channel: scompiler
-
 Download mIRC: http://www.mirc.com/
 
 2) Get a Google account (if you don't already have one) and tell me your screen name so I can add you to the project.  The project will be hosted on Google Code since the interface looks cleaner than sourceforge.  Google Code requires all developers to have a google account.  If this is not possible, or if people would prefer to use sourceforge, let me know.
 
 Google Account: https://www.google.com/accounts/
-
 Project host: http://code.google.com/p/scomp/
 
-3) My original idea was to just do the assignments from the MIT compilers class from open courseware.  This is available at the link below.  We can also follow a book or other online resources.
+3) My original idea was to just do the assignments from the MIT compilers class from opencourseware.  This is available at the link below.  We can also follow a book or other online resources.
 
-MIT Open CourseWare: http://ocw.mit.edu/OcwWeb/Electrical-Engineering-and-Computer-Science/6-035Fall-2005/CourseHome/index.htm.
-
+MIT opencourseware: http://ocw.mit.edu/OcwWeb/Electrical-Engineering-and-Computer-Science/6-035Fall-2005/CourseHome/index.htm.
 Stanford CS143: http://www.stanford.edu/class/cs143/
 
 4) If you have suggestions for other things we can do then let me know.  
