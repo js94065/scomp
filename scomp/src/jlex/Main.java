@@ -4,7 +4,10 @@
   Maintained by C. Scott Ananian <cananian@alumni.princeton.edu>.
   See below for copyright notice, license, and disclaimer.
   New releases from http://www.cs.princeton.edu/~appel/modern/java/JLex/
-
+  
+  Modification 2010-05-28 by codistmonk
+   Changed output file name so that it doesn't contain the extension .lex (lines 4868-4875)
+  
   Version 1.2.6, 2/7/03, [C. Scott Ananian]
    Renamed 'assert' function 'ASSERT' to accomodate Java 1.4's new keyword.
    Fixed a bug which certain forms of comment in the JLex directives section
@@ -171,13 +174,9 @@ package jlex;
 /***************************************************************
   Imported Packages
   **************************************************************/
-import java.lang.System;
-import java.lang.Integer;
-import java.lang.Character;
-
 import java.util.Enumeration;
-import java.util.Stack;
 import java.util.Hashtable;
+import java.util.Stack;
 import java.util.Vector;
 
 /******************************
@@ -4866,13 +4865,14 @@ class CLexGen
 	  }
 
 	/* Open output stream. */
+	final String outputFilename = filename.replaceAll("\\.lex", "") + ".java";
 	m_outstream 
 	  = new java.io.PrintWriter(new java.io.BufferedWriter(
-		new java.io.FileWriter(filename + ".java")));
+		new java.io.FileWriter(outputFilename)));
 	if (null == m_outstream)
 	  {
 	    System.out.println("Error: Unable to open output file "
-			       + filename + ".java.");
+			       + outputFilename);
 	    return;
 	  }
 
