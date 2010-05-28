@@ -2,6 +2,6 @@
 
 Everyone can list their availabilities on here.  This is when you're most likely to be available on IRC.  These are just rough estimates.  You can update this whenever you want as needed.  Everything is in USA Eastern Time (New York) using a 24-hour clock.
 
-  * js94065. I'm on summer vacation so I will be available at random times.
+  * js94065. I'm on vacation so I will be available at random times.
 
 We might have official meetings later, which are always voluntary.  Also, we might create a mailing list or a forum using Google Groups.  You're free to add stuff as needed, just let the other developers know.
