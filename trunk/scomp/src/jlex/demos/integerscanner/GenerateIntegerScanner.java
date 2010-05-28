@@ -17,7 +17,7 @@ public class GenerateIntegerScanner {
 	 */
 	public static final void main(final String[] arguments) {
 		try {
-			Main.main(new String[] { "src/jlex/demos/integerscanner/IntegerScanner" });
+			Main.main(new String[] { "src/jlex/demos/integerscanner/IntegerScanner.lex" });
 		} catch (final IOException exception) {
 			exception.printStackTrace();
 		}

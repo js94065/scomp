@@ -17,7 +17,7 @@ public class GenerateHelloScanner {
 	 */
 	public static final void main(final String[] arguments) {
 		try {
-			Main.main(new String[] { "src/jlex/demos/helloscanner/HelloScanner" });
+			Main.main(new String[] { "src/jlex/demos/helloscanner/HelloScanner.lex" });
 		} catch (final IOException exception) {
 			exception.printStackTrace();
 		}
