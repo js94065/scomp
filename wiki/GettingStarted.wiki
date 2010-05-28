@@ -22,6 +22,10 @@ The most important thing is to set up IRC for faster communication.
   * Scanner generator: JLex
   * Parser generator: CUP
 
+= Conventions =
+
+  * All file and folder names should be in lowercase, except Java class files which should be in UpperCamelCase
+
 = Plan = 
 
 == Scanner/Parser ==
