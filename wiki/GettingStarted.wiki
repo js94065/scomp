@@ -16,9 +16,9 @@ The most important thing is to set up IRC for faster communication.
   * Project Files: http://ocw.mit.edu/OcwWeb/Electrical-Engineering-and-Computer-Science/6-035Fall-2005/Projects/index.htm 
   * Language our compiler compiles: Decaf (described in project files above)
   * Development Language: Java
-  * Forum: We will use the Wiki tab from above
-  * Tasks: Tasks are from the Issues tab from above
-  * Source: The source code can be found from the Source tab above, or using SVN: https://scomp.googlecode.com/svn/trunk/scomp/
+  * Forum: See Wiki tab from above
+  * Tasks: See Issues tab from above
+  * Source: See Source tab above, we are using SVN: https://scomp.googlecode.com/svn/trunk/scomp/
   * IDE: Eclipse
   * Scanner generator: JLex
   * Parser generator: CUP
