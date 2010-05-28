@@ -261,7 +261,7 @@ class Yylex {
 					yy_to_mark();
 					switch (yy_last_accept_state) {
 					case 1:
-						{ return new Yytoken(Integer.parseInt(yytext()))/* TODO */; }
+						{ return new Yytoken(Integer.parseInt(yytext())); }
 					case -2:
 						break;
 					case 2:
