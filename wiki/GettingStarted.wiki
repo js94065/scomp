@@ -17,3 +17,5 @@ The most important thing is to set up IRC for faster communication.
   * Tasks: Tasks are from the Issues tab from above
   * Source: The source code can be found from the Source tab above, this uses SVN.
   * IDE: Eclipse
+  * Scanner generator: JLex
+  * Parser generator: CUP
