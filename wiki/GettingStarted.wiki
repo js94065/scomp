@@ -4,9 +4,9 @@
 
 Here are some preliminary steps for getting started.
 
-  #1 Get IRC (if you don't have it).  It is very simple.  One suggested client is mIRC, but there are a lot of other free ones out there.  We can also try other forms of communication (AIM, gtalk, skype).  <br> IRC meeting place: server: chat.freenode.net (port 6667), channel: scompiler <br> Download mIRC: http://www.mirc.com/ <br> <br>
-  # Get a Google account (if you don't already have one) and ask js94065 to add your screen name to the project.  The project will be hosted on Google Code since the interface looks cleaner than sourceforge.  Google Code requires all developers to have a google account.  <br> Google Account: https://www.google.com/accounts/ <br> <br>
-  # For this project, we will be following the assignments from the MIT compilers class from opencourseware.  This is available at the link below.  We can also follow a book or other online resources. <br> MIT opencourseware: http://ocw.mit.edu/OcwWeb/Electrical-Engineering-and-Computer-Science/6-035Fall-2005/CourseHome/index.htm. <br> <br>
+  #1 Get IRC (if you don't have it).  It is very simple.  One suggested client is mIRC, but there are a lot of other free ones out there.  We can also try other forms of communication (AIM, gtalk, skype). <br><br> IRC meeting place: server: chat.freenode.net (port 6667), channel: scompiler <br> Download mIRC: http://www.mirc.com/ <br> <br>
+  # Get a Google account (if you don't already have one) and ask js94065 to add your screen name to the project.  The project will be hosted on Google Code since the interface looks cleaner than sourceforge.  Google Code requires all developers to have a google account.  <br><br> Google Account: https://www.google.com/accounts/ <br> <br>
+  # For this project, we will be following the assignments from the MIT compilers class from opencourseware.  This is available at the link below.  We can also follow a book or other online resources. <br><br> MIT opencourseware: http://ocw.mit.edu/OcwWeb/Electrical-Engineering-and-Computer-Science/6-035Fall-2005/CourseHome/index.htm. <br> <br>
 
 The most important thing is to set up IRC for faster communication.
 
