@@ -21,7 +21,7 @@ The most important thing is to set up IRC for faster communication.
   * IDE: Eclipse
   * Scanner generator: JLex
   * Parser generator: CUP
-  * Forum/Mailing List: http://groups.google.com/group/scompiler.  
+  * Forum: http://groups.google.com/group/scompiler.  
 
 = Conventions =
 
