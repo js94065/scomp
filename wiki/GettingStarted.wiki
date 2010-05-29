@@ -15,12 +15,14 @@ The most important thing is to set up IRC for faster communication.
   * Project Files: http://ocw.mit.edu/OcwWeb/Electrical-Engineering-and-Computer-Science/6-035Fall-2005/Projects/index.htm 
   * Language our compiler compiles: Decaf (described in project files above)
   * Development Language: Java
-  * Forum: See Wiki tab from above
   * Tasks: See Issues tab from above
+  * Wiki: See Wiki tab from above
   * Source: See Source tab above, we are using SVN: https://scomp.googlecode.com/svn/trunk/scomp/
   * IDE: Eclipse
   * Scanner generator: JLex
   * Parser generator: CUP
+  * Forum: We will be using Google Groups: http://groups.google.com/group/scompiler.  
+  * Mailing List: scompiler@googlegroups.com
 
 = Conventions =
 
