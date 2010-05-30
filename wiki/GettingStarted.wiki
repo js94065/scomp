@@ -8,8 +8,6 @@ Here are some preliminary steps for getting started.
   # Get a Google account (if you don't already have one) and ask js94065 to add your screen name to the project.  The project will be hosted on Google Code since the interface looks cleaner than sourceforge.  Google Code requires all developers to have a google account.  <br><br> Google Account: https://www.google.com/accounts/ <br> <br>
   # For this project, we will be following the assignments from the MIT compilers class from opencourseware.  This is available at the link below.  We can also follow a book or other online resources. <br><br> MIT opencourseware: http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-035-computer-language-engineering-sma-5502-fall-2005/ <br> <br>
 
-The most important thing is to set up IRC for faster communication.
-
 = Work Tools = 
 
   * Project Files: http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-035-computer-language-engineering-sma-5502-fall-2005/projects/
