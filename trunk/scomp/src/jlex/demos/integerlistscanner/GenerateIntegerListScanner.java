@@ -9,8 +9,8 @@ import jlex.Main;
  * @author js94065 (creation 2010-05-28)
  *
  */
-
 public class GenerateIntegerListScanner {
+	
     /**
      * @param arguments
      * <br>Unused
