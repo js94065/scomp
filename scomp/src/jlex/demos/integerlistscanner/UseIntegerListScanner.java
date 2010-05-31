@@ -10,8 +10,8 @@ import java.util.List;
  * @author js94065 (creation 2010-05-28)
  *
  */
-
 public class UseIntegerListScanner {
+	
     /**
      * @param arguments
      * <br>Unused
@@ -33,6 +33,6 @@ public class UseIntegerListScanner {
         } catch (final IOException exception) {
             exception.printStackTrace();
         }
-        
     }
+    
 }
