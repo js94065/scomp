@@ -5,7 +5,7 @@
 Here are some preliminary steps for getting started.
 
   # We will mainly be using google accounts for this project.  Ask js94065 to add your google account screen name to the project.  The project will be hosted on Google Code since the interface looks cleaner than sourceforge.  Google Code requires all developers to have a google account.  <br><br> Google Account: https://www.google.com/accounts/ <br> <br>
-  # We will use gtalk for instant messaging.  We will hold meetings using partychat.  The link to partychat is below. To use partychat, just add: "scompiler@partychapp.appspotchat.com" to your gtalk buddy list and open a conversation window with this person to join the chatroom.  <br><br> Partychat: http://partychapp.appspot.com/.  <br> <br>
+  # We will use gtalk for instant messaging.  We will hold meetings using partychat.  The link to partychat is below. To use partychat, just add: "scompiler@partychapp.appspotchat.com" to your gtalk buddy list and open a conversation window with this buddy to join the chatroom.  <br><br> Partychat: http://partychapp.appspot.com/.  <br> <br>
   # For this project, we will be following the assignments from the MIT compilers class from opencourseware.  This is available at the link below.  We can also follow a book or other online resources. <br><br> MIT opencourseware: http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-035-computer-language-engineering-sma-5502-fall-2005/ <br> <br>
   # One of the original communications plans was to use IRC, but we later decided to use partychat.  Here's the old IRC info for reference.  IRC meeting place: server: chat.freenode.net (port 6667), channel: scompiler 
 
