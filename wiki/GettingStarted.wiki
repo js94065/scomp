@@ -1,14 +1,16 @@
 <wiki:toc max_depth="3" />
 
-= Intro = 
+=# Intro = 
 
 Here are some preliminary steps for getting started.
 
-  #1 Get IRC (if you don't have it).  It is very simple.  One suggested client is mIRC, but there are a lot of other free ones out there.  We can also try other forms of communication (AIM, gtalk, skype).  <br><br> IRC meeting place: server: chat.freenode.net (port 6667), channel: scompiler <br> Download mIRC: http://www.mirc.com/ <br> <br>
+  
   # Get a Google account (if you don't already have one) and ask js94065 to add your screen name to the project.  The project will be hosted on Google Code since the interface looks cleaner than sourceforge.  Google Code requires all developers to have a google account.  <br><br> Google Account: https://www.google.com/accounts/ <br> <br>
+  # We will use gtalk for instant messaging.  We will hold meetings using partychat: http://partychapp.appspot.com/.  To use partychat, just add: scompiler@partychapp.appspotchat.com to your gtalk buddy list and open a conversation window with this person to join the chatroom.  
   # For this project, we will be following the assignments from the MIT compilers class from opencourseware.  This is available at the link below.  We can also follow a book or other online resources. <br><br> MIT opencourseware: http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-035-computer-language-engineering-sma-5502-fall-2005/ <br> <br>
+  # One of the original communications plans was to use IRC, but we later decided partychat was bad.  Here's the old info for reference.  <br><br> IRC meeting place: server: chat.freenode.net (port 6667), channel: scompiler 
 
-= Work Tools = 
+=# Work Tools = 
 
   * Project Files: http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-035-computer-language-engineering-sma-5502-fall-2005/projects/
   * Language our compiler compiles: Decaf (described in project files above)
@@ -21,7 +23,7 @@ Here are some preliminary steps for getting started.
   * Parser generator: CUP
   * Forum: http://groups.google.com/group/scompiler.  
 
-= Conventions =
+=# Conventions =
 
   * All file and folder names should be in lowercase, except Java class files which should be in UpperCamelCase
   * All text files should be encoded in UTF-8 (check your Eclipse preferences)
