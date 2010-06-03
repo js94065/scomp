@@ -1,0 +1,30 @@
+package java_cup.demos.listparser;
+
+import java.util.*;
+
+import java_cup.runtime.*;
+
+terminal LEFT_PARENTHESIS;
+terminal RIGHT_PARENTHESIS;
+terminal String IDENTIFIER;
+
+non terminal List list;
+non terminal List elements;
+non terminal Object element;
+
+list ::=
+	LEFT_PARENTHESIS elements:elements RIGHT_PARENTHESIS {: RESULT = elements; :}
+	|
+	LEFT_PARENTHESIS RIGHT_PARENTHESIS {: RESULT = new ArrayList(); :}
+	;
+elements ::=
+	elements:elements element:element {: RESULT = new ArrayList(elements); RESULT.add(element); :}
+	|
+	element:element {: RESULT = new ArrayList(); RESULT.add(element); :}
+	;
+element ::=
+	IDENTIFIER:identifier {: RESULT = identifier; :}
+	|
+	list:list {: RESULT = list; :}
+	;
+ 
