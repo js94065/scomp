@@ -2,10 +2,10 @@ package scomp;
 
 import java_cup.runtime.*;
 
-terminal KEYWORD;
+terminal BOOLEAN, BREAK, CALLOUT, CLASS, CONTINUE, ELSE, FALSE, IF, INT, RETURN, TRUE, VOID, WHILE;
 
 non terminal Program;
 
 Program ::=
-	KEYWORD
+	CLASS
 	;
