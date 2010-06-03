@@ -8,7 +8,7 @@ import java_cup.runtime.Symbol;
 
 %%
 
-boolean|break|callout|class|continue|else|false|if|int|return|true|void|while { return new Symbol(-1, yytext()); }
+boolean|break|callout|class|continue|else|false|if|int|return|true|void|while { return new Symbol(DecafParserSymbols.KEYWORD, yytext()); }
 
 [ \t\r\n\f] { /* Ignore */ }
 
