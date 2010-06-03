@@ -3,6 +3,8 @@ package java_cup.demos.listparser;
 import java.io.File;
 
 /**
+ * This class contains a {@link #main(String[])} method used to generate "Yylex.java", "ListParser.java" and "ListParserSymbols.java".
+ * <br>After running it, you should refresh the source tree of your IDE.
  * 
  * @author codistmonk (creation 2010-06-03)
  */
