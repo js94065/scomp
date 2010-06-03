@@ -33,7 +33,6 @@ Here are some preliminary steps for getting started.
   * Indentation with tabs.
   * Instance attributes should be private. 
   * Braces should start on the same line as function name.  
-  * Use standard java conventions.  
   * Use imports and static imports (do not use java.io.Scanner).
 
 == Example of Coding Conventions ===
