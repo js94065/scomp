@@ -24,7 +24,7 @@ Here are some preliminary steps for getting started.
 
 = General Conventions =
 
-  * All file and folder names should be in lowercase, except Java class files which should be in UpperCamelCase
+  * All file and folder names should be in lowercase, except Java class files which should be in {{{UpperCamelCase}}}
   * All text files should be encoded in UTF-8 (check your Eclipse preferences)
 
 = Coding Conventions = 
@@ -36,9 +36,9 @@ Here are some preliminary steps for getting started.
   * Use standard java conventions.  
   * Use imports and static imports (do not use java.io.Scanner).
 
-== Sample Coding Conventions Clip ===
+== Example Code ===
 
-[code]
+{{{
 package sandbox;
 
 import static java.lang.Math.random;
@@ -206,7 +206,7 @@ values.
 
 }
 
-[/code] 
+}}}
 
 = Plan = 
 
