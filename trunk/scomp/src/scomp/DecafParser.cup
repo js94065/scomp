@@ -1,0 +1,11 @@
+package scomp;
+
+import java_cup.runtime.*;
+
+terminal KEYWORD;
+
+non terminal Program;
+
+Program ::=
+	KEYWORD
+	;

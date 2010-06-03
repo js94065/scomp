@@ -312,7 +312,7 @@ class Yylex implements java_cup.runtime.Scanner {
 					case -4:
 						break;
 					case 4:
-						{ return new Symbol(-1, yytext()); }
+						{ return new Symbol(DecafParserSymbols.KEYWORD, yytext()); }
 					case -5:
 						break;
 					case 6:
