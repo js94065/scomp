@@ -29,11 +29,10 @@ Here are some preliminary steps for getting started.
 
 = Coding Conventions = 
 
-  * Java naming conventions (http://java.sun.com/docs/codeconv/html/CodeConventions.doc8.html).
+  * Java naming conventions.
   * Indentation with tabs.
   * Instance attributes should be private. 
   * Braces should start on the same line as function name.  
-  * Use standard java conventions.  
   * Use imports and static imports (do not use java.io.Scanner).
 
 == Example of Coding Conventions ===
