@@ -15,12 +15,12 @@ Here are some preliminary steps for getting started.
   * Language our compiler compiles: Decaf (described in project files above)
   * Development Language: Java
   * Tasks: See Issues tab from above
-  * Wiki: See Wiki tab from above
+  * Forum: See Wiki tab from above
   * Source: See Source tab above, we are using SVN: https://scomp.googlecode.com/svn/trunk/scomp/
   * IDE: Eclipse
   * Scanner generator: JLex
   * Parser generator: CUP
-  * Forum: http://groups.google.com/group/scompiler.  
+  * Messaging System: http://groups.google.com/group/scompiler.  
 
 = General Conventions =
 
