@@ -196,17 +196,17 @@ class Yylex implements java_cup.runtime.Scanner {
 		/* 2 */ YY_NO_ANCHOR,
 		/* 3 */ YY_NO_ANCHOR,
 		/* 4 */ YY_NO_ANCHOR,
-		/* 5 */ YY_NOT_ACCEPT,
+		/* 5 */ YY_NO_ANCHOR,
 		/* 6 */ YY_NO_ANCHOR,
-		/* 7 */ YY_NOT_ACCEPT,
+		/* 7 */ YY_NO_ANCHOR,
 		/* 8 */ YY_NO_ANCHOR,
-		/* 9 */ YY_NOT_ACCEPT,
+		/* 9 */ YY_NO_ANCHOR,
 		/* 10 */ YY_NO_ANCHOR,
-		/* 11 */ YY_NOT_ACCEPT,
+		/* 11 */ YY_NO_ANCHOR,
 		/* 12 */ YY_NO_ANCHOR,
-		/* 13 */ YY_NOT_ACCEPT,
+		/* 13 */ YY_NO_ANCHOR,
 		/* 14 */ YY_NO_ANCHOR,
-		/* 15 */ YY_NOT_ACCEPT,
+		/* 15 */ YY_NO_ANCHOR,
 		/* 16 */ YY_NO_ANCHOR,
 		/* 17 */ YY_NOT_ACCEPT,
 		/* 18 */ YY_NO_ANCHOR,
@@ -215,17 +215,17 @@ class Yylex implements java_cup.runtime.Scanner {
 		/* 21 */ YY_NOT_ACCEPT,
 		/* 22 */ YY_NO_ANCHOR,
 		/* 23 */ YY_NOT_ACCEPT,
-		/* 24 */ YY_NOT_ACCEPT,
+		/* 24 */ YY_NO_ANCHOR,
 		/* 25 */ YY_NOT_ACCEPT,
-		/* 26 */ YY_NOT_ACCEPT,
+		/* 26 */ YY_NO_ANCHOR,
 		/* 27 */ YY_NOT_ACCEPT,
-		/* 28 */ YY_NOT_ACCEPT,
+		/* 28 */ YY_NO_ANCHOR,
 		/* 29 */ YY_NOT_ACCEPT,
-		/* 30 */ YY_NOT_ACCEPT,
+		/* 30 */ YY_NO_ANCHOR,
 		/* 31 */ YY_NOT_ACCEPT,
-		/* 32 */ YY_NOT_ACCEPT,
+		/* 32 */ YY_NO_ANCHOR,
 		/* 33 */ YY_NOT_ACCEPT,
-		/* 34 */ YY_NOT_ACCEPT,
+		/* 34 */ YY_NO_ANCHOR,
 		/* 35 */ YY_NOT_ACCEPT,
 		/* 36 */ YY_NOT_ACCEPT,
 		/* 37 */ YY_NOT_ACCEPT,
@@ -237,23 +237,42 @@ class Yylex implements java_cup.runtime.Scanner {
 		/* 43 */ YY_NOT_ACCEPT,
 		/* 44 */ YY_NOT_ACCEPT,
 		/* 45 */ YY_NOT_ACCEPT,
-		/* 46 */ YY_NOT_ACCEPT
+		/* 46 */ YY_NOT_ACCEPT,
+		/* 47 */ YY_NOT_ACCEPT,
+		/* 48 */ YY_NOT_ACCEPT,
+		/* 49 */ YY_NOT_ACCEPT,
+		/* 50 */ YY_NOT_ACCEPT,
+		/* 51 */ YY_NOT_ACCEPT,
+		/* 52 */ YY_NOT_ACCEPT,
+		/* 53 */ YY_NOT_ACCEPT,
+		/* 54 */ YY_NOT_ACCEPT,
+		/* 55 */ YY_NOT_ACCEPT,
+		/* 56 */ YY_NOT_ACCEPT,
+		/* 57 */ YY_NOT_ACCEPT,
+		/* 58 */ YY_NOT_ACCEPT,
+		/* 59 */ YY_NOT_ACCEPT,
+		/* 60 */ YY_NOT_ACCEPT,
+		/* 61 */ YY_NOT_ACCEPT,
+		/* 62 */ YY_NOT_ACCEPT,
+		/* 63 */ YY_NOT_ACCEPT,
+		/* 64 */ YY_NOT_ACCEPT
 	};
 	private int yy_cmap[] = unpackFromString(1,130,
 "20:9,19:2,20,19:2,20:18,19,20:64,5,1,9,16,4,14,20,18,13,20,8,3,20,6,2,20:2," +
 "7,12,11,10,15,17,20:8,0:2")[0];
 
-	private int yy_rmap[] = unpackFromString(1,47,
-"0,1,2,1:2,3,1,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,6,25" +
-",26,27,28,29,30,31,32,33,34,35,16,36,37,38,39,40,41")[0];
+	private int yy_rmap[] = unpackFromString(1,65,
+"0,1,2,1:14,3,1,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25," +
+"26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49")[0];
 
-	private int yy_nxt[][] = unpackFromString(42,21,
-"1,2,6:2,8,6:2,10,6,12,6,14,6,16,18,20,6,22,6,3,6,-1:23,5,-1:4,7,-1:15,44,-1" +
-":22,41,-1:19,9,-1:29,25,-1:12,11,-1:27,43,-1:11,13,15,-1,17,-1:21,26,-1:21," +
-"19,-1:18,27,-1:21,21,-1:7,4,-1:9,45,-1:22,42,-1:25,25,-1:12,23,-1:29,4,-1:2" +
-"7,24,-1:15,29,-1:20,46,-1:11,4,-1:27,33,-1:21,34,-1:24,4,-1:8,36,-1:24,4,-1" +
-":19,37,-1:26,38,-1:19,4,-1:10,39,-1:23,37,-1:21,4,-1:20,40,-1:24,21,-1:15,3" +
-"1,-1:18,28,-1:27,32,-1:13,30,-1:20,35,-1:20,25,-1:17");
+	private int yy_nxt[][] = unpackFromString(50,21,
+"1,2,18:2,20,18:2,22,18,24,18,26,18,28,30,32,18,34,18,3,18,-1:23,17,-1:4,19," +
+"-1:15,62,-1:22,57,-1:19,21,-1:29,37,-1:12,23,-1:27,59,-1:11,25,27,-1,29,-1:" +
+"21,38,-1:21,31,-1:18,39,-1:21,33,-1:7,4,-1:9,63,-1:22,58,-1:25,40,-1:12,35," +
+"-1:29,5,-1:27,36,-1:15,41,-1:20,64,-1:11,6,-1:27,45,-1:21,46,-1:12,7,-1:32," +
+"8,-1:8,50,-1:24,9,-1:19,51,-1:26,52,-1:19,10,-1:10,53,-1:22,11,-1:20,12,-1:" +
+"21,54,-1:21,13,-1:20,61,-1:24,55,-1:16,14,-1:25,15,-1:13,16,-1:21,43,-1:18," +
+"60,-1:27,44,-1:22,48,-1:18,56,-1:13,42,-1:20,47,-1:20,49,-1:17");
 
 	public java_cup.runtime.Symbol next_token ()
 		throws java.io.IOException {
@@ -312,44 +331,92 @@ class Yylex implements java_cup.runtime.Scanner {
 					case -4:
 						break;
 					case 4:
-						{ return new Symbol(DecafParserSymbols.KEYWORD, yytext()); }
+						{ return new Symbol(DecafParserSymbols.IF); }
 					case -5:
 						break;
-					case 6:
-						{ System.err.println("Illegal character: "+yytext()); }
+					case 5:
+						{ return new Symbol(DecafParserSymbols.INT); }
 					case -6:
 						break;
-					case 8:
-						{ System.err.println("Illegal character: "+yytext()); }
+					case 6:
+						{ return new Symbol(DecafParserSymbols.ELSE); }
 					case -7:
 						break;
-					case 10:
-						{ System.err.println("Illegal character: "+yytext()); }
+					case 7:
+						{ return new Symbol(DecafParserSymbols.TRUE); }
 					case -8:
 						break;
-					case 12:
-						{ System.err.println("Illegal character: "+yytext()); }
+					case 8:
+						{ return new Symbol(DecafParserSymbols.VOID); }
 					case -9:
 						break;
-					case 14:
-						{ System.err.println("Illegal character: "+yytext()); }
+					case 9:
+						{ return new Symbol(DecafParserSymbols.BREAK); }
 					case -10:
 						break;
-					case 16:
-						{ System.err.println("Illegal character: "+yytext()); }
+					case 10:
+						{ return new Symbol(DecafParserSymbols.CLASS); }
 					case -11:
+						break;
+					case 11:
+						{ return new Symbol(DecafParserSymbols.FALSE); }
+					case -12:
+						break;
+					case 12:
+						{ return new Symbol(DecafParserSymbols.WHILE); }
+					case -13:
+						break;
+					case 13:
+						{ return new Symbol(DecafParserSymbols.RETURN); }
+					case -14:
+						break;
+					case 14:
+						{ return new Symbol(DecafParserSymbols.BOOLEAN); }
+					case -15:
+						break;
+					case 15:
+						{ return new Symbol(DecafParserSymbols.CALLOUT); }
+					case -16:
+						break;
+					case 16:
+						{ return new Symbol(DecafParserSymbols.CONTINUE); }
+					case -17:
 						break;
 					case 18:
 						{ System.err.println("Illegal character: "+yytext()); }
-					case -12:
+					case -18:
 						break;
 					case 20:
 						{ System.err.println("Illegal character: "+yytext()); }
-					case -13:
+					case -19:
 						break;
 					case 22:
 						{ System.err.println("Illegal character: "+yytext()); }
-					case -14:
+					case -20:
+						break;
+					case 24:
+						{ System.err.println("Illegal character: "+yytext()); }
+					case -21:
+						break;
+					case 26:
+						{ System.err.println("Illegal character: "+yytext()); }
+					case -22:
+						break;
+					case 28:
+						{ System.err.println("Illegal character: "+yytext()); }
+					case -23:
+						break;
+					case 30:
+						{ System.err.println("Illegal character: "+yytext()); }
+					case -24:
+						break;
+					case 32:
+						{ System.err.println("Illegal character: "+yytext()); }
+					case -25:
+						break;
+					case 34:
+						{ System.err.println("Illegal character: "+yytext()); }
+					case -26:
 						break;
 					default:
 						yy_error(YY_E_INTERNAL,false);
