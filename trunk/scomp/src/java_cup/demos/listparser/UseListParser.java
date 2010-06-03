@@ -15,18 +15,31 @@ public class UseListParser {
 	public static final void main(final String[] arguments) {
 		try {
 			System.out.println("Parsing correct input 1");
-			System.out.println(new ListParser(new Yylex(new ByteArrayInputStream("(a b c)".getBytes()))).parse().value);
+			System.out.println(parse("(a b c)"));
 			
 			System.out.println("Parsing correct input 2");
-			System.out.println(new ListParser(new Yylex(new ByteArrayInputStream("(a (() b))".getBytes()))).parse().value);
+			System.out.println(parse("(a (() b))"));
 			
 			System.out.println("Parsing incorrect input");
-			System.out.flush();
-			System.err.flush();
-			System.out.println(new ListParser(new Yylex(new ByteArrayInputStream("(a))".getBytes()))).parse().value);
+			System.out.println(parse("(a))"));
 		} catch (final Exception exception) {
 			exception.printStackTrace();
 		}
+	}
+	
+	/**
+	 * 
+	 * @param string
+	 * <br>Should not be null
+	 * @return
+	 * <br>A possibly null value
+	 * @throws Exception if an error occurs
+	 */
+	public static final Object parse(final String string) throws Exception {
+		System.out.flush();
+		System.err.flush();
+		
+		return new ListParser(new Yylex(new ByteArrayInputStream(string.getBytes()))).parse().value;
 	}
 	
 }

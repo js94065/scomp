@@ -8,23 +8,23 @@ terminal LEFT_PARENTHESIS;
 terminal RIGHT_PARENTHESIS;
 terminal String IDENTIFIER;
 
-non terminal List list;
-non terminal List elements;
-non terminal Object element;
+non terminal List List;
+non terminal List Elements;
+non terminal Object Element;
 
-list ::=
-	LEFT_PARENTHESIS elements:elements RIGHT_PARENTHESIS {: RESULT = elements; :}
+List ::=
+	LEFT_PARENTHESIS Elements:elements RIGHT_PARENTHESIS {: RESULT = elements; :}
 	|
-	LEFT_PARENTHESIS RIGHT_PARENTHESIS {: RESULT = new ArrayList(); :}
+	LEFT_PARENTHESIS RIGHT_PARENTHESIS {: RESULT = new ArrayList<Object>(); :}
 	;
-elements ::=
-	elements:elements element:element {: RESULT = new ArrayList(elements); RESULT.add(element); :}
+Elements ::=
+	Elements:elements Element:element {: RESULT = new ArrayList<Object>(elements); RESULT.add(element); :}
 	|
-	element:element {: RESULT = new ArrayList(); RESULT.add(element); :}
+	Element:element {: RESULT = new ArrayList<Object>(); RESULT.add(element); :}
 	;
-element ::=
+Element ::=
 	IDENTIFIER:identifier {: RESULT = identifier; :}
 	|
-	list:list {: RESULT = list; :}
+	List:list {: RESULT = list; :}
 	;
  
