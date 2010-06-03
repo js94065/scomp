@@ -33,11 +33,13 @@ Here are some preliminary steps for getting started.
   * Indentation with tabs.
   * Instance attributes should be private. 
   * Braces should start on the same line as function name.  
+  * Use standard java conventions.  
   * Use imports and static imports (do not use java.io.Scanner).
 
 == Example of Coding Conventions ===
 
 {{{
+
 package sandbox;
 
 import static java.lang.Math.random;
@@ -48,161 +50,158 @@ import java.util.Scanner;
 
 /**
  * This class illustrates some coding conventions.
- * <br>It has a {@link #main(String[])} so you can run it to see what
-it does.
- *
+ * <br>It has a {@link #main(String[])} so you can run it to see what it does.
+ * 
  * @author codistmonk (creation 2010-06-01)
  */
 public final class Guess {
-
-        private final String answer;
-
-        private Scanner scanner;
-
-        public Guess() {
-                this.answer = Coin.flip().toString();
-        }
-
-        public final void go() {
-                try {
-                        System.out.println(QUESTION);
-
-                        Thread.sleep(SUSPENSE_DURATION);
-
-                        System.out.println(this.getAnswer());
-
-                        this.setScanner(new Scanner(toInputStream(this.getAnswer())));
-
-                        analyseAnswerAndPrintResult(this.getScanner());
-                } catch (final Exception exception) {
-                        // Synchronize console outputs when there is only one thread
-                        System.out.flush();
-
-                        exception.printStackTrace();
-                } finally {
-                        if (this.getScanner() != null) {
-                                this.getScanner().close();
-                        }
-                }
-        }
-
-        /**
-         *
-         * @return
-         * <br>A non-null value
-         * <br>A shared value
-         */
-        public final String getAnswer() {
-                return this.answer;
-        }
-
-        /**
-         *
-         * @return
-         * <br>A possibly null value
-         * <br>A shared value
-         */
-        public final Scanner getScanner() {
-                return this.scanner;
-        }
-
-        /**
-         *
-         * @param scanner
-         * <br>Can be null
-         * <br>Shared parameter
-         */
-        public final void setScanner(final Scanner scanner) {
-                this.scanner = scanner;
-        }
-
-        public static final String QUESTION = "Heads or tails?";
-
-        /**
-         * Duration in milliseconds.
-         */
-        public static final long SUSPENSE_DURATION = 1000L;
-
-        /**
-         *
-         * @param scanner
-         * <br>Should not be null
-         * <br>Input-output parameter
-         */
-        private static final void analyseAnswerAndPrintResult(final Scanner
-scanner) {
-                switch (Coin.valueOf(scanner.next())) {
-                case HEADS:
-                        System.out.println("Game over!");
-                        break;
-                case TAILS:
-                        System.out.println("You win!");
-                        break;
-                case EDGE:
-                        System.out.println("OMG!");
-                        break;
-                }
-        }
-
-        /**
-         * Creates an input stream from {@code string}.
-         *
-         * @param string
-         * <br>Should not be null
-         * @return
-         * <br>A non-null value
-         * <br>A new value
-         */
-        public static final InputStream toInputStream(final String string) {
-                return new ByteArrayInputStream(string.getBytes());
-        }
-
-        /**
-         * @param arguments
-         * <br>Unused
-         */
-        public static final void main(final String[] arguments) {
-                new Guess().go();
-        }
-
-        /**
-         * This enum defines the possible outcomes of a coin flip.
-         * <br>A static {@link #flip()} method is provided to generate random
-values.
-         *
-         * @author codistmonk (creation 2010-06-01)
-         */
-        public static enum Coin {
-
-                HEADS, TAILS, EDGE;
-
-                /**
-                 * Generates a random value.
-                 * <br>Note that {@link #EDGE} has a very low probability.
-                 *
-                 * @return
-                 * <br>A non-null value
-                 * <br>A shared value
-                 * <br>Range: { {@link #HEADS}, {@link #TAILS}, {@link #EDGE} }
-                 */
-                public static final Coin flip() {
-                        final double random = random();
-
-                        if (random < HEADS_PROBABILITY) {
-                                return HEADS;
-                        }
-                        else if (random > HEADS_PROBABILITY) {
-                                return TAILS;
-                        }
-                        else {
-                                return EDGE;
-                        }
-                }
-
-                private static final double HEADS_PROBABILITY = 0.5;
-
-        }
-
+	
+	private final String answer;
+	
+	private Scanner scanner;
+	
+	public Guess() {
+		this.answer = Coin.flip().toString();
+	}
+	
+	public final void go() {
+		try {
+			System.out.println(QUESTION);
+			
+			Thread.sleep(SUSPENSE_DURATION);
+			
+			System.out.println(this.getAnswer());
+			
+			this.setScanner(new Scanner(toInputStream(this.getAnswer())));
+			
+			analyseAnswerAndPrintResult(this.getScanner());
+		} catch (final Exception exception) {
+			// Synchronize console outputs when there is only one thread
+			System.out.flush();
+			
+			exception.printStackTrace();
+		} finally {
+			if (this.getScanner() != null) {
+				this.getScanner().close();
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * <br>A non-null value
+	 * <br>A shared value
+	 */
+	public final String getAnswer() {
+		return this.answer;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * <br>A possibly null value
+	 * <br>A shared value
+	 */
+	public final Scanner getScanner() {
+		return this.scanner;
+	}
+	
+	/**
+	 * 
+	 * @param scanner
+	 * <br>Can be null
+	 * <br>Shared parameter
+	 */
+	public final void setScanner(final Scanner scanner) {
+		this.scanner = scanner;
+	}
+	
+	public static final String QUESTION = "Heads or tails?";
+	
+	/**
+	 * Duration in milliseconds.
+	 */
+	public static final long SUSPENSE_DURATION = 1000L;
+	
+	/**
+	 * 
+	 * @param scanner
+	 * <br>Should not be null
+	 * <br>Input-output parameter
+	 */
+	private static final void analyseAnswerAndPrintResult(final Scanner scanner) {
+		switch (Coin.valueOf(scanner.next())) {
+		case HEADS:
+			System.out.println("Game over!");
+			break;
+		case TAILS:
+			System.out.println("You win!");
+			break;
+		case EDGE:
+			System.out.println("OMG!");
+			break;
+		}
+	}
+	
+	/**
+	 * Creates an input stream from {@code string}.
+	 * 
+	 * @param string
+	 * <br>Should not be null
+	 * @return
+	 * <br>A non-null value
+	 * <br>A new value
+	 */
+	public static final InputStream toInputStream(final String string) {
+		return new ByteArrayInputStream(string.getBytes());
+	}
+	
+	/**
+	 * @param arguments
+	 * <br>Unused
+	 */
+	public static final void main(final String[] arguments) {
+		new Guess().go();
+	}
+	
+	/**
+	 * This enum defines the possible outcomes of a coin flip.
+	 * <br>A static {@link #flip()} method is provided to generate random values.
+	 * 
+	 * @author codistmonk (creation 2010-06-01)
+	 */
+	public static enum Coin {
+		
+		HEADS, TAILS, EDGE;
+		
+		/**
+		 * Generates a random value.
+		 * <br>Note that {@link #EDGE} has a very low probability.
+		 * 
+		 * @return
+		 * <br>A non-null value
+		 * <br>A shared value
+		 * <br>Range: { {@link #HEADS}, {@link #TAILS}, {@link #EDGE} }
+		 */
+		public static final Coin flip() {
+			final double random = random();
+			
+			if (random < HEADS_PROBABILITY) {
+				return HEADS;
+			}
+			else if (random > HEADS_PROBABILITY) {
+				return TAILS;
+			}
+			else {
+				return EDGE;
+			}
+		}
+		
+		private static final double HEADS_PROBABILITY = 0.5;
+		
+	}
+	
 }
 
 }}}
