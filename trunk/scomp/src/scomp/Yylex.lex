@@ -69,6 +69,13 @@ true { return this.newToken(DecafParserSymbols.BOOLEAN_LITERAL, true); }
 void { return this.newToken(DecafParserSymbols.VOID); }
 while { return this.newToken(DecafParserSymbols.WHILE); }
 
+"(" { return this.newToken(DecafParserSymbols.LEFT_PARENTHESIS); }
+")" { return this.newToken(DecafParserSymbols.RIGHT_PARENTHESIS); }
+"{" { return this.newToken(DecafParserSymbols.LEFT_BRACE); }
+"}" { return this.newToken(DecafParserSymbols.RIGHT_BRACE); }
+"[" { return this.newToken(DecafParserSymbols.LEFT_BRACKET); }
+"]" { return this.newToken(DecafParserSymbols.RIGHT_BRACKET); }
+
 '([ -!#-&(-\[\]-~]|\\\'|\\\"|\\t|\\n)' { return this.newToken(DecafParserSymbols.CHAR_LITERAL, this.yytext().substring(1, this.yytext().length() - 1)); }
 
 \"([ -!#-&(-\[\]-~]|\\\'|\\\"|\\t|\\n)*\" { return this.newToken(DecafParserSymbols.STRING_LITERAL, this.yytext().substring(1, this.yytext().length() - 1)); }
@@ -78,6 +85,8 @@ while { return this.newToken(DecafParserSymbols.WHILE); }
 0x[a-fA-F0-9]+ { return this.newToken(DecafParserSymbols.INT_LITERAL, Integer.parseInt(this.yytext().substring(2), 16)); }
 
 [0-9]+ { return this.newToken(DecafParserSymbols.INT_LITERAL, Integer.parseInt(this.yytext())); }
+
+"!"|"+"|"-"|"*"|"%"|"<<"|">>"|">>>"|"<"|">"|"<="|">="|"=="|"!="|"&&"|"||" { return this.newToken(DecafParserSymbols.OPERATOR, this.yytext()); }
 
 //.* { this.updateLocation(); }
 
