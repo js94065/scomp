@@ -5,23 +5,57 @@ import java_cup.runtime.Symbol;
 %%
 
 %cup
+%char
+%line
+
+%{
+	private int firstCharacterIndexInCurrentLine = 0;
+	
+	private int currentLine = 1;
+	
+	private int currentColumn = 1;
+	
+	private final void updateLocation() {
+		if (yyline + 1 > this.currentLine) {
+			this.firstCharacterIndexInCurrentLine = yychar;
+			this.currentLine = yyline + 1;
+		}
+		
+		this.currentColumn = 1 + yychar - this.firstCharacterIndexInCurrentLine;
+	}
+	
+	/**
+	 * @param symbolId
+	 * <br>Range: any integer
+	 */
+	private final DecafToken newToken(final int symbolId) {
+		this.updateLocation();
+		
+		return new DecafToken(symbolId, this.currentLine, this.currentColumn);
+	}
+	
+%}
 
 %%
 
-boolean { return new Symbol(DecafParserSymbols.BOOLEAN); }
-break { return new Symbol(DecafParserSymbols.BREAK); }
-callout { return new Symbol(DecafParserSymbols.CALLOUT); }
-class { return new Symbol(DecafParserSymbols.CLASS); }
-continue { return new Symbol(DecafParserSymbols.CONTINUE); }
-else { return new Symbol(DecafParserSymbols.ELSE); }
-false { return new Symbol(DecafParserSymbols.FALSE); }
-if { return new Symbol(DecafParserSymbols.IF); }
-int { return new Symbol(DecafParserSymbols.INT); }
-return { return new Symbol(DecafParserSymbols.RETURN); }
-true { return new Symbol(DecafParserSymbols.TRUE); }
-void { return new Symbol(DecafParserSymbols.VOID); }
-while { return new Symbol(DecafParserSymbols.WHILE); }
+boolean { return this.newToken(DecafParserSymbols.BOOLEAN); }
+break { return this.newToken(DecafParserSymbols.BREAK); }
+callout { return this.newToken(DecafParserSymbols.CALLOUT); }
+class { return this.newToken(DecafParserSymbols.CLASS); }
+continue { return this.newToken(DecafParserSymbols.CONTINUE); }
+else { return this.newToken(DecafParserSymbols.ELSE); }
+false { return this.newToken(DecafParserSymbols.FALSE); }
+if { return this.newToken(DecafParserSymbols.IF); }
+int { return this.newToken(DecafParserSymbols.INT); }
+return { return this.newToken(DecafParserSymbols.RETURN); }
+true { return this.newToken(DecafParserSymbols.TRUE); }
+void { return this.newToken(DecafParserSymbols.VOID); }
+while { return this.newToken(DecafParserSymbols.WHILE); }
 
-[ \t\r\n\f] { /* Ignore */ }
+//.* { this.updateLocation(); }
 
-. { System.err.println("Illegal character: "+yytext()); }
+[ \t]+ { this.updateLocation(); }
+
+[\r\n\f]+ { /* Ignore */ }
+
+. { this.updateLocation(); throw new InvalidInputException(this.currentLine, this.currentColumn, yytext()); }
