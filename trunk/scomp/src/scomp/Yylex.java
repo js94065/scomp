@@ -12,12 +12,33 @@ class Yylex implements java_cup.runtime.Scanner {
 	private final int YY_NO_ANCHOR = 4;
 	private final int YY_BOL = 128;
 	private final int YY_EOF = 129;
+
+	private int firstCharacterIndexInCurrentLine = 0;
+	private int currentLine = 1;
+	private int currentColumn = 1;
+	private final void updateLocation() {
+		if (yyline + 1 > this.currentLine) {
+			this.firstCharacterIndexInCurrentLine = yychar;
+			this.currentLine = yyline + 1;
+		}
+		this.currentColumn = 1 + yychar - this.firstCharacterIndexInCurrentLine;
+	}
+	/**
+	 * @param symbolId
+	 * <br>Range: any integer
+	 */
+	private final DecafToken newToken(final int symbolId) {
+		this.updateLocation();
+		return new DecafToken(symbolId, this.currentLine, this.currentColumn);
+	}
 	private java.io.BufferedReader yy_reader;
 	private int yy_buffer_index;
 	private int yy_buffer_read;
 	private int yy_buffer_start;
 	private int yy_buffer_end;
 	private char yy_buffer[];
+	private int yychar;
+	private int yyline;
 	private boolean yy_at_bol;
 	private int yy_lexical_state;
 
@@ -43,6 +64,8 @@ class Yylex implements java_cup.runtime.Scanner {
 		yy_buffer_index = 0;
 		yy_buffer_start = 0;
 		yy_buffer_end = 0;
+		yychar = 0;
+		yyline = 0;
 		yy_at_bol = true;
 		yy_lexical_state = YYINITIAL;
 	}
@@ -110,6 +133,18 @@ class Yylex implements java_cup.runtime.Scanner {
 	}
 	private boolean yy_last_was_cr=false;
 	private void yy_mark_start () {
+		int i;
+		for (i = yy_buffer_start; i < yy_buffer_index; ++i) {
+			if ('\n' == yy_buffer[i] && !yy_last_was_cr) {
+				++yyline;
+			}
+			if ('\r' == yy_buffer[i]) {
+				++yyline;
+				yy_last_was_cr=true;
+			} else yy_last_was_cr=false;
+		}
+		yychar = yychar
+			+ yy_buffer_index - yy_buffer_start;
 		yy_buffer_start = yy_buffer_index;
 	}
 	private void yy_mark_end () {
@@ -208,7 +243,7 @@ class Yylex implements java_cup.runtime.Scanner {
 		/* 14 */ YY_NO_ANCHOR,
 		/* 15 */ YY_NO_ANCHOR,
 		/* 16 */ YY_NO_ANCHOR,
-		/* 17 */ YY_NOT_ACCEPT,
+		/* 17 */ YY_NO_ANCHOR,
 		/* 18 */ YY_NO_ANCHOR,
 		/* 19 */ YY_NOT_ACCEPT,
 		/* 20 */ YY_NO_ANCHOR,
@@ -227,9 +262,9 @@ class Yylex implements java_cup.runtime.Scanner {
 		/* 33 */ YY_NOT_ACCEPT,
 		/* 34 */ YY_NO_ANCHOR,
 		/* 35 */ YY_NOT_ACCEPT,
-		/* 36 */ YY_NOT_ACCEPT,
+		/* 36 */ YY_NO_ANCHOR,
 		/* 37 */ YY_NOT_ACCEPT,
-		/* 38 */ YY_NOT_ACCEPT,
+		/* 38 */ YY_NO_ANCHOR,
 		/* 39 */ YY_NOT_ACCEPT,
 		/* 40 */ YY_NOT_ACCEPT,
 		/* 41 */ YY_NOT_ACCEPT,
@@ -255,24 +290,29 @@ class Yylex implements java_cup.runtime.Scanner {
 		/* 61 */ YY_NOT_ACCEPT,
 		/* 62 */ YY_NOT_ACCEPT,
 		/* 63 */ YY_NOT_ACCEPT,
-		/* 64 */ YY_NOT_ACCEPT
+		/* 64 */ YY_NOT_ACCEPT,
+		/* 65 */ YY_NOT_ACCEPT,
+		/* 66 */ YY_NOT_ACCEPT,
+		/* 67 */ YY_NOT_ACCEPT
 	};
 	private int yy_cmap[] = unpackFromString(1,130,
-"20:9,19:2,20,19:2,20:18,19,20:64,5,1,9,16,4,14,20,18,13,20,8,3,20,6,2,20:2," +
-"7,12,11,10,15,17,20:8,0:2")[0];
+"20:9,21,22,20,23,22,20:18,21,20:14,19,20:49,5,1,9,16,4,14,20,18,13,20,8,3,2" +
+"0,6,2,20:2,7,12,11,10,15,17,20:8,0:2")[0];
 
-	private int yy_rmap[] = unpackFromString(1,65,
-"0,1,2,1:14,3,1,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25," +
-"26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49")[0];
+	private int yy_rmap[] = unpackFromString(1,68,
+"0,1,2,3,4,1,5,1:12,6,1,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,2" +
+"5,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,5" +
+"0,51,52,53")[0];
 
-	private int yy_nxt[][] = unpackFromString(50,21,
-"1,2,18:2,20,18:2,22,18,24,18,26,18,28,30,32,18,34,18,3,18,-1:23,17,-1:4,19," +
-"-1:15,62,-1:22,57,-1:19,21,-1:29,37,-1:12,23,-1:27,59,-1:11,25,27,-1,29,-1:" +
-"21,38,-1:21,31,-1:18,39,-1:21,33,-1:7,4,-1:9,63,-1:22,58,-1:25,40,-1:12,35," +
-"-1:29,5,-1:27,36,-1:15,41,-1:20,64,-1:11,6,-1:27,45,-1:21,46,-1:12,7,-1:32," +
-"8,-1:8,50,-1:24,9,-1:19,51,-1:26,52,-1:19,10,-1:10,53,-1:22,11,-1:20,12,-1:" +
-"21,54,-1:21,13,-1:20,61,-1:24,55,-1:16,14,-1:25,15,-1:13,16,-1:21,43,-1:18," +
-"60,-1:27,44,-1:22,48,-1:18,56,-1:13,42,-1:20,47,-1:20,49,-1:17");
+	private int yy_nxt[][] = unpackFromString(54,24,
+"1,2,20:2,22,20:2,24,20,26,20,28,20,30,32,34,20,36,20,38,20,3,4:2,-1:26,19,-" +
+"1:4,21,-1:37,3,-1:24,4:2,-1,6:21,-1,6,-1:2,65,-1:25,60,-1:22,23,-1:32,40,-1" +
+":15,25,-1:30,62,-1:14,27,29,-1,31,-1:24,41,-1:24,33,-1:21,42,-1:24,35,-1:7," +
+"5,-1:12,66,-1:25,61,-1:28,43,-1:15,37,-1:32,7,-1:30,39,-1:18,44,-1:29,6,-1:" +
+"17,67,-1:14,8,-1:30,48,-1:24,49,-1:15,9,-1:35,10,-1:11,53,-1:27,11,-1:22,54" +
+",-1:29,55,-1:22,12,-1:13,56,-1:25,13,-1:23,14,-1:24,57,-1:24,15,-1:23,64,-1" +
+":27,58,-1:19,16,-1:28,17,-1:16,18,-1:24,46,-1:21,63,-1:30,47,-1:25,51,-1:21" +
+",59,-1:16,45,-1:23,50,-1:23,52,-1:20");
 
 	public java_cup.runtime.Symbol next_token ()
 		throws java.io.IOException {
@@ -323,100 +363,112 @@ class Yylex implements java_cup.runtime.Scanner {
 					case -2:
 						break;
 					case 2:
-						{ System.err.println("Illegal character: "+yytext()); }
+						{ this.updateLocation(); throw new InvalidInputException(this.currentLine, this.currentColumn, yytext()); }
 					case -3:
 						break;
 					case 3:
-						{ /* Ignore */ }
+						{ this.updateLocation(); }
 					case -4:
 						break;
 					case 4:
-						{ return new Symbol(DecafParserSymbols.IF); }
+						{ /* Ignore */ }
 					case -5:
 						break;
 					case 5:
-						{ return new Symbol(DecafParserSymbols.INT); }
+						{ return this.newToken(DecafParserSymbols.IF); }
 					case -6:
 						break;
 					case 6:
-						{ return new Symbol(DecafParserSymbols.ELSE); }
+						{ this.updateLocation(); }
 					case -7:
 						break;
 					case 7:
-						{ return new Symbol(DecafParserSymbols.TRUE); }
+						{ return this.newToken(DecafParserSymbols.INT); }
 					case -8:
 						break;
 					case 8:
-						{ return new Symbol(DecafParserSymbols.VOID); }
+						{ return this.newToken(DecafParserSymbols.ELSE); }
 					case -9:
 						break;
 					case 9:
-						{ return new Symbol(DecafParserSymbols.BREAK); }
+						{ return this.newToken(DecafParserSymbols.TRUE); }
 					case -10:
 						break;
 					case 10:
-						{ return new Symbol(DecafParserSymbols.CLASS); }
+						{ return this.newToken(DecafParserSymbols.VOID); }
 					case -11:
 						break;
 					case 11:
-						{ return new Symbol(DecafParserSymbols.FALSE); }
+						{ return this.newToken(DecafParserSymbols.BREAK); }
 					case -12:
 						break;
 					case 12:
-						{ return new Symbol(DecafParserSymbols.WHILE); }
+						{ return this.newToken(DecafParserSymbols.CLASS); }
 					case -13:
 						break;
 					case 13:
-						{ return new Symbol(DecafParserSymbols.RETURN); }
+						{ return this.newToken(DecafParserSymbols.FALSE); }
 					case -14:
 						break;
 					case 14:
-						{ return new Symbol(DecafParserSymbols.BOOLEAN); }
+						{ return this.newToken(DecafParserSymbols.WHILE); }
 					case -15:
 						break;
 					case 15:
-						{ return new Symbol(DecafParserSymbols.CALLOUT); }
+						{ return this.newToken(DecafParserSymbols.RETURN); }
 					case -16:
 						break;
 					case 16:
-						{ return new Symbol(DecafParserSymbols.CONTINUE); }
+						{ return this.newToken(DecafParserSymbols.BOOLEAN); }
 					case -17:
 						break;
-					case 18:
-						{ System.err.println("Illegal character: "+yytext()); }
+					case 17:
+						{ return this.newToken(DecafParserSymbols.CALLOUT); }
 					case -18:
 						break;
-					case 20:
-						{ System.err.println("Illegal character: "+yytext()); }
+					case 18:
+						{ return this.newToken(DecafParserSymbols.CONTINUE); }
 					case -19:
 						break;
-					case 22:
-						{ System.err.println("Illegal character: "+yytext()); }
+					case 20:
+						{ this.updateLocation(); throw new InvalidInputException(this.currentLine, this.currentColumn, yytext()); }
 					case -20:
 						break;
-					case 24:
-						{ System.err.println("Illegal character: "+yytext()); }
+					case 22:
+						{ this.updateLocation(); throw new InvalidInputException(this.currentLine, this.currentColumn, yytext()); }
 					case -21:
 						break;
-					case 26:
-						{ System.err.println("Illegal character: "+yytext()); }
+					case 24:
+						{ this.updateLocation(); throw new InvalidInputException(this.currentLine, this.currentColumn, yytext()); }
 					case -22:
 						break;
-					case 28:
-						{ System.err.println("Illegal character: "+yytext()); }
+					case 26:
+						{ this.updateLocation(); throw new InvalidInputException(this.currentLine, this.currentColumn, yytext()); }
 					case -23:
 						break;
-					case 30:
-						{ System.err.println("Illegal character: "+yytext()); }
+					case 28:
+						{ this.updateLocation(); throw new InvalidInputException(this.currentLine, this.currentColumn, yytext()); }
 					case -24:
 						break;
-					case 32:
-						{ System.err.println("Illegal character: "+yytext()); }
+					case 30:
+						{ this.updateLocation(); throw new InvalidInputException(this.currentLine, this.currentColumn, yytext()); }
 					case -25:
 						break;
-					case 34:
-						{ System.err.println("Illegal character: "+yytext()); }
+					case 32:
+						{ this.updateLocation(); throw new InvalidInputException(this.currentLine, this.currentColumn, yytext()); }
 					case -26:
+						break;
+					case 34:
+						{ this.updateLocation(); throw new InvalidInputException(this.currentLine, this.currentColumn, yytext()); }
+					case -27:
+						break;
+					case 36:
+						{ this.updateLocation(); throw new InvalidInputException(this.currentLine, this.currentColumn, yytext()); }
+					case -28:
+						break;
+					case 38:
+						{ this.updateLocation(); throw new InvalidInputException(this.currentLine, this.currentColumn, yytext()); }
+					case -29:
 						break;
 					default:
 						yy_error(YY_E_INTERNAL,false);
