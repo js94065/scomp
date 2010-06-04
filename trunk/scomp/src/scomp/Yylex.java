@@ -26,6 +26,9 @@ class Yylex implements java_cup.runtime.Scanner {
 	/**
 	 * @param symbolId
 	 * <br>Range: any integer
+	 * @return
+	 * <br>A non-null value
+	 * <br>A new value
 	 */
 	private final DecafToken newToken(final int symbolId) {
 		this.updateLocation();
@@ -37,6 +40,9 @@ class Yylex implements java_cup.runtime.Scanner {
 	 * @param object
 	 * <br>Can be null
 	 * <br>Shared parameter
+	 * @return
+	 * <br>A non-null value
+	 * <br>A new value
 	 */
 	private final DecafToken newToken(final int symbolId, final Object object) {
 		this.updateLocation();
@@ -259,7 +265,7 @@ class Yylex implements java_cup.runtime.Scanner {
 		/* 19 */ YY_NO_ANCHOR,
 		/* 20 */ YY_NO_ANCHOR,
 		/* 21 */ YY_NO_ANCHOR,
-		/* 22 */ YY_NO_ANCHOR,
+		/* 22 */ YY_NOT_ACCEPT,
 		/* 23 */ YY_NO_ANCHOR,
 		/* 24 */ YY_NO_ANCHOR,
 		/* 25 */ YY_NO_ANCHOR,
@@ -306,33 +312,38 @@ class Yylex implements java_cup.runtime.Scanner {
 		/* 66 */ YY_NO_ANCHOR,
 		/* 67 */ YY_NO_ANCHOR,
 		/* 68 */ YY_NO_ANCHOR,
-		/* 69 */ YY_NO_ANCHOR
+		/* 69 */ YY_NO_ANCHOR,
+		/* 70 */ YY_NO_ANCHOR,
+		/* 71 */ YY_NO_ANCHOR,
+		/* 72 */ YY_NO_ANCHOR
 	};
 	private int yy_cmap[] = unpackFromString(1,130,
-"22:9,23,24,22,25,24,22:18,23,22:13,19,21,20:10,22:7,19:26,22:4,19,22,5,1,9," +
-"16,4,14,19,18,13,19,8,3,19,6,2,19:2,7,12,11,10,15,17,19:3,22:5,0:2")[0];
+"25:9,26,27,25,28,27,25:18,26,25:13,19,24,21,20:9,25:7,23:6,19:20,25:4,19,25" +
+",5,1,9,16,4,14,19,18,13,19,8,3,19,6,2,19:2,7,12,11,10,15,17,22,19:2,25:5,0:" +
+"2")[0];
 
-	private int yy_rmap[] = unpackFromString(1,70,
-"0,1,2,3,4,5,6,7,8,7:12,9,1,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25," +
-"26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,7,49,5" +
-"0,51,52,53,54,55")[0];
+	private int yy_rmap[] = unpackFromString(1,73,
+"0,1,2,3,4,5,6,7,8,7,9,7:11,9,10,11,1,12,13,14,15,16,17,18,19,20,21,22,23,24" +
+",25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49" +
+",50,7,51,52,53,54,55,56,57")[0];
 
-	private int yy_nxt[][] = unpackFromString(56,26,
-"1,2,62:2,46,62:2,64,62,66,62,47,62,21,67,48,62,68,62:2,3,4,22,5,6:2,-1:27,6" +
-"2,69,62:4,49,62:13,-1:25,3,-1:26,8,-1:27,5,-1:26,6:2,-1,62:20,-1:6,8:23,-1," +
-"8,-1,62:5,23,62:7,7,62:6,-1:6,62:10,9,62:9,-1:6,62:3,10,62:16,-1:6,62:3,11," +
-"62:16,-1:6,62:15,12,62:4,-1:6,62:7,13,62:12,-1:6,62:11,14,62:8,-1:6,62:3,15" +
-",62:16,-1:6,62:3,16,62:16,-1:6,62:5,17,62:14,-1:6,62:5,18,62:14,-1:6,62:10," +
-"19,62:9,-1:6,62:3,20,62:16,-1:6,62:11,24,62:8,-1:6,62:9,25,62:10,-1:6,62:12" +
-",26,62:7,-1:6,62:4,27,62:15,-1:6,62:11,28,62:8,-1:6,62:11,29,62:8,-1:6,62:2" +
-",30,62:17,-1:6,62:6,31,62:13,-1:6,62:4,32,62:15,-1:6,62:9,33,62:10,-1:6,62:" +
-"9,34,62:10,-1:6,62:2,35,62:17,-1:6,62:6,36,62:13,-1:6,62,37,62:18,-1:6,62:3" +
-",38,62:16,-1:6,62:10,56,62:9,-1:6,62:5,57,62:14,-1:6,62:4,39,62:15,-1:6,62:" +
-"2,65,62:17,-1:6,62:2,40,62:17,-1:6,62:12,41,62:7,-1:6,62:9,42,62:10,-1:6,62" +
-":10,59,62:9,-1:6,62:3,43,62:16,-1:6,62:12,61,62:7,-1:6,62,44,62:18,-1:6,62:" +
-"5,45,62:14,-1:6,62:2,58,62:17,-1:6,62:3,50,62:16,-1:6,62:2,60,62:17,-1:6,62" +
-",51,52,62,53,62:15,-1:6,62:4,54,62:15,-1:6,62:17,55,62:2,-1:6,62,63,62:18,-" +
-"1:5");
+	private int yy_nxt[][] = unpackFromString(58,29,
+"1,2,65:2,49,65:2,67,65,69,65,50,65,23,70,51,65,71,65:2,3,24,65:2,4,25,5,6:2" +
+",-1:30,65,72,65:4,52,65:16,-1:25,3:2,-1:31,8,-1:30,5,-1:29,6:2,-1,65:23,-1:" +
+"6,8:26,-1,8,-1,10,-1:2,10:2,-1:3,10,-1:4,10,-1,10,-1:3,10:2,-1,10,-1:6,65:5" +
+",26,65:7,7,65:9,-1:25,3:2,22,-1:7,65:10,9,65:12,-1:6,65:3,11,65:19,-1:6,65:" +
+"3,12,65:19,-1:6,65:15,13,65:7,-1:6,65:7,14,65:15,-1:6,65:11,15,65:11,-1:6,6" +
+"5:3,16,65:19,-1:6,65:3,17,65:19,-1:6,65:5,18,65:17,-1:6,65:5,19,65:17,-1:6," +
+"65:10,20,65:12,-1:6,65:3,21,65:19,-1:6,65:11,27,65:11,-1:6,65:9,28,65:13,-1" +
+":6,65:12,29,65:10,-1:6,65:4,30,65:18,-1:6,65:11,31,65:11,-1:6,65:11,32,65:1" +
+"1,-1:6,65:2,33,65:20,-1:6,65:6,34,65:16,-1:6,65:4,35,65:18,-1:6,65:9,36,65:" +
+"13,-1:6,65:9,37,65:13,-1:6,65:2,38,65:20,-1:6,65:6,39,65:16,-1:6,65,40,65:2" +
+"1,-1:6,65:3,41,65:19,-1:6,65:10,59,65:12,-1:6,65:5,60,65:17,-1:6,65:4,42,65" +
+":18,-1:6,65:2,68,65:20,-1:6,65:2,43,65:20,-1:6,65:12,44,65:10,-1:6,65:9,45," +
+"65:13,-1:6,65:10,62,65:12,-1:6,65:3,46,65:19,-1:6,65:12,64,65:10,-1:6,65,47" +
+",65:21,-1:6,65:5,48,65:17,-1:6,65:2,61,65:20,-1:6,65:3,53,65:19,-1:6,65:2,6" +
+"3,65:20,-1:6,65,54,55,65,56,65:18,-1:6,65:4,57,65:18,-1:6,65:17,58,65:5,-1:" +
+"6,65,66,65:21,-1:5");
 
 	public java_cup.runtime.Symbol next_token ()
 		throws java.io.IOException {
@@ -415,244 +426,252 @@ class Yylex implements java_cup.runtime.Scanner {
 					case -10:
 						break;
 					case 10:
-						{ return this.newToken(DecafParserSymbols.ELSE); }
+						{ return this.newToken(DecafParserSymbols.INT_LITERAL, Integer.parseInt(this.yytext().substring(2), 16)); }
 					case -11:
 						break;
 					case 11:
-						{ return this.newToken(DecafParserSymbols.TRUE); }
+						{ return this.newToken(DecafParserSymbols.ELSE); }
 					case -12:
 						break;
 					case 12:
-						{ return this.newToken(DecafParserSymbols.VOID); }
+						{ return this.newToken(DecafParserSymbols.TRUE); }
 					case -13:
 						break;
 					case 13:
-						{ return this.newToken(DecafParserSymbols.BREAK); }
+						{ return this.newToken(DecafParserSymbols.VOID); }
 					case -14:
 						break;
 					case 14:
-						{ return this.newToken(DecafParserSymbols.CLASS); }
+						{ return this.newToken(DecafParserSymbols.BREAK); }
 					case -15:
 						break;
 					case 15:
-						{ return this.newToken(DecafParserSymbols.FALSE); }
+						{ return this.newToken(DecafParserSymbols.CLASS); }
 					case -16:
 						break;
 					case 16:
-						{ return this.newToken(DecafParserSymbols.WHILE); }
+						{ return this.newToken(DecafParserSymbols.FALSE); }
 					case -17:
 						break;
 					case 17:
-						{ return this.newToken(DecafParserSymbols.RETURN); }
+						{ return this.newToken(DecafParserSymbols.WHILE); }
 					case -18:
 						break;
 					case 18:
-						{ return this.newToken(DecafParserSymbols.BOOLEAN); }
+						{ return this.newToken(DecafParserSymbols.RETURN); }
 					case -19:
 						break;
 					case 19:
-						{ return this.newToken(DecafParserSymbols.CALLOUT); }
+						{ return this.newToken(DecafParserSymbols.BOOLEAN); }
 					case -20:
 						break;
 					case 20:
-						{ return this.newToken(DecafParserSymbols.CONTINUE); }
+						{ return this.newToken(DecafParserSymbols.CALLOUT); }
 					case -21:
 						break;
 					case 21:
-						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
+						{ return this.newToken(DecafParserSymbols.CONTINUE); }
 					case -22:
-						break;
-					case 22:
-						{ this.updateLocation(); throw new InvalidInputException(this.currentLine, this.currentColumn, this.yytext()); }
-					case -23:
 						break;
 					case 23:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -24:
+					case -23:
 						break;
 					case 24:
-						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -25:
+						{ return this.newToken(DecafParserSymbols.INT_LITERAL, Integer.parseInt(this.yytext())); }
+					case -24:
 						break;
 					case 25:
-						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -26:
+						{ this.updateLocation(); throw new InvalidInputException(this.currentLine, this.currentColumn, this.yytext()); }
+					case -25:
 						break;
 					case 26:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -27:
+					case -26:
 						break;
 					case 27:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -28:
+					case -27:
 						break;
 					case 28:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -29:
+					case -28:
 						break;
 					case 29:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -30:
+					case -29:
 						break;
 					case 30:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -31:
+					case -30:
 						break;
 					case 31:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -32:
+					case -31:
 						break;
 					case 32:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -33:
+					case -32:
 						break;
 					case 33:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -34:
+					case -33:
 						break;
 					case 34:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -35:
+					case -34:
 						break;
 					case 35:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -36:
+					case -35:
 						break;
 					case 36:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -37:
+					case -36:
 						break;
 					case 37:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -38:
+					case -37:
 						break;
 					case 38:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -39:
+					case -38:
 						break;
 					case 39:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -40:
+					case -39:
 						break;
 					case 40:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -41:
+					case -40:
 						break;
 					case 41:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -42:
+					case -41:
 						break;
 					case 42:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -43:
+					case -42:
 						break;
 					case 43:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -44:
+					case -43:
 						break;
 					case 44:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -45:
+					case -44:
 						break;
 					case 45:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -46:
+					case -45:
 						break;
 					case 46:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -47:
+					case -46:
 						break;
 					case 47:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -48:
+					case -47:
 						break;
 					case 48:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -49:
+					case -48:
 						break;
 					case 49:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -50:
+					case -49:
 						break;
 					case 50:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -51:
+					case -50:
 						break;
 					case 51:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -52:
+					case -51:
 						break;
 					case 52:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -53:
+					case -52:
 						break;
 					case 53:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -54:
+					case -53:
 						break;
 					case 54:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -55:
+					case -54:
 						break;
 					case 55:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -56:
+					case -55:
 						break;
 					case 56:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -57:
+					case -56:
 						break;
 					case 57:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -58:
+					case -57:
 						break;
 					case 58:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -59:
+					case -58:
 						break;
 					case 59:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -60:
+					case -59:
 						break;
 					case 60:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -61:
+					case -60:
 						break;
 					case 61:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -62:
+					case -61:
 						break;
 					case 62:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -63:
+					case -62:
 						break;
 					case 63:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -64:
+					case -63:
 						break;
 					case 64:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -65:
+					case -64:
 						break;
 					case 65:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -66:
+					case -65:
 						break;
 					case 66:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -67:
+					case -66:
 						break;
 					case 67:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -68:
+					case -67:
 						break;
 					case 68:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
-					case -69:
+					case -68:
 						break;
 					case 69:
 						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
+					case -69:
+						break;
+					case 70:
+						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
 					case -70:
+						break;
+					case 71:
+						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
+					case -71:
+						break;
+					case 72:
+						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
+					case -72:
 						break;
 					default:
 						yy_error(YY_E_INTERNAL,false);

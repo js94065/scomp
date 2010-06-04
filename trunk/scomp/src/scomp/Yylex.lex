@@ -27,6 +27,9 @@ import java_cup.runtime.Symbol;
 	/**
 	 * @param symbolId
 	 * <br>Range: any integer
+	 * @return
+	 * <br>A non-null value
+	 * <br>A new value
 	 */
 	private final DecafToken newToken(final int symbolId) {
 		this.updateLocation();
@@ -40,6 +43,9 @@ import java_cup.runtime.Symbol;
 	 * @param object
 	 * <br>Can be null
 	 * <br>Shared parameter
+	 * @return
+	 * <br>A non-null value
+	 * <br>A new value
 	 */
 	private final DecafToken newToken(final int symbolId, final Object object) {
 		this.updateLocation();
@@ -66,6 +72,8 @@ void { return this.newToken(DecafParserSymbols.VOID); }
 while { return this.newToken(DecafParserSymbols.WHILE); }
 
 [a-zA-Z_\.][a-zA-Z_\.0-9]* { return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
+
+0x[a-fA-F0-9]+ { return this.newToken(DecafParserSymbols.INT_LITERAL, Integer.parseInt(this.yytext().substring(2), 16)); }
 
 [0-9]+ { return this.newToken(DecafParserSymbols.INT_LITERAL, Integer.parseInt(this.yytext())); }
 
