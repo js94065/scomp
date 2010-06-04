@@ -21,34 +21,25 @@ public class GenerateDecafParser {
 		
         try {
         	System.out.println("Generating scanner");
-        	System.out.flush();
         	
     		jlex.Main.main(new String[] { directory + "Yylex.lex" });
-        	System.out.flush();
-        	System.err.flush();
     		
     		System.out.println("Generating parser");
-        	System.out.flush();
     		
     		java_cup.Main.main(new String[] { "-parser", parserName, "-symbols", symbolsName, directory + parserName + ".cup" });
-        	System.out.flush();
-        	System.err.flush();
     		
     		final File parser = new File(parserName + ".java");
     		final File symbols = new File(symbolsName + ".java");
     		
     		System.out.println("Moving " + parser + " into " + directory);
-        	System.out.flush();
     		
     		parser.renameTo(new File(directory, parser.getName()));
     		
     		System.out.println("Moving " + symbols + " into " + directory);
-        	System.out.flush();
     		
     		symbols.renameTo(new File(directory, symbols.getName()));
     		
     		System.out.println("All done");
-        	System.out.flush();
 		} catch (final Exception exception) {
         	System.out.flush();
         	System.err.flush();
