@@ -2,7 +2,7 @@ package scomp;
 
 import java_cup.runtime.*;
 
-terminal BOOLEAN, BREAK, CALLOUT, CLASS, CONTINUE, ELSE, FALSE, IF, INT, RETURN, TRUE, VOID, WHILE;
+terminal BOOLEAN, BREAK, CALLOUT, CLASS, CONTINUE, ELSE, IF, INT, RETURN, VOID, WHILE;
 terminal int INT_LITERAL;
 terminal boolean BOOLEAN_LITERAL;
 terminal char CHAR_LITERAL;
