@@ -3,12 +3,13 @@ package scomp;
 import java_cup.runtime.*;
 
 terminal BOOLEAN, BREAK, CALLOUT, CLASS, CONTINUE, ELSE, IF, INT, RETURN, VOID, WHILE;
+terminal LEFT_PARENTHESIS, RIGHT_PARENTHESIS, LEFT_BRACE, RIGHT_BRACE, LEFT_BRACKET, RIGHT_BRACKET;
 terminal int INT_LITERAL;
 terminal boolean BOOLEAN_LITERAL;
 terminal char CHAR_LITERAL;
 terminal String STRING_LITERAL;
 terminal String IDENTIFIER;
-terminal String BINARY_OPERATOR;
+terminal String OPERATOR;
 
 non terminal Program;
 
