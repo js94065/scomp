@@ -34,6 +34,19 @@ import java_cup.runtime.Symbol;
 		return new DecafToken(symbolId, this.currentLine, this.currentColumn);
 	}
 	
+	/**
+	 * @param symbolId
+	 * <br>Range: any integer
+	 * @param object
+	 * <br>Can be null
+	 * <br>Shared parameter
+	 */
+	private final DecafToken newToken(final int symbolId, final Object object) {
+		this.updateLocation();
+		
+		return new DecafToken(symbolId, object, this.currentLine, this.currentColumn);
+	}
+	
 %}
 
 %%
@@ -52,10 +65,14 @@ true { return this.newToken(DecafParserSymbols.TRUE); }
 void { return this.newToken(DecafParserSymbols.VOID); }
 while { return this.newToken(DecafParserSymbols.WHILE); }
 
+[a-zA-Z_\.][a-zA-Z_\.0-9]* { return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
+
+[0-9]+ { return this.newToken(DecafParserSymbols.INT_LITERAL, Integer.parseInt(this.yytext())); }
+
 //.* { this.updateLocation(); }
 
 [ \t]+ { this.updateLocation(); }
 
 [\r\n\f]+ { /* Ignore */ }
 
-. { this.updateLocation(); throw new InvalidInputException(this.currentLine, this.currentColumn, yytext()); }
+. { this.updateLocation(); throw new InvalidInputException(this.currentLine, this.currentColumn, this.yytext()); }
