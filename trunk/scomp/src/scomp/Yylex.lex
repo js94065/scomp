@@ -1,7 +1,5 @@
 package scomp;
 
-import java_cup.runtime.Symbol;
-
 %%
 
 %cup
@@ -63,13 +61,17 @@ callout { return this.newToken(DecafParserSymbols.CALLOUT); }
 class { return this.newToken(DecafParserSymbols.CLASS); }
 continue { return this.newToken(DecafParserSymbols.CONTINUE); }
 else { return this.newToken(DecafParserSymbols.ELSE); }
-false { return this.newToken(DecafParserSymbols.FALSE); }
+false { return this.newToken(DecafParserSymbols.BOOLEAN_LITERAL, false); }
 if { return this.newToken(DecafParserSymbols.IF); }
 int { return this.newToken(DecafParserSymbols.INT); }
 return { return this.newToken(DecafParserSymbols.RETURN); }
-true { return this.newToken(DecafParserSymbols.TRUE); }
+true { return this.newToken(DecafParserSymbols.BOOLEAN_LITERAL, true); }
 void { return this.newToken(DecafParserSymbols.VOID); }
 while { return this.newToken(DecafParserSymbols.WHILE); }
+
+'([ -!#-&(-\[\]-~]|\\\'|\\\"|\\t|\\n)' { return this.newToken(DecafParserSymbols.CHAR_LITERAL, this.yytext().substring(1, this.yytext().length() - 1)); }
+
+\"([ -!#-&(-\[\]-~]|\\\'|\\\"|\\t|\\n)*\" { return this.newToken(DecafParserSymbols.STRING_LITERAL, this.yytext().substring(1, this.yytext().length() - 1)); }
 
 [a-zA-Z_\.][a-zA-Z_\.0-9]* { return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
 
