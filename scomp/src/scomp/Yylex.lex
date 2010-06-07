@@ -86,7 +86,24 @@ while { return this.newToken(DecafParserSymbols.WHILE); }
 
 [0-9]+ { return this.newToken(DecafParserSymbols.INT_LITERAL, Integer.parseInt(this.yytext())); }
 
-"!"|"+"|"-"|"*"|"%"|"<<"|">>"|">>>"|"<"|">"|"<="|">="|"=="|"!="|"&&"|"||" { return this.newToken(DecafParserSymbols.OPERATOR, this.yytext()); }
+"," { return this.newToken(DecafParserSymbols.COMMA, this.yytext()); }
+";" { return this.newToken(DecafParserSymbols.SEMI_COLON, this.yytext()); }
+"!" { return this.newToken(DecafParserSymbols.NOT, this.yytext()); }
+"+" { return this.newToken(DecafParserSymbols.PLUS, this.yytext()); }
+"-" { return this.newToken(DecafParserSymbols.MINUS, this.yytext()); }
+"*" { return this.newToken(DecafParserSymbols.TIMES, this.yytext()); }
+"%" { return this.newToken(DecafParserSymbols.MODULO, this.yytext()); }
+"<<" { return this.newToken(DecafParserSymbols.ARITHMETIC_SHIFT_LEFT, this.yytext()); }
+">>" { return this.newToken(DecafParserSymbols.ARITHMETIC_SHIFT_RIGHT, this.yytext()); }
+">>>" { return this.newToken(DecafParserSymbols.LOGICAL_SHIFT_RIGHT, this.yytext()); }
+"<" { return this.newToken(DecafParserSymbols.LESSER, this.yytext()); }
+">" { return this.newToken(DecafParserSymbols.GREATER, this.yytext()); }
+"<=" { return this.newToken(DecafParserSymbols.LESSER_OR_EQUAL, this.yytext()); }
+">=" { return this.newToken(DecafParserSymbols.GREATER_OR_EQUAL, this.yytext()); }
+"==" { return this.newToken(DecafParserSymbols.EQUAL, this.yytext()); }
+"!=" { return this.newToken(DecafParserSymbols.NOT_EQUAL, this.yytext()); }
+"&&" { return this.newToken(DecafParserSymbols.AND, this.yytext()); }
+"||" { return this.newToken(DecafParserSymbols.OR, this.yytext()); }
 
 //.* { this.updateLocation(); }
 
