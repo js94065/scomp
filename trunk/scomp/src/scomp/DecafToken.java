@@ -15,7 +15,7 @@ public class DecafToken extends Symbol {
 	/**
 	 * 
 	 * @param symbolId
-	 * <br>Range: any integer
+	 * <br>Range: any integer constant defined in {@link DecafParserSymbols}
 	 * @param row
 	 * <br>Range: {@code [1 .. Integer.MAX_VALUE]}
 	 * @param column
@@ -30,8 +30,8 @@ public class DecafToken extends Symbol {
 	/**
 	 * 
 	 * @param symbolId
-	 * <br>Range: any integer
-	 * @param object
+	 * <br>Range: any integer constant defined in {@link DecafParserSymbols}
+	 * @param value
 	 * <br>Can be null
 	 * <br>Shared parameter
 	 * @param row
@@ -39,8 +39,8 @@ public class DecafToken extends Symbol {
 	 * @param column
 	 * <br>Range: {@code [1 .. Integer.MAX_VALUE]}
 	 */
-	public DecafToken(final int symbolId, final Object object, final int row, final int column) {
-		super(symbolId, object);
+	public DecafToken(final int symbolId, final Object value, final int row, final int column) {
+		super(symbolId, value);
 		this.row = row;
 		this.column = column;
 	}
@@ -61,6 +61,37 @@ public class DecafToken extends Symbol {
 	 */
 	public final int getColumn() {
 		return this.column;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * <br>Range: any integer constant defined in {@link DecafParserSymbols}
+	 */
+	public final int getSymbolId() {
+		return this.sym;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * <br>A possibly null value
+	 * <br>A shared value
+	 */
+	public final Object getValue() {
+		return this.value;
+	}
+	
+	@Override
+	public boolean equals(final Object object) {
+		final DecafToken that = Tools.cast(this.getClass(), object);
+		
+		return that != null && this.getSymbolId() == that.getSymbolId() && Tools.equals(this.getValue(), that.getValue());
+	}
+	
+	@Override
+	public final int hashCode() {
+		return Tools.hashCode(this.getSymbolId()) + Tools.hashCode(this.getValue());
 	}
 	
 }
