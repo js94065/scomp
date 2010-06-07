@@ -17,7 +17,7 @@ public class DecafScannerTest {
 	 * Tests CHAR_LITERAL
 	 */
 	@Test
-	public void charLiteral() {
+	public void testCharLiteral() {
 		try {
 			Yylex lexer = new Yylex(new ByteArrayInputStream("\'a\'".getBytes()));
 			DecafToken token = (DecafToken) lexer.next_token();
@@ -32,7 +32,7 @@ public class DecafScannerTest {
 	 * Tests STRING_LITERAL.
 	 */
 	@Test
-	public void stringLiteral() {
+	public void testStringLiteral() {
 		try {
 			Yylex lexer = new Yylex(new ByteArrayInputStream("\"test1\"".getBytes()));
 			DecafToken token = (DecafToken) lexer.next_token();
@@ -47,7 +47,7 @@ public class DecafScannerTest {
 	 * Test INT_LITERAL 
 	 */
 	@Test
-	public void intLiteral() {
+	public void testIntLiteral() {
 		try {
 			Yylex lexer = new Yylex(new ByteArrayInputStream("42".getBytes()));
 			DecafToken token = (DecafToken) lexer.next_token();
@@ -62,7 +62,7 @@ public class DecafScannerTest {
 	 * Test IDENTIFIER
 	 */
 	@Test
-	public void identifier() {
+	public void testIdentifier() {
 		try {
 			Yylex lexer = new Yylex(new ByteArrayInputStream("something".getBytes()));
 			DecafToken token = (DecafToken) lexer.next_token();
@@ -78,12 +78,32 @@ public class DecafScannerTest {
 	 * For this test, we use a modified CHAR_LITERAL.
 	 */
 	@Test(expected=InvalidInputException.class)
-	public void invalidInputChar() throws InvalidInputException, IOException {
+	public void testInvalidInputChar() throws InvalidInputException, IOException {
 		Yylex lexer = new Yylex(new ByteArrayInputStream("\'ab\'".getBytes()));
 		// should throw an exception here
 		DecafToken token = (DecafToken) lexer.next_token();
 	}
 	
+	/**
+	 * Tests for Brace types
+	 */
+	@Test
+	public final void testBraceTypes() throws IOException {
+		match("( ) { } [ ]", 
+				token(LEFT_PARENTHESIS),
+				token(RIGHT_PARENTHESIS),
+				token(LEFT_BRACE),
+				token(RIGHT_BRACE),
+				token(LEFT_BRACKET),
+				token(RIGHT_BRACKET)
+				);
+	}
+	
+	
+	/**
+	 * Tests for keywords.
+	 * @throws IOException
+	 */
 	@Test
 	public final void testKeywords() throws IOException {
 		match("boolean break callout class continue else false if int return true void while",
@@ -182,5 +202,6 @@ public class DecafScannerTest {
 	private static final int UNSPECIFIED_ROW = Integer.MAX_VALUE;
 	
 	private static final int UNSPECIFIED_COLUMN = Integer.MAX_VALUE;
+	
 	
 }
