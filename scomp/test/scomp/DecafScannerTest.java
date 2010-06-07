@@ -99,6 +99,13 @@ public class DecafScannerTest {
 				);
 	}
 	
+	@Test
+	public final void testIntLiterals() throws IOException {
+		match("42 0x42",
+				token(INT_LITERAL, 42),
+				token(INT_LITERAL, 0x42)
+				);
+	}
 	
 	/**
 	 * Tests for keywords.

@@ -478,39 +478,39 @@ class Yylex implements java_cup.runtime.Scanner {
 					case -11:
 						break;
 					case 11:
-						{ return this.newToken(DecafParserSymbols.COMMA, this.yytext()); }
+						{ return this.newToken(DecafParserSymbols.COMMA); }
 					case -12:
 						break;
 					case 12:
-						{ return this.newToken(DecafParserSymbols.SEMI_COLON, this.yytext()); }
+						{ return this.newToken(DecafParserSymbols.SEMI_COLON); }
 					case -13:
 						break;
 					case 13:
-						{ return this.newToken(DecafParserSymbols.NOT, this.yytext()); }
+						{ return this.newToken(DecafParserSymbols.NOT); }
 					case -14:
 						break;
 					case 14:
-						{ return this.newToken(DecafParserSymbols.PLUS, this.yytext()); }
+						{ return this.newToken(DecafParserSymbols.PLUS); }
 					case -15:
 						break;
 					case 15:
-						{ return this.newToken(DecafParserSymbols.MINUS, this.yytext()); }
+						{ return this.newToken(DecafParserSymbols.MINUS); }
 					case -16:
 						break;
 					case 16:
-						{ return this.newToken(DecafParserSymbols.TIMES, this.yytext()); }
+						{ return this.newToken(DecafParserSymbols.TIMES); }
 					case -17:
 						break;
 					case 17:
-						{ return this.newToken(DecafParserSymbols.MODULO, this.yytext()); }
+						{ return this.newToken(DecafParserSymbols.MODULO); }
 					case -18:
 						break;
 					case 18:
-						{ return this.newToken(DecafParserSymbols.LESSER, this.yytext()); }
+						{ return this.newToken(DecafParserSymbols.LESSER); }
 					case -19:
 						break;
 					case 19:
-						{ return this.newToken(DecafParserSymbols.GREATER, this.yytext()); }
+						{ return this.newToken(DecafParserSymbols.GREATER); }
 					case -20:
 						break;
 					case 20:
@@ -530,35 +530,35 @@ class Yylex implements java_cup.runtime.Scanner {
 					case -24:
 						break;
 					case 24:
-						{ return this.newToken(DecafParserSymbols.NOT_EQUAL, this.yytext()); }
+						{ return this.newToken(DecafParserSymbols.NOT_EQUAL); }
 					case -25:
 						break;
 					case 25:
-						{ return this.newToken(DecafParserSymbols.ARITHMETIC_SHIFT_LEFT, this.yytext()); }
+						{ return this.newToken(DecafParserSymbols.ARITHMETIC_SHIFT_LEFT); }
 					case -26:
 						break;
 					case 26:
-						{ return this.newToken(DecafParserSymbols.LESSER_OR_EQUAL, this.yytext()); }
+						{ return this.newToken(DecafParserSymbols.LESSER_OR_EQUAL); }
 					case -27:
 						break;
 					case 27:
-						{ return this.newToken(DecafParserSymbols.ARITHMETIC_SHIFT_RIGHT, this.yytext()); }
+						{ return this.newToken(DecafParserSymbols.ARITHMETIC_SHIFT_RIGHT); }
 					case -28:
 						break;
 					case 28:
-						{ return this.newToken(DecafParserSymbols.GREATER_OR_EQUAL, this.yytext()); }
+						{ return this.newToken(DecafParserSymbols.GREATER_OR_EQUAL); }
 					case -29:
 						break;
 					case 29:
-						{ return this.newToken(DecafParserSymbols.EQUAL, this.yytext()); }
+						{ return this.newToken(DecafParserSymbols.EQUAL); }
 					case -30:
 						break;
 					case 30:
-						{ return this.newToken(DecafParserSymbols.AND, this.yytext()); }
+						{ return this.newToken(DecafParserSymbols.AND); }
 					case -31:
 						break;
 					case 31:
-						{ return this.newToken(DecafParserSymbols.OR, this.yytext()); }
+						{ return this.newToken(DecafParserSymbols.OR); }
 					case -32:
 						break;
 					case 32:
@@ -578,7 +578,7 @@ class Yylex implements java_cup.runtime.Scanner {
 					case -36:
 						break;
 					case 36:
-						{ return this.newToken(DecafParserSymbols.LOGICAL_SHIFT_RIGHT, this.yytext()); }
+						{ return this.newToken(DecafParserSymbols.BITWISE_ROTATE_RIGHT); }
 					case -37:
 						break;
 					case 37:
