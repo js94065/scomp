@@ -22,22 +22,10 @@ public class DecafScannerTest {
 			Yylex lexer = new Yylex(new ByteArrayInputStream("\'a\'".getBytes()));
 			DecafToken token = (DecafToken) lexer.next_token();
 			assertEquals(token.value, "a");
-			assertEquals(token.sym, 21);
+			assertEquals(token.sym, CHAR_LITERAL);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	/**
-	 * Test an incorrect CHAR_LITERAL.  
-	 */
-	@Test(expected=AssertionError.class)
-	public void charLiteralIncorrect() throws AssertionError, IOException {
-		// input a string
-		Yylex lexer = new Yylex(new ByteArrayInputStream("\"a\"".getBytes()));
-		// should throw an exception here
-		DecafToken token = (DecafToken) lexer.next_token();
-		assertEquals(token.sym, 21);
 	}
 
 	/**
@@ -49,22 +37,10 @@ public class DecafScannerTest {
 			Yylex lexer = new Yylex(new ByteArrayInputStream("\"test1\"".getBytes()));
 			DecafToken token = (DecafToken) lexer.next_token();
 			assertEquals(token.value, "test1");
-			assertEquals(token.sym, 22);
+			assertEquals(token.sym, STRING_LITERAL);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	/**`
-	 * Test an incorrect STRING_LITERAL
-	 */
-	@Test(expected=AssertionError.class)
-	public void stringLiteralIncorrect() throws AssertionError, IOException {
-		// input an identifier
-		Yylex lexer = new Yylex(new ByteArrayInputStream("test1,".getBytes()));  
-		// should throw an exception here
-		DecafToken token = (DecafToken) lexer.next_token();
-		assertEquals(token.sym, 22);
 	}
 	
 	/**
@@ -76,7 +52,7 @@ public class DecafScannerTest {
 			Yylex lexer = new Yylex(new ByteArrayInputStream("42".getBytes()));
 			DecafToken token = (DecafToken) lexer.next_token();
 			assertEquals(token.value, 42);
-			assertEquals(token.sym, 19);
+			assertEquals(token.sym, INT_LITERAL);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -91,7 +67,7 @@ public class DecafScannerTest {
 			Yylex lexer = new Yylex(new ByteArrayInputStream("something".getBytes()));
 			DecafToken token = (DecafToken) lexer.next_token();
 			assertEquals(token.value, "something");
-			assertEquals(token.sym, 23);
+			assertEquals(token.sym, IDENTIFIER);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
