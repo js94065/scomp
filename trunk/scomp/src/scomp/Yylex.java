@@ -290,21 +290,21 @@ class Yylex implements java_cup.runtime.Scanner {
 		/* 45 */ YY_NO_ANCHOR,
 		/* 46 */ YY_NO_ANCHOR,
 		/* 47 */ YY_NO_ANCHOR,
-		/* 48 */ YY_NOT_ACCEPT,
-		/* 49 */ YY_NO_ANCHOR,
+		/* 48 */ YY_NO_ANCHOR,
+		/* 49 */ YY_NOT_ACCEPT,
 		/* 50 */ YY_NO_ANCHOR,
 		/* 51 */ YY_NO_ANCHOR,
-		/* 52 */ YY_NOT_ACCEPT,
-		/* 53 */ YY_NO_ANCHOR,
+		/* 52 */ YY_NO_ANCHOR,
+		/* 53 */ YY_NOT_ACCEPT,
 		/* 54 */ YY_NO_ANCHOR,
-		/* 55 */ YY_NOT_ACCEPT,
-		/* 56 */ YY_NO_ANCHOR,
+		/* 55 */ YY_NO_ANCHOR,
+		/* 56 */ YY_NOT_ACCEPT,
 		/* 57 */ YY_NO_ANCHOR,
-		/* 58 */ YY_NOT_ACCEPT,
-		/* 59 */ YY_NO_ANCHOR,
+		/* 58 */ YY_NO_ANCHOR,
+		/* 59 */ YY_NOT_ACCEPT,
 		/* 60 */ YY_NO_ANCHOR,
-		/* 61 */ YY_NOT_ACCEPT,
-		/* 62 */ YY_NO_ANCHOR,
+		/* 61 */ YY_NO_ANCHOR,
+		/* 62 */ YY_NOT_ACCEPT,
 		/* 63 */ YY_NO_ANCHOR,
 		/* 64 */ YY_NO_ANCHOR,
 		/* 65 */ YY_NO_ANCHOR,
@@ -352,46 +352,47 @@ class Yylex implements java_cup.runtime.Scanner {
 		/* 107 */ YY_NO_ANCHOR
 	};
 	private int yy_cmap[] = unpackFromString(1,130,
-"47:9,48,50,47,51,50,47:18,49,36,28,26:2,40,44,25,19,20,39,37,34,38,29,46,31" +
-",30:9,26,35,41,43,42,26:2,33:6,29:20,23,27,24,26,29,26,5,1,9,16,4,14,29,18," +
-"13,29,8,3,29,6,2,29:2,7,12,11,10,15,17,32,29:2,21,45,22,26,47,0:2")[0];
+"47:9,48,50,47,51,50,47:18,49,36,28,26:2,41,45,25,19,20,39,37,34,38,29,40,31" +
+",30:9,26,35,42,44,43,26:2,33:6,29:20,23,27,24,26,29,26,5,1,9,16,4,14,29,18," +
+"13,29,8,3,29,6,2,29:2,7,12,11,10,15,17,32,29:2,21,46,22,26,47,0:2")[0];
 
 	private int yy_rmap[] = unpackFromString(1,108,
-"0,1,2,1:6,3,4,1:2,5,1:4,6,7,8,9,10,1:4,11,1:4,12,10,1,13,1,10:11,14,15,1,16" +
-",17,18,19:2,20,21,22,23,24,13,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39," +
-"40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,10,63," +
-"64,65,66,67,68,69")[0];
+"0,1,2,1:6,3,4,1:2,5,1:3,6,1,7,8,9,10,11,1:2,12,1:2,13,1:4,11,1,14,1,11:11,1" +
+"5,16,1,17,18,19,20:2,21,22,23,24,25,14,26,27,28,29,30,31,32,33,34,35,36,37," +
+"38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62," +
+"11,63,64,65,66,67,68,69")[0];
 
 	private int yy_nxt[][] = unpackFromString(70,52,
-"1,2,100:2,84,100:2,102,100,104,100,85,100,49,105,86,100,106,100,3,4,5,6,7,8" +
-",9,50:2,54,100,10,51,100:2,11,12,13,14,15,16,17,18,19,57,60,63,65,50,20:2,2" +
-"1:2,-1:53,100,107,100:4,87,100:11,-1:10,100:5,-1:19,48:24,-1,48,52,-1,48:18" +
-",-1:2,48,-1:32,10:2,-1:63,24,-1:49,25,-1,26,-1:50,27,28,-1:56,20:2,-1:52,21" +
-":2,-1,100:18,-1:10,100:5,-1:60,36,-1:10,32:49,-1,32,-1,35,-1:2,35:2,-1:3,35" +
-",-1:4,35,-1,35,-1:13,35:2,-1,35,-1:43,34,-1:27,100:5,53,100:7,22,100:4,-1:1" +
-"0,100:5,-1:48,10:2,61,-1:25,48,-1:4,48,-1:13,48,-1:2,48,-1:24,100:10,33,100" +
-":7,-1:10,100:5,-1:19,55:24,-1,55,58,23,55:18,-1:2,55,-1:3,100:3,37,100:14,-" +
-"1:10,100:5,-1:61,29,-1:14,55,-1:4,55,-1:13,55,-1:2,55,-1:24,100:3,38,100:14" +
-",-1:10,100:5,-1:62,30,-1:8,100:15,39,100:2,-1:10,100:5,-1:63,31,-1:7,100:7," +
-"40,100:10,-1:10,100:5,-1:64,32,-1:6,100:11,41,100:6,-1:10,100:5,-1:19,100:3" +
-",42,100:14,-1:10,100:5,-1:19,100:3,43,100:14,-1:10,100:5,-1:19,100:5,44,100" +
-":12,-1:10,100:5,-1:19,100:5,45,100:12,-1:10,100:5,-1:19,100:10,46,100:7,-1:" +
-"10,100:5,-1:19,100:3,47,100:14,-1:10,100:5,-1:19,100:11,56,100:6,-1:10,100:" +
-"5,-1:19,100:9,59,100:8,-1:10,100:5,-1:19,100:12,62,100:5,-1:10,100:5,-1:19," +
-"100:4,64,100:13,-1:10,100:5,-1:19,100:11,66,100:6,-1:10,100:5,-1:19,100:11," +
-"67,100:6,-1:10,100:5,-1:19,100:2,68,100:15,-1:10,100:5,-1:19,100:6,69,100:1" +
-"1,-1:10,100:5,-1:19,100:4,70,100:13,-1:10,100:5,-1:19,100:9,71,100:8,-1:10," +
-"100:5,-1:19,100:9,72,100:8,-1:10,100:5,-1:19,100:2,73,100:15,-1:10,100:5,-1" +
-":19,100:6,74,100:11,-1:10,100:5,-1:19,100,75,100:16,-1:10,100:5,-1:19,100:3" +
-",76,100:14,-1:10,100:5,-1:19,100:10,94,100:7,-1:10,100:5,-1:19,100:5,95,100" +
-":12,-1:10,100:5,-1:19,100:4,77,100:13,-1:10,100:5,-1:19,100:2,103,100:15,-1" +
-":10,100:5,-1:19,100:2,78,100:15,-1:10,100:5,-1:19,100:12,79,100:5,-1:10,100" +
-":5,-1:19,100:9,80,100:8,-1:10,100:5,-1:19,100:10,97,100:7,-1:10,100:5,-1:19" +
-",100:3,81,100:14,-1:10,100:5,-1:19,100:12,99,100:5,-1:10,100:5,-1:19,100,82" +
-",100:16,-1:10,100:5,-1:19,100:5,83,100:12,-1:10,100:5,-1:19,100:2,96,100:15" +
-",-1:10,100:5,-1:19,100:3,88,100:14,-1:10,100:5,-1:19,100:2,98,100:15,-1:10," +
-"100:5,-1:19,100,89,90,100,91,100:13,-1:10,100:5,-1:19,100:4,92,100:13,-1:10" +
-",100:5,-1:19,100:17,93,-1:10,100:5,-1:19,100,101,100:16,-1:10,100:5,-1:18");
+"1,2,100:2,84,100:2,102,100,104,100,85,100,50,105,86,100,106,100,3,4,5,6,7,8" +
+",9,51:2,55,100,10,52,100:2,11,12,13,14,15,16,17,18,19,20,58,61,64,51,21:2,2" +
+"2:2,-1:53,100,107,100:4,87,100:11,-1:10,100:5,-1:19,49:24,-1,49,53,-1,49:18" +
+",-1:2,49,-1:32,10:2,-1:64,25,-1:47,26,-1:53,27,-1,28,-1:50,29,30,-1:55,21:2" +
+",-1:52,22:2,-1,100:18,-1:10,100:5,-1:19,26:49,-1,26,-1:43,37,-1:9,36,-1:2,3" +
+"6:2,-1:3,36,-1:4,36,-1,36,-1:13,36:2,-1,36,-1:43,35,-1:27,100:5,54,100:7,23" +
+",100:4,-1:10,100:5,-1:48,10:2,62,-1:25,49,-1:4,49,-1:13,49,-1:2,49,-1:24,10" +
+"0:10,34,100:7,-1:10,100:5,-1:19,56:24,-1,56,59,24,56:18,-1:2,56,-1:3,100:3," +
+"38,100:14,-1:10,100:5,-1:62,31,-1:13,56,-1:4,56,-1:13,56,-1:2,56,-1:24,100:" +
+"3,39,100:14,-1:10,100:5,-1:63,32,-1:7,100:15,40,100:2,-1:10,100:5,-1:64,33," +
+"-1:6,100:7,41,100:10,-1:10,100:5,-1:19,100:11,42,100:6,-1:10,100:5,-1:19,10" +
+"0:3,43,100:14,-1:10,100:5,-1:19,100:3,44,100:14,-1:10,100:5,-1:19,100:5,45," +
+"100:12,-1:10,100:5,-1:19,100:5,46,100:12,-1:10,100:5,-1:19,100:10,47,100:7," +
+"-1:10,100:5,-1:19,100:3,48,100:14,-1:10,100:5,-1:19,100:11,57,100:6,-1:10,1" +
+"00:5,-1:19,100:9,60,100:8,-1:10,100:5,-1:19,100:12,63,100:5,-1:10,100:5,-1:" +
+"19,100:4,65,100:13,-1:10,100:5,-1:19,100:11,66,100:6,-1:10,100:5,-1:19,100:" +
+"11,67,100:6,-1:10,100:5,-1:19,100:2,68,100:15,-1:10,100:5,-1:19,100:6,69,10" +
+"0:11,-1:10,100:5,-1:19,100:4,70,100:13,-1:10,100:5,-1:19,100:9,71,100:8,-1:" +
+"10,100:5,-1:19,100:9,72,100:8,-1:10,100:5,-1:19,100:2,73,100:15,-1:10,100:5" +
+",-1:19,100:6,74,100:11,-1:10,100:5,-1:19,100,75,100:16,-1:10,100:5,-1:19,10" +
+"0:3,76,100:14,-1:10,100:5,-1:19,100:10,94,100:7,-1:10,100:5,-1:19,100:5,95," +
+"100:12,-1:10,100:5,-1:19,100:4,77,100:13,-1:10,100:5,-1:19,100:2,103,100:15" +
+",-1:10,100:5,-1:19,100:2,78,100:15,-1:10,100:5,-1:19,100:12,79,100:5,-1:10," +
+"100:5,-1:19,100:9,80,100:8,-1:10,100:5,-1:19,100:10,97,100:7,-1:10,100:5,-1" +
+":19,100:3,81,100:14,-1:10,100:5,-1:19,100:12,99,100:5,-1:10,100:5,-1:19,100" +
+",82,100:16,-1:10,100:5,-1:19,100:5,83,100:12,-1:10,100:5,-1:19,100:2,96,100" +
+":15,-1:10,100:5,-1:19,100:3,88,100:14,-1:10,100:5,-1:19,100:2,98,100:15,-1:" +
+"10,100:5,-1:19,100,89,90,100,91,100:13,-1:10,100:5,-1:19,100:4,92,100:13,-1" +
+":10,100:5,-1:19,100:17,93,-1:10,100:5,-1:19,100,101,100:16,-1:10,100:5,-1:1" +
+"8");
 
 	public java_cup.runtime.Symbol next_token ()
 		throws java.io.IOException {
@@ -502,179 +503,179 @@ class Yylex implements java_cup.runtime.Scanner {
 					case -17:
 						break;
 					case 17:
-						{ return this.newToken(DecafParserSymbols.MODULO); }
+						{ return this.newToken(DecafParserSymbols.DIVIDE); }
 					case -18:
 						break;
 					case 18:
-						{ return this.newToken(DecafParserSymbols.LESSER); }
+						{ return this.newToken(DecafParserSymbols.MODULO); }
 					case -19:
 						break;
 					case 19:
-						{ return this.newToken(DecafParserSymbols.GREATER); }
+						{ return this.newToken(DecafParserSymbols.LESSER); }
 					case -20:
 						break;
 					case 20:
-						{ this.updateLocation(); }
+						{ return this.newToken(DecafParserSymbols.GREATER); }
 					case -21:
 						break;
 					case 21:
-						{ /* Ignore */ }
+						{ this.updateLocation(); }
 					case -22:
 						break;
 					case 22:
-						{ return this.newToken(DecafParserSymbols.IF); }
+						{ /* Ignore */ }
 					case -23:
 						break;
 					case 23:
-						{ return this.newToken(DecafParserSymbols.STRING_LITERAL, this.yytext().substring(1, this.yytext().length() - 1)); }
+						{ return this.newToken(DecafParserSymbols.IF); }
 					case -24:
 						break;
 					case 24:
-						{ return this.newToken(DecafParserSymbols.NOT_EQUAL); }
+						{ return this.newToken(DecafParserSymbols.STRING_LITERAL, this.yytext().substring(1, this.yytext().length() - 1)); }
 					case -25:
 						break;
 					case 25:
-						{ return this.newToken(DecafParserSymbols.ARITHMETIC_SHIFT_LEFT); }
+						{ return this.newToken(DecafParserSymbols.NOT_EQUAL); }
 					case -26:
 						break;
 					case 26:
-						{ return this.newToken(DecafParserSymbols.LESSER_OR_EQUAL); }
+						{ this.updateLocation(); }
 					case -27:
 						break;
 					case 27:
-						{ return this.newToken(DecafParserSymbols.ARITHMETIC_SHIFT_RIGHT); }
+						{ return this.newToken(DecafParserSymbols.ARITHMETIC_SHIFT_LEFT); }
 					case -28:
 						break;
 					case 28:
-						{ return this.newToken(DecafParserSymbols.GREATER_OR_EQUAL); }
+						{ return this.newToken(DecafParserSymbols.LESSER_OR_EQUAL); }
 					case -29:
 						break;
 					case 29:
-						{ return this.newToken(DecafParserSymbols.EQUAL); }
+						{ return this.newToken(DecafParserSymbols.ARITHMETIC_SHIFT_RIGHT); }
 					case -30:
 						break;
 					case 30:
-						{ return this.newToken(DecafParserSymbols.AND); }
+						{ return this.newToken(DecafParserSymbols.GREATER_OR_EQUAL); }
 					case -31:
 						break;
 					case 31:
-						{ return this.newToken(DecafParserSymbols.OR); }
+						{ return this.newToken(DecafParserSymbols.EQUAL); }
 					case -32:
 						break;
 					case 32:
-						{ this.updateLocation(); }
+						{ return this.newToken(DecafParserSymbols.AND); }
 					case -33:
 						break;
 					case 33:
-						{ return this.newToken(DecafParserSymbols.INT); }
+						{ return this.newToken(DecafParserSymbols.OR); }
 					case -34:
 						break;
 					case 34:
-						{ return this.newToken(DecafParserSymbols.CHAR_LITERAL, this.yytext().substring(1, this.yytext().length() - 1)); }
+						{ return this.newToken(DecafParserSymbols.INT); }
 					case -35:
 						break;
 					case 35:
-						{ return this.newToken(DecafParserSymbols.INT_LITERAL, Integer.parseInt(this.yytext().substring(2), 16)); }
+						{ return this.newToken(DecafParserSymbols.CHAR_LITERAL, this.yytext().substring(1, this.yytext().length() - 1)); }
 					case -36:
 						break;
 					case 36:
-						{ return this.newToken(DecafParserSymbols.BITWISE_ROTATE_RIGHT); }
+						{ return this.newToken(DecafParserSymbols.INT_LITERAL, Integer.parseInt(this.yytext().substring(2), 16)); }
 					case -37:
 						break;
 					case 37:
-						{ return this.newToken(DecafParserSymbols.ELSE); }
+						{ return this.newToken(DecafParserSymbols.BITWISE_ROTATE_RIGHT); }
 					case -38:
 						break;
 					case 38:
-						{ return this.newToken(DecafParserSymbols.BOOLEAN_LITERAL, true); }
+						{ return this.newToken(DecafParserSymbols.ELSE); }
 					case -39:
 						break;
 					case 39:
-						{ return this.newToken(DecafParserSymbols.VOID); }
+						{ return this.newToken(DecafParserSymbols.BOOLEAN_LITERAL, true); }
 					case -40:
 						break;
 					case 40:
-						{ return this.newToken(DecafParserSymbols.BREAK); }
+						{ return this.newToken(DecafParserSymbols.VOID); }
 					case -41:
 						break;
 					case 41:
-						{ return this.newToken(DecafParserSymbols.CLASS); }
+						{ return this.newToken(DecafParserSymbols.BREAK); }
 					case -42:
 						break;
 					case 42:
-						{ return this.newToken(DecafParserSymbols.BOOLEAN_LITERAL, false); }
+						{ return this.newToken(DecafParserSymbols.CLASS); }
 					case -43:
 						break;
 					case 43:
-						{ return this.newToken(DecafParserSymbols.WHILE); }
+						{ return this.newToken(DecafParserSymbols.BOOLEAN_LITERAL, false); }
 					case -44:
 						break;
 					case 44:
-						{ return this.newToken(DecafParserSymbols.RETURN); }
+						{ return this.newToken(DecafParserSymbols.WHILE); }
 					case -45:
 						break;
 					case 45:
-						{ return this.newToken(DecafParserSymbols.BOOLEAN); }
+						{ return this.newToken(DecafParserSymbols.RETURN); }
 					case -46:
 						break;
 					case 46:
-						{ return this.newToken(DecafParserSymbols.CALLOUT); }
+						{ return this.newToken(DecafParserSymbols.BOOLEAN); }
 					case -47:
 						break;
 					case 47:
-						{ return this.newToken(DecafParserSymbols.CONTINUE); }
+						{ return this.newToken(DecafParserSymbols.CALLOUT); }
 					case -48:
 						break;
-					case 49:
-						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
+					case 48:
+						{ return this.newToken(DecafParserSymbols.CONTINUE); }
 					case -49:
 						break;
 					case 50:
-						{ this.updateLocation(); throw new InvalidInputException(this.currentLine, this.currentColumn, this.yytext()); }
+						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
 					case -50:
 						break;
 					case 51:
-						{ return this.newToken(DecafParserSymbols.INT_LITERAL, Integer.parseInt(this.yytext())); }
+						{ this.updateLocation(); throw new InvalidInputException(this.currentLine, this.currentColumn, this.yytext()); }
 					case -51:
 						break;
-					case 53:
-						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
+					case 52:
+						{ return this.newToken(DecafParserSymbols.INT_LITERAL, Integer.parseInt(this.yytext())); }
 					case -52:
 						break;
 					case 54:
-						{ this.updateLocation(); throw new InvalidInputException(this.currentLine, this.currentColumn, this.yytext()); }
+						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
 					case -53:
 						break;
-					case 56:
-						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
+					case 55:
+						{ this.updateLocation(); throw new InvalidInputException(this.currentLine, this.currentColumn, this.yytext()); }
 					case -54:
 						break;
 					case 57:
-						{ this.updateLocation(); throw new InvalidInputException(this.currentLine, this.currentColumn, this.yytext()); }
+						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
 					case -55:
 						break;
-					case 59:
-						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
+					case 58:
+						{ this.updateLocation(); throw new InvalidInputException(this.currentLine, this.currentColumn, this.yytext()); }
 					case -56:
 						break;
 					case 60:
-						{ this.updateLocation(); throw new InvalidInputException(this.currentLine, this.currentColumn, this.yytext()); }
+						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
 					case -57:
 						break;
-					case 62:
-						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
+					case 61:
+						{ this.updateLocation(); throw new InvalidInputException(this.currentLine, this.currentColumn, this.yytext()); }
 					case -58:
 						break;
 					case 63:
-						{ this.updateLocation(); throw new InvalidInputException(this.currentLine, this.currentColumn, this.yytext()); }
+						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
 					case -59:
 						break;
 					case 64:
-						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
+						{ this.updateLocation(); throw new InvalidInputException(this.currentLine, this.currentColumn, this.yytext()); }
 					case -60:
 						break;
 					case 65:
-						{ this.updateLocation(); throw new InvalidInputException(this.currentLine, this.currentColumn, this.yytext()); }
+						{ return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
 					case -61:
 						break;
 					case 66:

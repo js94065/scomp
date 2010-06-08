@@ -92,6 +92,7 @@ while { return this.newToken(DecafParserSymbols.WHILE); }
 "+" { return this.newToken(DecafParserSymbols.PLUS); }
 "-" { return this.newToken(DecafParserSymbols.MINUS); }
 "*" { return this.newToken(DecafParserSymbols.TIMES); }
+"/" { return this.newToken(DecafParserSymbols.DIVIDE); }
 "%" { return this.newToken(DecafParserSymbols.MODULO); }
 "<<" { return this.newToken(DecafParserSymbols.ARITHMETIC_SHIFT_LEFT); }
 ">>" { return this.newToken(DecafParserSymbols.ARITHMETIC_SHIFT_RIGHT); }
