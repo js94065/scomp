@@ -44,21 +44,6 @@ public class DecafScannerTest {
 	}
 	
 	/**
-	 * Test INT_LITERAL 
-	 */
-	@Test
-	public void testIntLiteral() {
-		try {
-			Yylex lexer = new Yylex(new ByteArrayInputStream("42".getBytes()));
-			DecafToken token = (DecafToken) lexer.next_token();
-			assertEquals(token.value, 42);
-			assertEquals(token.sym, INT_LITERAL);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	/**
 	 * Test IDENTIFIER
 	 */
 	@Test
@@ -96,6 +81,34 @@ public class DecafScannerTest {
 				token(RIGHT_BRACE),
 				token(LEFT_BRACKET),
 				token(RIGHT_BRACKET)
+				);
+	}
+	
+
+	/**
+	 * Tests for operators.
+	 */
+	@Test
+	public final void testOperators() throws IOException {
+		match(", ; ! + - * % << >> >>> < > <= >= == != && ||", 
+				token(COMMA),
+				token(SEMI_COLON),
+				token(NOT),
+				token(PLUS),
+				token(MINUS),
+				token(TIMES),
+				token(MODULO),
+				token(ARITHMETIC_SHIFT_LEFT),
+				token(ARITHMETIC_SHIFT_RIGHT),
+				token(BITWISE_ROTATE_RIGHT),
+				token(LESSER),
+				token(GREATER),
+				token(LESSER_OR_EQUAL),
+				token(GREATER_OR_EQUAL),
+				token(EQUAL),
+				token(NOT_EQUAL),
+				token(AND),
+				token(OR)
 				);
 	}
 	
