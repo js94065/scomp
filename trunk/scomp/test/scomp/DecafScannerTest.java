@@ -148,6 +148,16 @@ public class DecafScannerTest {
 		);
 	}
 	
+	@Test
+	public final void testSmallestProgram() throws IOException {
+		match("class Program{}",
+				token(CLASS),
+				token(IDENTIFIER, "Program"),
+				token(LEFT_BRACE),
+				token(RIGHT_BRACE)
+		);
+	}
+	
 	private static final int UNSPECIFIED_ROW = Integer.MAX_VALUE;
 	
 	private static final int UNSPECIFIED_COLUMN = Integer.MAX_VALUE;
