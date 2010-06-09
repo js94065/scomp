@@ -49,8 +49,8 @@ public final class Tools {
 	 * 
 	 * @param object
 	 * <br>Can be null
-	 * @return
-	 * <br>A non-null value
+	 * @return {@code 0} if {@code object is null}, otherwise {@code object.hashcode()}
+	 * <br>Range: any integer
 	 */
 	public static final int hashCode(final Object object) {
 		return object == null ? 0 : object.hashCode();
