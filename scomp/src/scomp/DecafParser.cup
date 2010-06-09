@@ -14,9 +14,11 @@ terminal String IDENTIFIER;
 
 non terminal Program;
 non terminal FieldDecl, MethodDecl, Block, VarDecl, Type, Statement, MethodCall, MethodName, Location, Expr, MoreExpr, CalloutArg, MoreCalloutArg;
+non terminal CallingArgs, ElseBlock, ReturnExpr, MoreVar, MoreVarDecl, MoreStatement, ReturnType, MethodArgs, MoreFields, MoreFieldDecls, MoreMethodDecls;
 non terminal BinOp, ArithOp, RelOp, EqOp, CondOp;
 non terminal Literal,Id;
 non terminal BoolLiteral;
+non terminal DecimalLiteral, HexLiteral;
 
 precedence left OR;
 precedence left AND;
@@ -27,24 +29,120 @@ precedence left PLUS, MINUS;
 precedence left TIMES, DIVIDE, MODULO;
 precedence left NOT;
 
-Program ::= CLASS IDENTIFIER LEFT_BRACE  RIGHT_BRACE;
-Type ::= INT | BOOLEAN;
+Program ::= CLASS IDENTIFIER LEFT_BRACE MoreFieldDecls MoreMethodDecls RIGHT_BRACE;
+MoreFieldDecls ::= FieldDecl 
+				   | FieldDecl MoreFieldDecls 
+				   | /*Zero Occurrence*/ 
+				   ; 
+MoreMethodDecls ::= MethodDecl 
+					| MethodDecl MoreMethodDecls 
+					| /*Zero Occurrence*/ 
+					;
+FieldDecl ::= Type MoreFields SEMI_COLON;
+MoreFields ::= Id 
+			   | Id COMMA MoreFields 
+			   | Id LEFT_BRACKET INT_LITERAL RIGHT_BRACKET 
+			   | Id LEFT_BRACKET INT_LITERAL RIGHT_BRACKET COMMA MoreFields
+			   ;
+MethodDecl ::= ReturnType Id LEFT_PARENTHESIS MethodArgs RIGHT_PARENTHESIS Block;
+MethodArgs ::= Type Id 
+			   | Type Id COMMA MethodArgs
+			   ;
+ReturnType ::= Type 
+			   | VOID
+			   ;
+Block ::= LEFT_BRACE MoreVarDecl MoreStatement RIGHT_BRACE;
+MoreVarDecl ::= VarDecl 
+				| VarDecl MoreVarDecl 
+				| /*Zero Occurrence*/ 
+				;
+MoreStatement ::= Statement 
+				  | Statement MoreStatement 
+				  | /*Zero Occurrence*/ 
+				  ;
+VarDecl ::= Type MoreVar SEMI_COLON;
+MoreVar ::= Id 
+			| Id COMMA MoreVar
+			;
+Type ::= INT 
+		 | BOOLEAN
+		 ;
+Statement ::= Location EQUAL Expr SEMI_COLON
+			  | MethodCall SEMI_COLON
+			  | IF LEFT_PARENTHESIS Expr RIGHT_PARENTHESIS Block ElseBlock
+			  | WHILE LEFT_PARENTHESIS Expr RIGHT_PARENTHESIS Block
+			  | RETURN ReturnExpr SEMI_COLON
+			  | BREAK SEMI_COLON
+			  | CONTINUE SEMI_COLON
+			  |	Block
+			  ;
+ElseBlock ::= ELSE Block 
+			  | /*Zero Occurrence*/ 
+			  ;
+ReturnExpr ::= Expr 
+			   | 
+			   ;
 MethodCall ::= MethodName LEFT_PARENTHESIS RIGHT_PARENTHESIS
 			   | MethodName LEFT_PARENTHESIS MoreExpr RIGHT_PARENTHESIS
-			   | CALLOUT LEFT_PARENTHESIS STRING_LITERAL RIGHT_PARENTHESIS
-			   | CALLOUT LEFT_PARENTHESIS STRING_LITERAL COMMA MoreCalloutArg RIGHT_PARENTHESIS;
+			   | CALLOUT LEFT_PARENTHESIS STRING_LITERAL CallingArgs RIGHT_PARENTHESIS
+			   ;
 MethodName ::= Id;
-Location ::= Id | Id LEFT_BRACKET Expr RIGHT_BRACKET;
-MoreExpr ::= Expr | Expr COMMA MoreExpr;
-Expr ::= Location | MethodCall | Literal | Expr BinOp Expr | MINUS Expr | NOT Expr | LEFT_PARENTHESIS Expr RIGHT_PARENTHESIS;
-MoreCalloutArg ::= CalloutArg | CalloutArg COMMA MoreCalloutArg;
-CalloutArg ::= Expr | STRING_LITERAL;
-BinOp ::= ArithOp | RelOp | EqOp | CondOp;
-ArithOp ::= PLUS | MINUS | TIMES | DIVIDE | MODULO | ARITHMETIC_SHIFT_LEFT | ARITHMETIC_SHIFT_RIGHT | BITWISE_ROTATE_RIGHT;
-RelOp ::= LESSER | GREATER | LESSER_OR_EQUAL | GREATER_OR_EQUAL;
-EqOp ::= EQUAL | NOT_EQUAL;
-CondOp ::= AND | OR;
-Literal ::= INT_LITERAL | CHAR_LITERAL | STRING_LITERAL;
-Id ::= CHAR_LITERAL | Literal;
+Location ::= Id 
+			 | Id LEFT_BRACKET Expr RIGHT_BRACKET
+			 ;
+MoreExpr ::= Expr 
+			 | Expr COMMA MoreExpr
+			 ;
+Expr ::= Location 
+		 | MethodCall 
+		 | Literal 
+		 | Expr BinOp Expr 
+		 | MINUS Expr 
+		 | NOT Expr 
+		 | LEFT_PARENTHESIS Expr RIGHT_PARENTHESIS
+		 ;
+CallingArgs ::= COMMA MoreCalloutArg 
+				| /*Zero Occurrence*/ 
+				;
+MoreCalloutArg ::= CalloutArg 
+				   | CalloutArg COMMA MoreCalloutArg
+				   ;
+CalloutArg ::= Expr 
+			   | STRING_LITERAL
+			   ;
+BinOp ::= ArithOp 
+		  | RelOp 
+		  | EqOp 
+		  | CondOp
+		  ;
+ArithOp ::= PLUS 
+		    | MINUS 
+		    | TIMES 
+		    | DIVIDE 
+		    | MODULO 
+		    | ARITHMETIC_SHIFT_LEFT 
+		    | ARITHMETIC_SHIFT_RIGHT 
+		    | BITWISE_ROTATE_RIGHT
+		    ;
+RelOp ::= LESSER 
+		  | GREATER 
+		  | LESSER_OR_EQUAL 
+		  | GREATER_OR_EQUAL
+		  ;
+EqOp ::= EQUAL 
+		 | NOT_EQUAL
+		 ;
+CondOp ::= AND 
+		   | OR
+		   ;
+Literal ::= INT_LITERAL 
+			| CHAR_LITERAL 
+			| STRING_LITERAL
+			;
+Id ::= CHAR_LITERAL 
+	   | Literal
+	   ;
+DecimalLiteral ::= INT_LITERAL;
+HexLiteral ::= INT_LITERAL;
 BoolLiteral ::= BOOLEAN_LITERAL;
 
