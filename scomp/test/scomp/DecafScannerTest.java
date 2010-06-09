@@ -11,6 +11,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 
+ * @author js94065 (creation 2010-06-06)
+ *
+ */
 public class DecafScannerTest {
 
 	/**
@@ -143,6 +148,10 @@ public class DecafScannerTest {
 		);
 	}
 	
+	private static final int UNSPECIFIED_ROW = Integer.MAX_VALUE;
+	
+	private static final int UNSPECIFIED_COLUMN = Integer.MAX_VALUE;
+	
 	/**
 	 * Decomposes {@code input} using {@link #scan(String)} and matches the result against {@code expectedTokens} using {@link Assert#assertArrayEquals(Object[], Object[])}.
 	 * 
@@ -182,18 +191,6 @@ public class DecafScannerTest {
 	
 	/**
 	 * 
-	 * @param input
-	 * <br>Should not be null
-	 * @return
-	 * <br>A non-null value
-	 * <br>A new value
-	 */
-	private static final Yylex createScanner(final String input) {
-		return new Yylex(new ByteArrayInputStream(input.getBytes()));
-	}
-	
-	/**
-	 * 
 	 * @param symbolId
 	 * <br>Range: any integer constant defined in {@link DecafParserSymbols}
 	 * @param value
@@ -219,9 +216,16 @@ public class DecafScannerTest {
 		return token(symbolId, null);
 	}
 	
-	private static final int UNSPECIFIED_ROW = Integer.MAX_VALUE;
-	
-	private static final int UNSPECIFIED_COLUMN = Integer.MAX_VALUE;
-	
+	/**
+	 * 
+	 * @param input
+	 * <br>Should not be null
+	 * @return
+	 * <br>A non-null value
+	 * <br>A new value
+	 */
+	public static final Yylex createScanner(final String input) {
+		return new Yylex(new ByteArrayInputStream(input.getBytes()));
+	}
 	
 }
