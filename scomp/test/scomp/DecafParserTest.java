@@ -12,8 +12,8 @@ import org.junit.Test;
 public class DecafParserTest {
 	
 	@Test
-	public final void testProgram() throws Exception {
-		parse("class Program {}");
+	public final void testSmallestProgram() throws Exception {
+		parse("class Program{}");
 	}
 	
 	/**
