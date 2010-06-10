@@ -29,7 +29,7 @@ precedence left PLUS, MINUS;
 precedence left TIMES, DIVIDE, MODULO;
 precedence left NOT;
 
-/* Error some here
+/* Error here
 MethodCall ::= MethodName LEFT_PARENTHESIS RIGHT_PARENTHESIS
 			   | MethodName LEFT_PARENTHESIS MoreExpr RIGHT_PARENTHESIS
 			   | CALLOUT LEFT_PARENTHESIS STRING_LITERAL CallingArgs RIGHT_PARENTHESIS
