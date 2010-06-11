@@ -17,6 +17,9 @@ non terminal Program;
 non terminal FieldDeclarations, FieldDeclaration;
 non terminal Fields, Field;
 non terminal MethodDeclarations, MethodDeclaration;
+non terminal Variables, Variable;
+non terminal VariableDeclarations, VariableDeclaration;
+non terminal Statements, Statement;
 non terminal Block;
 non terminal Type;
 
@@ -59,15 +62,59 @@ MethodDeclarations ::=
 	;
 
 MethodDeclaration ::=
-	Type IDENTIFIER LEFT_PARENTHESIS /* TODO */ RIGHT_PARENTHESIS Block
+	Type IDENTIFIER LEFT_PARENTHESIS RIGHT_PARENTHESIS Block
 	|
-	VOID IDENTIFIER LEFT_PARENTHESIS /* TODO */ RIGHT_PARENTHESIS Block
+	VOID IDENTIFIER LEFT_PARENTHESIS RIGHT_PARENTHESIS Block
+	|
+	Type IDENTIFIER LEFT_PARENTHESIS Variables RIGHT_PARENTHESIS Block
+	|
+	VOID IDENTIFIER LEFT_PARENTHESIS Variables RIGHT_PARENTHESIS Block
 	;
+	
+Variables ::= 
+	Variable
+	|
+	Variables COMMA Variable
+	;
+	
+Variable ::=
+	Type IDENTIFIER;
 
 Block ::=
-	LEFT_BRACE /* TODO */ RIGHT_BRACE
+	LEFT_BRACE RIGHT_BRACE
+	|
+	LEFT_BRACE VariableDeclarations RIGHT_BRACE
+	|
+	LEFT_BRACE Statements RIGHT_BRACE
+	|
+	LEFT_BRACE VariableDeclarations Statements RIGHT_BRACE
+	;
+	
+VariableDeclarations ::=
+	Type VariableDeclaration SEMI_COLON;
+
+VariableDeclaration ::=
+	IDENTIFIER
+	|
+	VariableDeclaration COMMA IDENTIFIER
 	;
 
+Statements ::=
+	Statement
+	|
+	Statements Statement
+	;
+
+Statement ::=
+
+	BREAK SEMI_COLON
+	|
+	CONTINUE SEMI_COLON
+	|
+	Block
+	;
+	
+	
 Type ::=
 	INT
 	|
