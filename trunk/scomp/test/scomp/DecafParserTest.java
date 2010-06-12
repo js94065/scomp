@@ -31,6 +31,16 @@ public class DecafParserTest {
 		parse(PROGRAM_WITH_A_FIELD_AND_A_METHOD);
 	}
 	
+	@Test
+	public final void testProgramWithMethodWithParameters() throws Exception {
+		parse(PROGRAM_WITH_METHOD_WITH_PARAMETERS);
+	}
+	
+	@Test
+	public final void testProgramWithMethodWithParametersAndComplexBlock() throws Exception {
+		parse(PROGRAM_WITH_METHOD_WITH_PARAMETERS_AND_COMPLEX_BLOCK);
+	}
+	
 	public static final String SMALLEST_PROGRAM =
 		"class Program{}";
 	
@@ -67,8 +77,26 @@ public class DecafParserTest {
 		"	void f() {\n" +
 		"	}\n" +
 		"\n" +
-		// TODO change following method into function as soon as parser can handle it
-		"	void g() {\n" +
+		"	int g() {\n" +
+		"		return 42;\n" +
+		"	}\n" +
+		"\n" +
+		"}";
+	
+	public static final String PROGRAM_WITH_METHOD_WITH_PARAMETERS =
+		"class Program {\n" +
+		"\n" +
+		"	void f(int x, boolean y) {\n" +
+		"	}\n" +
+		"\n" +
+		"}";
+	
+	public static final String PROGRAM_WITH_METHOD_WITH_PARAMETERS_AND_COMPLEX_BLOCK =
+		"class Program {\n" +
+		"\n" +
+		"	void f(int a, boolean b) {\n" +
+		"		int c, d;\n" +
+		"		boolean e, f;\n" +
 		"	}\n" +
 		"\n" +
 		"}";

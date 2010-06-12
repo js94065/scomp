@@ -150,7 +150,7 @@ public class DecafScannerTest {
 	
 	@Test
 	public final void testSmallestProgram() throws IOException {
-		match("class Program{}",
+		match(DecafParserTest.SMALLEST_PROGRAM,
 				token(CLASS),
 				token(IDENTIFIER, "Program"),
 				token(LEFT_BRACE),
