@@ -22,6 +22,9 @@ non terminal VariableDeclarations, VariableDeclaration;
 non terminal Statements, Statement;
 non terminal Block;
 non terminal Type;
+non terminal MethodCall;
+non terminal Exprs, Expr;
+non terminal CalloutArgs, CalloutArg;
 
 Program ::=
 	CLASS IDENTIFIER LEFT_BRACE RIGHT_BRACE
@@ -99,6 +102,12 @@ VariableDeclaration ::=
 	VariableDeclaration COMMA IDENTIFIER
 	;
 
+Type ::=
+	INT
+	|
+	BOOLEAN
+	;
+	
 Statements ::=
 	Statement
 	|
@@ -106,7 +115,18 @@ Statements ::=
 	;
 
 Statement ::=
-
+	MethodCall SEMI_COLON
+	|
+	IF LEFT_PARENTHESIS Expr RIGHT_PARENTHESIS Block
+	|
+	IF LEFT_PARENTHESIS Expr RIGHT_PARENTHESIS Block ELSE Block
+	|
+	WHILE LEFT_PARENTHESIS Expr RIGHT_PARENTHESIS Block
+	|
+	RETURN SEMI_COLON
+	|
+	RETURN Expr SEMI_COLON
+	|
 	BREAK SEMI_COLON
 	|
 	CONTINUE SEMI_COLON
@@ -114,9 +134,31 @@ Statement ::=
 	Block
 	;
 	
-	
-Type ::=
-	INT
+MethodCall ::= 
+	IDENTIFIER LEFT_PARENTHESIS RIGHT_PARENTHESIS
 	|
-	BOOLEAN
+	IDENTIFIER LEFT_PARENTHESIS Exprs RIGHT_PARENTHESIS
+	|
+	CALLOUT LEFT_PARENTHESIS STRING_LITERAL RIGHT_PARENTHESIS
+	|
+	CALLOUT LEFT_PARENTHESIS STRING_LITERAL COMMA CalloutArgs RIGHT_PARENTHESIS
 	;
+
+CalloutArgs ::=
+	CalloutArg
+	|
+	CalloutArgs COMMA CalloutArg
+	;
+	
+CalloutArg ::=
+	Expr
+	|
+	STRING_LITERAL
+	;
+
+Exprs ::=
+	Expr
+	|
+	Exprs COMMA Expr
+	;
+
