@@ -18,7 +18,7 @@ non terminal FieldDeclarations, FieldDeclaration;
 non terminal Fields, Field;
 non terminal MethodDeclarations, MethodDeclaration;
 non terminal ParameterDeclarations, ParameterDeclaration;
-non terminal VariableDeclarations, VariableDeclaration;
+non terminal VariableDeclarations, VariableDeclarations2, VariableDeclaration;
 non terminal Statements, Statement;
 non terminal Block;
 non terminal Type;
@@ -97,12 +97,19 @@ Block ::=
 	;
 	
 VariableDeclarations ::=
-	Type VariableDeclaration SEMI_COLON;
+	VariableDeclarations2
+	|
+	VariableDeclarations VariableDeclarations2
+	;
 
+VariableDeclarations2 ::=
+	Type VariableDeclaration SEMI_COLON
+	;
+	
 VariableDeclaration ::=
 	IDENTIFIER
 	|
-	VariableDeclaration COMMA IDENTIFIER
+	VariableDeclaration COMMA IDENTIFIER  
 	;
 
 Type ::=
