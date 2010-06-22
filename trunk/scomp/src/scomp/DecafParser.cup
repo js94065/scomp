@@ -17,14 +17,17 @@ non terminal Program;
 non terminal FieldDeclarations, FieldDeclaration;
 non terminal Fields, Field;
 non terminal MethodDeclarations, MethodDeclaration;
-non terminal Variables, Variable;
+non terminal ParameterDeclarations, ParameterDeclaration;
 non terminal VariableDeclarations, VariableDeclaration;
 non terminal Statements, Statement;
 non terminal Block;
 non terminal Type;
 non terminal MethodCall;
+non terminal Location;
 non terminal Exprs, Expr;
 non terminal CalloutArgs, CalloutArg;
+non terminal Literal;
+non terminal BinOp;
 
 Program ::=
 	CLASS IDENTIFIER LEFT_BRACE RIGHT_BRACE
@@ -69,18 +72,18 @@ MethodDeclaration ::=
 	|
 	VOID IDENTIFIER LEFT_PARENTHESIS RIGHT_PARENTHESIS Block
 	|
-	Type IDENTIFIER LEFT_PARENTHESIS Variables RIGHT_PARENTHESIS Block
+	Type IDENTIFIER LEFT_PARENTHESIS ParameterDeclarations RIGHT_PARENTHESIS Block
 	|
-	VOID IDENTIFIER LEFT_PARENTHESIS Variables RIGHT_PARENTHESIS Block
+	VOID IDENTIFIER LEFT_PARENTHESIS ParameterDeclarations RIGHT_PARENTHESIS Block
 	;
 	
-Variables ::= 
-	Variable
+ParameterDeclarations ::= 
+	ParameterDeclaration
 	|
-	Variables COMMA Variable
+	ParameterDeclarations COMMA ParameterDeclaration
 	;
 	
-Variable ::=
+ParameterDeclaration ::=
 	Type IDENTIFIER;
 
 Block ::=
@@ -115,6 +118,8 @@ Statements ::=
 	;
 
 Statement ::=
+	Location EQUAL Expr SEMI_COLON
+	|
 	MethodCall SEMI_COLON
 	|
 	IF LEFT_PARENTHESIS Expr RIGHT_PARENTHESIS Block
@@ -156,9 +161,37 @@ CalloutArg ::=
 	STRING_LITERAL
 	;
 
+Location ::=
+	IDENTIFIER
+	|
+	IDENTIFIER LEFT_BRACKET Expr RIGHT_BRACKET
+	;
+	
 Exprs ::=
 	Expr
 	|
 	Exprs COMMA Expr
+	;
+	
+Expr ::=
+	Location
+	|
+	MethodCall
+	|
+	Literal
+	|
+	MINUS Expr
+	|
+	NOT Expr
+	|
+	LEFT_PARENTHESIS Expr RIGHT_PARENTHESIS
+	;
+
+Literal ::=
+	INT_LITERAL
+	|
+	BOOLEAN_LITERAL
+	|
+	CHAR_LITERAL
 	;
 
