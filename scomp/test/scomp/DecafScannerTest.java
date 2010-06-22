@@ -14,69 +14,38 @@ import java.util.List;
 /**
  * 
  * @author js94065 (creation 2010-06-06)
+ * @author codistmonk (modifications since 2010-06-06)
  *
  */
 public class DecafScannerTest {
-
-	/**
-	 * Tests CHAR_LITERAL
-	 */
+	
 	@Test
-	public void testCharLiteral() {
-		try {
-			Yylex lexer = new Yylex(new ByteArrayInputStream("\'a\'".getBytes()));
-			DecafToken token = (DecafToken) lexer.next_token();
-			assertEquals(token.value, "a");
-			assertEquals(token.sym, CHAR_LITERAL);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Tests STRING_LITERAL.
-	 */
-	@Test
-	public void testStringLiteral() {
-		try {
-			Yylex lexer = new Yylex(new ByteArrayInputStream("\"test1\"".getBytes()));
-			DecafToken token = (DecafToken) lexer.next_token();
-			assertEquals(token.value, "test1");
-			assertEquals(token.sym, STRING_LITERAL);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public final void testCharLiteral() throws IOException {
+		match("\'a\'", token(CHAR_LITERAL, "a"));
 	}
 	
-	/**
-	 * Test IDENTIFIER
-	 */
 	@Test
-	public void testIdentifier() {
-		try {
-			Yylex lexer = new Yylex(new ByteArrayInputStream("something".getBytes()));
-			DecafToken token = (DecafToken) lexer.next_token();
-			assertEquals(token.value, "something");
-			assertEquals(token.sym, IDENTIFIER);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public final void testStringLiteral() throws IOException {
+		match("\"test1\"", token(STRING_LITERAL, "test1"));
+	}
+	
+	@Test
+	public final void testIdentifier() throws IOException {
+		match("something", token(IDENTIFIER, "something"));
 	}
 	
 	/**
 	 * Test InvalidInputException is thrown for invalid input.  
-	 * For this test, we use a modified CHAR_LITERAL.
+	 * <br>For this test, we use a modified CHAR_LITERAL.
+	 * 
+	 * @throws InvalidInputException if some input cannot be converted into a token
+	 * @throws IOException if a reading error occurs
 	 */
 	@Test(expected=InvalidInputException.class)
-	public void testInvalidInputChar() throws InvalidInputException, IOException {
-		Yylex lexer = new Yylex(new ByteArrayInputStream("\'ab\'".getBytes()));
-		// should throw an exception here
-		DecafToken token = (DecafToken) lexer.next_token();
+	public final void testInvalidInputChar() throws InvalidInputException, IOException {
+		createScanner("\'ab\'").next_token();
 	}
 	
-	/**
-	 * Tests for Brace types
-	 */
 	@Test
 	public final void testBraceTypes() throws IOException {
 		match("( ) { } [ ]", 
@@ -90,12 +59,9 @@ public class DecafScannerTest {
 	}
 	
 
-	/**
-	 * Tests for operators.
-	 */
 	@Test
 	public final void testOperators() throws IOException {
-		match(", ; ! + - * % << >> >>> < > <= >= == != && ||", 
+		match(", ; ! + - * % << >> >>> < > <= >= == != && || =", 
 				token(COMMA),
 				token(SEMI_COLON),
 				token(NOT),
@@ -113,7 +79,8 @@ public class DecafScannerTest {
 				token(EQUAL),
 				token(NOT_EQUAL),
 				token(AND),
-				token(OR)
+				token(OR),
+				token(ASSIGN)
 				);
 	}
 	
@@ -125,10 +92,6 @@ public class DecafScannerTest {
 				);
 	}
 	
-	/**
-	 * Tests for keywords.
-	 * @throws IOException
-	 */
 	@Test
 	public final void testKeywords() throws IOException {
 		match("boolean break callout class continue else false if int return true void while",

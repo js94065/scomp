@@ -94,9 +94,22 @@ public class DecafParserTest {
 	public static final String PROGRAM_WITH_METHOD_WITH_PARAMETERS_AND_COMPLEX_BLOCK =
 		"class Program {\n" +
 		"\n" +
-		"	void f(int a, boolean b) {\n" +
+		"	boolean f(int a, boolean b) {\n" +
 		"		int c, d;\n" +
 		"		boolean e, f;\n" +
+		"\n" +
+		"		c = a;\n" +
+//		"		d = a + c;\n" +
+//		"		e = a < d;\n" +
+//		"\n" +
+//		"		if (e) {\n" +
+//		"			f = b && (((a / c) - d * d) % 42 == 0);\n" +
+//		"		}" +
+//		"		else {" +
+//		"			f = false;\n" +
+//		"		}\n" +
+//		"\n" +
+		"		return f;\n" +
 		"	}\n" +
 		"\n" +
 		"}";
