@@ -19,7 +19,7 @@ non terminal FieldDeclarations, FieldDeclaration;
 non terminal Fields, Field;
 non terminal MethodDeclarations, MethodDeclaration;
 non terminal ParameterDeclarations, ParameterDeclaration;
-non terminal VariableDeclarations, VariableDeclarations2, VariableDeclaration;
+non terminal VariableDeclarations, IdentifierList;
 non terminal Statements, Statement;
 non terminal Block;
 non terminal Type;
@@ -28,7 +28,7 @@ non terminal Location;
 non terminal Exprs, Expr;
 non terminal CalloutArgs, CalloutArg;
 non terminal Literal;
-non terminal BinOp;
+non terminal BinOp, ArithOp, RelOp, EqOp, CondOp;
 
 Program ::=
 	CLASS IDENTIFIER LEFT_BRACE RIGHT_BRACE
@@ -98,19 +98,15 @@ Block ::=
 	;
 	
 VariableDeclarations ::=
-	VariableDeclarations2
+	Type IdentifierList SEMI_COLON
 	|
-	VariableDeclarations VariableDeclarations2
-	;
-
-VariableDeclarations2 ::=
-	Type VariableDeclaration SEMI_COLON
+	VariableDeclarations Type IdentifierList SEMI_COLON
 	;
 	
-VariableDeclaration ::=
+IdentifierList  ::=
 	IDENTIFIER
 	|
-	VariableDeclaration COMMA IDENTIFIER  
+	IdentifierList COMMA IDENTIFIER  
 	;
 
 Type ::=
@@ -126,7 +122,7 @@ Statements ::=
 	;
 
 Statement ::=
-	Location EQUAL Expr SEMI_COLON
+	Location ASSIGN Expr SEMI_COLON
 	|
 	MethodCall SEMI_COLON
 	|
@@ -188,6 +184,8 @@ Expr ::=
 	|
 	Literal
 	|
+	BinOp
+	|
 	MINUS Expr
 	|
 	NOT Expr
@@ -195,6 +193,37 @@ Expr ::=
 	LEFT_PARENTHESIS Expr RIGHT_PARENTHESIS
 	;
 
+BinOp ::=
+	ArithOp
+	|
+	RelOp
+	|
+	EqOp
+	|
+	CondOp
+	;
+
+	
+ArithOp ::=
+	PLUS
+	|
+	MINUS
+	|
+	TIMES
+	|
+	DIVIDE
+	|
+	MODULO
+	|
+	ARITHMETIC_SHIFT_LEFT
+	|
+	ARITHMETIC_SHIFT_RIGHT
+	|
+	BITWISE_ROTATE_RIGHT
+	;
+	
+	
+	
 Literal ::=
 	INT_LITERAL
 	|
