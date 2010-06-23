@@ -99,7 +99,7 @@ public class DecafParserTest {
 		"		boolean e, f;\n" +
 		"\n" +
 		"		c = a;\n" +
-//		"		d = a + c;\n" +
+		"		d = a + c;\n" +
 //		"		e = a < d;\n" +
 //		"\n" +
 //		"		if (e) {\n" +
