@@ -30,6 +30,15 @@ non terminal CalloutArgs, CalloutArg;
 non terminal Literal;
 non terminal BinOp, ArithOp, RelOp, EqOp, CondOp;
 
+precedence left OR;
+precedence left AND;
+precedence left EQUAL, NOT_EQUAL;
+precedence left LESSER, GREATER, LESSER_OR_EQUAL, GREATER_OR_EQUAL;
+precedence left ARITHMETIC_SHIFT_LEFT, ARITHMETIC_SHIFT_RIGHT, BITWISE_ROTATE_RIGHT;
+precedence left PLUS, MINUS;
+precedence left TIMES, DIVIDE, MODULO;
+precedence left NOT;
+
 Program ::=
 	CLASS IDENTIFIER LEFT_BRACE RIGHT_BRACE
 	|
@@ -184,7 +193,7 @@ Expr ::=
 	|
 	Literal
 	|
-	BinOp
+	Expr BinOp Expr
 	|
 	MINUS Expr
 	|
@@ -203,7 +212,6 @@ BinOp ::=
 	CondOp
 	;
 
-	
 ArithOp ::=
 	PLUS
 	|
@@ -221,8 +229,28 @@ ArithOp ::=
 	|
 	BITWISE_ROTATE_RIGHT
 	;
+
+RelOp ::=
+	LESSER
+	|
+	GREATER
+	|
+	LESSER_OR_EQUAL
+	|
+	GREATER_OR_EQUAL
+	;
 	
-	
+EqOp ::=
+	EQUAL
+	|
+	NOT_EQUAL
+	;
+
+CondOp ::=
+	AND
+	|
+	OR
+	;
 	
 Literal ::=
 	INT_LITERAL
