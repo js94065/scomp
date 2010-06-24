@@ -1,5 +1,6 @@
 package scomp;
 
+import static org.junit.Assert.*;
 import java_cup.runtime.Symbol;
 
 import org.junit.Test;
@@ -54,6 +55,69 @@ public class DecafParserTest {
 	@Test
 	public final void testProgramWithMethodWithParametersAndComplexBlock() throws Exception {
 		parse(PROGRAM_WITH_METHOD_WITH_PARAMETERS_AND_COMPLEX_BLOCK);
+	}
+	
+	@Test
+	public final void testMalformedProgram1() {
+		try {
+			parse(MALFORMED_PROGRAM_1);
+		} catch (final Exception exception) {
+			assertEquals("Parse error on line 1", exception.getMessage());
+		}
+	}
+	
+	@Test
+	public final void testMalformedProgram2() {
+		try {
+			parse(MALFORMED_PROGRAM_2);
+		} catch (final Exception exception) {
+			assertEquals("Parse error on line 1", exception.getMessage());
+		}
+	}
+	
+	@Test
+	public final void testMalformedProgram3() {
+		try {
+			parse(MALFORMED_PROGRAM_3);
+		} catch (final Exception exception) {
+			assertEquals("Parse error on line 1", exception.getMessage());
+		}
+	}
+	
+	@Test
+	public final void testProgramWithUnmatchedBraces1() {
+		try {
+			parse(PROGRAM_WITH_UNMATCHED_BRACES_1);
+		} catch (final Exception exception) {
+			assertEquals("Missing '}' at (1, 16)", exception.getMessage());
+		}
+	}
+	
+	@Test
+	public final void testProgramWithUnmatchedBraces2() {
+		try {
+			parse(PROGRAM_WITH_UNMATCHED_BRACES_2);
+		} catch (final Exception exception) {
+			assertEquals("Unmatched '}' at (1, 15)", exception.getMessage());
+		}
+	}
+	
+	@Test
+	public final void testProgramWithMismatchingParentheses1() {
+		try {
+			parse(PROGRAM_WITH_MISMATCHING_PARENTHESES_1);
+		} catch (final Exception exception) {
+			assertEquals("Missing ')' at (4, 16)", exception.getMessage());
+		}
+	}
+	
+	@Test
+	public final void testProgramWithMismatchingParentheses2() {
+		try {
+			parse(PROGRAM_WITH_MISMATCHING_PARENTHESES_2);
+		} catch (final Exception exception) {
+			assertEquals("Unmatched ')' at (4, 17)", exception.getMessage());
+		}
 	}
 	
 	public static final String SMALLEST_PROGRAM =
@@ -199,6 +263,39 @@ public class DecafParserTest {
 		"		}\n" +
 		"\n" +
 		"		return f;\n" +
+		"	}\n" +
+		"\n" +
+		"}";
+	
+	public static final String MALFORMED_PROGRAM_1 =
+		"";
+	
+	public static final String MALFORMED_PROGRAM_2 =
+		"class";
+	
+	public static final String MALFORMED_PROGRAM_3 =
+		"class Program";
+	
+	public static final String PROGRAM_WITH_UNMATCHED_BRACES_1 =
+		"class Program {";
+	
+	public static final String PROGRAM_WITH_UNMATCHED_BRACES_2 =
+		"class Program }";
+	
+	public static final String PROGRAM_WITH_MISMATCHING_PARENTHESES_1 =
+		"class Program {\n" +
+		"\n" +
+		"	int f() {\n" +
+		"		return (1 + 2;" +
+		"	}\n" +
+		"\n" +
+		"}";
+	
+	public static final String PROGRAM_WITH_MISMATCHING_PARENTHESES_2 =
+		"class Program {\n" +
+		"\n" +
+		"	int f() {\n" +
+		"		return (1 + 2));" +
 		"	}\n" +
 		"\n" +
 		"}";
