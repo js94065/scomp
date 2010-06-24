@@ -37,6 +37,16 @@ public class DecafParserTest {
 	}
 	
 	@Test
+	public final void testProgramARecursiveMethod() throws Exception {
+		parse(PROGRAM_WITH_A_RECURSIVE_METHOD);
+	}
+	
+	@Test
+	public final void testProgramWithMethodWithVariousExpressions() throws Exception {
+		parse(PROGRAM_WITH_METHOD_WITH_VARIOUS_EXPRESSIONS);
+	}
+	
+	@Test
 	public final void testProgramWithMethodWithParametersAndComplexBlock() throws Exception {
 		parse(PROGRAM_WITH_METHOD_WITH_PARAMETERS_AND_COMPLEX_BLOCK);
 	}
@@ -72,7 +82,8 @@ public class DecafParserTest {
 	public static final String PROGRAM_WITH_FIELDS_AND_METHODS =
 		"class Program {\n" +
 		"\n" +
-		"	int x, y;\n" +
+		"	int x, y[], z;\n" +
+		"	boolean a, b[], c;\n" +
 		"\n" +
 		"	void f() {\n" +
 		"	}\n" +
@@ -91,6 +102,67 @@ public class DecafParserTest {
 		"\n" +
 		"}";
 	
+	public static final String PROGRAM_WITH_METHOD_WITH_VARIOUS_EXPRESSIONS =
+		"class Program {\n" +
+		"\n" +
+		"	void f() {\n" +
+		"		// Declarations\n" +
+		"		int a, b;\n" +
+		"		boolean c, d;\n" +
+		"		// Int expressions\n" +
+		"		a = -42;\n\n" +
+		"		b = 0x33;\n" +
+		"		a = 'a';\n" +
+		"		a = a + b;\n" +
+		"		a = a - b;\n" +
+		"		a = a * b;\n" +
+		"		a = a / b;\n" +
+		"		a = a % b;\n" +
+		"		a = a << b;\n" +
+		"		a = a >> b;\n" +
+		"		a = a >>> b;\n" +
+		"		// Boolean expressions\n" +
+		"		c = true;\n" +
+		"		d = false;\n" +
+		"		c = !d;\n" +
+		"		c = a < b;\n" +
+		"		c = a > b;\n" +
+		"		c = a <= b;\n" +
+		"		c = a >= b;\n" +
+		"		c = c == d;\n" +
+		"		c = c != d;\n" +
+		"		c = c && d;\n" +
+		"		c = c || d;\n" +
+		"		// Precedence\n" +
+		"		a = a + b + a;\n" +
+		"		a = a + b - a;\n" +
+		"		a = a + b * a;\n" +
+		"		a = a + b / a;\n" +
+		"		a = a + b % a;\n" +
+		"		a = a + b << a;\n" +
+		"		a = a + b >> a;\n" +
+		"		a = a + b >>> a;\n" +
+		"		c = a < b == d;\n" +
+		"		c = a > b != d;\n" +
+		"		c = a <= b && d;\n" +
+		"		c = a >= b || d;\n" +
+		"	}\n" +
+		"\n" +
+		"}";
+	
+	public static final String PROGRAM_WITH_A_RECURSIVE_METHOD =
+		"class Program {\n" +
+		"\n" +
+		"	int factorial(int n) {\n" +
+		"		if (n <= 0) {\n" +
+		"			return 1;" +
+		"		}\n" +
+		"\n" +
+		"		return n * factorial(n - 1);\n" +
+		"	}\n" +
+		"\n" +
+		"}";
+	
 	public static final String PROGRAM_WITH_METHOD_WITH_PARAMETERS_AND_COMPLEX_BLOCK =
 		"class Program {\n" +
 		"\n" +
@@ -100,15 +172,27 @@ public class DecafParserTest {
 		"\n" +
 		"		c = a;\n" +
 		"		d = a + c;\n" +
-//		"		e = a < d;\n" +
-//		"\n" +
-//		"		if (e) {\n" +
-//		"			f = b && (((a / c) - d * d) % 42 == 0);\n" +
-//		"		}" +
-//		"		else {" +
-//		"			f = false;\n" +
-//		"		}\n" +
-//		"\n" +
+		"		e = a < d;\n" +
+		"\n" +
+		"		if (e) {\n" +
+		"			f = b && (((a / c) - d * d) % 42 == 0);\n" +
+		"		}" +
+		"		else {" +
+		"			f = false;\n" +
+		"		}\n" +
+		"\n" +
+		"		callout(\"printf\", \"Hello world!\\n\");\n" +
+		"\n" +
+		"		while (c != 0) {\n" +
+		"			c = c / 2;\n" +
+		"			if (c < 0) {\n" +
+		"				break;\n" +
+		"			}\n" +
+		"			else {\n" +
+		"				continue;\n" +
+		"			}\n" +
+		"		}\n" +
+		"\n" +
 		"		return f;\n" +
 		"	}\n" +
 		"\n" +
