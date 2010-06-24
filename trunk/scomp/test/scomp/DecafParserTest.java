@@ -27,6 +27,11 @@ public class DecafParserTest {
 	}
 	
 	@Test
+	public final void testProgramWithFieldsAndMethods() throws Exception {
+		parse(PROGRAM_WITH_FIELDS_AND_METHODS);
+	}
+	
+	@Test
 	public final void testProgramWithAFieldAndAMethod() throws Exception {
 		parse(PROGRAM_WITH_A_FIELD_AND_A_METHOD);
 	}
@@ -82,8 +87,8 @@ public class DecafParserTest {
 	public static final String PROGRAM_WITH_FIELDS_AND_METHODS =
 		"class Program {\n" +
 		"\n" +
-		"	int x, y[], z;\n" +
-		"	boolean a, b[], c;\n" +
+		"	int x, y[1], z;\n" +
+		"	boolean a, b[2], c;\n" +
 		"\n" +
 		"	void f() {\n" +
 		"	}\n" +
