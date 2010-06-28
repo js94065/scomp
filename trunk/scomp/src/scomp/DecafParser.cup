@@ -2,6 +2,23 @@ package scomp;
 
 import java_cup.runtime.*;
 
+parser code 
+{:
+
+/*
+public void report_error(String message, Object info) {
+	if(message.equals("Syntax error")) {
+		System.out.println(((Symbol)info).left);
+	}
+	else if(message.equals("Couldn't repair and continue parse")) {
+		System.err.println("Missing syntax: " + ((Symbol)info).right);
+	}
+
+}
+*/
+
+:}
+
 terminal BOOLEAN, BREAK, CALLOUT, CLASS, CONTINUE, ELSE, IF, INT, RETURN, VOID, WHILE;
 terminal LEFT_PARENTHESIS, RIGHT_PARENTHESIS, LEFT_BRACE, RIGHT_BRACE, LEFT_BRACKET, RIGHT_BRACKET;
 terminal ASSIGN; // "=", not to be confused with "=="  which is EQUAL
@@ -47,6 +64,21 @@ Program ::=
 	CLASS IDENTIFIER LEFT_BRACE MethodDeclarations RIGHT_BRACE
 	|
 	CLASS IDENTIFIER LEFT_BRACE FieldDeclarations MethodDeclarations RIGHT_BRACE
+	|
+	error // the program is empty
+	|
+	CLASS error // missing "Program" identifier
+	|
+	CLASS IDENTIFIER error // missing LEFT_BRACE
+	|
+	// missing RIGHT_BRACE 
+	CLASS IDENTIFIER LEFT_BRACE error 
+	|
+	CLASS IDENTIFIER LEFT_BRACE FieldDeclarations error
+	|
+	CLASS IDENTIFIER LEFT_BRACE MethodDeclarations error
+	|
+	CLASS IDENTIFIER LEFT_BRACE FieldDeclarations MethodDeclarations error 
 	;
 
 FieldDeclarations ::=
@@ -57,18 +89,30 @@ FieldDeclarations ::=
 
 FieldDeclaration ::=
 	Type Fields SEMI_COLON
+	|
+	Type Fields error // missing SEMI_COLON
 	;
 
 Fields ::=
 	Fields COMMA Field
 	|
 	Field
+	|
+	error // missing Field
+	|
+	Fields error Field // missing COMMA
 	;
 
 Field ::=
 	IDENTIFIER
 	|
 	IDENTIFIER LEFT_BRACKET INT_LITERAL RIGHT_BRACKET
+	|
+	IDENTIFIER LEFT_BRACKET error // missing INT_LITERAL and RIGHT_BRACKET
+	|
+	IDENTIFIER LEFT_BRACKET INT_LITERAL error // missing RIGHT_BRACKET
+	| 
+	IDENTIFIER LEFT_BRACKET error RIGHT_BRACKET // missing INT_LITERAL
 	;
 
 MethodDeclarations ::=
