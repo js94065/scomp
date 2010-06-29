@@ -82,9 +82,9 @@ while { return this.newToken(DecafParserSymbols.WHILE); }
 
 [a-zA-Z_\.][a-zA-Z_\.0-9]* { return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
 
-0x[a-fA-F0-9]+ { return this.newToken(DecafParserSymbols.INT_LITERAL, Integer.parseInt(this.yytext().substring(2), 16)); }
+0x[a-fA-F0-9]+ { return this.newToken(DecafParserSymbols.INT_LITERAL, this.yytext()); }
 
-[0-9]+ { return this.newToken(DecafParserSymbols.INT_LITERAL, Integer.parseInt(this.yytext())); }
+[0-9]+ { return this.newToken(DecafParserSymbols.INT_LITERAL, this.yytext()); }
 
 "," { return this.newToken(DecafParserSymbols.COMMA); }
 ";" { return this.newToken(DecafParserSymbols.SEMI_COLON); }
