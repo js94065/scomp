@@ -93,5 +93,10 @@ public class DecafToken extends Symbol {
 	public final int hashCode() {
 		return Tools.hashCode(this.getSymbolId()) + Tools.hashCode(this.getValue());
 	}
+
+	@Override
+	public final String toString() {
+		return super.toString() + ": (" + (this.getValue() == null ? "" : this.getValue().getClass()) + ") " + this.getValue();
+	}
 	
 }

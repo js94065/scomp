@@ -61,6 +61,8 @@ public class DecafParserTest {
 	public final void testMalformedProgram1() {
 		try {
 			parse(MALFORMED_PROGRAM_1);
+			
+			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
 			assertEquals("Parse error on line 1", exception.getMessage());
 		}
@@ -70,6 +72,8 @@ public class DecafParserTest {
 	public final void testMalformedProgram2() {
 		try {
 			parse(MALFORMED_PROGRAM_2);
+			
+			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
 			assertEquals("Parse error on line 1", exception.getMessage());
 		}
@@ -79,6 +83,8 @@ public class DecafParserTest {
 	public final void testMalformedProgram3() {
 		try {
 			parse(MALFORMED_PROGRAM_3);
+			
+			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
 			assertEquals("Parse error on line 1", exception.getMessage());
 		}
@@ -88,6 +94,8 @@ public class DecafParserTest {
 	public final void testProgramWithUnmatchedBraces1() {
 		try {
 			parse(PROGRAM_WITH_UNMATCHED_BRACES_1);
+			
+			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
 			assertEquals("Missing '}' at (1, 16)", exception.getMessage());
 		}
@@ -97,6 +105,8 @@ public class DecafParserTest {
 	public final void testProgramWithUnmatchedBraces2() {
 		try {
 			parse(PROGRAM_WITH_UNMATCHED_BRACES_2);
+			
+			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
 			assertEquals("Unmatched '}' at (1, 15)", exception.getMessage());
 		}
@@ -106,6 +116,8 @@ public class DecafParserTest {
 	public final void testProgramWithMismatchingParentheses1() {
 		try {
 			parse(PROGRAM_WITH_MISMATCHING_PARENTHESES_1);
+			
+			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
 			assertEquals("Missing ')' at (4, 16)", exception.getMessage());
 		}
@@ -115,6 +127,8 @@ public class DecafParserTest {
 	public final void testProgramWithMismatchingParentheses2() {
 		try {
 			parse(PROGRAM_WITH_MISMATCHING_PARENTHESES_2);
+			
+			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
 			assertEquals("Unmatched ')' at (4, 17)", exception.getMessage());
 		}
