@@ -475,7 +475,7 @@ class Yylex implements java_cup.runtime.Scanner {
 					case -10:
 						break;
 					case 10:
-						{ return this.newToken(DecafParserSymbols.INT_LITERAL, Integer.parseInt(this.yytext())); }
+						{ return this.newToken(DecafParserSymbols.INT_LITERAL, this.yytext()); }
 					case -11:
 						break;
 					case 11:
@@ -583,7 +583,7 @@ class Yylex implements java_cup.runtime.Scanner {
 					case -37:
 						break;
 					case 37:
-						{ return this.newToken(DecafParserSymbols.INT_LITERAL, Integer.parseInt(this.yytext().substring(2), 16)); }
+						{ return this.newToken(DecafParserSymbols.INT_LITERAL, this.yytext()); }
 					case -38:
 						break;
 					case 38:
@@ -643,7 +643,7 @@ class Yylex implements java_cup.runtime.Scanner {
 					case -52:
 						break;
 					case 53:
-						{ return this.newToken(DecafParserSymbols.INT_LITERAL, Integer.parseInt(this.yytext())); }
+						{ return this.newToken(DecafParserSymbols.INT_LITERAL, this.yytext()); }
 					case -53:
 						break;
 					case 55:
