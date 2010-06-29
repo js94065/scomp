@@ -90,7 +90,11 @@ FieldDeclarations ::=
 FieldDeclaration ::=
 	Type Fields SEMI_COLON
 	|
+	error Fields SEMI_COLON // missing Type
+	|
 	Type Fields error // missing SEMI_COLON
+	|
+	Type error SEMI_COLON // missing Fields
 	;
 
 Fields ::=
@@ -98,21 +102,25 @@ Fields ::=
 	|
 	Field
 	|
-	error // missing Field
-	|
 	Fields error Field // missing COMMA
+	|
+	Fields COMMA error // missing Field
 	;
 
 Field ::=
 	IDENTIFIER
 	|
-	IDENTIFIER LEFT_BRACKET INT_LITERAL RIGHT_BRACKET
+	IDENTIFIER LEFT_BRACKET INT_LITERAL RIGHT_BRACKET	
 	|
 	IDENTIFIER LEFT_BRACKET error // missing INT_LITERAL and RIGHT_BRACKET
 	|
 	IDENTIFIER LEFT_BRACKET INT_LITERAL error // missing RIGHT_BRACKET
 	| 
 	IDENTIFIER LEFT_BRACKET error RIGHT_BRACKET // missing INT_LITERAL
+//	|
+//	error RIGHT_BRACKET // missing LEFT_BRACKET
+//	|
+//	IDENTIFIER error INT_LITERAL RIGHT_BRACKET // missing LEFT_BRACKET
 	;
 
 MethodDeclarations ::=
@@ -129,16 +137,47 @@ MethodDeclaration ::=
 	Type IDENTIFIER LEFT_PARENTHESIS ParameterDeclarations RIGHT_PARENTHESIS Block
 	|
 	VOID IDENTIFIER LEFT_PARENTHESIS ParameterDeclarations RIGHT_PARENTHESIS Block
+	|
+	error IDENTIFIER LEFT_PARENTHESIS RIGHT_PARENTHESIS Block // missing Type or VOID
+	|
+	error IDENTIFIER LEFT_PARENTHESIS ParameterDeclarations RIGHT_PARENTHESIS Block // missing Type or VOID
+	|
+	Type error // missing IDENTIFIER
+	|
+	VOID error // missing IDENTIFIER
+	|
+	Type IDENTIFIER LEFT_PARENTHESIS error Block // missing RIGHT_PARENTHESIS
+	|
+	VOID IDENTIFIER LEFT_PARENTHESIS error Block // missing RIGHT_PARENTHESIS
+	|
+	Type IDENTIFIER LEFT_PARENTHESIS ParameterDeclarations error Block // missing RIGHT_PARENTHESIS
+	|
+	VOID IDENTIFIER LEFT_PARENTHESIS ParameterDeclarations error Block // missing RIGHT_PARENTHESIS
+	|
+	Type IDENTIFIER LEFT_PARENTHESIS RIGHT_PARENTHESIS error // missing Block
+	|
+	VOID IDENTIFIER LEFT_PARENTHESIS RIGHT_PARENTHESIS error // missing Block
+	|
+	Type IDENTIFIER LEFT_PARENTHESIS ParameterDeclarations RIGHT_PARENTHESIS error // missing Block
+	|
+	VOID IDENTIFIER LEFT_PARENTHESIS ParameterDeclarations RIGHT_PARENTHESIS error // missing Block
 	;
 	
 ParameterDeclarations ::= 
 	ParameterDeclaration
 	|
 	ParameterDeclarations COMMA ParameterDeclaration
+	|
+	ParameterDeclarations error ParameterDeclaration // missing COMMA
 	;
 	
 ParameterDeclaration ::=
-	Type IDENTIFIER;
+	Type IDENTIFIER
+	|
+	error IDENTIFIER // missing Type
+	|
+	Type error // missing IDENTIFIER
+	;
 
 Block ::=
 	LEFT_BRACE RIGHT_BRACE
@@ -148,6 +187,14 @@ Block ::=
 	LEFT_BRACE Statements RIGHT_BRACE
 	|
 	LEFT_BRACE VariableDeclarations Statements RIGHT_BRACE
+	|
+	LEFT_BRACE error // missing RIGHT_BRACE
+	|
+	LEFT_BRACE VariableDeclarations error // missing RIGHT_BRACE
+	|
+	LEFT_BRACE Statements error // missing RIGHT_BRACE
+	|
+	LEFT_BRACE VariableDeclarations Statements error // missing RIGHT_BRACE
 	;
 	
 VariableDeclarations ::=
