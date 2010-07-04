@@ -5,17 +5,16 @@ import java_cup.runtime.*;
 parser code 
 {:
 
-/*
 public void report_error(String message, Object info) {
 	if(message.equals("Syntax error")) {
-		System.out.println(((Symbol)info).left);
+		System.err.println("Syntax error: " + ((Symbol)info).left);
 	}
 	else if(message.equals("Couldn't repair and continue parse")) {
 		System.err.println("Missing syntax: " + ((Symbol)info).right);
 	}
 
 }
-*/
+
 
 :}
 
@@ -65,8 +64,6 @@ Program ::=
 	|
 	CLASS IDENTIFIER LEFT_BRACE FieldDeclarations MethodDeclarations RIGHT_BRACE
 	|
-	error // the program is empty
-	|
 	CLASS error // missing "Program" identifier
 	|
 	CLASS IDENTIFIER error // missing LEFT_BRACE
@@ -95,12 +92,13 @@ Fields ::=
 	Fields COMMA Field
 	|
 	Field
-	|
+	/*|
 	Fields COMMA error // missing Field
 	|
 	error COMMA Field // missing Fields
 	|
 	error Field // missing COMMA
+	*/
 	;
 
 Field ::=
@@ -131,7 +129,7 @@ MethodDeclaration ::=
 	Type IDENTIFIER LEFT_PARENTHESIS ParameterDeclarations RIGHT_PARENTHESIS Block
 	|
 	VOID IDENTIFIER LEFT_PARENTHESIS ParameterDeclarations RIGHT_PARENTHESIS Block
-	|
+	/*|
 	// missing Type or VOID
 	error IDENTIFIER LEFT_PARENTHESIS RIGHT_PARENTHESIS Block 
 	|
@@ -172,26 +170,31 @@ MethodDeclaration ::=
 	Type IDENTIFIER LEFT_PARENTHESIS ParameterDeclarations RIGHT_PARENTHESIS error
 	|
 	VOID IDENTIFIER LEFT_PARENTHESIS ParameterDeclarations RIGHT_PARENTHESIS error
+	*/
 	;
 	
 ParameterDeclarations ::= 
 	ParameterDeclaration
 	|
 	ParameterDeclarations COMMA ParameterDeclaration
+	/*
 	|
 	ParameterDeclarations COMMA error // missing ParameterDeclaration
 	|
 	error COMMA ParameterDeclaration // missing ParameterDeclarations
 	|
 	error ParameterDeclaration // missing COMMA
+	*/
 	;
 	
 ParameterDeclaration ::=
 	Type IDENTIFIER
+	/*
 	|
 	Type error // missing IDENTIFIER
 	|
 	error IDENTIFIER // missing Type
+	*/
 	;
 
 Block ::=
@@ -202,16 +205,16 @@ Block ::=
 	LEFT_BRACE Statements RIGHT_BRACE
 	|
 	LEFT_BRACE VariableDeclarations Statements RIGHT_BRACE
-	|
+	/*|
 	// missing LEFT_BRACE
-	/*error RIGHT_BRACE
+	error RIGHT_BRACE
 	|
 	error VariableDeclarations RIGHT_BRACE
 	|
 	error Statements RIGHT_BRACE
 	|
 	error VariableDeclarations Statements RIGHT_BRACE
-	|*/
+	|
 	// missing RIGHT_BRACE
 	LEFT_BRACE error
 	|
@@ -220,7 +223,7 @@ Block ::=
 	LEFT_BRACE Statements error
 	|
 	LEFT_BRACE VariableDeclarations Statements error
-	
+	*/
 	;
 	
 VariableDeclarations ::=
