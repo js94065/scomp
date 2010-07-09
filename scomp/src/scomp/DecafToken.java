@@ -12,6 +12,8 @@ public class DecafToken extends Symbol {
 	
 	private final int column;
 	
+	private final String inputString;
+	
 	/**
 	 * 
 	 * @param symbolId
@@ -20,11 +22,12 @@ public class DecafToken extends Symbol {
 	 * <br>Range: {@code [1 .. Integer.MAX_VALUE]}
 	 * @param column
 	 * <br>Range: {@code [1 .. Integer.MAX_VALUE]}
+	 * @param inputString 
+	 * <br>Not null
+	 * <br>Shared
 	 */
-	public DecafToken(final int symbolId, final int row, final int column) {
-		super(symbolId);
-		this.row = row;
-		this.column = column;
+	public DecafToken(final int symbolId, final int row, final int column, final String inputString) {
+		this(symbolId, null, row, column, inputString);
 	}
 	
 	/**
@@ -38,11 +41,15 @@ public class DecafToken extends Symbol {
 	 * <br>Range: {@code [1 .. Integer.MAX_VALUE]}
 	 * @param column
 	 * <br>Range: {@code [1 .. Integer.MAX_VALUE]}
+	 * @param inputString 
+	 * <br>Not null
+	 * <br>Shared
 	 */
-	public DecafToken(final int symbolId, final Object value, final int row, final int column) {
+	public DecafToken(final int symbolId, final Object value, final int row, final int column, final String inputString) {
 		super(symbolId, value);
 		this.row = row;
 		this.column = column;
+		this.inputString = inputString;
 	}
 	
 	/**
@@ -75,13 +82,23 @@ public class DecafToken extends Symbol {
 	/**
 	 * 
 	 * @return
-	 * <br>A possibly null value
-	 * <br>A shared value
+	 * <br>Maybe null
+	 * <br>Shared
 	 */
 	public final Object getValue() {
 		return this.value;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 * <br>Not null
+	 * <br>Shared
+	 */
+	public final String getInputString() {
+		return this.inputString;
+	}
+
 	@Override
 	public boolean equals(final Object object) {
 		final DecafToken that = Tools.cast(this.getClass(), object);

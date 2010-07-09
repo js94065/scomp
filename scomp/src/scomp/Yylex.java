@@ -31,7 +31,7 @@ class Yylex implements java_cup.runtime.Scanner {
 	 */
 	private final DecafToken newToken(final int symbolId) {
 		this.updateLocation();
-		return new DecafToken(symbolId, this.currentLine, this.currentColumn);
+		return new DecafToken(symbolId, this.currentLine, this.currentColumn, this.yytext());
 	}
 	/**
 	 * @param symbolId
@@ -45,7 +45,7 @@ class Yylex implements java_cup.runtime.Scanner {
 	 */
 	private final DecafToken newToken(final int symbolId, final Object object) {
 		this.updateLocation();
-		return new DecafToken(symbolId, object, this.currentLine, this.currentColumn);
+		return new DecafToken(symbolId, object, this.currentLine, this.currentColumn, this.yytext());
 	}
 	private java.io.BufferedReader yy_reader;
 	private int yy_buffer_index;
