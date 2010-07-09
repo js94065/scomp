@@ -174,7 +174,7 @@ public class DecafScannerTest {
 	 * <br>A new value
 	 */
 	private static final DecafToken token(final int symbolId, final Object value) {
-		return new DecafToken(symbolId, value, UNSPECIFIED_ROW, UNSPECIFIED_COLUMN);
+		return new DecafToken(symbolId, value, UNSPECIFIED_ROW, UNSPECIFIED_COLUMN, value == null ? "" : value.toString());
 	}
 	
 	/**
