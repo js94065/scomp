@@ -51,6 +51,47 @@ package scomp;
 		return new DecafToken(symbolId, object, this.currentLine, this.currentColumn, this.yytext());
 	}
 	
+	/**
+	 * 
+	 * @param string
+	 * <br>Not null
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	public static final String unescape(final String string) {
+		final StringBuilder result = new StringBuilder();
+		int i = 0;
+		
+		while (i < string.length()) {
+			final char currentCharacter = string.charAt(i);
+			
+			if (currentCharacter != '\\') {
+				result.append(currentCharacter);
+			} else {
+				final char nextCharacter = string.charAt(++i);
+				
+				switch (nextCharacter) {
+				case '\'':
+				case '\"':
+				case '\\':
+					result.append(nextCharacter);
+					break;
+				case 't':
+					result.append('\t');
+					break;
+				case 'n':
+					result.append('\n');
+					break;
+				}
+			}
+			
+			++i;
+		}
+		
+		return result.toString();
+	}
+		
 %}
 
 %%
@@ -76,9 +117,9 @@ while { return this.newToken(DecafParserSymbols.WHILE); }
 "[" { return this.newToken(DecafParserSymbols.LEFT_BRACKET); }
 "]" { return this.newToken(DecafParserSymbols.RIGHT_BRACKET); }
 
-'([ -!#-&(-\[\]-~]|\\\'|\\\"|\\t|\\n)' { return this.newToken(DecafParserSymbols.CHAR_LITERAL, this.yytext().substring(1, this.yytext().length() - 1)); }
+'([ -!#-&(-\[\]-~]|\\\'|\\\"|\\\\|\\t|\\n)' { return this.newToken(DecafParserSymbols.CHAR_LITERAL, unescape(this.yytext().substring(1, this.yytext().length() - 1))); }
 
-\"([ -!#-&(-\[\]-~]|\\\'|\\\"|\\t|\\n)*\" { return this.newToken(DecafParserSymbols.STRING_LITERAL, this.yytext().substring(1, this.yytext().length() - 1)); }
+\"([ -!#-&(-\[\]-~]|\\\'|\\\"|\\\\|\\t|\\n)*\" { return this.newToken(DecafParserSymbols.STRING_LITERAL, unescape(this.yytext().substring(1, this.yytext().length() - 1))); }
 
 [a-zA-Z_\.][a-zA-Z_\.0-9]* { return this.newToken(DecafParserSymbols.IDENTIFIER, this.yytext()); }
 
