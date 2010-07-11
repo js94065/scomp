@@ -5,16 +5,23 @@ import java_cup.runtime.*;
 parser code 
 {:
 
+
 public void report_error(String message, Object info) {
+
 	if(message.equals("Syntax error")) {
-		System.err.println("Syntax error: " + ((Symbol)info).left);
+		/*System.err.println("Input String: " + ((DecafToken)(info)).getInputString());
+		System.err.println("Symbol Id: " + ((DecafToken)info).getSymbolId());
+		System.err.println("Row: " + ((DecafToken)info).getRow());
+		System.err.println("Column: " + ((DecafToken)info).getColumn());
+		System.err.println();
+		*/
+		System.err.println("Missing '" + ((DecafToken)(info)).getInputString() + "' at (" + ((DecafToken)info).getRow() + "," + ((DecafToken)info).getColumn() + ")");
+		
 	}
 	else if(message.equals("Couldn't repair and continue parse")) {
-		System.err.println("Missing syntax: " + ((Symbol)info).right);
 	}
-
+	
 }
-
 
 :}
 
@@ -63,7 +70,7 @@ Program ::=
 	CLASS IDENTIFIER LEFT_BRACE MethodDeclarations RIGHT_BRACE
 	|
 	CLASS IDENTIFIER LEFT_BRACE FieldDeclarations MethodDeclarations RIGHT_BRACE
-	|
+/*	|
 	CLASS error // missing "Program" identifier
 	|
 	CLASS IDENTIFIER error // missing LEFT_BRACE
@@ -76,6 +83,7 @@ Program ::=
 	CLASS IDENTIFIER LEFT_BRACE MethodDeclarations error
 	|
 	CLASS IDENTIFIER LEFT_BRACE FieldDeclarations MethodDeclarations error 
+	*/
 	;
 
 FieldDeclarations ::=
