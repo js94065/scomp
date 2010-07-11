@@ -47,6 +47,41 @@ class Yylex implements java_cup.runtime.Scanner {
 		this.updateLocation();
 		return new DecafToken(symbolId, object, this.currentLine, this.currentColumn, this.yytext());
 	}
+	/**
+	 * 
+	 * @param string
+	 * <br>Not null
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	public static final String unescape(final String string) {
+		final StringBuilder result = new StringBuilder();
+		int i = 0;
+		while (i < string.length()) {
+			final char currentCharacter = string.charAt(i);
+			if (currentCharacter != '\\') {
+				result.append(currentCharacter);
+			} else {
+				final char nextCharacter = string.charAt(++i);
+				switch (nextCharacter) {
+				case '\'':
+				case '\"':
+				case '\\':
+					result.append(nextCharacter);
+					break;
+				case 't':
+					result.append('\t');
+					break;
+				case 'n':
+					result.append('\n');
+					break;
+				}
+			}
+			++i;
+		}
+		return result.toString();
+	}
 	private java.io.BufferedReader yy_reader;
 	private int yy_buffer_index;
 	private int yy_buffer_read;
@@ -369,9 +404,9 @@ class Yylex implements java_cup.runtime.Scanner {
 ",-1:2,50,-1:32,10:2,-1:64,26,-1:47,27,-1:53,28,-1,29,-1:50,30,31,-1:51,32,-" +
 "1:55,22:2,-1:52,23:2,-1,100:18,-1:10,100:5,-1:19,27:49,-1,27,-1:43,38,-1:9," +
 "37,-1:2,37:2,-1:3,37,-1:4,37,-1,37,-1:13,37:2,-1,37,-1:43,36,-1:27,100:5,55" +
-",100:7,24,100:4,-1:10,100:5,-1:48,10:2,63,-1:25,50,-1:4,50,-1:13,50,-1:2,50" +
+",100:7,24,100:4,-1:10,100:5,-1:48,10:2,63,-1:25,50,-1:4,50,-1:13,50,-1,50:2" +
 ",-1:24,100:10,35,100:7,-1:10,100:5,-1:19,57:24,-1,57,60,25,57:18,-1:2,57,-1" +
-":3,100:3,39,100:14,-1:10,100:5,-1:63,33,-1:12,57,-1:4,57,-1:13,57,-1:2,57,-" +
+":3,100:3,39,100:14,-1:10,100:5,-1:63,33,-1:12,57,-1:4,57,-1:13,57,-1,57:2,-" +
 "1:24,100:3,40,100:14,-1:10,100:5,-1:64,34,-1:6,100:15,41,100:2,-1:10,100:5," +
 "-1:19,100:7,42,100:10,-1:10,100:5,-1:19,100:11,43,100:6,-1:10,100:5,-1:19,1" +
 "00:3,44,100:14,-1:10,100:5,-1:19,100:3,45,100:14,-1:10,100:5,-1:19,100:5,46" +
@@ -535,7 +570,7 @@ class Yylex implements java_cup.runtime.Scanner {
 					case -25:
 						break;
 					case 25:
-						{ return this.newToken(DecafParserSymbols.STRING_LITERAL, this.yytext().substring(1, this.yytext().length() - 1)); }
+						{ return this.newToken(DecafParserSymbols.STRING_LITERAL, unescape(this.yytext().substring(1, this.yytext().length() - 1))); }
 					case -26:
 						break;
 					case 26:
@@ -579,7 +614,7 @@ class Yylex implements java_cup.runtime.Scanner {
 					case -36:
 						break;
 					case 36:
-						{ return this.newToken(DecafParserSymbols.CHAR_LITERAL, this.yytext().substring(1, this.yytext().length() - 1)); }
+						{ return this.newToken(DecafParserSymbols.CHAR_LITERAL, unescape(this.yytext().substring(1, this.yytext().length() - 1))); }
 					case -37:
 						break;
 					case 37:
