@@ -188,11 +188,9 @@ public final class Guess {
 			
 			if (random < HEADS_PROBABILITY) {
 				return HEADS;
-			}
-			else if (random > HEADS_PROBABILITY) {
+			} else if (random > HEADS_PROBABILITY) {
 				return TAILS;
-			}
-			else {
+			} else {
 				return EDGE;
 			}
 		}
