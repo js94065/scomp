@@ -31,13 +31,13 @@ terminal ASSIGN; // "=", not to be confused with "=="  which is EQUAL
 terminal COMMA, SEMI_COLON, NOT, PLUS, MINUS, TIMES, DIVIDE, MODULO;
 terminal ARITHMETIC_SHIFT_LEFT, ARITHMETIC_SHIFT_RIGHT, BITWISE_ROTATE_RIGHT;
 terminal LESSER, GREATER, LESSER_OR_EQUAL, GREATER_OR_EQUAL, EQUAL, NOT_EQUAL, AND, OR;
-terminal int INT_LITERAL;
-terminal boolean BOOLEAN_LITERAL;
-terminal char CHAR_LITERAL;
-terminal String STRING_LITERAL;
-terminal String IDENTIFIER;
+terminal INT_LITERAL;
+terminal BOOLEAN_LITERAL;
+terminal CHAR_LITERAL;
+terminal STRING_LITERAL;
+terminal IDENTIFIER;
 
-non terminal Program;
+non terminal Program Program;
 non terminal FieldDeclarations, FieldDeclaration;
 non terminal Fields, Field;
 non terminal MethodDeclarations, MethodDeclaration;
@@ -63,14 +63,15 @@ precedence left TIMES, DIVIDE, MODULO;
 precedence left NOT;
 
 Program ::=
-	CLASS IDENTIFIER LEFT_BRACE RIGHT_BRACE
+	CLASS IDENTIFIER LEFT_BRACE RIGHT_BRACE {: RESULT = new Program(); :}
 	|
-	CLASS IDENTIFIER LEFT_BRACE FieldDeclarations RIGHT_BRACE
+	CLASS IDENTIFIER LEFT_BRACE FieldDeclarations RIGHT_BRACE {: RESULT = new Program(); :}
 	|
-	CLASS IDENTIFIER LEFT_BRACE MethodDeclarations RIGHT_BRACE
+	CLASS IDENTIFIER LEFT_BRACE MethodDeclarations RIGHT_BRACE {: RESULT = new Program(); :}
 	|
-	CLASS IDENTIFIER LEFT_BRACE FieldDeclarations MethodDeclarations RIGHT_BRACE
-/*	|
+	CLASS IDENTIFIER LEFT_BRACE FieldDeclarations MethodDeclarations RIGHT_BRACE {: RESULT = new Program(); :}
+	/*
+	|
 	CLASS error // missing "Program" identifier
 	|
 	CLASS IDENTIFIER error // missing LEFT_BRACE
