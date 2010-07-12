@@ -8,18 +8,18 @@ package scomp;
  */
 public abstract class AbstractNode {
 	
-	private final AbstractNode parent;
+	private AbstractNode parent;
 	
 	/**
 	 * 
-	 * @param parent 
+	 * @param parent
 	 * <br>Maybe null
 	 * <br>Shared
 	 */
-	public AbstractNode(final AbstractNode parent) {
+	public final void setParent(final AbstractNode parent) {
 		this.parent = parent;
 	}
-	
+
 	/**
 	 * 
 	 * @return
