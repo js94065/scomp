@@ -100,7 +100,7 @@ public class DecafToken extends Symbol {
 	}
 
 	@Override
-	public boolean equals(final Object object) {
+	public final boolean equals(final Object object) {
 		final DecafToken that = Tools.cast(this.getClass(), object);
 		
 		return that != null && this.getSymbolId() == that.getSymbolId() && Tools.equals(this.getValue(), that.getValue());

@@ -1,7 +1,6 @@
 package scomp;
 
 import static org.junit.Assert.*;
-import java_cup.runtime.Symbol;
 
 import org.junit.Test;
 
@@ -134,9 +133,15 @@ public class DecafParserTest {
 		}
 	}
 	
+	/**
+	 * {@value}.
+	 */
 	public static final String SMALLEST_PROGRAM =
 		"class Program{}";
 	
+	/**
+	 * {@value}.
+	 */
 	public static final String PROGRAM_WITH_A_FIELD =
 		"class Program {\n" +
 		"\n" +
@@ -144,6 +149,9 @@ public class DecafParserTest {
 		"\n" +
 		"}";
 	
+	/**
+	 * {@value}.
+	 */
 	public static final String PROGRAM_WITH_A_METHOD =
 		"class Program {\n" +
 		"\n" +
@@ -152,6 +160,9 @@ public class DecafParserTest {
 		"\n" +
 		"}";
 	
+	/**
+	 * {@value}.
+	 */
 	public static final String PROGRAM_WITH_A_FIELD_AND_A_METHOD =
 		"class Program {\n" +
 		"\n" +
@@ -162,6 +173,9 @@ public class DecafParserTest {
 		"\n" +
 		"}";
 	
+	/**
+	 * {@value}.
+	 */
 	public static final String PROGRAM_WITH_FIELDS_AND_METHODS =
 		"class Program {\n" +
 		"\n" +
@@ -177,6 +191,9 @@ public class DecafParserTest {
 		"\n" +
 		"}";
 	
+	/**
+	 * {@value}.
+	 */
 	public static final String PROGRAM_WITH_METHOD_WITH_PARAMETERS =
 		"class Program {\n" +
 		"\n" +
@@ -185,6 +202,9 @@ public class DecafParserTest {
 		"\n" +
 		"}";
 	
+	/**
+	 * {@value}.
+	 */
 	public static final String PROGRAM_WITH_METHOD_WITH_VARIOUS_EXPRESSIONS =
 		"class Program {\n" +
 		"\n" +
@@ -233,6 +253,9 @@ public class DecafParserTest {
 		"\n" +
 		"}";
 	
+	/**
+	 * {@value}.
+	 */
 	public static final String PROGRAM_WITH_A_RECURSIVE_METHOD =
 		"class Program {\n" +
 		"\n" +
@@ -246,6 +269,9 @@ public class DecafParserTest {
 		"\n" +
 		"}";
 	
+	/**
+	 * {@value}.
+	 */
 	public static final String PROGRAM_WITH_METHOD_WITH_PARAMETERS_AND_COMPLEX_BLOCK =
 		"class Program {\n" +
 		"\n" +
@@ -281,21 +307,39 @@ public class DecafParserTest {
 		"\n" +
 		"}";
 	
+	/**
+	 * {@value}.
+	 */
 	public static final String MALFORMED_PROGRAM_1 =
 		"";
 	
+	/**
+	 * {@value}.
+	 */
 	public static final String MALFORMED_PROGRAM_2 =
 		"class";
 	
+	/**
+	 * {@value}.
+	 */
 	public static final String MALFORMED_PROGRAM_3 =
 		"class Program";
 	
+	/**
+	 * {@value}.
+	 */
 	public static final String PROGRAM_WITH_UNMATCHED_BRACES_1 =
 		"class Program {";
 	
+	/**
+	 * {@value}.
+	 */
 	public static final String PROGRAM_WITH_UNMATCHED_BRACES_2 =
 		"class Program }";
 	
+	/**
+	 * {@value}.
+	 */
 	public static final String PROGRAM_WITH_MISMATCHING_PARENTHESES_1 =
 		"class Program {\n" +
 		"\n" +
@@ -305,6 +349,9 @@ public class DecafParserTest {
 		"\n" +
 		"}";
 	
+	/**
+	 * {@value}.
+	 */
 	public static final String PROGRAM_WITH_MISMATCHING_PARENTHESES_2 =
 		"class Program {\n" +
 		"\n" +
@@ -316,16 +363,18 @@ public class DecafParserTest {
 	
 	/**
 	 * 
+	 * @param <T> The expected return type
 	 * @param input
-	 * <br>Should not be null
+	 * <br>Not null
 	 * @return
-	 * <br>A possibly null value
-	 * @throws Exception if an error occurs
+	 * <br>Maybe null
+	 * @throws Exception If an error occurs
 	 */
-	public static final Symbol parse(final String input) throws Exception {
+	@SuppressWarnings("unchecked")
+	public static final <T> T parse(final String input) throws Exception {
 		final DecafParser parser = new DecafParser(DecafScannerTest.createScanner(input));
 		
-		return parser.parse();
+		return (T) parser.parse().value;
 	}
 	
 }
