@@ -168,7 +168,7 @@ public class DecafParserTest {
 	public static final String PROGRAM_WITH_A_FIELD_AND_A_METHOD =
 		"class Program {\n" +
 		"\n" +
-		"	int x[0];\n" +
+		"	int x[42];\n" +
 		"\n" +
 		"	void f() {\n" +
 		"	}\n" +
