@@ -66,19 +66,43 @@ precedence left TIMES, DIVIDE, MODULO;
 precedence left NOT;
 
 Program ::=
-	CLASS:e IDENTIFIER LEFT_BRACE RIGHT_BRACE
-	{: RESULT = new Program(null, null);:}
+	CLASS IDENTIFIER LEFT_BRACE RIGHT_BRACE
+	{:
+		RESULT = new Program(null, null);
+	:}
 	|
 	CLASS IDENTIFIER LEFT_BRACE FieldDeclarations:fieldDeclarations RIGHT_BRACE
-	{: RESULT = new Program(fieldDeclarations, null); :}
+	{:
+		RESULT = new Program(fieldDeclarations, null);
+	:}
 	|
 	CLASS IDENTIFIER LEFT_BRACE MethodDeclarations:methodDeclarations RIGHT_BRACE
-	{: RESULT = new Program(null, methodDeclarations); :}
+	{:
+		RESULT = new Program(null, methodDeclarations);
+	:}
 	|
 	CLASS IDENTIFIER LEFT_BRACE FieldDeclarations:fieldDeclarations MethodDeclarations:methodDeclarations RIGHT_BRACE
-	{: RESULT = new Program(fieldDeclarations, methodDeclarations); :}
+	{:
+		RESULT = new Program(fieldDeclarations, methodDeclarations);
+	:}
 	|
-	CLASS error // missing "Program" identifier
+	// Missing code
+	{:
+		final Yylex scanner = Tools.cast(Yylex.class, this.parser.getScanner());
+		
+		if (scanner != null) {
+			throw new RuntimeException("(:" + scanner.getCurrentRow() + ":" + scanner.getCurrentColumn() + ") Parse error");
+		}
+	:}
+	|
+	CLASS // Missing "Program" identifier
+	{:
+		final DecafToken lastToken = Tools.cast(DecafToken.class, CUP$DecafParser$stack.elementAt(CUP$DecafParser$top - 0));
+		
+		if (lastToken != null) {
+			throw new RuntimeException("(:" + lastToken.getRow() + ":" + lastToken.getColumn() + ") Parse error");
+		}
+	:}
 	|
 	CLASS IDENTIFIER error // missing LEFT_BRACE
 	|
@@ -94,10 +118,16 @@ Program ::=
 
 FieldDeclarations ::=
 	FieldDeclarations:fieldDeclarations FieldDeclaration:fieldDeclaration
-	{: RESULT = new ArrayList<Object>(fieldDeclarations); RESULT.add(fieldDeclaration); :}
+	{:
+		RESULT = new ArrayList<Object>(fieldDeclarations);
+		RESULT.add(fieldDeclaration);
+	:}
 	|
 	FieldDeclaration:fieldDeclaration
-	{: RESULT = new ArrayList<Object>(); RESULT.add(fieldDeclaration); :}
+	{:
+		RESULT = new ArrayList<Object>();
+		RESULT.add(fieldDeclaration);
+	:}
 	;
 
 FieldDeclaration ::=
@@ -133,10 +163,16 @@ Field ::=
 
 MethodDeclarations ::=
 	MethodDeclarations:methodDeclarations MethodDeclaration:methodDeclaration
-	{: RESULT = new ArrayList<Object>(methodDeclarations); RESULT.add(methodDeclaration); :}
+	{:
+		RESULT = new ArrayList<Object>(methodDeclarations);
+		RESULT.add(methodDeclaration);
+	:}
 	|
 	MethodDeclaration:methodDeclaration
-	{: RESULT = new ArrayList<Object>(); RESULT.add(methodDeclaration); :}
+	{:
+		RESULT = new ArrayList<Object>();
+		RESULT.add(methodDeclaration);
+	:}
 	;
 
 MethodDeclaration ::=

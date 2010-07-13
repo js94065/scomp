@@ -1,6 +1,7 @@
 package scomp;
 
 import static org.junit.Assert.*;
+import java_cup.runtime.Symbol;
 
 import org.junit.Test;
 
@@ -63,7 +64,7 @@ public class DecafParserTest {
 			
 			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
-			assertEquals("Parse error on line 1", exception.getMessage());
+			assertEquals("(:1:1) Parse error", exception.getMessage());
 		}
 	}
 	
@@ -74,7 +75,7 @@ public class DecafParserTest {
 			
 			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
-			assertEquals("Parse error on line 1", exception.getMessage());
+			assertEquals("(:1:1) Parse error", exception.getMessage());
 		}
 	}
 	
@@ -85,7 +86,7 @@ public class DecafParserTest {
 			
 			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
-			assertEquals("Parse error on line 1", exception.getMessage());
+			assertEquals("(:1:1) Parse error", exception.getMessage());
 		}
 	}
 	
@@ -96,7 +97,7 @@ public class DecafParserTest {
 			
 			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
-			assertEquals("Missing '}' at (1, 16)", exception.getMessage());
+			assertEquals("(:1:16) Missing '}'", exception.getMessage());
 		}
 	}
 	
@@ -107,7 +108,7 @@ public class DecafParserTest {
 			
 			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
-			assertEquals("Unmatched '}' at (1, 15)", exception.getMessage());
+			assertEquals("(:1:15) Unmatched '}'", exception.getMessage());
 		}
 	}
 	
@@ -118,7 +119,7 @@ public class DecafParserTest {
 			
 			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
-			assertEquals("Missing ')' at (4, 16)", exception.getMessage());
+			assertEquals("(:4:16) Missing ')'", exception.getMessage());
 		}
 	}
 	
@@ -129,7 +130,7 @@ public class DecafParserTest {
 			
 			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
-			assertEquals("Unmatched ')' at (4, 17)", exception.getMessage());
+			assertEquals("(:4:17) Unmatched ')'", exception.getMessage());
 		}
 	}
 	
@@ -373,8 +374,9 @@ public class DecafParserTest {
 	@SuppressWarnings("unchecked")
 	public static final <T> T parse(final String input) throws Exception {
 		final DecafParser parser = new DecafParser(DecafScannerTest.createScanner(input));
+		final Symbol parseResult = parser.parse();
 		
-		return (T) parser.parse().value;
+		return (T) (parseResult == null ? null : parseResult.value);
 	}
 	
 }
