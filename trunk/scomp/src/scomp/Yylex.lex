@@ -7,19 +7,35 @@ package scomp;
 %line
 
 %{
-	private int firstCharacterIndexInCurrentLine = 0;
+	private int firstCharacterIndexInCurrentRow = 0;
 	
-	private int currentLine = 1;
+	private int currentRow = 1;
 	
 	private int currentColumn = 1;
 	
+	/**
+	 * @return
+	 * <br>Range: {@code [1 .. Integer.MAX_VALUE]}
+	 */
+	public final int getCurrentRow() {
+		return this.currentRow;
+	}
+	
+	/**
+	 * @return
+	 * <br>Range: {@code [1 .. Integer.MAX_VALUE]}
+	 */
+	public final int getCurrentColumn() {
+		return this.currentRow;
+	}
+	
 	private final void updateLocation() {
-		if (yyline + 1 > this.currentLine) {
-			this.firstCharacterIndexInCurrentLine = yychar;
-			this.currentLine = yyline + 1;
+		if (yyline + 1 > this.getCurrentRow()) {
+			this.firstCharacterIndexInCurrentRow = yychar;
+			this.currentRow = yyline + 1;
 		}
 		
-		this.currentColumn = 1 + yychar - this.firstCharacterIndexInCurrentLine;
+		this.currentColumn = 1 + yychar - this.firstCharacterIndexInCurrentRow;
 	}
 	
 	/**
@@ -32,7 +48,7 @@ package scomp;
 	private final DecafToken newToken(final int symbolId) {
 		this.updateLocation();
 		
-		return new DecafToken(symbolId, this.currentLine, this.currentColumn, this.yytext());
+		return new DecafToken(symbolId, this.getCurrentRow(), this.getCurrentColumn(), this.yytext());
 	}
 	
 	/**
@@ -48,7 +64,7 @@ package scomp;
 	private final DecafToken newToken(final int symbolId, final Object object) {
 		this.updateLocation();
 		
-		return new DecafToken(symbolId, object, this.currentLine, this.currentColumn, this.yytext());
+		return new DecafToken(symbolId, object, this.getCurrentRow(), this.getCurrentColumn(), this.yytext());
 	}
 	
 	/**
@@ -154,4 +170,4 @@ while { return this.newToken(DecafParserSymbols.WHILE); }
 
 [\r\n\f]+ { /* Ignore */ }
 
-. { this.updateLocation(); throw new InvalidInputException(this.currentLine, this.currentColumn, this.yytext()); }
+. { this.updateLocation(); throw new InvalidInputException(this.getCurrentRow(), this.getCurrentColumn(), this.yytext()); }
