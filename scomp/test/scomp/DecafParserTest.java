@@ -1,6 +1,7 @@
 package scomp;
 
 import static org.junit.Assert.*;
+
 import java_cup.runtime.Symbol;
 
 import org.junit.Test;
@@ -167,7 +168,7 @@ public class DecafParserTest {
 	public static final String PROGRAM_WITH_A_FIELD_AND_A_METHOD =
 		"class Program {\n" +
 		"\n" +
-		"	int x;\n" +
+		"	int x[0];\n" +
 		"\n" +
 		"	void f() {\n" +
 		"	}\n" +
