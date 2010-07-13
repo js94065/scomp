@@ -4,6 +4,7 @@ import java.util.*;
 
 import java_cup.runtime.*;
 
+
 parser code 
 {:
 
@@ -11,18 +12,16 @@ parser code
 public void report_error(String message, Object info) {
 
 	if(message.equals("Syntax error")) {
-		/*System.err.println("Input String: " + ((DecafToken)(info)).getInputString());
-		System.err.println("Symbol Id: " + ((DecafToken)info).getSymbolId());
-		System.err.println("Row: " + ((DecafToken)info).getRow());
-		System.err.println("Column: " + ((DecafToken)info).getColumn());
-		System.err.println();
-		*/
-		System.err.println("Missing '" + ((DecafToken)(info)).getInputString() + "' at (" + ((DecafToken)info).getRow() + "," + ((DecafToken)info).getColumn() + ")");
+		
+		if(((Symbol)info).sym == 0) {
+			
+		}
+		else {
+			System.err.println("Syntax Error '" + ((DecafToken)(info)).getInputString() + 
+			"' at (" + ((DecafToken)info).getRow() + "," + ((DecafToken)info).getColumn() + ")");
+		}
 		
 	}
-	else if(message.equals("Couldn't repair and continue parse")) {
-	}
-	
 }
 
 :}
@@ -67,8 +66,8 @@ precedence left TIMES, DIVIDE, MODULO;
 precedence left NOT;
 
 Program ::=
-	CLASS IDENTIFIER LEFT_BRACE RIGHT_BRACE
-	{: RESULT = new Program(null, null); :}
+	CLASS:e IDENTIFIER LEFT_BRACE RIGHT_BRACE
+	{: RESULT = new Program(null, null);:}
 	|
 	CLASS IDENTIFIER LEFT_BRACE FieldDeclarations:fieldDeclarations RIGHT_BRACE
 	{: RESULT = new Program(fieldDeclarations, null); :}
@@ -78,7 +77,6 @@ Program ::=
 	|
 	CLASS IDENTIFIER LEFT_BRACE FieldDeclarations:fieldDeclarations MethodDeclarations:methodDeclarations RIGHT_BRACE
 	{: RESULT = new Program(fieldDeclarations, methodDeclarations); :}
-	/*
 	|
 	CLASS error // missing "Program" identifier
 	|
@@ -92,7 +90,6 @@ Program ::=
 	CLASS IDENTIFIER LEFT_BRACE MethodDeclarations error
 	|
 	CLASS IDENTIFIER LEFT_BRACE FieldDeclarations MethodDeclarations error 
-	*/
 	;
 
 FieldDeclarations ::=
