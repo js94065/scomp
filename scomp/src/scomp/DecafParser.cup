@@ -137,11 +137,18 @@ FieldDeclaration ::=
 		RESULT = new ArrayList<FieldDeclaration>();
 		
 		for (final Object field : fields) {
-			final boolean isArray = ((String) field).indexOf("[]") >= 0;
-			final Class<?> t = isArray ? java.lang.reflect.Array.newInstance(type, 0).getClass() : type;
-			final String identifier = ((String) field).split("\\[\\]")[0];
+			final String[] fieldElements = ((String) field).split(" ");
 			
-			RESULT.add(new FieldDeclaration(t, identifier));
+			switch (fieldElements.length) {
+			case 1:
+				RESULT.add(new FieldDeclaration(type, fieldElements[0]));
+				break;
+			case 2:
+				RESULT.add(new ArrayFieldDeclaration(type, fieldElements[0], Integer.parseInt(fieldElements[1])));
+				break;
+			default:
+				throw new IllegalArgumentException("" + field);
+			}
 		}
 	:}
 	;
@@ -176,9 +183,9 @@ Field ::=
 		RESULT = (String) identifier;
 	:}
 	|
-	IDENTIFIER:identifier LEFT_BRACKET INT_LITERAL RIGHT_BRACKET
+	IDENTIFIER:identifier LEFT_BRACKET INT_LITERAL:elementCount RIGHT_BRACKET
 	{:
-		RESULT = identifier + "[]";
+		RESULT = identifier + " " + elementCount;
 	:}
 	|
 	error LEFT_BRACKET INT_LITERAL RIGHT_BRACKET // missing IDENTIFIER
