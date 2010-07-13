@@ -14,7 +14,7 @@ public void report_error(String message, Object info) {
 	if(message.equals("Syntax error")) {
 		
 		if(((Symbol)info).sym == 0) {
-			
+			System.err.println(((Symbol)info).sym);
 		}
 		else {
 			System.err.println("Syntax Error '" + ((DecafToken)(info)).getInputString() + 
