@@ -40,15 +40,16 @@ terminal IDENTIFIER;
 
 non terminal Program Program;
 non terminal List FieldDeclarations;
-non terminal FieldDeclaration FieldDeclaration;
-non terminal Fields, Field;
+non terminal List FieldDeclaration;
+non terminal List Fields;
+non terminal String Field;
 non terminal List MethodDeclarations;
 non terminal MethodDeclaration MethodDeclaration;
 non terminal ParameterDeclarations, ParameterDeclaration;
 non terminal VariableDeclarations, IdentifierList;
 non terminal Statements, Statement;
 non terminal Block;
-non terminal Type;
+non terminal Class Type;
 non terminal MethodCall;
 non terminal Location;
 non terminal Exprs, Expr;
@@ -119,26 +120,48 @@ Program ::=
 FieldDeclarations ::=
 	FieldDeclarations:fieldDeclarations FieldDeclaration:fieldDeclaration
 	{:
-		RESULT = new ArrayList<Object>(fieldDeclarations);
-		RESULT.add(fieldDeclaration);
+		RESULT = new ArrayList<FieldDeclaration>(fieldDeclarations);
+		
+		RESULT.addAll(fieldDeclaration);
 	:}
 	|
 	FieldDeclaration:fieldDeclaration
 	{:
-		RESULT = new ArrayList<Object>();
-		RESULT.add(fieldDeclaration);
+		RESULT = new ArrayList<FieldDeclaration>(fieldDeclaration);
 	:}
 	;
 
 FieldDeclaration ::=
-	Type Fields SEMI_COLON
+	Type:type Fields:fields SEMI_COLON
+	{:
+		RESULT = new ArrayList<FieldDeclaration>();
+		
+		for (final Object field : fields) {
+			final boolean isArray = ((String) field).indexOf("[]") >= 0;
+			final Class<?> t = isArray ? java.lang.reflect.Array.newInstance(type, 0).getClass() : type;
+			final String identifier = ((String) field).split("\\[\\]")[0];
+			
+			RESULT.add(new FieldDeclaration(t, identifier));
+		}
+	:}
 	;
 
 Fields ::=
-	Fields COMMA Field
+	Fields:fields COMMA Field:field
+	{:
+		RESULT = new ArrayList<String>(fields);
+		
+		RESULT.add(field);
+	:}
 	|
-	Field
-	/*|
+	Field:field
+	{:
+		RESULT = new ArrayList<String>();
+		
+		RESULT.add(field);
+	:}
+	/*
+	|
 	Fields COMMA error // missing Field
 	|
 	error COMMA Field // missing Fields
@@ -148,9 +171,15 @@ Fields ::=
 	;
 
 Field ::=
-	IDENTIFIER
+	IDENTIFIER:identifier
+	{:
+		RESULT = (String) identifier;
+	:}
 	|
-	IDENTIFIER LEFT_BRACKET INT_LITERAL RIGHT_BRACKET
+	IDENTIFIER:identifier LEFT_BRACKET INT_LITERAL RIGHT_BRACKET
+	{:
+		RESULT = identifier + "[]";
+	:}
 	|
 	error LEFT_BRACKET INT_LITERAL RIGHT_BRACKET // missing IDENTIFIER
 	|
@@ -294,8 +323,14 @@ IdentifierList  ::=
 
 Type ::=
 	INT
+	{:
+		RESULT = int.class;
+	:}
 	|
 	BOOLEAN
+	{:
+		RESULT = boolean.class;
+	:}
 	;
 	
 Statements ::=
