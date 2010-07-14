@@ -170,7 +170,8 @@ public class DecafParserTest {
 		"\n" +
 		"	int x[42];\n" +
 		"\n" +
-		"	void f() {\n" +
+		"	boolean f(int y) {\n" +
+		"		return y == 42;" +
 		"	}\n" +
 		"\n" +
 		"}";

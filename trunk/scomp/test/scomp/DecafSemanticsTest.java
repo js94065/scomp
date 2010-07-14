@@ -48,6 +48,12 @@ public class DecafSemanticsTest {
 		assertNotNull(program.getFieldDeclarations());
 		assertTrue(program.getFieldDeclarations().isEmpty());
 		assertNotNull(program.getMethodDeclarations());
+		{
+			final MethodDeclaration methodDeclaration = program.getMethodDeclarations().get(0);
+			
+			assertEquals(void.class, methodDeclaration.getType());
+			assertEquals("f", methodDeclaration.getIdentifier());
+		}
 		assertEquals(1, program.getMethodDeclarations().size());
 	}
 	
@@ -66,6 +72,16 @@ public class DecafSemanticsTest {
 		}
 		assertEquals(1, program.getFieldDeclarations().size());
 		assertNotNull(program.getMethodDeclarations());
+		{
+			final MethodDeclaration methodDeclaration = program.getMethodDeclarations().get(0);
+			
+			assertEquals(boolean.class, methodDeclaration.getType());
+			assertEquals("f", methodDeclaration.getIdentifier());
+			{
+				// TODO
+			}
+			assertEquals(1, methodDeclaration.getParameterDeclarations().size());
+		}
 		assertEquals(1, program.getMethodDeclarations().size());
 	}
 	
