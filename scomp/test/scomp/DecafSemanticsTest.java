@@ -78,7 +78,10 @@ public class DecafSemanticsTest {
 			assertEquals(boolean.class, methodDeclaration.getType());
 			assertEquals("f", methodDeclaration.getIdentifier());
 			{
-				// TODO
+				final FieldDeclaration parameterDeclaration = methodDeclaration.getParameterDeclarations().get(0);
+				
+				assertEquals(int.class, parameterDeclaration.getType());
+				assertEquals("y", parameterDeclaration.getIdentifier());
 			}
 			assertEquals(1, methodDeclaration.getParameterDeclarations().size());
 		}

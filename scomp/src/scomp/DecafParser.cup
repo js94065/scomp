@@ -45,7 +45,8 @@ non terminal List Fields;
 non terminal String Field;
 non terminal List MethodDeclarations;
 non terminal MethodDeclaration MethodDeclaration;
-non terminal ParameterDeclarations, ParameterDeclaration;
+non terminal List ParameterDeclarations;
+non terminal FieldDeclaration ParameterDeclaration;
 non terminal VariableDeclarations, IdentifierList;
 non terminal Statements, Statement;
 non terminal Block;
@@ -219,18 +220,17 @@ MethodDeclaration ::=
 	|
 	VOID IDENTIFIER:identifier LEFT_PARENTHESIS RIGHT_PARENTHESIS Block
 	{:
-		Tools.debugPrint();
 		RESULT = new MethodDeclaration(void.class, identifier, null);
 	:}
 	|
-	Type:type IDENTIFIER:identifier LEFT_PARENTHESIS ParameterDeclarations RIGHT_PARENTHESIS Block
+	Type:type IDENTIFIER:identifier LEFT_PARENTHESIS ParameterDeclarations:parameterDeclarations RIGHT_PARENTHESIS Block
 	{:
-		RESULT = new MethodDeclaration(type, identifier, null);
+		RESULT = new MethodDeclaration(type, identifier, parameterDeclarations);
 	:}
 	|
-	VOID IDENTIFIER:identifier LEFT_PARENTHESIS ParameterDeclarations RIGHT_PARENTHESIS Block
+	VOID IDENTIFIER:identifier LEFT_PARENTHESIS ParameterDeclarations:parameterDeclarations RIGHT_PARENTHESIS Block
 	{:
-		RESULT = new MethodDeclaration(void.class, identifier, null);
+		RESULT = new MethodDeclaration(void.class, identifier, parameterDeclarations);
 	:}
 	/*
 	|
@@ -278,9 +278,19 @@ MethodDeclaration ::=
 	;
 	
 ParameterDeclarations ::= 
-	ParameterDeclaration
+	ParameterDeclaration:parameterDeclaration
+	{:
+		RESULT = new ArrayList<FieldDeclaration>();
+		
+		RESULT.add(parameterDeclaration);
+	:}
 	|
-	ParameterDeclarations COMMA ParameterDeclaration
+	ParameterDeclarations:parameterDeclarations COMMA ParameterDeclaration:parameterDeclaration
+	{:
+		RESULT = new ArrayList<FieldDeclaration>(parameterDeclarations);
+		
+		RESULT.add(parameterDeclaration);
+	:}
 	/*
 	|
 	ParameterDeclarations COMMA error // missing ParameterDeclaration
@@ -292,7 +302,10 @@ ParameterDeclarations ::=
 	;
 	
 ParameterDeclaration ::=
-	Type IDENTIFIER
+	Type:type IDENTIFIER:identifier
+	{:
+		RESULT = new FieldDeclaration(type, identifier);
+	:}
 	/*
 	|
 	Type error // missing IDENTIFIER
@@ -309,7 +322,8 @@ Block ::=
 	LEFT_BRACE Statements RIGHT_BRACE
 	|
 	LEFT_BRACE VariableDeclarations Statements RIGHT_BRACE
-	/*|
+	/*
+	|
 	// missing LEFT_BRACE
 	error RIGHT_BRACE
 	|
