@@ -12,7 +12,7 @@ import java.util.List;
  */
 public final class MethodDeclaration extends AbstractTypedEntityDeclaration {
 	
-	private final List<AbstractTypedEntityDeclaration> parameterDeclarations;
+	private final List<FieldDeclaration> parameterDeclarations;
 	
 	/**
 	 * 
@@ -27,7 +27,7 @@ public final class MethodDeclaration extends AbstractTypedEntityDeclaration {
 	 * <br>Shared
 	 */
 	public MethodDeclaration(final Class<?> type, final String identifier,
-			final List<AbstractTypedEntityDeclaration> parameterDeclarations) {
+			final List<FieldDeclaration> parameterDeclarations) {
 		super(type, identifier);
 		this.parameterDeclarations = emptyIfNull(parameterDeclarations);
 	}
@@ -38,7 +38,7 @@ public final class MethodDeclaration extends AbstractTypedEntityDeclaration {
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	public final List<AbstractTypedEntityDeclaration> getParameterDeclarations() {
+	public final List<FieldDeclaration> getParameterDeclarations() {
 		return this.parameterDeclarations;
 	}
 	
