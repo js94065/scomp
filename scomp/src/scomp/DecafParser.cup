@@ -36,7 +36,7 @@ terminal INT_LITERAL;
 terminal BOOLEAN_LITERAL;
 terminal CHAR_LITERAL;
 terminal STRING_LITERAL;
-terminal IDENTIFIER;
+terminal String IDENTIFIER;
 
 non terminal Program Program;
 non terminal List FieldDeclarations;
@@ -89,7 +89,7 @@ Program ::=
 	|
 	// Missing code
 	{:
-		final Yylex scanner = Tools.cast(Yylex.class, this.parser.getScanner());
+		final Yylex scanner = (Yylex) this.parser.getScanner();
 		
 		if (scanner != null) {
 			throw new RuntimeException("(:" + scanner.getCurrentRow() + ":" + scanner.getCurrentColumn() + ") Parse error");
@@ -98,7 +98,7 @@ Program ::=
 	|
 	CLASS // Missing "Program" identifier
 	{:
-		final DecafToken lastToken = Tools.cast(DecafToken.class, CUP$DecafParser$stack.elementAt(CUP$DecafParser$top - 0));
+		final DecafToken lastToken = (DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top - 0);
 		
 		if (lastToken != null) {
 			throw new RuntimeException("(:" + lastToken.getRow() + ":" + lastToken.getColumn() + ") Parse error");
@@ -180,7 +180,7 @@ Fields ::=
 Field ::=
 	IDENTIFIER:identifier
 	{:
-		RESULT = (String) identifier;
+		RESULT = identifier;
 	:}
 	|
 	IDENTIFIER:identifier LEFT_BRACKET INT_LITERAL:elementCount RIGHT_BRACKET
@@ -212,14 +212,28 @@ MethodDeclarations ::=
 	;
 
 MethodDeclaration ::=
-	Type IDENTIFIER LEFT_PARENTHESIS RIGHT_PARENTHESIS Block
+	Type:type IDENTIFIER:identifier LEFT_PARENTHESIS RIGHT_PARENTHESIS Block
+	{:
+		RESULT = new MethodDeclaration(type, identifier, null);
+	:}
 	|
-	VOID IDENTIFIER LEFT_PARENTHESIS RIGHT_PARENTHESIS Block
+	VOID IDENTIFIER:identifier LEFT_PARENTHESIS RIGHT_PARENTHESIS Block
+	{:
+		Tools.debugPrint();
+		RESULT = new MethodDeclaration(void.class, identifier, null);
+	:}
 	|
-	Type IDENTIFIER LEFT_PARENTHESIS ParameterDeclarations RIGHT_PARENTHESIS Block
+	Type:type IDENTIFIER:identifier LEFT_PARENTHESIS ParameterDeclarations RIGHT_PARENTHESIS Block
+	{:
+		RESULT = new MethodDeclaration(type, identifier, null);
+	:}
 	|
-	VOID IDENTIFIER LEFT_PARENTHESIS ParameterDeclarations RIGHT_PARENTHESIS Block
-	/*|
+	VOID IDENTIFIER:identifier LEFT_PARENTHESIS ParameterDeclarations RIGHT_PARENTHESIS Block
+	{:
+		RESULT = new MethodDeclaration(void.class, identifier, null);
+	:}
+	/*
+	|
 	// missing Type or VOID
 	error IDENTIFIER LEFT_PARENTHESIS RIGHT_PARENTHESIS Block 
 	|

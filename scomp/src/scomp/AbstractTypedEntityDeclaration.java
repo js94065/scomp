@@ -1,12 +1,12 @@
 package scomp;
 
 /**
- * This class defines a Decaf field declaration.
+ * This class defines a Decaf typed entity declaration.
  * 
  * @author codistmonk (creation 2010-07-13)
  *
  */
-public abstract class AbstractFieldDeclaration extends AbstractNode {
+public abstract class AbstractTypedEntityDeclaration extends AbstractNode {
 	
 	private final Class<?> type;
 	
@@ -21,7 +21,7 @@ public abstract class AbstractFieldDeclaration extends AbstractNode {
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	public AbstractFieldDeclaration(final Class<?> type, final String identifier) {
+	public AbstractTypedEntityDeclaration(final Class<?> type, final String identifier) {
 		this.type = type;
 		this.identifier = identifier;
 	}

@@ -1,5 +1,8 @@
 package scomp;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * 
  * @author codistmonk (creation 2010-06-07)
@@ -12,6 +15,20 @@ public final class Tools {
 	 */
 	private Tools() {
 		// Do nothing
+	}
+	
+	/**
+	 * 
+	 * @param <T> The type of the elements
+	 * @param list
+	 * <br>Maybe null
+	 * @return
+	 * <br>Not null
+	 * <br>Maybe new
+	 */
+	@SuppressWarnings("unchecked")
+	public static final <T> List<T> emptyIfNull(final List<T> list) {
+		return (List<T>) (list == null ? Collections.emptyList() : list);
 	}
 	
 	/**
