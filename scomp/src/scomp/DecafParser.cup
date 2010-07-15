@@ -8,7 +8,7 @@ import java_cup.runtime.*;
 parser code 
 {:
 
-
+/*
 public void report_error(String message, Object info) {
 
 	if(message.equals("Syntax error")) {
@@ -23,7 +23,7 @@ public void report_error(String message, Object info) {
 		
 	}
 }
-
+*/
 :}
 
 terminal BOOLEAN, BREAK, CALLOUT, CLASS, CONTINUE, ELSE, IF, INT, RETURN, VOID, WHILE;
@@ -106,16 +106,52 @@ Program ::=
 		}
 	:}
 	|
-	CLASS IDENTIFIER error // missing LEFT_BRACE
+	// missing LEFT_BRACE
+	CLASS IDENTIFIER 
+	{:
+		final DecafToken lastToken = Tools.cast(DecafToken.class, CUP$DecafParser$stack.elementAt(CUP$DecafParser$top - 0));
+		
+		if (lastToken != null) {
+			throw new RuntimeException("(:" + lastToken.getRow() + ":" + lastToken.getColumn() + ") Unmatched '}'");
+		}
+	:}
 	|
 	// missing RIGHT_BRACE 
-	CLASS IDENTIFIER LEFT_BRACE error 
+	CLASS IDENTIFIER LEFT_BRACE 
+	{:
+		final DecafToken lastToken = Tools.cast(DecafToken.class, CUP$DecafParser$stack.elementAt(CUP$DecafParser$top - 0));
+		
+		if (lastToken != null) {
+			throw new RuntimeException("(:" + lastToken.getRow() + ":" + lastToken.getColumn() + ") Missing '}'");
+		}
+	:}
 	|
-	CLASS IDENTIFIER LEFT_BRACE FieldDeclarations error
+	CLASS IDENTIFIER LEFT_BRACE FieldDeclarations
+	{:
+		final DecafToken lastToken = Tools.cast(DecafToken.class, CUP$DecafParser$stack.elementAt(CUP$DecafParser$top - 0));
+		
+		if (lastToken != null) {
+			throw new RuntimeException("(:" + lastToken.getRow() + ":" + lastToken.getColumn() + ") Missing '}'");
+		}
+	:}
 	|
-	CLASS IDENTIFIER LEFT_BRACE MethodDeclarations error
+	CLASS IDENTIFIER LEFT_BRACE MethodDeclarations
+	{:
+		final DecafToken lastToken = Tools.cast(DecafToken.class, CUP$DecafParser$stack.elementAt(CUP$DecafParser$top - 0));
+		
+		if (lastToken != null) {
+			throw new RuntimeException("(:" + lastToken.getRow() + ":" + lastToken.getColumn() + ") Missing '}'");
+		}
+	:}
 	|
-	CLASS IDENTIFIER LEFT_BRACE FieldDeclarations MethodDeclarations error 
+	CLASS IDENTIFIER LEFT_BRACE FieldDeclarations MethodDeclarations
+	{:
+		final DecafToken lastToken = Tools.cast(DecafToken.class, CUP$DecafParser$stack.elementAt(CUP$DecafParser$top - 0));
+		
+		if (lastToken != null) {
+			throw new RuntimeException("(:" + lastToken.getRow() + ":" + lastToken.getColumn() + ") Missing '}'");
+		}
+	:}
 	;
 
 FieldDeclarations ::=
