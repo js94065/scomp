@@ -249,24 +249,24 @@ MethodDeclarations ::=
 	;
 
 MethodDeclaration ::=
-	Type:type IDENTIFIER:identifier LEFT_PARENTHESIS RIGHT_PARENTHESIS Block
+	Type:type IDENTIFIER:identifier LEFT_PARENTHESIS RIGHT_PARENTHESIS Block:block 
 	{:
-		RESULT = new MethodDeclaration(type, identifier, null);
+		RESULT = new MethodDeclaration(type, identifier, null, block);
 	:}
 	|
-	VOID IDENTIFIER:identifier LEFT_PARENTHESIS RIGHT_PARENTHESIS Block
+	VOID IDENTIFIER:identifier LEFT_PARENTHESIS RIGHT_PARENTHESIS Block:block 
 	{:
-		RESULT = new MethodDeclaration(void.class, identifier, null);
+		RESULT = new MethodDeclaration(void.class, identifier, null, block);
 	:}
 	|
-	Type:type IDENTIFIER:identifier LEFT_PARENTHESIS ParameterDeclarations:parameterDeclarations RIGHT_PARENTHESIS Block
+	Type:type IDENTIFIER:identifier LEFT_PARENTHESIS ParameterDeclarations:parameterDeclarations RIGHT_PARENTHESIS Block:block 
 	{:
-		RESULT = new MethodDeclaration(type, identifier, parameterDeclarations);
+		RESULT = new MethodDeclaration(type, identifier, parameterDeclarations, block);
 	:}
 	|
-	VOID IDENTIFIER:identifier LEFT_PARENTHESIS ParameterDeclarations:parameterDeclarations RIGHT_PARENTHESIS Block
+	VOID IDENTIFIER:identifier LEFT_PARENTHESIS ParameterDeclarations:parameterDeclarations RIGHT_PARENTHESIS Block:block
 	{:
-		RESULT = new MethodDeclaration(void.class, identifier, parameterDeclarations);
+		RESULT = new MethodDeclaration(void.class, identifier, parameterDeclarations, block);
 	:}
 	/*
 	|
@@ -353,11 +353,20 @@ ParameterDeclaration ::=
 Block ::=
 	LEFT_BRACE RIGHT_BRACE
 	|
-	LEFT_BRACE VariableDeclarations RIGHT_BRACE
+	LEFT_BRACE VariableDeclarations:variableDeclarations RIGHT_BRACE
+	{:
+		RESULT = new Block(variableDeclarations, null);
+	:}
 	|
-	LEFT_BRACE Statements RIGHT_BRACE
+	LEFT_BRACE Statements:statements RIGHT_BRACE
+	{:
+		RESULT = new Block(null, statements);
+	:}
 	|
-	LEFT_BRACE VariableDeclarations Statements RIGHT_BRACE
+	LEFT_BRACE VariableDeclarations:variableDeclarations Statements:statements RIGHT_BRACE
+	{:
+		RESULT = new Block(variableDeclarations, statements);
+	:}
 	/*
 	|
 	// missing LEFT_BRACE
@@ -381,7 +390,10 @@ Block ::=
 	;
 	
 VariableDeclarations ::=
-	Type IdentifierList SEMI_COLON
+	Type:type IdentifierList:identifierList SEMI_COLON
+	{:
+		RESULT = new VariableDeclarations(type, identifierList);
+	:}
 	|
 	VariableDeclarations Type IdentifierList SEMI_COLON
 	;
