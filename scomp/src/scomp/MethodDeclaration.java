@@ -14,6 +14,8 @@ public final class MethodDeclaration extends AbstractTypedEntityDeclaration {
 	
 	private final List<FieldDeclaration> parameterDeclarations;
 	
+	private final Block block;
+	
 	/**
 	 * 
 	 * @param type
@@ -27,9 +29,11 @@ public final class MethodDeclaration extends AbstractTypedEntityDeclaration {
 	 * <br>Shared
 	 */
 	public MethodDeclaration(final Class<?> type, final String identifier,
-			final List<FieldDeclaration> parameterDeclarations) {
+			final List<FieldDeclaration> parameterDeclarations,
+			final Block block) {
 		super(type, identifier);
 		this.parameterDeclarations = emptyIfNull(parameterDeclarations);
+		this.block = block;
 	}
 	
 	/**
@@ -42,4 +46,13 @@ public final class MethodDeclaration extends AbstractTypedEntityDeclaration {
 		return this.parameterDeclarations;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 * <br>Not null
+	 * <br>Shared
+	 */
+	public final Block getBlock() {
+		return this.block;
+	}
 }
