@@ -1,13 +1,16 @@
 package scomp;
 
+import static scomp.Tools.emptyIfNull;
+
+import java.util.List;
+
 /**
- * This class defines a Decaf Block.
+ * This class defines a Decaf Statement.
  * 
  * @author js94065 (creation 2010-07-16)
  *
  */
 
-public final class Statement extends AbstractNode {
-
+public abstract class Statement extends AbstractNode {
 	
 }

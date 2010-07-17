@@ -50,12 +50,13 @@ non terminal FieldDeclaration ParameterDeclaration;
 non terminal List VariableDeclarations;
 non terminal List IdentifierList;
 non terminal List Statements;
-non terminal Statement;
+non terminal Statement Statement;
 non terminal Block Block;
 non terminal Class Type;
-non terminal MethodCall;
-non terminal Location;
-non terminal Exprs, Expr;
+non terminal MethodCall MethodCall;
+non terminal Location Location;
+non terminal List Exprs;
+non terminal Expr Expr;
 non terminal CalloutArgs, CalloutArg;
 non terminal Literal;
 non terminal BinOp, ArithOp, RelOp, EqOp, CondOp;
@@ -437,31 +438,71 @@ Type ::=
 	;
 	
 Statements ::=
-	Statement
+	Statement:statement
+	{:
+		RESULT = new ArrayList<Statement>();
+		
+		RESULT.add(statement);
+	:}
 	|
-	Statements Statement
+	Statements:statements Statement:statement
+	{:
+		RESULT = new ArrayList<Statement>(statements);
+		
+		RESULT.add(statement);
+	:}
 	;
 
 Statement ::=
-	Location ASSIGN Expr SEMI_COLON
+	Location:location ASSIGN Expr:expr SEMI_COLON
+	{:
+		RESULT = new StatementLocation(location, expr);
+	:}
 	|
-	MethodCall SEMI_COLON
+	MethodCall:methodCall SEMI_COLON
+	{:
+		RESULT = new StatementMethodCall(methodCall);
+	:}
 	|
-	IF LEFT_PARENTHESIS Expr RIGHT_PARENTHESIS Block
+	IF LEFT_PARENTHESIS Expr:expr RIGHT_PARENTHESIS Block:block
+	{:
+		RESULT = new StatementIf(expr, block, null);
+	:}
 	|
-	IF LEFT_PARENTHESIS Expr RIGHT_PARENTHESIS Block ELSE Block
+	IF LEFT_PARENTHESIS Expr:expr RIGHT_PARENTHESIS Block:ifBlock ELSE Block:elseBlock
+	{:
+		RESULT = new StatementIf(expr, ifBlock, elseBlock);
+	:}
 	|
-	WHILE LEFT_PARENTHESIS Expr RIGHT_PARENTHESIS Block
+	WHILE LEFT_PARENTHESIS Expr:expr RIGHT_PARENTHESIS Block:block
+	{:
+		RESULT = new StatementWhile(expr, block);
+	:}
 	|
 	RETURN SEMI_COLON
+	{:
+		RESULT = new StatementReturn(null);
+	:}
 	|
-	RETURN Expr SEMI_COLON
+	RETURN Expr:expr SEMI_COLON
+	{:
+		RESULT = new StatementReturn(expr);
+	:}
 	|
 	BREAK SEMI_COLON
+	{:
+		RESULT = new StatementBreak();
+	:}
 	|
 	CONTINUE SEMI_COLON
+	{:
+		RESULT = new StatementContinue();
+	:}
 	|
-	Block
+	Block:block
+	{:
+		RESULT = new StatementBlock(block);
+	:}
 	;
 	
 MethodCall ::= 

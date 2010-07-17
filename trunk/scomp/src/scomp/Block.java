@@ -2,14 +2,14 @@ package scomp;
 
 import static scomp.Tools.*;
 
+import java.util.List;
+
 /**
  * This class defines a Decaf Block.
  * 
  * @author js94065 (creation 2010-07-15)
  *
  */
-
-import java.util.List;
 
 public final class Block extends AbstractNode {
 
