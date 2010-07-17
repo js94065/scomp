@@ -1,15 +1,9 @@
 package scomp;
 
-/**
- * This class defines a Decaf Block.
- * 
- * @author js94065 (creation 2010-07-15)
- *
- */
 import static scomp.Tools.*;
 
 /**
- * This class defines a Decaf method declaration.
+ * This class defines a Decaf Block.
  * 
  * @author js94065 (creation 2010-07-15)
  *
@@ -19,9 +13,9 @@ import java.util.List;
 
 public final class Block extends AbstractNode {
 
-	private final List<VariableDeclarations> variableDeclarations;
+	private final List<VariableDeclaration> variableDeclarations;
 	
-	private final Class<?> statementDeclarations;
+	private final List<Statement> statements;
 	
 	/**
 	 * 
@@ -32,10 +26,10 @@ public final class Block extends AbstractNode {
 	 * <br>Maybe null
 	 * <br>Shared
 	 */
-	public Block(final List<VariableDeclarations> variableDeclarations, 
-			final Class<?> statementDeclarations) {
+	public Block(final List<VariableDeclaration> variableDeclarations, 
+			final List<Statement> statements) {
 		this.variableDeclarations = emptyIfNull(variableDeclarations);
-		this.statementDeclarations = statementDeclarations;
+		this.statements = emptyIfNull(statements);
 	}
 	
 	/**
@@ -44,7 +38,7 @@ public final class Block extends AbstractNode {
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	public final List<VariableDeclarations> getVariablesDeclarations() {
+	public final List<VariableDeclaration> getVariablesDeclarations() {
 		return this.variableDeclarations;
 	}
 	
@@ -54,8 +48,8 @@ public final class Block extends AbstractNode {
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	public final Class<?> getStatementDeclarations() {
-		return this.statementDeclarations;
+	public final List<Statement> getStatementDeclarations() {
+		return this.statements;
 	}
 
 }

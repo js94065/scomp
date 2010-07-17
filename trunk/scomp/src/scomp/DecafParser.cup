@@ -47,9 +47,11 @@ non terminal List MethodDeclarations;
 non terminal MethodDeclaration MethodDeclaration;
 non terminal List ParameterDeclarations;
 non terminal FieldDeclaration ParameterDeclaration;
-non terminal VariableDeclarations, IdentifierList;
-non terminal Statements, Statement;
-non terminal Block;
+non terminal List VariableDeclarations;
+non terminal List IdentifierList;
+non terminal List Statements;
+non terminal Statement;
+non terminal Block Block;
 non terminal Class Type;
 non terminal MethodCall;
 non terminal Location;
@@ -392,16 +394,34 @@ Block ::=
 VariableDeclarations ::=
 	Type:type IdentifierList:identifierList SEMI_COLON
 	{:
-		RESULT = new VariableDeclarations(type, identifierList);
+		RESULT = new ArrayList<VariableDeclaration>();
+		
+		RESULT.add(new VariableDeclaration(type, identifierList));
 	:}
 	|
-	VariableDeclarations Type IdentifierList SEMI_COLON
+	VariableDeclarations:variableDeclarations Type:type IdentifierList:identifierList SEMI_COLON
+	{:
+		RESULT = new ArrayList<VariableDeclaration>(variableDeclarations);
+		
+		RESULT.add(new VariableDeclaration(type, identifierList));
+		
+	:}
 	;
 	
 IdentifierList  ::=
-	IDENTIFIER
+	IDENTIFIER:identifier
+	{:
+		RESULT = new ArrayList<String>();
+		
+		RESULT.add(identifier);
+	:}
 	|
-	IdentifierList COMMA IDENTIFIER  
+	IdentifierList:identifierList COMMA IDENTIFIER:identifier
+	{:
+		RESULT = new ArrayList<String>(identifierList);
+		
+		RESULT.add(identifier);
+	:}
 	;
 
 Type ::=

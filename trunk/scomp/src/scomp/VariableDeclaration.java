@@ -8,18 +8,19 @@ import java.util.List;
  * @author js94065 (creation 2010-07-15)
  *
  */
-public final class VariableDeclarations extends AbstractNode {
+
+public final class VariableDeclaration extends AbstractNode {
 
 	private final Class<?> type;
 	
-	private final Class<?> identifierList;
+	private final List<String> identifierList;
 	
 	/**
 	 * 
 	 * @param type
 	 * @param identifier
 	 */
-	public VariableDeclarations(final Class<?> type, Class<?> identifierList) {
+	public VariableDeclaration(final Class<?> type, List<String> identifierList) {
 		this.type = type;
 		this.identifierList = identifierList;
 	}
@@ -40,7 +41,7 @@ public final class VariableDeclarations extends AbstractNode {
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	public final Class<?> getIdentifierList() {
+	public final List<String> getIdentifierList() {
 		return this.identifierList;
 	}
 
