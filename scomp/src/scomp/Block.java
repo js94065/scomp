@@ -38,8 +38,8 @@ public final class Block extends AbstractNode {
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	public final List<VariableDeclaration> getVariablesDeclarations() {
-		return this.variableDeclarations;
+	public List<VariableDeclaration> getVariableDeclarations() {
+		return variableDeclarations;
 	}
 	
 	/**
@@ -48,8 +48,8 @@ public final class Block extends AbstractNode {
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	public final List<Statement> getStatementDeclarations() {
-		return this.statements;
-	}
-
+	public List<Statement> getStatements() {
+		return statements;
+	}	
+	
 }
