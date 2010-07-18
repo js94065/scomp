@@ -15,7 +15,7 @@ public class GenerateListParser {
 	 * <br>Unused
 	 */
 	public static final void main(final String[] arguments) {
-		final String directory = ("src." + GenerateListParser.class.getPackage().getName() + ".").replaceAll("\\.", File.separator);
+		final String directory = ("src." + GenerateListParser.class.getPackage().getName() + ".").replace(".", File.separator);
 		final String parserName = "ListParser";
 		final String symbolsName = "ListParserSymbols";
 		
