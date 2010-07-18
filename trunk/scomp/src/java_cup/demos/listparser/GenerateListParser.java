@@ -15,7 +15,7 @@ public class GenerateListParser {
 	 * <br>Unused
 	 */
 	public static final void main(final String[] arguments) {
-		final String directory = "src/" + GenerateListParser.class.getPackage().getName().replaceAll("\\.", "/") + "/";
+		final String directory = ("src." + GenerateListParser.class.getPackage().getName() + ".").replaceAll("\\.", File.separator);
 		final String parserName = "ListParser";
 		final String symbolsName = "ListParserSymbols";
 		
@@ -31,18 +31,42 @@ public class GenerateListParser {
     		final File parser = new File(parserName + ".java");
     		final File symbols = new File(symbolsName + ".java");
     		
-    		System.out.println("Moving " + parser + " into " + directory);
-    		
-    		parser.renameTo(new File(directory, parser.getName()));
-    		
-    		System.out.println("Moving " + symbols + " into " + directory);
-    		
-    		symbols.renameTo(new File(directory, symbols.getName()));
+    		moveToDirectory(parser, directory);
+    		moveToDirectory(symbols, directory);
     		
     		System.out.println("All done");
 		} catch (final Exception exception) {
 			exception.printStackTrace();
 		}
+	}
+	
+	/**
+	 * 
+	 * @param file
+	 * <br>Not null
+	 * <br>Input-output
+	 * @param directoryPath
+	 * <br>Not null
+	 * @return {@code true} if the operation succeeds
+	 */
+	public static final boolean moveToDirectory(final File file, final String directoryPath) {
+		final File destination = new File(directoryPath, file.getName());
+		
+		System.out.println("Moving " + file.getAbsolutePath() + " to " + destination.getAbsolutePath() + " ...");
+		
+		if (destination.exists() && !destination.delete()) {
+			System.err.println("Warning: The destination file (" + destination.getAbsolutePath() + ") exists and could not be deleted");
+		}
+		
+		final boolean result = file.renameTo(destination);
+		
+		if (result) {
+			System.out.println("Success");
+		} else {
+			System.err.println("Failure");
+		}
+		
+		return result;
 	}
 
 }
