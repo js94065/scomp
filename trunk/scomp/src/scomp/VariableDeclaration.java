@@ -9,40 +9,15 @@ import java.util.List;
  *
  */
 
-public final class VariableDeclaration extends AbstractNode {
+public final class VariableDeclaration extends AbstractTypedEntityDeclaration {
 
-	private final Class<?> type;
-	
-	private final List<String> identifierList;
-	
 	/**
 	 * 
 	 * @param type
 	 * @param identifier
 	 */
-	public VariableDeclaration(final Class<?> type, List<String> identifierList) {
-		this.type = type;
-		this.identifierList = identifierList;
+	public VariableDeclaration(final Class<?> type, String identifier) {
+		super(type, identifier);
 	}
 	
-	/**
-	 * 
-	 * @return
-	 * <br>Not null
-	 * <br>Shared
-	 */
-	public final Class<?> getType() {
-		return this.type;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 * <br>Not null
-	 * <br>Shared
-	 */
-	public final List<String> getIdentifierList() {
-		return this.identifierList;
-	}
-
 }
