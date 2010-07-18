@@ -395,16 +395,21 @@ Block ::=
 VariableDeclarations ::=
 	Type:type IdentifierList:identifierList SEMI_COLON
 	{:
-		RESULT = new ArrayList<VariableDeclaration>();
+		RESULT = new ArrayList<FieldDeclaration>();
 		
-		RESULT.add(new VariableDeclaration(type, identifierList));
+		for (final Object identifier : identifierList) {
+			RESULT.add(new VariableDeclaration(type, (String) identifier));
+		}
+
 	:}
 	|
 	VariableDeclarations:variableDeclarations Type:type IdentifierList:identifierList SEMI_COLON
 	{:
 		RESULT = new ArrayList<VariableDeclaration>(variableDeclarations);
 		
-		RESULT.add(new VariableDeclaration(type, identifierList));
+		for (final Object identifier : identifierList) {
+			RESULT.add(new VariableDeclaration(type, (String) identifier));
+		}
 		
 	:}
 	;
