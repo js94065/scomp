@@ -32,6 +32,18 @@ public class DecafScannerTest {
 	@Test
 	public final void testIdentifier() throws IOException {
 		match("something", token(IDENTIFIER, "something"));
+		match("0xxx42",
+				token(INT_LITERAL, "0"),
+				token(IDENTIFIER, "xxx42")
+				);
+	}
+	
+	@Test
+	public final void testCombination() throws IOException {
+		match("0xxx42",
+				token(INT_LITERAL, "0"),
+				token(IDENTIFIER, "xxx42")
+		);
 	}
 	
 	/**
