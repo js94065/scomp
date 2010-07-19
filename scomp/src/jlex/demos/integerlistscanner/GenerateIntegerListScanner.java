@@ -1,5 +1,7 @@
 package jlex.demos.integerlistscanner;
 
+import static jlex.tools.JLexTools.getSourceDirectory;
+
 import java.io.IOException;
 
 import jlex.Main;
@@ -18,7 +20,7 @@ public class GenerateIntegerListScanner {
      */
     public static final void main(final String[] arguments) {
         try {
-            Main.main(new String[] { "src/jlex/demos/integerlistscanner/IntegerListScanner.lex" });
+            Main.main(new String[] { getSourceDirectory("src") + "IntegerListScanner.lex" });
         } catch (final IOException exception) {
             exception.printStackTrace();
         }

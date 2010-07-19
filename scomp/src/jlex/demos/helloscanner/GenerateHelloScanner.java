@@ -1,5 +1,7 @@
 package jlex.demos.helloscanner;
 
+import static jlex.tools.JLexTools.getSourceDirectory;
+
 import java.io.IOException;
 
 import jlex.Main;
@@ -18,7 +20,7 @@ public class GenerateHelloScanner {
 	 */
 	public static final void main(final String[] arguments) {
 		try {
-			Main.main(new String[] { "src/jlex/demos/helloscanner/HelloScanner.lex" });
+			Main.main(new String[] { getSourceDirectory("src") + "HelloScanner.lex" });
 		} catch (final IOException exception) {
 			exception.printStackTrace();
 		}

@@ -1,5 +1,7 @@
 package java_cup.demos.listparser;
 
+import static jlex.tools.JLexTools.*;
+
 import java.io.File;
 
 /**
@@ -15,7 +17,7 @@ public class GenerateListParser {
 	 * <br>Unused
 	 */
 	public static final void main(final String[] arguments) {
-		final String directory = ("src." + GenerateListParser.class.getPackage().getName() + ".").replace(".", File.separator);
+		final String directory = getSourceDirectory("src");
 		final String parserName = "ListParser";
 		final String symbolsName = "ListParserSymbols";
 		
@@ -38,35 +40,6 @@ public class GenerateListParser {
 		} catch (final Exception exception) {
 			exception.printStackTrace();
 		}
-	}
-	
-	/**
-	 * 
-	 * @param file
-	 * <br>Not null
-	 * <br>Input-output
-	 * @param directoryPath
-	 * <br>Not null
-	 * @return {@code true} if the operation succeeds
-	 */
-	public static final boolean moveToDirectory(final File file, final String directoryPath) {
-		final File destination = new File(directoryPath, file.getName());
-		
-		System.out.println("Moving " + file.getAbsolutePath() + " to " + destination.getAbsolutePath() + " ...");
-		
-		if (destination.exists() && !destination.delete()) {
-			System.err.println("Warning: The destination file (" + destination.getAbsolutePath() + ") exists and could not be deleted");
-		}
-		
-		final boolean result = file.renameTo(destination);
-		
-		if (result) {
-			System.out.println("Success");
-		} else {
-			System.err.println("Failure");
-		}
-		
-		return result;
 	}
 
 }
