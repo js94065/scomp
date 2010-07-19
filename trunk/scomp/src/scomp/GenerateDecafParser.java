@@ -1,5 +1,7 @@
 package scomp;
 
+import static jlex.tools.JLexTools.*;
+
 import java.io.File;
 
 /**
@@ -15,7 +17,7 @@ public class GenerateDecafParser {
 	 * <br>Unused
 	 */
 	public static final void main(final String[] arguments) {
-		final String directory = "src/" + GenerateDecafParser.class.getPackage().getName().replaceAll("\\.", "/") + "/";
+		final String directory = getSourceDirectory("src");
 		final String parserName = "DecafParser";
 		final String symbolsName = "DecafParserSymbols";
 		
@@ -31,13 +33,8 @@ public class GenerateDecafParser {
     		final File parser = new File(parserName + ".java");
     		final File symbols = new File(symbolsName + ".java");
     		
-    		System.out.println("Moving " + parser + " into " + directory);
-    		
-    		parser.renameTo(new File(directory, parser.getName()));
-    		
-    		System.out.println("Moving " + symbols + " into " + directory);
-    		
-    		symbols.renameTo(new File(directory, symbols.getName()));
+    		moveToDirectory(parser, directory);
+    		moveToDirectory(symbols, directory);
     		
     		System.out.println("All done");
 		} catch (final Exception exception) {
