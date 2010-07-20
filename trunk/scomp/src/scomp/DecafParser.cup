@@ -511,19 +511,39 @@ Statement ::=
 	;
 	
 MethodCall ::= 
-	IDENTIFIER LEFT_PARENTHESIS RIGHT_PARENTHESIS
+	IDENTIFIER:identifier LEFT_PARENTHESIS RIGHT_PARENTHESIS
+	{:
+		RESULT = new MethodName(identifier,null);
+	:}
 	|
-	IDENTIFIER LEFT_PARENTHESIS Exprs RIGHT_PARENTHESIS
+	IDENTIFIER:identifier LEFT_PARENTHESIS Exprs:exprs RIGHT_PARENTHESIS
+	{:
+		RESULT = new MethodName(identifier, exprs);
+	:}
 	|
-	CALLOUT LEFT_PARENTHESIS STRING_LITERAL RIGHT_PARENTHESIS
+	CALLOUT LEFT_PARENTHESIS STRING_LITERAL:stringLiteral RIGHT_PARENTHESIS
+	{:
+		RESULT = new MethodCallout((String)stringLiteral,null);
+	:}
 	|
-	CALLOUT LEFT_PARENTHESIS STRING_LITERAL COMMA CalloutArgs RIGHT_PARENTHESIS
+	CALLOUT LEFT_PARENTHESIS STRING_LITERAL:stringLiteral COMMA CalloutArgs:calloutArgs RIGHT_PARENTHESIS
+	{:
+	//	RESULT = new MethodCallout((String)stringLiteral,calloutArgs);
+	:}
 	;
 
 CalloutArgs ::=
-	CalloutArg
+	CalloutArg:calloutArg
+	{:
+	//	RESULT = new ArrayList<CalloutArgument>(calloutArg);
+	:}
 	|
-	CalloutArgs COMMA CalloutArg
+	CalloutArgs:calloutArgs COMMA CalloutArg:calloutArg
+	{:
+	//	RESULT = new ArrayList<CalloutArgument>(calloutArgs);
+		
+	//	RESULT.addAll(calloutArg);
+	:}
 	;
 	
 CalloutArg ::=
