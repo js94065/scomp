@@ -113,7 +113,7 @@ public class DecafToken extends Symbol {
 
 	@Override
 	public final String toString() {
-		return super.toString() + ": (" + (this.getValue() == null ? "" : this.getValue().getClass()) + ") " + this.getValue();
+		return "(:" + this.getRow() + ":" + this.getColumn() + ") " + super.toString() + " " + this.getInputString();
 	}
 	
 }

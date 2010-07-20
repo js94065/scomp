@@ -131,7 +131,7 @@ public class DecafParserTest {
 			
 			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
-			assertEquals("(:4:17) Missing \"(\"", exception.getMessage());
+			assertEquals("(:4:17) Unmatched \")\"", exception.getMessage());
 		}
 	}
 	
@@ -347,7 +347,7 @@ public class DecafParserTest {
 		"class Program {\n" +
 		"\n" +
 		"	int f() {\n" +
-		"		return (1 + 2;" +
+		"		return (1 + 2;\n" +
 		"	}\n" +
 		"\n" +
 		"}";
@@ -359,7 +359,7 @@ public class DecafParserTest {
 		"class Program {\n" +
 		"\n" +
 		"	int f() {\n" +
-		"		return (1 + 2));" +
+		"		return (1 + 2));\n" +
 		"	}\n" +
 		"\n" +
 		"}";
