@@ -87,7 +87,7 @@ public class DecafParserTest {
 			
 			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
-			assertEquals("(:1:1) Parse error", exception.getMessage());
+			assertEquals("(:1:14) Missing \"{\"", exception.getMessage());
 		}
 	}
 	
@@ -98,7 +98,7 @@ public class DecafParserTest {
 			
 			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
-			assertEquals("(:1:16) Missing '}'", exception.getMessage());
+			assertEquals("(:1:16) Missing \"}\"", exception.getMessage());
 		}
 	}
 	
@@ -109,7 +109,7 @@ public class DecafParserTest {
 			
 			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
-			assertEquals("(:1:15) Unmatched '}'", exception.getMessage());
+			assertEquals("(:1:15) Missing \"{\"", exception.getMessage());
 		}
 	}
 	
@@ -120,7 +120,7 @@ public class DecafParserTest {
 			
 			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
-			assertEquals("(:4:16) Missing ')'", exception.getMessage());
+			assertEquals("(:4:16) Missing \")\"", exception.getMessage());
 		}
 	}
 	
@@ -131,7 +131,7 @@ public class DecafParserTest {
 			
 			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
-			assertEquals("(:4:17) Unmatched ')'", exception.getMessage());
+			assertEquals("(:4:17) Missing \"(\"", exception.getMessage());
 		}
 	}
 	

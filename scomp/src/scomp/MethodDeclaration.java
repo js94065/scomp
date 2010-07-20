@@ -27,6 +27,9 @@ public final class MethodDeclaration extends AbstractTypedEntityDeclaration {
 	 * @param parameterDeclarations
 	 * <br>Not null
 	 * <br>Shared
+	 * @param block 
+	 * <br>Not null
+	 * <br>Shared
 	 */
 	public MethodDeclaration(final Class<?> type, final String identifier,
 			final List<FieldDeclaration> parameterDeclarations,

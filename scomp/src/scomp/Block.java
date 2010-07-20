@@ -10,7 +10,6 @@ import java.util.List;
  * @author js94065 (creation 2010-07-15)
  *
  */
-
 public final class Block extends AbstractNode {
 
 	private final List<VariableDeclaration> variableDeclarations;
@@ -19,7 +18,7 @@ public final class Block extends AbstractNode {
 	
 	/**
 	 * 
-	 * @param variables
+	 * @param variableDeclarations
 	 * <br>Maybe null
 	 * <br>Shared
 	 * @param statements
@@ -38,8 +37,8 @@ public final class Block extends AbstractNode {
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	public List<VariableDeclaration> getVariableDeclarations() {
-		return variableDeclarations;
+	public final List<VariableDeclaration> getVariableDeclarations() {
+		return this.variableDeclarations;
 	}
 	
 	/**
@@ -48,8 +47,8 @@ public final class Block extends AbstractNode {
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	public List<Statement> getStatements() {
-		return statements;
+	public final List<Statement> getStatements() {
+		return this.statements;
 	}	
 	
 }

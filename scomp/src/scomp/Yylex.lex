@@ -26,7 +26,7 @@ package scomp;
 	 * <br>Range: {@code [1 .. Integer.MAX_VALUE]}
 	 */
 	public final int getCurrentColumn() {
-		return this.currentRow;
+		return this.currentColumn;
 	}
 	
 	private final void updateLocation() {
