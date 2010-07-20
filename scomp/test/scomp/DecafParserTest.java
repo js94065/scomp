@@ -109,7 +109,7 @@ public class DecafParserTest {
 			
 			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
-			assertEquals("(:1:15) Missing \"{\"", exception.getMessage());
+			assertEquals("(:1:15) Parse error", exception.getMessage());
 		}
 	}
 	
