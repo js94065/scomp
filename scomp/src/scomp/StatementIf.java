@@ -11,20 +11,20 @@ package scomp;
 
 public class StatementIf extends Statement {
 
-	private final Expr expr;
+	private final Expression expression;
 	
 	private final Block ifBlock;
 	
 	private final Block elseBlock;
 	
-	public StatementIf(Expr expr, Block ifBlock, Block elseBlock) {
-		this.expr = expr;
+	public StatementIf(Expression expression, Block ifBlock, Block elseBlock) {
+		this.expression = expression;
 		this.ifBlock = ifBlock;
 		this.elseBlock = elseBlock;
 	}
 
-	public Expr getExpr() {
-		return expr;
+	public Expression getExpr() {
+		return expression;
 	}
 
 	public Block getIfBlock() {

@@ -11,10 +11,10 @@ public class StatementLocation extends Statement {
 
 	private final Location location;
 	
-	private final Expr expression;
+	private final Expression expression;
 	
 	public StatementLocation(final Location location, 
-			final Expr expression) {
+			final Expression expression) {
 		this.location = location;
 		this.expression = expression;
 	}
@@ -35,7 +35,7 @@ public class StatementLocation extends Statement {
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	public final Expr getExpression() {
+	public final Expression getExpression() {
 		return this.expression;
 	}
 

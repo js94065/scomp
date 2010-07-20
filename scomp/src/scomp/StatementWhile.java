@@ -9,17 +9,17 @@ package scomp;
 
 public class StatementWhile extends Statement {
 
-	private final Expr expr;
+	private final Expression expression;
 	
 	private final Block block;
 	
-	public StatementWhile(Expr expr, Block block) {
-		this.expr = expr;
+	public StatementWhile(Expression expression, Block block) {
+		this.expression = expression;
 		this.block = block;
 	}
 
-	public Expr getExpr() {
-		return expr;
+	public Expression getExpr() {
+		return expression;
 	}
 
 	public Block getBlock() {

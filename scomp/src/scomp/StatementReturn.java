@@ -9,14 +9,14 @@ package scomp;
 
 public class StatementReturn extends Statement {
 
-	private final Expr expr;
+	private final Expression expression;
 	
-	public StatementReturn(Expr expr) {
-		this.expr = expr;
+	public StatementReturn(Expression expression) {
+		this.expression = expression;
 	}
 
-	public Expr getExpr() {
-		return expr;
+	public Expression getExpr() {
+		return expression;
 	}
 	
 	

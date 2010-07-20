@@ -6,6 +6,6 @@ package scomp;
  * 
  */
 
-public abstract class Expr extends AbstractNode {
+public abstract class Expression extends AbstractNode {
 
 }
