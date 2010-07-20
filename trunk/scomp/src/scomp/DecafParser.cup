@@ -5,25 +5,48 @@ import java.util.*;
 import java_cup.runtime.*;
 
 
-parser code 
+action code 
 {:
 
-/*
-public void report_error(String message, Object info) {
-
-	if(message.equals("Syntax error")) {
+	/**
+	 * @param stack
+	 * <br>Not null
+	 * @param top
+	 * <br>Range: {@code [0 .. stack.size() - 1]}
+	 * @param tokenRepresentation
+	 * <br>Not null
+	 * @throws RuntimeException
+	 */
+	public final void missingToken(final Stack stack, final int top, final Object tokenRepresentation) {
+		final DecafToken lastToken = (DecafToken) stack.elementAt(top - 0);
 		
-		if(((Symbol)info).sym == 0) {
-			System.err.println(((Symbol)info).sym);
-		}
-		else {
-			System.err.println("Syntax Error '" + ((DecafToken)(info)).getInputString() + 
-			"' at (" + ((DecafToken)info).getRow() + "," + ((DecafToken)info).getColumn() + ")");
-		}
+		Tools.debugPrint(lastToken.getInputString(), lastToken.getColumn());
 		
+		throw new RuntimeException("(:" + lastToken.getRow() + ":" + (lastToken.getColumn() + lastToken.getInputString().length()) + ") Missing \"" + tokenRepresentation + "\"");
 	}
-}
-*/
+	
+	/**
+	 * @param stack
+	 * <br>Not null
+	 * @param top
+	 * <br>Range: {@code [0 .. stack.size() - 1]}
+	 * @throws RuntimeException
+	 */
+	public final void parseError(final Stack stack, final int top) {
+		final DecafToken lastToken = (DecafToken) stack.elementAt(top - 0);
+		
+		throw new RuntimeException("(:" + lastToken.getRow() + ":" + lastToken.getColumn() + ") Parse error");
+	}
+	
+	/**
+	 * @throws RuntimeException
+	 */
+	public final void parseErrorEndOfFile() {
+		final Yylex scanner = (Yylex) this.parser.getScanner();
+		
+		throw new RuntimeException("(:" + scanner.getCurrentRow() + ":" + scanner.getCurrentColumn() + ") Parse error");
+	}
+
 :}
 
 terminal BOOLEAN, BREAK, CALLOUT, CLASS, CONTINUE, ELSE, IF, INT, RETURN, VOID, WHILE;
@@ -93,67 +116,39 @@ Program ::=
 	|
 	// Missing code
 	{:
-		final Yylex scanner = (Yylex) this.parser.getScanner();
-		
-		if (scanner != null) {
-			throw new RuntimeException("(:" + scanner.getCurrentRow() + ":" + scanner.getCurrentColumn() + ") Parse error");
-		}
+		this.parseErrorEndOfFile();
 	:}
 	|
 	CLASS // Missing "Program" identifier
 	{:
-		final DecafToken lastToken = (DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top - 0);
-		
-		if (lastToken != null) {
-			throw new RuntimeException("(:" + lastToken.getRow() + ":" + lastToken.getColumn() + ") Parse error");
-		}
+		this.parseError(CUP$DecafParser$stack, CUP$DecafParser$top);
 	:}
 	|
 	// missing LEFT_BRACE
 	CLASS IDENTIFIER 
 	{:
-		final DecafToken lastToken = Tools.cast(DecafToken.class, CUP$DecafParser$stack.elementAt(CUP$DecafParser$top - 0));
-		
-		if (lastToken != null) {
-			throw new RuntimeException("(:" + lastToken.getRow() + ":" + lastToken.getColumn() + ") Unmatched '}'");
-		}
+		this.missingToken(CUP$DecafParser$stack, CUP$DecafParser$top, '{');
 	:}
 	|
 	// missing RIGHT_BRACE 
 	CLASS IDENTIFIER LEFT_BRACE 
 	{:
-		final DecafToken lastToken = Tools.cast(DecafToken.class, CUP$DecafParser$stack.elementAt(CUP$DecafParser$top - 0));
-		
-		if (lastToken != null) {
-			throw new RuntimeException("(:" + lastToken.getRow() + ":" + lastToken.getColumn() + ") Missing '}'");
-		}
+		this.missingToken(CUP$DecafParser$stack, CUP$DecafParser$top, '}');
 	:}
 	|
 	CLASS IDENTIFIER LEFT_BRACE FieldDeclarations
 	{:
-		final DecafToken lastToken = Tools.cast(DecafToken.class, CUP$DecafParser$stack.elementAt(CUP$DecafParser$top - 0));
-		
-		if (lastToken != null) {
-			throw new RuntimeException("(:" + lastToken.getRow() + ":" + lastToken.getColumn() + ") Missing '}'");
-		}
+		this.missingToken(CUP$DecafParser$stack, CUP$DecafParser$top, '}');
 	:}
 	|
 	CLASS IDENTIFIER LEFT_BRACE MethodDeclarations
 	{:
-		final DecafToken lastToken = Tools.cast(DecafToken.class, CUP$DecafParser$stack.elementAt(CUP$DecafParser$top - 0));
-		
-		if (lastToken != null) {
-			throw new RuntimeException("(:" + lastToken.getRow() + ":" + lastToken.getColumn() + ") Missing '}'");
-		}
+		this.missingToken(CUP$DecafParser$stack, CUP$DecafParser$top, '}');
 	:}
 	|
 	CLASS IDENTIFIER LEFT_BRACE FieldDeclarations MethodDeclarations
 	{:
-		final DecafToken lastToken = Tools.cast(DecafToken.class, CUP$DecafParser$stack.elementAt(CUP$DecafParser$top - 0));
-		
-		if (lastToken != null) {
-			throw new RuntimeException("(:" + lastToken.getRow() + ":" + lastToken.getColumn() + ") Missing '}'");
-		}
+		this.missingToken(CUP$DecafParser$stack, CUP$DecafParser$top, '}');
 	:}
 	;
 

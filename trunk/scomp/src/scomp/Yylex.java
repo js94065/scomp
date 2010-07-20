@@ -27,7 +27,7 @@ class Yylex implements java_cup.runtime.Scanner {
 	 * <br>Range: {@code [1 .. Integer.MAX_VALUE]}
 	 */
 	public final int getCurrentColumn() {
-		return this.currentRow;
+		return this.currentColumn;
 	}
 	private final void updateLocation() {
 		if (yyline + 1 > this.getCurrentRow()) {
