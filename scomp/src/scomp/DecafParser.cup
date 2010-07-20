@@ -7,7 +7,7 @@ import java_cup.runtime.*;
 
 action code 
 {:
-
+	
 	/**
 	 * @param stack
 	 * <br>Not null
@@ -17,12 +17,29 @@ action code
 	 * <br>Not null
 	 * @throws RuntimeException
 	 */
-	public final void missingToken(final Stack stack, final int top, final Object tokenRepresentation) {
+	public final void missingTokenAfter(final Stack stack, final int top, final Object tokenRepresentation) {
+		Tools.debugPrint(stack.elementAt(top));
+		
 		final DecafToken lastToken = (DecafToken) stack.elementAt(top - 0);
 		
-		Tools.debugPrint(lastToken.getInputString(), lastToken.getColumn());
-		
 		throw new RuntimeException("(:" + lastToken.getRow() + ":" + (lastToken.getColumn() + lastToken.getInputString().length()) + ") Missing \"" + tokenRepresentation + "\"");
+	}
+	
+	/**
+	 * @param stack
+	 * <br>Not null
+	 * @param top
+	 * <br>Range: {@code [0 .. stack.size() - 1]}
+	 * @param tokenRepresentation
+	 * <br>Not null
+	 * @throws RuntimeException
+	 */
+	public final void missingTokenBefore(final Stack stack, final int top, final Object tokenRepresentation) {
+		Tools.debugPrint(stack.elementAt(top));
+		
+		final DecafToken lastToken = (DecafToken) stack.elementAt(top - 0);
+		
+		throw new RuntimeException("(:" + lastToken.getRow() + ":" + lastToken.getColumn() + ") Missing \"" + tokenRepresentation + "\"");
 	}
 	
 	/**
@@ -33,6 +50,8 @@ action code
 	 * @throws RuntimeException
 	 */
 	public final void parseError(final Stack stack, final int top) {
+		Tools.debugPrint(stack.elementAt(top));
+		
 		final DecafToken lastToken = (DecafToken) stack.elementAt(top - 0);
 		
 		throw new RuntimeException("(:" + lastToken.getRow() + ":" + lastToken.getColumn() + ") Parse error");
@@ -46,7 +65,7 @@ action code
 		
 		throw new RuntimeException("(:" + scanner.getCurrentRow() + ":" + scanner.getCurrentColumn() + ") Parse error");
 	}
-
+	
 :}
 
 parser code
@@ -65,6 +84,12 @@ parser code
 	@Override
 	public final void syntax_error(final Symbol currentToken) {
 		Tools.debugPrint(currentToken);
+		
+		final DecafToken token = (DecafToken) currentToken;
+		
+		if (")".equals(token.getInputString())) {
+			throw new RuntimeException("(:" + token.getRow() + ":" + token.getColumn() + ") Unmatched \")\"");
+		}
 	}
 	
 	@Override
@@ -155,27 +180,27 @@ Program ::=
 	|
 	CLASS IDENTIFIER 
 	{:
-		this.missingToken(CUP$DecafParser$stack, CUP$DecafParser$top, '{');
+		this.missingTokenAfter(CUP$DecafParser$stack, CUP$DecafParser$top, '{');
 	:}
 	|
 	CLASS IDENTIFIER LEFT_BRACE 
 	{:
-		this.missingToken(CUP$DecafParser$stack, CUP$DecafParser$top, '}');
+		this.missingTokenAfter(CUP$DecafParser$stack, CUP$DecafParser$top, '}');
 	:}
 	|
 	CLASS IDENTIFIER LEFT_BRACE FieldDeclarations
 	{:
-		this.missingToken(CUP$DecafParser$stack, CUP$DecafParser$top, '}');
+		this.missingTokenAfter(CUP$DecafParser$stack, CUP$DecafParser$top, '}');
 	:}
 	|
 	CLASS IDENTIFIER LEFT_BRACE MethodDeclarations
 	{:
-		this.missingToken(CUP$DecafParser$stack, CUP$DecafParser$top, '}');
+		this.missingTokenAfter(CUP$DecafParser$stack, CUP$DecafParser$top, '}');
 	:}
 	|
 	CLASS IDENTIFIER LEFT_BRACE FieldDeclarations MethodDeclarations
 	{:
-		this.missingToken(CUP$DecafParser$stack, CUP$DecafParser$top, '}');
+		this.missingTokenAfter(CUP$DecafParser$stack, CUP$DecafParser$top, '}');
 	:}
 	;
 
@@ -426,9 +451,9 @@ Statements ::=
 	;
 
 Statement ::=
-	Location:location ASSIGN Expression:expr SEMI_COLON
+	Location:location ASSIGN Expression:expression SEMI_COLON
 	{:
-		RESULT = new StatementLocation(location, expr);
+		RESULT = new StatementLocation(location, expression);
 	:}
 	|
 	MethodCall:methodCall SEMI_COLON
@@ -436,19 +461,19 @@ Statement ::=
 		RESULT = new StatementMethodCall(methodCall);
 	:}
 	|
-	IF LEFT_PARENTHESIS Expression:expr RIGHT_PARENTHESIS Block:block
+	IF LEFT_PARENTHESIS Expression:expression RIGHT_PARENTHESIS Block:block
 	{:
-		RESULT = new StatementIf(expr, block, null);
+		RESULT = new StatementIf(expression, block, null);
 	:}
 	|
-	IF LEFT_PARENTHESIS Expression:expr RIGHT_PARENTHESIS Block:ifBlock ELSE Block:elseBlock
+	IF LEFT_PARENTHESIS Expression:expression RIGHT_PARENTHESIS Block:ifBlock ELSE Block:elseBlock
 	{:
-		RESULT = new StatementIf(expr, ifBlock, elseBlock);
+		RESULT = new StatementIf(expression, ifBlock, elseBlock);
 	:}
 	|
-	WHILE LEFT_PARENTHESIS Expression:expr RIGHT_PARENTHESIS Block:block
+	WHILE LEFT_PARENTHESIS Expression:expression RIGHT_PARENTHESIS Block:block
 	{:
-		RESULT = new StatementWhile(expr, block);
+		RESULT = new StatementWhile(expression, block);
 	:}
 	|
 	RETURN SEMI_COLON
@@ -456,9 +481,9 @@ Statement ::=
 		RESULT = new StatementReturn(null);
 	:}
 	|
-	RETURN Expression:expr SEMI_COLON
+	RETURN Expression:expression SEMI_COLON
 	{:
-		RESULT = new StatementReturn(expr);
+		RESULT = new StatementReturn(expression);
 	:}
 	|
 	BREAK SEMI_COLON
@@ -483,19 +508,19 @@ MethodCall ::=
 		RESULT = new MethodName(identifier,null);
 	:}
 	|
-	IDENTIFIER:identifier LEFT_PARENTHESIS Expressions:exprs RIGHT_PARENTHESIS
+	IDENTIFIER:identifier LEFT_PARENTHESIS Expressions:expressions RIGHT_PARENTHESIS
 	{:
-		RESULT = new MethodName(identifier, exprs);
+		RESULT = new MethodName(identifier, expressions);
 	:}
 	|
 	CALLOUT LEFT_PARENTHESIS STRING_LITERAL:stringLiteral RIGHT_PARENTHESIS
 	{:
-		RESULT = new MethodCallout((String)stringLiteral,null);
+		RESULT = new MethodCallout((String) stringLiteral, null);
 	:}
 	|
 	CALLOUT LEFT_PARENTHESIS STRING_LITERAL:stringLiteral COMMA CalloutArgs:calloutArgs RIGHT_PARENTHESIS
 	{:
-	//	RESULT = new MethodCallout((String)stringLiteral,calloutArgs);
+	//	RESULT = new MethodCallout((String) stringLiteral, calloutArgs);
 	:}
 	;
 
@@ -533,18 +558,60 @@ Expressions ::=
 
 Expression ::=
 	Location
+	{:
+		Tools.debugPrint();
+	:}
 	|
 	MethodCall
+	{:
+		Tools.debugPrint();
+	:}
 	|
 	Literal
+	{:
+		Tools.debugPrint();
+	:}
 	|
 	Expression BinOp Expression
+	{:
+		Tools.debugPrint();
+	:}
 	|
 	MINUS Expression
+	{:
+		Tools.debugPrint();
+	:}
 	|
 	NOT Expression
+	{:
+		Tools.debugPrint();
+	:}
 	|
 	LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS
+	{:
+		Tools.debugPrint();
+	:}
+	|
+	LEFT_PARENTHESIS Expression COMMA
+	{:
+		Tools.debugPrint();
+		
+		this.missingTokenBefore(CUP$DecafParser$stack, CUP$DecafParser$top, ')');
+	:}
+	|
+	LEFT_PARENTHESIS Expression SEMI_COLON
+	{:
+		Tools.debugPrint();
+		
+		this.missingTokenBefore(CUP$DecafParser$stack, CUP$DecafParser$top, ')');
+	:}
+	|
+	LEFT_PARENTHESIS Expression RIGHT_BRACE
+	{:
+		Tools.debugPrint();
+		
+		this.missingTokenBefore(CUP$DecafParser$stack, CUP$DecafParser$top, ')');
+	:}
 	;
 
 BinOp ::=
