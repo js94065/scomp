@@ -11,9 +11,9 @@ import java.util.List;
 public class MethodName extends MethodCall{
 	
 	private final String methodName;
-	private final List<Expr> expressions;
+	private final List<Expression> expressions;
 	
-	public MethodName(final String methodName, List<Expr> expressions) {
+	public MethodName(final String methodName, List<Expression> expressions) {
 		this.methodName = methodName;
 		this.expressions = emptyIfNull(expressions);
 	}
@@ -22,7 +22,7 @@ public class MethodName extends MethodCall{
 		return this.methodName;
 	}
 	
-	public final List<Expr> getExpressions() {
+	public final List<Expression> getExpressions() {
 		return this.expressions;
 	}
 }

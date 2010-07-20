@@ -8,15 +8,15 @@ package scomp;
 
 public class CalloutArgument extends AbstractNode{
 
-	private final Expr expression;
+	private final Expression expression;
 	private final String stringLiteral;
 	
-	public CalloutArgument(final Expr expression, final String stringLiteral){
+	public CalloutArgument(final Expression expression, final String stringLiteral){
 		this.expression = expression;
 		this.stringLiteral = stringLiteral;
 	}
 	
-	public final Expr getExpression(){
+	public final Expression getExpression(){
 		return this.expression;
 	}
 	

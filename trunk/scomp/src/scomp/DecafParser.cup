@@ -107,8 +107,8 @@ non terminal Block Block;
 non terminal Class Type;
 non terminal MethodCall MethodCall;
 non terminal Location Location;
-non terminal List Exprs;
-non terminal Expr Expr;
+non terminal List Expressions;
+non terminal Expression Expression;
 non terminal CalloutArgs, CalloutArg;
 non terminal Literal;
 non terminal BinOp, ArithOp, RelOp, EqOp, CondOp;
@@ -295,46 +295,14 @@ MethodDeclaration ::=
 	:}
 	/*
 	|
-	// missing Type or VOID
-	error IDENTIFIER LEFT_PARENTHESIS RIGHT_PARENTHESIS Block 
-	|
-	error IDENTIFIER LEFT_PARENTHESIS ParameterDeclarations RIGHT_PARENTHESIS Block
-	|
-	// missing IDENTIFIER
-	Type error LEFT_PARENTHESIS RIGHT_PARENTHESIS Block 
-	|
-	VOID error LEFT_PARENTHESIS RIGHT_PARENTHESIS Block
-	|
-	Type error LEFT_PARENTHESIS ParameterDeclarations RIGHT_PARENTHESIS Block
-	|
-	VOID error LEFT_PARENTHESIS ParameterDeclarations RIGHT_PARENTHESIS Block
-	|
-	// missing LEFT_PARENTHESIS
-	Type IDENTIFIER error RIGHT_PARENTHESIS Block
-	|
-	VOID IDENTIFIER error RIGHT_PARENTHESIS Block
-	|
-	Type IDENTIFIER error ParameterDeclarations RIGHT_PARENTHESIS Block
-	|
-	VOID IDENTIFIER error ParameterDeclarations RIGHT_PARENTHESIS Block
-	|
 	// missing RIGHT_PARENTHESIS
-	Type IDENTIFIER LEFT_PARENTHESIS error Block
+	Type IDENTIFIER LEFT_PARENTHESIS Block
 	|
-	VOID IDENTIFIER LEFT_PARENTHESIS error Block
+	VOID IDENTIFIER LEFT_PARENTHESIS Block
 	|
-	Type IDENTIFIER LEFT_PARENTHESIS ParameterDeclarations error Block
+	Type IDENTIFIER LEFT_PARENTHESIS ParameterDeclarations Block
 	|
-	VOID IDENTIFIER LEFT_PARENTHESIS ParameterDeclarations error Block
-	|
-	// missing Block
-	Type IDENTIFIER LEFT_PARENTHESIS RIGHT_PARENTHESIS error
-	|
-	VOID IDENTIFIER LEFT_PARENTHESIS RIGHT_PARENTHESIS error
-	|
-	Type IDENTIFIER LEFT_PARENTHESIS ParameterDeclarations RIGHT_PARENTHESIS error
-	|
-	VOID IDENTIFIER LEFT_PARENTHESIS ParameterDeclarations RIGHT_PARENTHESIS error
+	VOID IDENTIFIER LEFT_PARENTHESIS ParameterDeclarations Block
 	*/
 	;
 	
@@ -352,14 +320,6 @@ ParameterDeclarations ::=
 		
 		RESULT.add(parameterDeclaration);
 	:}
-	/*
-	|
-	ParameterDeclarations COMMA error // missing ParameterDeclaration
-	|
-	error COMMA ParameterDeclaration // missing ParameterDeclarations
-	|
-	error ParameterDeclaration // missing COMMA
-	*/
 	;
 	
 ParameterDeclaration ::=
@@ -367,12 +327,6 @@ ParameterDeclaration ::=
 	{:
 		RESULT = new FieldDeclaration(type, identifier);
 	:}
-	/*
-	|
-	Type error // missing IDENTIFIER
-	|
-	error IDENTIFIER // missing Type
-	*/
 	;
 
 Block ::=
@@ -393,15 +347,6 @@ Block ::=
 		RESULT = new Block(variableDeclarations, statements);
 	:}
 	/*
-	|
-	// missing LEFT_BRACE
-	error RIGHT_BRACE
-	|
-	error VariableDeclarations RIGHT_BRACE
-	|
-	error Statements RIGHT_BRACE
-	|
-	error VariableDeclarations Statements RIGHT_BRACE
 	|
 	// missing RIGHT_BRACE
 	LEFT_BRACE error
@@ -481,7 +426,7 @@ Statements ::=
 	;
 
 Statement ::=
-	Location:location ASSIGN Expr:expr SEMI_COLON
+	Location:location ASSIGN Expression:expr SEMI_COLON
 	{:
 		RESULT = new StatementLocation(location, expr);
 	:}
@@ -491,17 +436,17 @@ Statement ::=
 		RESULT = new StatementMethodCall(methodCall);
 	:}
 	|
-	IF LEFT_PARENTHESIS Expr:expr RIGHT_PARENTHESIS Block:block
+	IF LEFT_PARENTHESIS Expression:expr RIGHT_PARENTHESIS Block:block
 	{:
 		RESULT = new StatementIf(expr, block, null);
 	:}
 	|
-	IF LEFT_PARENTHESIS Expr:expr RIGHT_PARENTHESIS Block:ifBlock ELSE Block:elseBlock
+	IF LEFT_PARENTHESIS Expression:expr RIGHT_PARENTHESIS Block:ifBlock ELSE Block:elseBlock
 	{:
 		RESULT = new StatementIf(expr, ifBlock, elseBlock);
 	:}
 	|
-	WHILE LEFT_PARENTHESIS Expr:expr RIGHT_PARENTHESIS Block:block
+	WHILE LEFT_PARENTHESIS Expression:expr RIGHT_PARENTHESIS Block:block
 	{:
 		RESULT = new StatementWhile(expr, block);
 	:}
@@ -511,7 +456,7 @@ Statement ::=
 		RESULT = new StatementReturn(null);
 	:}
 	|
-	RETURN Expr:expr SEMI_COLON
+	RETURN Expression:expr SEMI_COLON
 	{:
 		RESULT = new StatementReturn(expr);
 	:}
@@ -538,7 +483,7 @@ MethodCall ::=
 		RESULT = new MethodName(identifier,null);
 	:}
 	|
-	IDENTIFIER:identifier LEFT_PARENTHESIS Exprs:exprs RIGHT_PARENTHESIS
+	IDENTIFIER:identifier LEFT_PARENTHESIS Expressions:exprs RIGHT_PARENTHESIS
 	{:
 		RESULT = new MethodName(identifier, exprs);
 	:}
@@ -569,7 +514,7 @@ CalloutArgs ::=
 	;
 	
 CalloutArg ::=
-	Expr
+	Expression
 	|
 	STRING_LITERAL
 	;
@@ -577,29 +522,29 @@ CalloutArg ::=
 Location ::=
 	IDENTIFIER
 	|
-	IDENTIFIER LEFT_BRACKET Expr RIGHT_BRACKET
+	IDENTIFIER LEFT_BRACKET Expression RIGHT_BRACKET
 	;
-	
-Exprs ::=
-	Expr
+
+Expressions ::=
+	Expression
 	|
-	Exprs COMMA Expr
+	Expressions COMMA Expression
 	;
-	
-Expr ::=
+
+Expression ::=
 	Location
 	|
 	MethodCall
 	|
 	Literal
 	|
-	Expr BinOp Expr
+	Expression BinOp Expression
 	|
-	MINUS Expr
+	MINUS Expression
 	|
-	NOT Expr
+	NOT Expression
 	|
-	LEFT_PARENTHESIS Expr RIGHT_PARENTHESIS
+	LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS
 	;
 
 BinOp ::=
