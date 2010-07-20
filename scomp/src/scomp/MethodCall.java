@@ -3,9 +3,10 @@ package scomp;
 /**
  * This class defines a Decaf method call.
  * 
- * 
+ * @author Wilson (creation 2010-07-19)
  */
 
-public final class MethodCall extends AbstractNode {
-
+public abstract class MethodCall extends AbstractNode {
+	
+	
 }
