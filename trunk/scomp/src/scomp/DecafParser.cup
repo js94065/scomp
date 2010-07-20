@@ -49,6 +49,35 @@ action code
 
 :}
 
+parser code
+{:
+	
+	@Override
+	public final void report_error(final String message, final Object info) {
+		Tools.debugPrint(message, info);
+	}
+	
+	@Override
+	public final void report_fatal_error(final String message, final Object info) {
+		Tools.debugPrint(message, info);
+	}
+	
+	@Override
+	public final void syntax_error(final Symbol currentToken) {
+		Tools.debugPrint(currentToken);
+	}
+	
+	@Override
+	public final void unrecovered_syntax_error(final Symbol currentToken) {
+		Tools.debugPrint(currentToken);
+		
+		final DecafToken lastToken = (DecafToken) currentToken;
+		
+		throw new RuntimeException("(:" + lastToken.getRow() + ":" + lastToken.getColumn() + ") Parse error");
+	}
+	
+:}
+
 terminal BOOLEAN, BREAK, CALLOUT, CLASS, CONTINUE, ELSE, IF, INT, RETURN, VOID, WHILE;
 terminal LEFT_PARENTHESIS, RIGHT_PARENTHESIS, LEFT_BRACE, RIGHT_BRACE, LEFT_BRACKET, RIGHT_BRACKET;
 terminal ASSIGN; // "=", not to be confused with "=="  which is EQUAL
@@ -83,6 +112,7 @@ non terminal Expr Expr;
 non terminal CalloutArgs, CalloutArg;
 non terminal Literal;
 non terminal BinOp, ArithOp, RelOp, EqOp, CondOp;
+non terminal UnexpectedToken;
 
 precedence left OR;
 precedence left AND;
@@ -114,23 +144,20 @@ Program ::=
 		RESULT = new Program(fieldDeclarations, methodDeclarations);
 	:}
 	|
-	// Missing code
 	{:
 		this.parseErrorEndOfFile();
 	:}
 	|
-	CLASS // Missing "Program" identifier
+	CLASS
 	{:
 		this.parseError(CUP$DecafParser$stack, CUP$DecafParser$top);
 	:}
 	|
-	// missing LEFT_BRACE
 	CLASS IDENTIFIER 
 	{:
 		this.missingToken(CUP$DecafParser$stack, CUP$DecafParser$top, '{');
 	:}
 	|
-	// missing RIGHT_BRACE 
 	CLASS IDENTIFIER LEFT_BRACE 
 	{:
 		this.missingToken(CUP$DecafParser$stack, CUP$DecafParser$top, '}');
@@ -632,4 +659,3 @@ Literal ::=
 	|
 	CHAR_LITERAL
 	;
-
