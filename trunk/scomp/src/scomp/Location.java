@@ -6,6 +6,6 @@ package scomp;
  * 
  */
 
-public final class Location extends AbstractNode {
+public abstract class Location extends AbstractNode {
 
 }
