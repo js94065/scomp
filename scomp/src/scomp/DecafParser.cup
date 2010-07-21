@@ -134,7 +134,8 @@ non terminal MethodCall MethodCall;
 non terminal Location Location;
 non terminal List Expressions;
 non terminal Expression Expression;
-non terminal CalloutArgs, CalloutArg;
+non terminal CalloutArg;
+non terminal List CalloutArgs;
 non terminal Literal;
 non terminal BinOp, ArithOp, RelOp, EqOp, CondOp;
 non terminal UnexpectedToken;
@@ -515,45 +516,65 @@ MethodCall ::=
 	|
 	CALLOUT LEFT_PARENTHESIS STRING_LITERAL:stringLiteral RIGHT_PARENTHESIS
 	{:
-		RESULT = new MethodCallout((String) stringLiteral, null);
+		RESULT = new MethodCallout((String)stringLiteral, null);
 	:}
 	|
 	CALLOUT LEFT_PARENTHESIS STRING_LITERAL:stringLiteral COMMA CalloutArgs:calloutArgs RIGHT_PARENTHESIS
 	{:
-	//	RESULT = new MethodCallout((String) stringLiteral, calloutArgs);
+		RESULT = new MethodCallout((String)stringLiteral, calloutArgs);
 	:}
 	;
 
 CalloutArgs ::=
 	CalloutArg:calloutArg
 	{:
-	//	RESULT = new ArrayList<CalloutArgument>(calloutArg);
+		RESULT = new ArrayList<CalloutArgument>();
+		RESULT.add(calloutArg);
 	:}
 	|
 	CalloutArgs:calloutArgs COMMA CalloutArg:calloutArg
 	{:
-	//	RESULT = new ArrayList<CalloutArgument>(calloutArgs);
-		
-	//	RESULT.addAll(calloutArg);
+		RESULT = new ArrayList<CalloutArgument>(calloutArgs);
+		RESULT.add(calloutArg);
 	:}
 	;
 	
 CalloutArg ::=
-	Expression
+	Expression:expression
+	{:
+		RESULT = new CalloutArgumentExpression(expression);
+	:}
 	|
-	STRING_LITERAL
+	STRING_LITERAL:stringLiteral
+	{:
+		RESULT = new CalloutArgumentStringLiteral((String)stringLiteral);
+	:}
 	;
 
 Location ::=
-	IDENTIFIER
+	IDENTIFIER:identifier
+	{:
+		RESULT = new LocationIdentifier(identifier);
+	:}
 	|
-	IDENTIFIER LEFT_BRACKET Expression RIGHT_BRACKET
+	IDENTIFIER:identifier LEFT_BRACKET Expression:expression RIGHT_BRACKET
+	{:
+		RESULT = new LocationOffset(identifier, expression);
+	:}
 	;
 
 Expressions ::=
-	Expression
+	Expression:expression
+	{:
+		RESULT = new ArrayList<Expression>();
+		RESULT.add(expression);
+	:}
 	|
-	Expressions COMMA Expression
+	Expressions:expressions COMMA Expression:expression
+	{:
+		RESULT = new ArrayList<Expression>(expressions);
+		RESULT.add(expression);
+	:}
 	;
 
 Expression ::=

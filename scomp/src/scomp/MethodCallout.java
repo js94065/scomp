@@ -1,4 +1,5 @@
 package scomp;
+import static scomp.Tools.*;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ public class MethodCallout extends MethodCall{
 	
 	public MethodCallout(final String stringLiteral, final List<CalloutArgument> calloutArguments) {
 		this.stringLiteral = stringLiteral;
-		this.calloutArguments = calloutArguments;
+		this.calloutArguments = emptyIfNull(calloutArguments);
 	}
 	
 	public final String getStringLiteral(){
