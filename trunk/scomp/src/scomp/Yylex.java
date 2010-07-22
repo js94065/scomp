@@ -29,7 +29,7 @@ class Yylex implements java_cup.runtime.Scanner {
 	public final int getCurrentColumn() {
 		return this.currentColumn;
 	}
-	private final void updateLocation() {
+	public final void updateLocation() {
 		if (yyline + 1 > this.getCurrentRow()) {
 			this.firstCharacterIndexInCurrentRow = yychar;
 			this.currentRow = yyline + 1;
@@ -628,7 +628,7 @@ class Yylex implements java_cup.runtime.Scanner {
 					case -36:
 						break;
 					case 36:
-						{ return this.newToken(DecafParserSymbols.CHAR_LITERAL, unescape(this.yytext().substring(1, this.yytext().length() - 1))); }
+						{ return this.newToken(DecafParserSymbols.CHAR_LITERAL, unescape(this.yytext().substring(1, this.yytext().length() - 1)).charAt(0)); }
 					case -37:
 						break;
 					case 37:

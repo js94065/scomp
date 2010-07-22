@@ -2,13 +2,13 @@ package scomp;
 
 public class ExpressionLiteral extends Expression{
 	
-	private final Literal literal;
+	private final AbstractLiteral abstractLiteral;
 	
-	public ExpressionLiteral(final Literal literal) {
-		this.literal = literal;
+	public ExpressionLiteral(final AbstractLiteral abstractLiteral) {
+		this.abstractLiteral = abstractLiteral;
 	}
 	
-	public final Literal getLiteral(){
-		return this.literal;
+	public final AbstractLiteral getLiteral(){
+		return this.abstractLiteral;
 	}
 }

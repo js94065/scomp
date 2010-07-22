@@ -5,69 +5,6 @@ import java.util.*;
 import java_cup.runtime.*;
 
 
-action code 
-{:
-	
-	/**
-	 * @param stack
-	 * <br>Not null
-	 * @param top
-	 * <br>Range: {@code [0 .. stack.size() - 1]}
-	 * @param tokenRepresentation
-	 * <br>Not null
-	 * @throws RuntimeException
-	 */
-	public final void missingTokenAfter(final Stack stack, final int top, final Object tokenRepresentation) {
-		Tools.debugPrint(stack.elementAt(top));
-		
-		final DecafToken lastToken = (DecafToken) stack.elementAt(top - 0);
-		
-		throw new RuntimeException("(:" + lastToken.getRow() + ":" + (lastToken.getColumn() + lastToken.getInputString().length()) + ") Missing \"" + tokenRepresentation + "\"");
-	}
-	
-	/**
-	 * @param stack
-	 * <br>Not null
-	 * @param top
-	 * <br>Range: {@code [0 .. stack.size() - 1]}
-	 * @param tokenRepresentation
-	 * <br>Not null
-	 * @throws RuntimeException
-	 */
-	public final void missingTokenBefore(final Stack stack, final int top, final Object tokenRepresentation) {
-		Tools.debugPrint(stack.elementAt(top));
-		
-		final DecafToken lastToken = (DecafToken) stack.elementAt(top - 0);
-		
-		throw new RuntimeException("(:" + lastToken.getRow() + ":" + lastToken.getColumn() + ") Missing \"" + tokenRepresentation + "\"");
-	}
-	
-	/**
-	 * @param stack
-	 * <br>Not null
-	 * @param top
-	 * <br>Range: {@code [0 .. stack.size() - 1]}
-	 * @throws RuntimeException
-	 */
-	public final void parseError(final Stack stack, final int top) {
-		Tools.debugPrint(stack.elementAt(top));
-		
-		final DecafToken lastToken = (DecafToken) stack.elementAt(top - 0);
-		
-		throw new RuntimeException("(:" + lastToken.getRow() + ":" + lastToken.getColumn() + ") Parse error");
-	}
-	
-	/**
-	 * @throws RuntimeException
-	 */
-	public final void parseErrorEndOfFile() {
-		final Yylex scanner = (Yylex) this.parser.getScanner();
-		
-		throw new RuntimeException("(:" + scanner.getCurrentRow() + ":" + scanner.getCurrentColumn() + ") Parse error");
-	}
-	
-:}
-
 parser code
 {:
 	
@@ -84,12 +21,42 @@ parser code
 	@Override
 	public final void syntax_error(final Symbol currentToken) {
 		Tools.debugPrint(currentToken);
+		Tools.debugPrint(this.stack);
 		
-		final DecafToken token = (DecafToken) currentToken;
+		final Yylex scanner = (Yylex) this.getScanner();
 		
-		if (")".equals(token.getInputString())) {
-			throw new RuntimeException("(:" + token.getRow() + ":" + token.getColumn() + ") Unmatched \")\"");
+		scanner.updateLocation();
+		
+		int row = scanner.getCurrentRow();
+		int column = scanner.getCurrentColumn();
+		String errorMessage = "Parse error";
+		
+		for (final Object symbol : this.stack) {
+			switch (((Symbol) symbol).sym) {
+			case DecafParserSymbols.LEFT_PARENTHESIS:
+				errorMessage = "Missing \")\"";
+				break;
+			case DecafParserSymbols.LEFT_BRACE:
+				errorMessage = "Missing \"}\"";
+				break;
+			case DecafParserSymbols.LEFT_BRACKET:
+				errorMessage = "Missing \"]\"";
+				break;
+			default:
+				break;
+			}
 		}
+		
+		final DecafToken token = Tools.cast(DecafToken.class, currentToken);
+		
+		if (token != null) {
+			row = token.getRow();
+			column = token.getColumn();
+			
+			errorMessage = "Unexpected \"" + token.getInputString() + "\"";
+		}
+		
+		throw new RuntimeException("(:" + row + ":" + column + ") " + errorMessage);
 	}
 	
 	@Override
@@ -110,9 +77,9 @@ terminal COMMA, SEMI_COLON, NOT, PLUS, MINUS, TIMES, DIVIDE, MODULO;
 terminal ARITHMETIC_SHIFT_LEFT, ARITHMETIC_SHIFT_RIGHT, BITWISE_ROTATE_RIGHT;
 terminal LESSER, GREATER, LESSER_OR_EQUAL, GREATER_OR_EQUAL, EQUAL, NOT_EQUAL, AND, OR;
 terminal INT_LITERAL;
-terminal BOOLEAN_LITERAL;
-terminal CHAR_LITERAL;
-terminal STRING_LITERAL;
+terminal Boolean BOOLEAN_LITERAL;
+terminal Character CHAR_LITERAL;
+terminal String STRING_LITERAL;
 terminal String IDENTIFIER;
 
 non terminal Program Program;
@@ -136,9 +103,8 @@ non terminal List Expressions;
 non terminal Expression Expression;
 non terminal CalloutArg;
 non terminal List CalloutArgs;
-non terminal Literal Literal;
+non terminal AbstractLiteral Literal;
 non terminal BinOp, ArithOp, RelOp, EqOp, CondOp;
-non terminal UnexpectedToken;
 
 precedence left OR;
 precedence left AND;
@@ -168,40 +134,6 @@ Program ::=
 	CLASS IDENTIFIER LEFT_BRACE FieldDeclarations:fieldDeclarations MethodDeclarations:methodDeclarations RIGHT_BRACE
 	{:
 		RESULT = new Program(fieldDeclarations, methodDeclarations);
-	:}
-	|
-	{:
-		this.parseErrorEndOfFile();
-	:}
-	|
-	CLASS
-	{:
-		this.parseError(CUP$DecafParser$stack, CUP$DecafParser$top);
-	:}
-	|
-	CLASS IDENTIFIER 
-	{:
-		this.missingTokenAfter(CUP$DecafParser$stack, CUP$DecafParser$top, '{');
-	:}
-	|
-	CLASS IDENTIFIER LEFT_BRACE 
-	{:
-		this.missingTokenAfter(CUP$DecafParser$stack, CUP$DecafParser$top, '}');
-	:}
-	|
-	CLASS IDENTIFIER LEFT_BRACE FieldDeclarations
-	{:
-		this.missingTokenAfter(CUP$DecafParser$stack, CUP$DecafParser$top, '}');
-	:}
-	|
-	CLASS IDENTIFIER LEFT_BRACE MethodDeclarations
-	{:
-		this.missingTokenAfter(CUP$DecafParser$stack, CUP$DecafParser$top, '}');
-	:}
-	|
-	CLASS IDENTIFIER LEFT_BRACE FieldDeclarations MethodDeclarations
-	{:
-		this.missingTokenAfter(CUP$DecafParser$stack, CUP$DecafParser$top, '}');
 	:}
 	;
 
@@ -255,14 +187,6 @@ Fields ::=
 		
 		RESULT.add(field);
 	:}
-	/*
-	|
-	Fields COMMA error // missing Field
-	|
-	error COMMA Field // missing Fields
-	|
-	error Field // missing COMMA
-	*/
 	;
 
 Field ::=
@@ -275,26 +199,20 @@ Field ::=
 	{:
 		RESULT = identifier + " " + elementCount;
 	:}
-	|
-	error LEFT_BRACKET INT_LITERAL RIGHT_BRACKET // missing IDENTIFIER
-	|
-	IDENTIFIER error INT_LITERAL RIGHT_BRACKET // missing LEFT_BRACKET
-	|
-	IDENTIFIER LEFT_BRACKET error RIGHT_BRACKET // missing INT_LITERAL
-	|
-	IDENTIFIER LEFT_BRACKET INT_LITERAL error // missing RIGHT_BRACKET
 	;
 
 MethodDeclarations ::=
 	MethodDeclarations:methodDeclarations MethodDeclaration:methodDeclaration
 	{:
 		RESULT = new ArrayList<Object>(methodDeclarations);
+		
 		RESULT.add(methodDeclaration);
 	:}
 	|
 	MethodDeclaration:methodDeclaration
 	{:
 		RESULT = new ArrayList<Object>();
+		
 		RESULT.add(methodDeclaration);
 	:}
 	;
@@ -319,17 +237,6 @@ MethodDeclaration ::=
 	{:
 		RESULT = new MethodDeclaration(void.class, identifier, parameterDeclarations, block);
 	:}
-	/*
-	|
-	// missing RIGHT_PARENTHESIS
-	Type IDENTIFIER LEFT_PARENTHESIS Block
-	|
-	VOID IDENTIFIER LEFT_PARENTHESIS Block
-	|
-	Type IDENTIFIER LEFT_PARENTHESIS ParameterDeclarations Block
-	|
-	VOID IDENTIFIER LEFT_PARENTHESIS ParameterDeclarations Block
-	*/
 	;
 	
 ParameterDeclarations ::= 
@@ -372,17 +279,6 @@ Block ::=
 	{:
 		RESULT = new Block(variableDeclarations, statements);
 	:}
-	/*
-	|
-	// missing RIGHT_BRACE
-	LEFT_BRACE error
-	|
-	LEFT_BRACE VariableDeclarations error
-	|
-	LEFT_BRACE Statements error
-	|
-	LEFT_BRACE VariableDeclarations Statements error
-	*/
 	;
 	
 VariableDeclarations ::=
@@ -506,7 +402,7 @@ Statement ::=
 MethodCall ::= 
 	IDENTIFIER:identifier LEFT_PARENTHESIS RIGHT_PARENTHESIS
 	{:
-		RESULT = new MethodName(identifier,null);
+		RESULT = new MethodName(identifier, null);
 	:}
 	|
 	IDENTIFIER:identifier LEFT_PARENTHESIS Expressions:expressions RIGHT_PARENTHESIS
@@ -615,27 +511,6 @@ Expression ::=
 	{:
 		Tools.debugPrint();
 	:}
-	|
-	LEFT_PARENTHESIS Expression COMMA
-	{:
-		Tools.debugPrint();
-		
-		this.missingTokenBefore(CUP$DecafParser$stack, CUP$DecafParser$top, ')');
-	:}
-	|
-	LEFT_PARENTHESIS Expression SEMI_COLON
-	{:
-		Tools.debugPrint();
-		
-		this.missingTokenBefore(CUP$DecafParser$stack, CUP$DecafParser$top, ')');
-	:}
-	|
-	LEFT_PARENTHESIS Expression RIGHT_BRACE
-	{:
-		Tools.debugPrint();
-		
-		this.missingTokenBefore(CUP$DecafParser$stack, CUP$DecafParser$top, ')');
-	:}
 	;
 
 BinOp ::=
@@ -691,13 +566,13 @@ CondOp ::=
 Literal ::=
 	INT_LITERAL
 	|
-	BOOLEAN_LITERAL:booleanLiteral
+	BOOLEAN_LITERAL:value
 	{:
-		RESULT = new BooleanLiteral((String)booleanLiteral);
+		RESULT = new BooleanLiteral(value);
 	:}
 	|
-	CHAR_LITERAL:charLiteral
+	CHAR_LITERAL:value
 	{:
-		//RESULT = new CharLiteral((char)charLiteral);
+		RESULT = new CharLiteral(value);
 	:}
 	;
