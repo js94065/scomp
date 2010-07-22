@@ -136,7 +136,7 @@ non terminal List Expressions;
 non terminal Expression Expression;
 non terminal CalloutArg;
 non terminal List CalloutArgs;
-non terminal Literal;
+non terminal Literal Literal;
 non terminal BinOp, ArithOp, RelOp, EqOp, CondOp;
 non terminal UnexpectedToken;
 
@@ -578,18 +578,21 @@ Expressions ::=
 	;
 
 Expression ::=
-	Location
+	Location:location
 	{:
+		RESULT = new ExpressionLocation(location);
 		Tools.debugPrint();
 	:}
 	|
-	MethodCall
+	MethodCall:methodCall
 	{:
+		RESULT = new ExpressionMethodCall(methodCall);
 		Tools.debugPrint();
 	:}
 	|
-	Literal
+	Literal:literal
 	{:
+		RESULT = new ExpressionLiteral(literal);
 		Tools.debugPrint();
 	:}
 	|
@@ -688,7 +691,13 @@ CondOp ::=
 Literal ::=
 	INT_LITERAL
 	|
-	BOOLEAN_LITERAL
+	BOOLEAN_LITERAL:booleanLiteral
+	{:
+		RESULT = new BooleanLiteral((String)booleanLiteral);
+	:}
 	|
-	CHAR_LITERAL
+	CHAR_LITERAL:charLiteral
+	{:
+		//RESULT = new CharLiteral((char)charLiteral);
+	:}
 	;
