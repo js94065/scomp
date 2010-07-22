@@ -21,7 +21,7 @@ public class DecafScannerTest {
 	
 	@Test
 	public final void testCharLiteral() throws IOException {
-		match("\'a\'", token(CHAR_LITERAL, "a"));
+		match("\'a\'", token(CHAR_LITERAL, 'a'));
 	}
 	
 	@Test
@@ -132,11 +132,11 @@ public class DecafScannerTest {
 	@Test
 	public final void testEscapedLiteralCharacters() throws IOException {
 		match("'\\\'' '\\\"' '\\\\' '\\t' '\\n'",
-				token(CHAR_LITERAL, "\'"),
-				token(CHAR_LITERAL, "\""),
-				token(CHAR_LITERAL, "\\"),
-				token(CHAR_LITERAL, "\t"),
-				token(CHAR_LITERAL, "\n"));
+				token(CHAR_LITERAL, '\''),
+				token(CHAR_LITERAL, '\"'),
+				token(CHAR_LITERAL, '\\'),
+				token(CHAR_LITERAL, '\t'),
+				token(CHAR_LITERAL, '\n'));
 	}
 	
 	@Test(expected=InvalidInputException.class)

@@ -76,7 +76,7 @@ public class DecafParserTest {
 			
 			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
-			assertEquals("(:1:1) Parse error", exception.getMessage());
+			assertEquals("(:1:6) Parse error", exception.getMessage());
 		}
 	}
 	
@@ -87,7 +87,7 @@ public class DecafParserTest {
 			
 			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
-			assertEquals("(:1:14) Missing \"{\"", exception.getMessage());
+			assertEquals("(:1:14) Parse error", exception.getMessage());
 		}
 	}
 	
@@ -109,7 +109,7 @@ public class DecafParserTest {
 			
 			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
-			assertEquals("(:1:15) Parse error", exception.getMessage());
+			assertEquals("(:1:15) Unexpected \"}\"", exception.getMessage());
 		}
 	}
 	
@@ -120,7 +120,7 @@ public class DecafParserTest {
 			
 			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
-			assertEquals("(:4:16) Missing \")\"", exception.getMessage());
+			assertEquals("(:4:16) Unexpected \";\"", exception.getMessage());
 		}
 	}
 	
@@ -131,7 +131,18 @@ public class DecafParserTest {
 			
 			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
-			assertEquals("(:4:17) Unmatched \")\"", exception.getMessage());
+			assertEquals("(:4:17) Unexpected \")\"", exception.getMessage());
+		}
+	}
+	
+	@Test
+	public final void testProgramWithMismatchingParentheses3() {
+		try {
+			parse(PROGRAM_WITH_MISMATCHING_PARENTHESES_3);
+			
+			fail("This line shouldn't be reached");
+		} catch (final Exception exception) {
+			assertEquals("(:4:12) Unexpected \";\"", exception.getMessage());
 		}
 	}
 	
@@ -360,6 +371,18 @@ public class DecafParserTest {
 		"\n" +
 		"	int f() {\n" +
 		"		return (1 + 2));\n" +
+		"	}\n" +
+		"\n" +
+		"}";
+	
+	/**
+	 * {@value}.
+	 */
+	public static final String PROGRAM_WITH_MISMATCHING_PARENTHESES_3 =
+		"class Program {\n" +
+		"\n" +
+		"	int f() {\n" +
+		"		return f(;\n" +
 		"	}\n" +
 		"\n" +
 		"}";

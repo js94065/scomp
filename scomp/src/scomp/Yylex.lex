@@ -29,7 +29,7 @@ package scomp;
 		return this.currentColumn;
 	}
 	
-	private final void updateLocation() {
+	public final void updateLocation() {
 		if (yyline + 1 > this.getCurrentRow()) {
 			this.firstCharacterIndexInCurrentRow = yychar;
 			this.currentRow = yyline + 1;
@@ -133,7 +133,7 @@ while { return this.newToken(DecafParserSymbols.WHILE); }
 "[" { return this.newToken(DecafParserSymbols.LEFT_BRACKET); }
 "]" { return this.newToken(DecafParserSymbols.RIGHT_BRACKET); }
 
-'([ -!#-&(-\[\]-~]|\\\'|\\\"|\\\\|\\t|\\n)' { return this.newToken(DecafParserSymbols.CHAR_LITERAL, unescape(this.yytext().substring(1, this.yytext().length() - 1))); }
+'([ -!#-&(-\[\]-~]|\\\'|\\\"|\\\\|\\t|\\n)' { return this.newToken(DecafParserSymbols.CHAR_LITERAL, unescape(this.yytext().substring(1, this.yytext().length() - 1)).charAt(0)); }
 
 \"([ -!#-&(-\[\]-~]|\\\'|\\\"|\\\\|\\t|\\n)*\" { return this.newToken(DecafParserSymbols.STRING_LITERAL, unescape(this.yytext().substring(1, this.yytext().length() - 1))); }
 

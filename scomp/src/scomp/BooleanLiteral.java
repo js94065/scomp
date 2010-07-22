@@ -1,14 +1,30 @@
 package scomp;
 
-public class BooleanLiteral extends Literal{
-
-	private final String booleanLiteral;
+/**
+ * 
+ * @author wilson (creation 2010-07-21)
+ *
+ */
+public final class BooleanLiteral extends AbstractLiteral {
 	
-	public BooleanLiteral(final String booleanLiteral){
-		this.booleanLiteral = booleanLiteral;
+	private final boolean value;
+	
+	/**
+	 * 
+	 * @param value
+	 * <br>Range: any boolean
+	 */
+	public BooleanLiteral(final boolean value){
+		this.value = value;
 	}
 	
-	public final String getBooleanLiteral(){
-		return this.booleanLiteral;
+	/**
+	 * 
+	 * @return
+	 * <br>Range: any boolean
+	 */
+	public final boolean getValue(){
+		return this.value;
 	}
+	
 }
