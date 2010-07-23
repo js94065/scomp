@@ -58,4 +58,5 @@ public final class MethodDeclaration extends AbstractTypedEntityDeclaration {
 	public final Block getBlock() {
 		return this.block;
 	}
+	
 }

@@ -564,9 +564,9 @@ CondOp ::=
 	;
 	
 Literal ::=
-	INT_LITERAL:value
+	INT_LITERAL
 	{:
-		RESULT = new IntLiteral((String)value);
+		// TODO
 	:}
 	|
 	BOOLEAN_LITERAL:value
