@@ -363,12 +363,12 @@ Statement ::=
 	|
 	IF LEFT_PARENTHESIS Expression:expression RIGHT_PARENTHESIS Block:block
 	{:
-		RESULT = new StatementIf(expression, block, null);
+		RESULT = new IfStatement(expression, block, null);
 	:}
 	|
 	IF LEFT_PARENTHESIS Expression:expression RIGHT_PARENTHESIS Block:thenBlock ELSE Block:elseBlock
 	{:
-		RESULT = new StatementIf(expression, thenBlock, elseBlock);
+		RESULT = new IfStatement(expression, thenBlock, elseBlock);
 	:}
 	|
 	WHILE LEFT_PARENTHESIS Expression:expression RIGHT_PARENTHESIS Block:block
@@ -378,12 +378,12 @@ Statement ::=
 	|
 	RETURN SEMI_COLON
 	{:
-		RESULT = new StatementReturn(null);
+		RESULT = new ReturnStatement(null);
 	:}
 	|
 	RETURN Expression:expression SEMI_COLON
 	{:
-		RESULT = new StatementReturn(expression);
+		RESULT = new ReturnStatement(expression);
 	:}
 	|
 	BREAK SEMI_COLON
@@ -398,7 +398,7 @@ Statement ::=
 	|
 	Block:block
 	{:
-		RESULT = new StatementBlock(block);
+		RESULT = new BlockStatement(block);
 	:}
 	;
 	
