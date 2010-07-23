@@ -230,9 +230,27 @@ public class DecafSemanticsTest {
 					final BinaryOperation condition = (BinaryOperation) statement.getCondition();
 					
 					assertNotNull(condition);
-					assertNotNull(condition.getLeft());
+					{
+						final LocationExpression left = (LocationExpression) condition.getLeft();
+						
+						assertNotNull(left);
+						
+						final IdentifierLocation location = (IdentifierLocation) left.getLocation();
+						
+						assertNotNull(location);
+						assertEquals("n", location.getIdentifier());
+					}
 					assertEquals("<=", condition.getOperator());
-					assertNotNull(condition.getRight());
+					{
+						final LiteralExpression right = (LiteralExpression) condition.getRight();
+						
+						assertNotNull(right);
+						
+						final IntLiteral literal = (IntLiteral) right.getLiteral();
+						
+						assertNotNull(literal);
+						assertEquals(0, literal.getValue());
+					}
 				}
 				assertNotNull(statement.getThenBlock());
 				assertNull(statement.getElseBlock());
@@ -282,9 +300,27 @@ public class DecafSemanticsTest {
 					final BinaryOperation condition = (BinaryOperation) statement.getCondition();
 					
 					assertNotNull(condition);
-					assertNotNull(condition.getLeft());
+					{
+						final LocationExpression left = (LocationExpression) condition.getLeft();
+						
+						assertNotNull(left);
+						
+						final IdentifierLocation location = (IdentifierLocation) left.getLocation();
+						
+						assertNotNull(location);
+						assertEquals("n", location.getIdentifier());
+					}
 					assertEquals("<=", condition.getOperator());
-					assertNotNull(condition.getRight());
+					{
+						final LiteralExpression right = (LiteralExpression) condition.getRight();
+						
+						assertNotNull(right);
+						
+						final IntLiteral literal = (IntLiteral) right.getLiteral();
+						
+						assertNotNull(literal);
+						assertEquals(0, literal.getValue());
+					}
 				}
 				assertNotNull(statement.getThenBlock());
 				assertNull(statement.getElseBlock());

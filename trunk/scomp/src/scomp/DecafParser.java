@@ -810,7 +810,7 @@ class CUP$DecafParser$actions {
 		int literalright = ((java_cup.runtime.Symbol)CUP$DecafParser$stack.elementAt(CUP$DecafParser$top-0)).right;
 		AbstractLiteral literal = (AbstractLiteral)((java_cup.runtime.Symbol) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top-0)).value;
 		
-		RESULT = new ExpressionLiteral(literal);
+		RESULT = new LiteralExpression(literal);
 	
               CUP$DecafParser$result = new java_cup.runtime.Symbol(19/*Expression*/, ((java_cup.runtime.Symbol)CUP$DecafParser$stack.elementAt(CUP$DecafParser$top-0)).left, ((java_cup.runtime.Symbol)CUP$DecafParser$stack.elementAt(CUP$DecafParser$top-0)).right, RESULT);
             }
@@ -836,9 +836,9 @@ class CUP$DecafParser$actions {
               AbstractExpression RESULT = null;
 		int locationleft = ((java_cup.runtime.Symbol)CUP$DecafParser$stack.elementAt(CUP$DecafParser$top-0)).left;
 		int locationright = ((java_cup.runtime.Symbol)CUP$DecafParser$stack.elementAt(CUP$DecafParser$top-0)).right;
-		Location location = (Location)((java_cup.runtime.Symbol) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top-0)).value;
+		AbstractLocation abstractLocation = (AbstractLocation)((java_cup.runtime.Symbol) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top-0)).value;
 		
-		RESULT = new ExpressionLocation(location);
+		RESULT = new LocationExpression(abstractLocation);
 	
               CUP$DecafParser$result = new java_cup.runtime.Symbol(19/*Expression*/, ((java_cup.runtime.Symbol)CUP$DecafParser$stack.elementAt(CUP$DecafParser$top-0)).left, ((java_cup.runtime.Symbol)CUP$DecafParser$stack.elementAt(CUP$DecafParser$top-0)).right, RESULT);
             }
@@ -882,7 +882,7 @@ class CUP$DecafParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 52: // Location ::= IDENTIFIER LEFT_BRACKET Expression RIGHT_BRACKET 
             {
-              Location RESULT = null;
+              AbstractLocation RESULT = null;
 		int identifierleft = ((java_cup.runtime.Symbol)CUP$DecafParser$stack.elementAt(CUP$DecafParser$top-3)).left;
 		int identifierright = ((java_cup.runtime.Symbol)CUP$DecafParser$stack.elementAt(CUP$DecafParser$top-3)).right;
 		String identifier = (String)((java_cup.runtime.Symbol) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top-3)).value;
@@ -890,7 +890,7 @@ class CUP$DecafParser$actions {
 		int expressionright = ((java_cup.runtime.Symbol)CUP$DecafParser$stack.elementAt(CUP$DecafParser$top-1)).right;
 		AbstractExpression expression = (AbstractExpression)((java_cup.runtime.Symbol) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top-1)).value;
 		
-		RESULT = new LocationOffset(identifier, expression);
+		RESULT = new ArrayLocation(identifier, expression);
 	
               CUP$DecafParser$result = new java_cup.runtime.Symbol(17/*Location*/, ((java_cup.runtime.Symbol)CUP$DecafParser$stack.elementAt(CUP$DecafParser$top-3)).left, ((java_cup.runtime.Symbol)CUP$DecafParser$stack.elementAt(CUP$DecafParser$top-0)).right, RESULT);
             }
@@ -899,12 +899,12 @@ class CUP$DecafParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 51: // Location ::= IDENTIFIER 
             {
-              Location RESULT = null;
+              AbstractLocation RESULT = null;
 		int identifierleft = ((java_cup.runtime.Symbol)CUP$DecafParser$stack.elementAt(CUP$DecafParser$top-0)).left;
 		int identifierright = ((java_cup.runtime.Symbol)CUP$DecafParser$stack.elementAt(CUP$DecafParser$top-0)).right;
 		String identifier = (String)((java_cup.runtime.Symbol) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top-0)).value;
 		
-		RESULT = new LocationIdentifier(identifier);
+		RESULT = new IdentifierLocation(identifier);
 	
               CUP$DecafParser$result = new java_cup.runtime.Symbol(17/*Location*/, ((java_cup.runtime.Symbol)CUP$DecafParser$stack.elementAt(CUP$DecafParser$top-0)).left, ((java_cup.runtime.Symbol)CUP$DecafParser$stack.elementAt(CUP$DecafParser$top-0)).right, RESULT);
             }
@@ -1168,12 +1168,12 @@ class CUP$DecafParser$actions {
               AbstractStatement RESULT = null;
 		int locationleft = ((java_cup.runtime.Symbol)CUP$DecafParser$stack.elementAt(CUP$DecafParser$top-3)).left;
 		int locationright = ((java_cup.runtime.Symbol)CUP$DecafParser$stack.elementAt(CUP$DecafParser$top-3)).right;
-		Location location = (Location)((java_cup.runtime.Symbol) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top-3)).value;
+		AbstractLocation abstractLocation = (AbstractLocation)((java_cup.runtime.Symbol) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top-3)).value;
 		int expressionleft = ((java_cup.runtime.Symbol)CUP$DecafParser$stack.elementAt(CUP$DecafParser$top-1)).left;
 		int expressionright = ((java_cup.runtime.Symbol)CUP$DecafParser$stack.elementAt(CUP$DecafParser$top-1)).right;
 		AbstractExpression expression = (AbstractExpression)((java_cup.runtime.Symbol) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top-1)).value;
 		
-		RESULT = new StatementLocation(location, expression);
+		RESULT = new StatementLocation(abstractLocation, expression);
 	
               CUP$DecafParser$result = new java_cup.runtime.Symbol(13/*Statement*/, ((java_cup.runtime.Symbol)CUP$DecafParser$stack.elementAt(CUP$DecafParser$top-3)).left, ((java_cup.runtime.Symbol)CUP$DecafParser$stack.elementAt(CUP$DecafParser$top-0)).right, RESULT);
             }
