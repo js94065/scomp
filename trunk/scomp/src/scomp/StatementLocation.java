@@ -7,7 +7,7 @@ package scomp;
  *
  */
 
-public class StatementLocation extends Statement {
+public class StatementLocation extends AbstractStatement {
 
 	private final Location location;
 	
