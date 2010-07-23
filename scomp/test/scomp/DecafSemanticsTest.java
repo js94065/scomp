@@ -172,7 +172,7 @@ public class DecafSemanticsTest {
 			assertTrue(methodBlock.getStatements().isEmpty());
 		}
 		{
-			final MethodDeclaration methodDeclaration = program.getMethodDeclarations().get(0);
+			final MethodDeclaration methodDeclaration = program.getMethodDeclarations().get(1);
 			
 			assertEquals(int.class, methodDeclaration.getType());
 			assertEquals("g", methodDeclaration.getIdentifier());
@@ -191,6 +191,48 @@ public class DecafSemanticsTest {
 				assertNotNull(statement);
 			}
 			assertEquals(1, methodBlock.getStatements().size());
+		}
+		assertEquals(2, program.getMethodDeclarations().size());
+	}
+	
+	@Test
+	public final void testProgramWithARecursiveMethod() throws Exception {
+		final Program program = parse(PROGRAM_WITH_A_RECURSIVE_METHOD);
+		
+		assertNotNull(program);
+		assertNotNull(program.getFieldDeclarations());
+		assertTrue(program.getFieldDeclarations().isEmpty());
+		assertNotNull(program.getMethodDeclarations());
+		{
+			final MethodDeclaration methodDeclaration = program.getMethodDeclarations().get(0);
+			
+			assertEquals(int.class, methodDeclaration.getType());
+			assertEquals("factorial", methodDeclaration.getIdentifier());
+			{
+				final FieldDeclaration parameterDeclaration = methodDeclaration.getParameterDeclarations().get(0);
+				
+				assertEquals(int.class, parameterDeclaration.getType());
+				assertEquals("n", parameterDeclaration.getIdentifier());
+			}
+			assertEquals(1, methodDeclaration.getParameterDeclarations().size());
+			
+			final Block methodBlock = methodDeclaration.getBlock();
+			
+			assertNotNull(methodBlock);
+			assertNotNull(methodBlock.getVariableDeclarations());
+			assertTrue(methodBlock.getVariableDeclarations().isEmpty());
+			assertNotNull(methodBlock.getStatements());
+			{
+				final StatementIf statement = (StatementIf) methodBlock.getStatements().get(0);
+				
+				assertNotNull(statement);
+			}
+			{
+				final ReturnStatement statement = (ReturnStatement) methodBlock.getStatements().get(1);
+				
+				assertNotNull(statement);
+			}
+			assertEquals(2, methodBlock.getStatements().size());
 		}
 		assertEquals(1, program.getMethodDeclarations().size());
 	}
