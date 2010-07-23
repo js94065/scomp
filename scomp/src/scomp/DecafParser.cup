@@ -94,7 +94,7 @@ non terminal FieldDeclaration ParameterDeclaration;
 non terminal List VariableDeclarations;
 non terminal List IdentifierList;
 non terminal List Statements;
-non terminal Statement Statement;
+non terminal AbstractStatement Statement;
 non terminal Block Block;
 non terminal Class Type;
 non terminal MethodCall MethodCall;
@@ -264,6 +264,9 @@ ParameterDeclaration ::=
 
 Block ::=
 	LEFT_BRACE RIGHT_BRACE
+	{:
+		RESULT = new Block(null, null);
+	:}
 	|
 	LEFT_BRACE VariableDeclarations:variableDeclarations RIGHT_BRACE
 	{:
@@ -334,14 +337,14 @@ Type ::=
 Statements ::=
 	Statement:statement
 	{:
-		RESULT = new ArrayList<Statement>();
+		RESULT = new ArrayList<AbstractStatement>();
 		
 		RESULT.add(statement);
 	:}
 	|
 	Statements:statements Statement:statement
 	{:
-		RESULT = new ArrayList<Statement>(statements);
+		RESULT = new ArrayList<AbstractStatement>(statements);
 		
 		RESULT.add(statement);
 	:}
@@ -363,9 +366,9 @@ Statement ::=
 		RESULT = new StatementIf(expression, block, null);
 	:}
 	|
-	IF LEFT_PARENTHESIS Expression:expression RIGHT_PARENTHESIS Block:ifBlock ELSE Block:elseBlock
+	IF LEFT_PARENTHESIS Expression:expression RIGHT_PARENTHESIS Block:thenBlock ELSE Block:elseBlock
 	{:
-		RESULT = new StatementIf(expression, ifBlock, elseBlock);
+		RESULT = new StatementIf(expression, thenBlock, elseBlock);
 	:}
 	|
 	WHILE LEFT_PARENTHESIS Expression:expression RIGHT_PARENTHESIS Block:block

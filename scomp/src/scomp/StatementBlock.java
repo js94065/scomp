@@ -8,7 +8,7 @@ package scomp;
  */
 
 
-public class StatementBlock extends Statement {
+public class StatementBlock extends AbstractStatement {
 
 	private final Block block;
 	

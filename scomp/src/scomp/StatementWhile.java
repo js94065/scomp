@@ -7,7 +7,7 @@ package scomp;
  *
  */
 
-public class StatementWhile extends Statement {
+public class StatementWhile extends AbstractStatement {
 
 	private final Expression expression;
 	

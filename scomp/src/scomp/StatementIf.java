@@ -9,7 +9,7 @@ package scomp;
  */
 
 
-public class StatementIf extends Statement {
+public class StatementIf extends AbstractStatement {
 
 	private final Expression expression;
 	

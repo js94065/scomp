@@ -14,21 +14,21 @@ public final class Block extends AbstractNode {
 
 	private final List<VariableDeclaration> variableDeclarations;
 	
-	private final List<Statement> statements;
+	private final List<AbstractStatement> abstractStatements;
 	
 	/**
 	 * 
 	 * @param variableDeclarations
 	 * <br>Maybe null
 	 * <br>Shared
-	 * @param statements
+	 * @param abstractStatements
 	 * <br>Maybe null
 	 * <br>Shared
 	 */
 	public Block(final List<VariableDeclaration> variableDeclarations, 
-			final List<Statement> statements) {
+			final List<AbstractStatement> abstractStatements) {
 		this.variableDeclarations = emptyIfNull(variableDeclarations);
-		this.statements = emptyIfNull(statements);
+		this.abstractStatements = emptyIfNull(abstractStatements);
 	}
 	
 	/**
@@ -47,8 +47,8 @@ public final class Block extends AbstractNode {
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	public final List<Statement> getStatements() {
-		return this.statements;
+	public final List<AbstractStatement> getStatements() {
+		return this.abstractStatements;
 	}	
 	
 }

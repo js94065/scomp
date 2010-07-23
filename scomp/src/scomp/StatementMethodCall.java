@@ -7,7 +7,7 @@ package scomp;
  *
  */
 
-public class StatementMethodCall extends Statement {
+public class StatementMethodCall extends AbstractStatement {
 
 	private final MethodCall methodCall;
 	

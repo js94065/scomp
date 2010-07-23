@@ -99,7 +99,12 @@ public class DecafSemanticsTest {
 			assertNotNull(methodBlock.getVariableDeclarations());
 			assertTrue(methodBlock.getVariableDeclarations().isEmpty());
 			assertNotNull(methodBlock.getStatements());
-			assertTrue(methodBlock.getStatements().isEmpty());
+			{
+				final ReturnStatement statement = (ReturnStatement) methodBlock.getStatements().get(0);
+				
+				assertNotNull(statement);
+			}
+			assertEquals(1, methodBlock.getStatements().size());
 		}
 		assertEquals(1, program.getMethodDeclarations().size());
 	}
