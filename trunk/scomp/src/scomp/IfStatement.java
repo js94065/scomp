@@ -8,7 +8,7 @@ package scomp;
  */
 public final class IfStatement extends AbstractStatement {
 	
-	private final Expression expression;
+	private final AbstractExpression condition;
 	
 	private final Block thenBlock;
 	
@@ -16,7 +16,7 @@ public final class IfStatement extends AbstractStatement {
 	
 	/**
 	 * 
-	 * @param expression
+	 * @param condition
 	 * <br>Not null
 	 * <br>Shared
 	 * @param thenBlock
@@ -26,8 +26,8 @@ public final class IfStatement extends AbstractStatement {
 	 * <br>Maybe null
 	 * <br>Shared
 	 */
-	public IfStatement(final Expression expression, final Block thenBlock, final Block elseBlock) {
-		this.expression = expression;
+	public IfStatement(final AbstractExpression condition, final Block thenBlock, final Block elseBlock) {
+		this.condition = condition;
 		this.thenBlock = thenBlock;
 		this.elseBlock = elseBlock;
 	}
@@ -38,8 +38,8 @@ public final class IfStatement extends AbstractStatement {
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	public final Expression getExpression() {
-		return this.expression;
+	public final AbstractExpression getCondition() {
+		return this.condition;
 	}
 
 	/**

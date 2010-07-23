@@ -6,7 +6,7 @@ package scomp;
  * @author Wilson 2010-07-21
  */
 
-public class ExpressionMethodCall extends Expression{
+public class ExpressionMethodCall extends AbstractExpression{
 
 	private final MethodCall methodCall;
 	

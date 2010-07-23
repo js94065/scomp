@@ -8,16 +8,16 @@ package scomp;
  */
 public class ReturnStatement extends AbstractStatement {
 	
-	private final Expression expression;
+	private final AbstractExpression abstractExpression;
 	
 	/**
 	 * 
-	 * @param expression
+	 * @param abstractExpression
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	public ReturnStatement(final Expression expression) {
-		this.expression = expression;
+	public ReturnStatement(final AbstractExpression abstractExpression) {
+		this.abstractExpression = abstractExpression;
 	}
 	
 	/**
@@ -26,8 +26,8 @@ public class ReturnStatement extends AbstractStatement {
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	public final Expression getExpression() {
-		return this.expression;
+	public final AbstractExpression getExpression() {
+		return this.abstractExpression;
 	}
 	
 }

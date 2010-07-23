@@ -11,12 +11,12 @@ public class StatementLocation extends AbstractStatement {
 
 	private final Location location;
 	
-	private final Expression expression;
+	private final AbstractExpression abstractExpression;
 	
 	public StatementLocation(final Location location, 
-			final Expression expression) {
+			final AbstractExpression abstractExpression) {
 		this.location = location;
-		this.expression = expression;
+		this.abstractExpression = abstractExpression;
 	}
 	
 	/**
@@ -35,8 +35,8 @@ public class StatementLocation extends AbstractStatement {
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	public final Expression getExpression() {
-		return this.expression;
+	public final AbstractExpression getExpression() {
+		return this.abstractExpression;
 	}
 
 }

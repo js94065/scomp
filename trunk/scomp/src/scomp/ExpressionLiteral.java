@@ -1,6 +1,6 @@
 package scomp;
 
-public class ExpressionLiteral extends Expression{
+public class ExpressionLiteral extends AbstractExpression{
 	
 	private final AbstractLiteral abstractLiteral;
 	
