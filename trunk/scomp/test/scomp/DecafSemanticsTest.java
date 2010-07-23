@@ -109,4 +109,90 @@ public class DecafSemanticsTest {
 		assertEquals(1, program.getMethodDeclarations().size());
 	}
 	
+	@Test
+	public final void testProgramWithFieldsAndMethods() throws Exception {
+		final Program program = parse(PROGRAM_WITH_FIELDS_AND_METHODS);
+		
+		assertNotNull(program);
+		assertNotNull(program.getFieldDeclarations());
+		{
+			final FieldDeclaration fieldDeclaration = (FieldDeclaration) program.getFieldDeclarations().get(0);
+			
+			assertEquals(int.class, fieldDeclaration.getType());
+			assertEquals("x", fieldDeclaration.getIdentifier());
+		}
+		{
+			final ArrayFieldDeclaration fieldDeclaration = (ArrayFieldDeclaration) program.getFieldDeclarations().get(1);
+			
+			assertEquals(int.class, fieldDeclaration.getType());
+			assertEquals("y", fieldDeclaration.getIdentifier());
+			assertEquals(1, fieldDeclaration.getElementCount());
+		}
+		{
+			final FieldDeclaration fieldDeclaration = (FieldDeclaration) program.getFieldDeclarations().get(2);
+			
+			assertEquals(int.class, fieldDeclaration.getType());
+			assertEquals("z", fieldDeclaration.getIdentifier());
+		}
+		{
+			final FieldDeclaration fieldDeclaration = (FieldDeclaration) program.getFieldDeclarations().get(3);
+			
+			assertEquals(boolean.class, fieldDeclaration.getType());
+			assertEquals("a", fieldDeclaration.getIdentifier());
+		}
+		{
+			final ArrayFieldDeclaration fieldDeclaration = (ArrayFieldDeclaration) program.getFieldDeclarations().get(4);
+			
+			assertEquals(boolean.class, fieldDeclaration.getType());
+			assertEquals("b", fieldDeclaration.getIdentifier());
+			assertEquals(2, fieldDeclaration.getElementCount());
+		}
+		{
+			final FieldDeclaration fieldDeclaration = (FieldDeclaration) program.getFieldDeclarations().get(5);
+			
+			assertEquals(boolean.class, fieldDeclaration.getType());
+			assertEquals("c", fieldDeclaration.getIdentifier());
+		}
+		assertEquals(6, program.getFieldDeclarations().size());
+		assertNotNull(program.getMethodDeclarations());
+		{
+			final MethodDeclaration methodDeclaration = program.getMethodDeclarations().get(0);
+			
+			assertEquals(void.class, methodDeclaration.getType());
+			assertEquals("f", methodDeclaration.getIdentifier());
+			assertNotNull(methodDeclaration.getParameterDeclarations());
+			assertTrue(methodDeclaration.getParameterDeclarations().isEmpty());
+			
+			final Block methodBlock = methodDeclaration.getBlock();
+			
+			assertNotNull(methodBlock);
+			assertNotNull(methodBlock.getVariableDeclarations());
+			assertTrue(methodBlock.getVariableDeclarations().isEmpty());
+			assertNotNull(methodBlock.getStatements());
+			assertTrue(methodBlock.getStatements().isEmpty());
+		}
+		{
+			final MethodDeclaration methodDeclaration = program.getMethodDeclarations().get(0);
+			
+			assertEquals(int.class, methodDeclaration.getType());
+			assertEquals("g", methodDeclaration.getIdentifier());
+			assertNotNull(methodDeclaration.getParameterDeclarations());
+			assertTrue(methodDeclaration.getParameterDeclarations().isEmpty());
+			
+			final Block methodBlock = methodDeclaration.getBlock();
+			
+			assertNotNull(methodBlock);
+			assertNotNull(methodBlock.getVariableDeclarations());
+			assertTrue(methodBlock.getVariableDeclarations().isEmpty());
+			assertNotNull(methodBlock.getStatements());
+			{
+				final ReturnStatement statement = (ReturnStatement) methodBlock.getStatements().get(0);
+				
+				assertNotNull(statement);
+			}
+			assertEquals(1, methodBlock.getStatements().size());
+		}
+		assertEquals(1, program.getMethodDeclarations().size());
+	}
+	
 }
