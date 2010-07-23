@@ -104,7 +104,7 @@ non terminal AbstractExpression Expression;
 non terminal CalloutArg;
 non terminal List CalloutArgs;
 non terminal AbstractLiteral Literal;
-non terminal BinOp, ArithOp, RelOp, EqOp, CondOp;
+non terminal String BinaryOperator, ArithmeticOperator, RelationOperator, EqualityOperator, ConditionalOperator;
 
 precedence left OR;
 precedence left AND;
@@ -494,7 +494,10 @@ Expression ::=
 		RESULT = new ExpressionLiteral(literal);
 	:}
 	|
-	Expression BinOp Expression
+	Expression:left BinaryOperator:operator Expression:right
+	{:
+		RESULT = new BinaryOperation(left, operator, right);
+	:}
 	|
 	MINUS Expression
 	|
@@ -503,17 +506,17 @@ Expression ::=
 	LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS
 	;
 
-BinOp ::=
-	ArithOp
+BinaryOperator ::=
+	ArithmeticOperator
 	|
-	RelOp
+	RelationOperator
 	|
-	EqOp
+	EqualityOperator
 	|
-	CondOp
+	ConditionalOperator
 	;
 
-ArithOp ::=
+ArithmeticOperator ::=
 	PLUS
 	|
 	MINUS
@@ -531,7 +534,7 @@ ArithOp ::=
 	BITWISE_ROTATE_RIGHT
 	;
 
-RelOp ::=
+RelationOperator ::=
 	LESSER
 	|
 	GREATER
@@ -541,13 +544,13 @@ RelOp ::=
 	GREATER_OR_EQUAL
 	;
 	
-EqOp ::=
+EqualityOperator ::=
 	EQUAL
 	|
 	NOT_EQUAL
 	;
 
-CondOp ::=
+ConditionalOperator ::=
 	AND
 	|
 	OR

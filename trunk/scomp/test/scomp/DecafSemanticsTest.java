@@ -226,7 +226,14 @@ public class DecafSemanticsTest {
 				final IfStatement statement = (IfStatement) methodBlock.getStatements().get(0);
 				
 				assertNotNull(statement);
-				assertNotNull(statement.getCondition());
+				{
+					final BinaryOperation condition = (BinaryOperation) statement.getCondition();
+					
+					assertNotNull(condition);
+					assertNotNull(condition.getLeft());
+					assertEquals("<=", condition.getOperator());
+					assertNotNull(condition.getRight());
+				}
 				assertNotNull(statement.getThenBlock());
 				assertNull(statement.getElseBlock());
 			}
@@ -271,7 +278,14 @@ public class DecafSemanticsTest {
 				final IfStatement statement = (IfStatement) methodBlock.getStatements().get(0);
 				
 				assertNotNull(statement);
-				assertNotNull(statement.getCondition());
+				{
+					final BinaryOperation condition = (BinaryOperation) statement.getCondition();
+					
+					assertNotNull(condition);
+					assertNotNull(condition.getLeft());
+					assertEquals("<=", condition.getOperator());
+					assertNotNull(condition.getRight());
+				}
 				assertNotNull(statement.getThenBlock());
 				assertNull(statement.getElseBlock());
 			}
