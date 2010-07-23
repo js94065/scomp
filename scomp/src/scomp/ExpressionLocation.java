@@ -6,7 +6,7 @@ package scomp;
  * @author Wilson 2010-07-21
  */
 
-public class ExpressionLocation extends Expression{
+public class ExpressionLocation extends AbstractExpression{
 	
 	private final Location location;
 	

@@ -100,7 +100,7 @@ non terminal Class Type;
 non terminal MethodCall MethodCall;
 non terminal Location Location;
 non terminal List Expressions;
-non terminal Expression Expression;
+non terminal AbstractExpression Expression;
 non terminal CalloutArg;
 non terminal List CalloutArgs;
 non terminal AbstractLiteral Literal;
@@ -465,13 +465,13 @@ Location ::=
 Expressions ::=
 	Expression:expression
 	{:
-		RESULT = new ArrayList<Expression>();
+		RESULT = new ArrayList<AbstractExpression>();
 		RESULT.add(expression);
 	:}
 	|
 	Expressions:expressions COMMA Expression:expression
 	{:
-		RESULT = new ArrayList<Expression>(expressions);
+		RESULT = new ArrayList<AbstractExpression>(expressions);
 		RESULT.add(expression);
 	:}
 	;

@@ -9,18 +9,18 @@ package scomp;
 public class LocationOffset extends Location {
 
 	private final String identifier;
-	private final Expression expression;
+	private final AbstractExpression abstractExpression;
 	
-	public LocationOffset(final String identifier, final Expression expression) {
+	public LocationOffset(final String identifier, final AbstractExpression abstractExpression) {
 		this.identifier = identifier;
-		this.expression = expression;
+		this.abstractExpression = abstractExpression;
 	}
 	
 	public final String getIdentifier() {
 		return this.identifier;
 	}
 	
-	public final Expression getExpression() {
-		return this.expression;
+	public final AbstractExpression getExpression() {
+		return this.abstractExpression;
 	}
 }

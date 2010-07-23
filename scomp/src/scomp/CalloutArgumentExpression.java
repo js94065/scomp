@@ -8,13 +8,13 @@ package scomp;
 
 public class CalloutArgumentExpression extends CalloutArgument {
 	
-	private final Expression expression;
+	private final AbstractExpression abstractExpression;
 	
-	public CalloutArgumentExpression(final Expression expression){
-		this.expression = expression;
+	public CalloutArgumentExpression(final AbstractExpression abstractExpression){
+		this.abstractExpression = abstractExpression;
 	}
 	
-	public final Expression getExpression(){
-		return this.expression;
+	public final AbstractExpression getExpression(){
+		return this.abstractExpression;
 	}
 }

@@ -11,18 +11,18 @@ import java.util.List;
 public class MethodName extends MethodCall{
 	
 	private final String methodName;
-	private final List<Expression> expressions;
+	private final List<AbstractExpression> abstractExpressions;
 	
-	public MethodName(final String methodName, List<Expression> expressions) {
+	public MethodName(final String methodName, List<AbstractExpression> abstractExpressions) {
 		this.methodName = methodName;
-		this.expressions = emptyIfNull(expressions);
+		this.abstractExpressions = emptyIfNull(abstractExpressions);
 	}
 	
 	public final String getMethodName() {
 		return this.methodName;
 	}
 	
-	public final List<Expression> getExpressions() {
-		return this.expressions;
+	public final List<AbstractExpression> getExpressions() {
+		return this.abstractExpressions;
 	}
 }
