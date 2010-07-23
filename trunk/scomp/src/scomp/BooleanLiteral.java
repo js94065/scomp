@@ -1,8 +1,9 @@
 package scomp;
 
 /**
+ * This class defines a Decaf boolean literal.
  * 
- * @author wilson (creation 2010-07-21)
+ * @author Wilson (creation 2010-07-21)
  *
  */
 public final class BooleanLiteral extends AbstractLiteral {
