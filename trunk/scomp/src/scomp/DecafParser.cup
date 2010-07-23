@@ -466,12 +466,14 @@ Expressions ::=
 	Expression:expression
 	{:
 		RESULT = new ArrayList<AbstractExpression>();
+		
 		RESULT.add(expression);
 	:}
 	|
 	Expressions:expressions COMMA Expression:expression
 	{:
 		RESULT = new ArrayList<AbstractExpression>(expressions);
+		
 		RESULT.add(expression);
 	:}
 	;
@@ -480,40 +482,25 @@ Expression ::=
 	Location:location
 	{:
 		RESULT = new ExpressionLocation(location);
-		Tools.debugPrint();
 	:}
 	|
 	MethodCall:methodCall
 	{:
 		RESULT = new ExpressionMethodCall(methodCall);
-		Tools.debugPrint();
 	:}
 	|
 	Literal:literal
 	{:
 		RESULT = new ExpressionLiteral(literal);
-		Tools.debugPrint();
 	:}
 	|
 	Expression BinOp Expression
-	{:
-		Tools.debugPrint();
-	:}
 	|
 	MINUS Expression
-	{:
-		Tools.debugPrint();
-	:}
 	|
 	NOT Expression
-	{:
-		Tools.debugPrint();
-	:}
 	|
 	LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS
-	{:
-		Tools.debugPrint();
-	:}
 	;
 
 BinOp ::=
