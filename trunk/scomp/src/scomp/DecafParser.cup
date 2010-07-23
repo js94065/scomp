@@ -73,9 +73,10 @@ parser code
 terminal BOOLEAN, BREAK, CALLOUT, CLASS, CONTINUE, ELSE, IF, INT, RETURN, VOID, WHILE;
 terminal LEFT_PARENTHESIS, RIGHT_PARENTHESIS, LEFT_BRACE, RIGHT_BRACE, LEFT_BRACKET, RIGHT_BRACKET;
 terminal ASSIGN; // "=", not to be confused with "=="  which is EQUAL
-terminal COMMA, SEMI_COLON, NOT, PLUS, MINUS, TIMES, DIVIDE, MODULO;
-terminal ARITHMETIC_SHIFT_LEFT, ARITHMETIC_SHIFT_RIGHT, BITWISE_ROTATE_RIGHT;
-terminal LESSER, GREATER, LESSER_OR_EQUAL, GREATER_OR_EQUAL, EQUAL, NOT_EQUAL, AND, OR;
+terminal COMMA, SEMI_COLON;
+terminal String NOT, PLUS, MINUS, TIMES, DIVIDE, MODULO;
+terminal String ARITHMETIC_SHIFT_LEFT, ARITHMETIC_SHIFT_RIGHT, BITWISE_ROTATE_RIGHT;
+terminal String LESS, GREATER, LESS_OR_EQUAL, GREATER_OR_EQUAL, EQUAL, NOT_EQUAL, AND, OR;
 terminal INT_LITERAL;
 terminal Boolean BOOLEAN_LITERAL;
 terminal Character CHAR_LITERAL;
@@ -109,7 +110,7 @@ non terminal String BinaryOperator, ArithmeticOperator, RelationOperator, Equali
 precedence left OR;
 precedence left AND;
 precedence left EQUAL, NOT_EQUAL;
-precedence left LESSER, GREATER, LESSER_OR_EQUAL, GREATER_OR_EQUAL;
+precedence left LESS, GREATER, LESS_OR_EQUAL, GREATER_OR_EQUAL;
 precedence left ARITHMETIC_SHIFT_LEFT, ARITHMETIC_SHIFT_RIGHT, BITWISE_ROTATE_RIGHT;
 precedence left PLUS, MINUS;
 precedence left TIMES, DIVIDE, MODULO;
@@ -507,53 +508,113 @@ Expression ::=
 	;
 
 BinaryOperator ::=
-	ArithmeticOperator
+	ArithmeticOperator:operator
+	{:
+		RESULT = operator;
+	:}
 	|
-	RelationOperator
+	RelationOperator:operator
+	{:
+		RESULT = operator;
+	:}
 	|
-	EqualityOperator
+	EqualityOperator:operator
+	{:
+		RESULT = operator;
+	:}
 	|
-	ConditionalOperator
+	ConditionalOperator:operator
+	{:
+		RESULT = operator;
+	:}
 	;
 
 ArithmeticOperator ::=
 	PLUS
+	{:
+		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+	:}
 	|
 	MINUS
+	{:
+		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+	:}
 	|
 	TIMES
+	{:
+		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+	:}
 	|
 	DIVIDE
+	{:
+		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+	:}
 	|
 	MODULO
+	{:
+		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+	:}
 	|
 	ARITHMETIC_SHIFT_LEFT
+	{:
+		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+	:}
 	|
 	ARITHMETIC_SHIFT_RIGHT
+	{:
+		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+	:}
 	|
 	BITWISE_ROTATE_RIGHT
+	{:
+		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+	:}
 	;
 
 RelationOperator ::=
-	LESSER
+	LESS
+	{:
+		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+	:}
 	|
 	GREATER
+	{:
+		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+	:}
 	|
-	LESSER_OR_EQUAL
+	LESS_OR_EQUAL
+	{:
+		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+	:}
 	|
 	GREATER_OR_EQUAL
+	{:
+		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+	:}
 	;
 	
 EqualityOperator ::=
 	EQUAL
+	{:
+		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+	:}
 	|
 	NOT_EQUAL
+	{:
+		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+	:}
 	;
 
 ConditionalOperator ::=
 	AND
+	{:
+		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+	:}
 	|
 	OR
+	{:
+		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+	:}
 	;
 	
 Literal ::=

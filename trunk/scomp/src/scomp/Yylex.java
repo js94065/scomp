@@ -560,7 +560,7 @@ class Yylex implements java_cup.runtime.Scanner {
 					case -19:
 						break;
 					case 19:
-						{ return this.newToken(DecafParserSymbols.LESSER); }
+						{ return this.newToken(DecafParserSymbols.LESS); }
 					case -20:
 						break;
 					case 20:
@@ -600,7 +600,7 @@ class Yylex implements java_cup.runtime.Scanner {
 					case -29:
 						break;
 					case 29:
-						{ return this.newToken(DecafParserSymbols.LESSER_OR_EQUAL); }
+						{ return this.newToken(DecafParserSymbols.LESS_OR_EQUAL); }
 					case -30:
 						break;
 					case 30:
