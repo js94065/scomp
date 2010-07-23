@@ -53,6 +53,14 @@ public class DecafSemanticsTest {
 			
 			assertEquals(void.class, methodDeclaration.getType());
 			assertEquals("f", methodDeclaration.getIdentifier());
+			
+			final Block methodBlock = methodDeclaration.getBlock();
+			
+			assertNotNull(methodBlock);
+			assertNotNull(methodBlock.getVariableDeclarations());
+			assertTrue(methodBlock.getVariableDeclarations().isEmpty());
+			assertNotNull(methodBlock.getStatements());
+			assertTrue(methodBlock.getStatements().isEmpty());
 		}
 		assertEquals(1, program.getMethodDeclarations().size());
 	}
@@ -84,6 +92,14 @@ public class DecafSemanticsTest {
 				assertEquals("y", parameterDeclaration.getIdentifier());
 			}
 			assertEquals(1, methodDeclaration.getParameterDeclarations().size());
+			
+			final Block methodBlock = methodDeclaration.getBlock();
+			
+			assertNotNull(methodBlock);
+			assertNotNull(methodBlock.getVariableDeclarations());
+			assertTrue(methodBlock.getVariableDeclarations().isEmpty());
+			assertNotNull(methodBlock.getStatements());
+			assertTrue(methodBlock.getStatements().isEmpty());
 		}
 		assertEquals(1, program.getMethodDeclarations().size());
 	}
