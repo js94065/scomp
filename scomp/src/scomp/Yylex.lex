@@ -155,9 +155,9 @@ while { return this.newToken(DecafParserSymbols.WHILE); }
 ">>" { return this.newToken(DecafParserSymbols.ARITHMETIC_SHIFT_RIGHT); }
 ">>>" { return this.newToken(DecafParserSymbols.BITWISE_ROTATE_RIGHT); }
 "=" { return this.newToken(DecafParserSymbols.ASSIGN); }
-"<" { return this.newToken(DecafParserSymbols.LESSER); }
+"<" { return this.newToken(DecafParserSymbols.LESS); }
 ">" { return this.newToken(DecafParserSymbols.GREATER); }
-"<=" { return this.newToken(DecafParserSymbols.LESSER_OR_EQUAL); }
+"<=" { return this.newToken(DecafParserSymbols.LESS_OR_EQUAL); }
 ">=" { return this.newToken(DecafParserSymbols.GREATER_OR_EQUAL); }
 "==" { return this.newToken(DecafParserSymbols.EQUAL); }
 "!=" { return this.newToken(DecafParserSymbols.NOT_EQUAL); }
