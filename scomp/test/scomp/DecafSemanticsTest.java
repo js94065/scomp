@@ -226,6 +226,9 @@ public class DecafSemanticsTest {
 				final IfStatement statement = (IfStatement) methodBlock.getStatements().get(0);
 				
 				assertNotNull(statement);
+				assertNotNull(statement.getCondition());
+				assertNotNull(statement.getThenBlock());
+				assertNull(statement.getElseBlock());
 			}
 			{
 				final ReturnStatement statement = (ReturnStatement) methodBlock.getStatements().get(1);
@@ -268,6 +271,9 @@ public class DecafSemanticsTest {
 				final IfStatement statement = (IfStatement) methodBlock.getStatements().get(0);
 				
 				assertNotNull(statement);
+				assertNotNull(statement.getCondition());
+				assertNotNull(statement.getThenBlock());
+				assertNull(statement.getElseBlock());
 			}
 			{
 				final BlockStatement statement = (BlockStatement) methodBlock.getStatements().get(1);
