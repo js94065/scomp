@@ -6,17 +6,28 @@ package scomp;
  * @author js94065 (creation 2010-07-17)
  *
  */
-
-public class MethodCallStatement extends AbstractStatement {
-
-	private final MethodCall methodCall;
+public final class MethodCallStatement extends AbstractStatement {
 	
-	public MethodCallStatement(MethodCall methodCall) {
+	private final AbstractMethodCall<?> methodCall;
+	
+	/**
+	 * 
+	 * @param methodCall
+	 * <br>Not null
+	 * <br>Shared
+	 */
+	public MethodCallStatement(final AbstractMethodCall<?> methodCall) {
 		this.methodCall = methodCall;
 	}
-
-	public MethodCall getMethodCall() {
-		return methodCall;
+	
+	/**
+	 * 
+	 * @return
+	 * <br>Not null
+	 * <br>Shared
+	 */
+	public final AbstractMethodCall<?> getMethodCall() {
+		return this.methodCall;
 	}
-
+	
 }

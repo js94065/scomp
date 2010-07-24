@@ -35,4 +35,17 @@ public final class ArrayFieldDeclaration extends AbstractTypedEntityDeclaration 
 		return this.elementCount;
 	}
 	
+	@Override
+	protected final int doHashCode() {
+		return super.doHashCode() + this.getElementCount();
+	}
+	
+	@Override
+	protected final boolean doEquals(final Object other) {
+		final ArrayFieldDeclaration that = Tools.cast(this.getClass(), other);
+		
+		return super.doEquals(other) &&
+				this.getElementCount() == that.getElementCount();
+	}
+	
 }

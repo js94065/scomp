@@ -46,14 +46,19 @@ public abstract class AbstractTypedEntityDeclaration extends AbstractNode {
 		return this.identifier;
 	}
 	
-	/**
-	 * 
-	 * @author codistmonk (creation 2010-07-13)
-	 */
-	public static enum Type {
+	@Override
+	protected int doHashCode() {
+		return this.getType().hashCode() + this.getIdentifier().hashCode();
+	}
+	
+	@Override
+	protected boolean doEquals(final Object other) {
+		final AbstractTypedEntityDeclaration that = Tools.cast(this.getClass(), other);
 		
-		INT, BOOLEAN;
-		
+		return this == that ||
+				that != null &&
+				this.getType().equals(that.getType()) &&
+				this.getIdentifier().equals(that.getIdentifier());
 	}
 	
 }

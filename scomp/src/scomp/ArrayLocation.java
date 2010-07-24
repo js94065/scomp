@@ -33,4 +33,17 @@ public final class ArrayLocation extends AbstractLocation {
 		return this.offset;
 	}
 	
+	@Override
+	protected final int doHashCode() {
+		return super.doHashCode() + this.getOffset().hashCode();
+	}
+	
+	@Override
+	protected final boolean doEquals(final Object other) {
+		final ArrayLocation that = Tools.cast(this.getClass(), other);
+		
+		return super.doEquals(other) &&
+				this.getOffset().equals(that.getOffset());
+	}
+	
 }

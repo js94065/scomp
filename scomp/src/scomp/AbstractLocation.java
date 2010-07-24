@@ -29,4 +29,18 @@ public abstract class AbstractLocation extends AbstractNode {
 		return this.identifier;
 	}
 	
+	@Override
+	protected int doHashCode() {
+		return this.getIdentifier().hashCode();
+	}
+	
+	@Override
+	protected boolean doEquals(final Object other) {
+		final AbstractLocation that = Tools.cast(this.getClass(), other);
+		
+		return this == that ||
+				that != null &&
+				this.getIdentifier().equals(that.getIdentifier());
+	}
+	
 }

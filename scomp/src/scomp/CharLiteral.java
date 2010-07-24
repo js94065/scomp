@@ -28,4 +28,18 @@ public final class CharLiteral extends AbstractLiteral{
 		return this.value;
 	}
 	
+	@Override
+	protected final int doHashCode() {
+		return Character.valueOf(this.getValue()).hashCode();
+	}
+	
+	@Override
+	protected final boolean doEquals(final Object other) {
+		final CharLiteral that = Tools.cast(this.getClass(), other);
+		
+		return this == that ||
+				that != null &&
+				this.getValue() == that.getValue();
+	}
+	
 }

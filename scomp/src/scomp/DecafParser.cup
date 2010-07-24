@@ -99,11 +99,11 @@ non terminal List Statements;
 non terminal AbstractStatement Statement;
 non terminal Block Block;
 non terminal Class Type;
-non terminal MethodCall MethodCall;
+non terminal AbstractMethodCall MethodCall;
 non terminal AbstractLocation Location;
 non terminal List Expressions;
 non terminal AbstractExpression Expression;
-non terminal CalloutArg;
+non terminal AbstractCalloutArgument CalloutArg;
 non terminal List CalloutArgs;
 non terminal AbstractLiteral Literal;
 non terminal String BinaryOperator, ArithmeticOperator, RelationOperator, EqualityOperator, ConditionalOperator;
@@ -407,12 +407,12 @@ Statement ::=
 MethodCall ::= 
 	IDENTIFIER:identifier LEFT_PARENTHESIS RIGHT_PARENTHESIS
 	{:
-		RESULT = new MethodName(identifier, null);
+		RESULT = new MethodCall(identifier, null);
 	:}
 	|
 	IDENTIFIER:identifier LEFT_PARENTHESIS Expressions:expressions RIGHT_PARENTHESIS
 	{:
-		RESULT = new MethodName(identifier, expressions);
+		RESULT = new MethodCall(identifier, expressions);
 	:}
 	|
 	CALLOUT LEFT_PARENTHESIS STRING_LITERAL:stringLiteral RIGHT_PARENTHESIS
@@ -429,13 +429,15 @@ MethodCall ::=
 CalloutArgs ::=
 	CalloutArg:calloutArg
 	{:
-		RESULT = new ArrayList<CalloutArgument>();
+		RESULT = new ArrayList<AbstractCalloutArgument>();
+		
 		RESULT.add(calloutArg);
 	:}
 	|
 	CalloutArgs:calloutArgs COMMA CalloutArg:calloutArg
 	{:
-		RESULT = new ArrayList<CalloutArgument>(calloutArgs);
+		RESULT = new ArrayList<AbstractCalloutArgument>(calloutArgs);
+		
 		RESULT.add(calloutArg);
 	:}
 	;
@@ -488,7 +490,7 @@ Expression ::=
 	|
 	MethodCall:methodCall
 	{:
-		RESULT = new ExpressionMethodCall(methodCall);
+		RESULT = new MethodCallExpression(methodCall);
 	:}
 	|
 	Literal:literal

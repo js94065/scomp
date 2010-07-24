@@ -51,4 +51,19 @@ public final class Program extends AbstractNode {
 		return this.methodDeclarations;
 	}
 	
+	@Override
+	protected final int doHashCode() {
+		return this.getFieldDeclarations().hashCode() + this.getMethodDeclarations().hashCode();
+	}
+	
+	@Override
+	protected final boolean doEquals(final Object other) {
+		final Program that = Tools.cast(this.getClass(), other);
+		
+		return this == that ||
+				that != null &&
+				this.getFieldDeclarations().equals(that.getFieldDeclarations()) &&
+				this.getMethodDeclarations().equals(that.getMethodDeclarations());
+	}
+	
 }

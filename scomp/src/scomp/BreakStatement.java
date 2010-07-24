@@ -6,8 +6,6 @@ package scomp;
  * @author js94065 (creation 2010-07-17)
  *
  */
-
-public class BreakStatement extends AbstractStatement {
-
-	
+public final class BreakStatement extends AbstractStatement {
+	// Deliberately left empty
 }

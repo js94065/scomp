@@ -7,5 +7,18 @@ package scomp;
  *
  */
 public abstract class AbstractStatement extends AbstractNode {
-	// Deliberately left empty
+	
+	@Override
+	protected int doHashCode() {
+		return this.getClass().hashCode();
+	}
+	
+	@Override
+	protected boolean doEquals(final Object other) {
+		final AbstractStatement that = Tools.cast(this.getClass(), other);
+		
+		return this == that ||
+				that != null;
+	}
+	
 }

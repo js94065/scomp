@@ -28,4 +28,18 @@ public final class BooleanLiteral extends AbstractLiteral {
 		return this.value;
 	}
 	
+	@Override
+	protected final int doHashCode() {
+		return Boolean.valueOf(this.getValue()).hashCode();
+	}
+	
+	@Override
+	protected final boolean doEquals(final Object other) {
+		final BooleanLiteral that = Tools.cast(this.getClass(), other);
+		
+		return this == that ||
+				that != null &&
+				this.getValue() == that.getValue();
+	}
+	
 }

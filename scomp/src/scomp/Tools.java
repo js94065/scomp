@@ -22,7 +22,7 @@ public final class Tools {
 	 * @param <T> The type of the elements
 	 * @param list
 	 * <br>Maybe null
-	 * @return
+	 * @return {@code list} if it is not null, otherwise an empty list
 	 * <br>Not null
 	 * <br>Maybe new
 	 */
