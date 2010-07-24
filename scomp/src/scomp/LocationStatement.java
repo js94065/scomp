@@ -7,13 +7,13 @@ package scomp;
  *
  */
 
-public class StatementLocation extends AbstractStatement {
+public class LocationStatement extends AbstractStatement {
 
 	private final AbstractLocation abstractLocation;
 	
 	private final AbstractExpression abstractExpression;
 	
-	public StatementLocation(final AbstractLocation abstractLocation, 
+	public LocationStatement(final AbstractLocation abstractLocation, 
 			final AbstractExpression abstractExpression) {
 		this.abstractLocation = abstractLocation;
 		this.abstractExpression = abstractExpression;

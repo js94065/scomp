@@ -7,7 +7,7 @@ package scomp;
  *
  */
 
-public class StatementBreak extends AbstractStatement {
+public class BreakStatement extends AbstractStatement {
 
 	
 }

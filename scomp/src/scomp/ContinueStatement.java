@@ -7,6 +7,6 @@ package scomp;
  *
  */
 
-public class StatementContinue extends AbstractStatement {
+public class ContinueStatement extends AbstractStatement {
 
 }
