@@ -110,92 +110,30 @@ public class DecafSemanticsTest {
 	
 	@Test
 	public final void testProgramWithARecursiveMethod1() throws Exception {
-		final Program program = parse(PROGRAM_WITH_A_RECURSIVE_METHOD_1);
+		final Program expectedProgram = program(
+				null,
+				methods(
+						method(int.class, "factorial", parameters(parameter(int.class, "n")),
+								block(
+										null,
+										statements(
+												ifStatement(operation(expression("n"), "<=", expression(0)),
+														block(
+																null,
+																statements(
+																		returnStatement(expression(1))
+																)
+														),
+														null
+												),
+												returnStatement(operation(expression("n"), "*", expression(call("factorial", arguments(operation(expression("n"), "-", expression(1)))))))
+										)
+								)
+						)
+				)
+		);
 		
-		assertNotNull(program);
-		assertNotNull(program.getFieldDeclarations());
-		assertTrue(program.getFieldDeclarations().isEmpty());
-		assertNotNull(program.getMethodDeclarations());
-		{
-			final MethodDeclaration methodDeclaration = program.getMethodDeclarations().get(0);
-			
-			assertEquals(int.class, methodDeclaration.getType());
-			assertEquals("factorial", methodDeclaration.getIdentifier());
-			{
-				final FieldDeclaration parameterDeclaration = methodDeclaration.getParameterDeclarations().get(0);
-				
-				assertEquals(int.class, parameterDeclaration.getType());
-				assertEquals("n", parameterDeclaration.getIdentifier());
-			}
-			assertEquals(1, methodDeclaration.getParameterDeclarations().size());
-			
-			final Block methodBlock = methodDeclaration.getBlock();
-			
-			assertNotNull(methodBlock);
-			assertNotNull(methodBlock.getVariableDeclarations());
-			assertTrue(methodBlock.getVariableDeclarations().isEmpty());
-			assertNotNull(methodBlock.getStatements());
-			{
-				final IfStatement statement = (IfStatement) methodBlock.getStatements().get(0);
-				
-				assertNotNull(statement);
-				{
-					final BinaryOperation condition = (BinaryOperation) statement.getCondition();
-					
-					assertNotNull(condition);
-					{
-						final LocationExpression left = (LocationExpression) condition.getLeft();
-						
-						assertNotNull(left);
-						
-						final IdentifierLocation location = (IdentifierLocation) left.getLocation();
-						
-						assertNotNull(location);
-						assertEquals("n", location.getIdentifier());
-					}
-					assertEquals("<=", condition.getOperator());
-					{
-						final LiteralExpression right = (LiteralExpression) condition.getRight();
-						
-						assertNotNull(right);
-						
-						final IntLiteral literal = (IntLiteral) right.getLiteral();
-						
-						assertNotNull(literal);
-						assertEquals(0, literal.getValue());
-					}
-				}
-				{
-					final Block block = statement.getThenBlock();
-					
-					assertNotNull(block);
-					assertNotNull(block.getVariableDeclarations());
-					assertTrue(block.getVariableDeclarations().isEmpty());
-					assertNotNull(block.getStatements());
-					
-					final ReturnStatement returnStatement = (ReturnStatement) block.getStatements().get(0);
-					
-					assertNotNull(returnStatement);
-					
-					final LiteralExpression returnExpression = (LiteralExpression) returnStatement.getExpression();
-					
-					assertNotNull(returnExpression);
-					
-					final IntLiteral literal = (IntLiteral) returnExpression.getLiteral();
-					
-					assertNotNull(literal);
-					assertEquals(1, literal.getValue());
-				}
-				assertNull(statement.getElseBlock());
-			}
-			{
-				final ReturnStatement statement = (ReturnStatement) methodBlock.getStatements().get(1);
-				
-				assertNotNull(statement);
-			}
-			assertEquals(2, methodBlock.getStatements().size());
-		}
-		assertEquals(1, program.getMethodDeclarations().size());
+		assertEquals(expectedProgram, parse(PROGRAM_WITH_A_RECURSIVE_METHOD_1));
 	}
 	
 	@Test
@@ -482,6 +420,19 @@ public class DecafSemanticsTest {
 	
 	/**
 	 * 
+	 * @param methodCall
+	 * <br>Not null
+	 * <br>Shared
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final MethodCallExpression expression(final AbstractMethodCall<?> methodCall) {
+		return new MethodCallExpression(methodCall);
+	}
+	
+	/**
+	 * 
 	 * @param left
 	 * <br>Not null
 	 * <br>Shared
@@ -497,6 +448,53 @@ public class DecafSemanticsTest {
 	 */
 	private static final BinaryOperation operation(final AbstractExpression left, final String operator, final AbstractExpression right) {
 		return new BinaryOperation(left, operator, right);
+	}
+	
+	/**
+	 * 
+	 * @param condition
+	 * <br>Not null
+	 * <br>Shared
+	 * @param thenBlock
+	 * <br>Not null
+	 * <br>Shared
+	 * @param elseBlock
+	 * <br>Maybe null
+	 * <br>Shared
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final IfStatement ifStatement(final AbstractExpression condition, final Block thenBlock, final Block elseBlock) {
+		return new IfStatement(condition, thenBlock, elseBlock);
+	}
+	
+	/**
+	 * 
+	 * @param methodName
+	 * <br>Not null
+	 * <br>Shared
+	 * @param arguments
+	 * <br>Maybe null
+	 * <br>Shared
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final MethodCall call(final String methodName, final List<AbstractExpression> arguments) {
+		return new MethodCall(methodName, arguments);
+	}
+	
+	/**
+	 * 
+	 * @param arguments
+	 * <br>Not null
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final List<AbstractExpression> arguments(final AbstractExpression... arguments) {
+		return Arrays.asList(arguments);
 	}
 	
 }

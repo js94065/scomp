@@ -30,6 +30,14 @@ public final class LocationExpression extends AbstractExpression {
 	}
 	
 	@Override
+	public final String toString() {
+		return
+				this.getClass().getSimpleName() + "{" +
+				"location{" + this.getLocation() + "}" +
+				"}";
+	}
+	
+	@Override
 	protected final int doHashCode() {
 		return this.getLocation().hashCode();
 	}

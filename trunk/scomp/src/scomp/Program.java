@@ -54,10 +54,10 @@ public final class Program extends AbstractNode {
 	@Override
 	public final String toString() {
 		return
-			this.getClass().getSimpleName() + "{" +
-			"fieldDeclarations{" + this.getFieldDeclarations() + "} " +
-			"methodDeclarations{" + this.getMethodDeclarations() + "}" +
-			"}";
+				this.getClass().getSimpleName() + "{" +
+				"fieldDeclarations{" + this.getFieldDeclarations() + "} " +
+				"methodDeclarations{" + this.getMethodDeclarations() + "}" +
+				"}";
 	}
 	
 	@Override

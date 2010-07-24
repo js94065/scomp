@@ -22,4 +22,13 @@ public final class MethodCall extends AbstractMethodCall<AbstractExpression> {
 		super(methodName, arguments);
 	}
 	
+	@Override
+	public final String toString() {
+		return
+				this.getClass().getSimpleName() + "{" +
+				"methodName{" + this.getMethodName() + "} " +
+				"arguments{" + this.getArguments() + "}" +
+				"}";
+	}
+	
 }

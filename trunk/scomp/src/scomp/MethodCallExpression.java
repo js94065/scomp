@@ -30,6 +30,14 @@ public final class MethodCallExpression extends AbstractExpression {
 	}
 	
 	@Override
+	public final String toString() {
+		return
+				this.getClass().getSimpleName() + "{" +
+				"methodCall{" + this.getMethodCall() + "}" +
+				"}";
+	}
+	
+	@Override
 	protected final int doHashCode() {
 		return this.getMethodCall().hashCode();
 	}

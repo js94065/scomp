@@ -38,11 +38,11 @@ public final class ArrayFieldDeclaration extends AbstractTypedEntityDeclaration 
 	@Override
 	public final String toString() {
 		return
-			this.getClass().getSimpleName() + "{" +
-			"elementType{" + this.getType().getName() + "} " +
-			"identifier{" + this.getIdentifier() + "} " +
-			"elementCount{" + this.getElementCount() + "}" +
-			"}";
+				this.getClass().getSimpleName() + "{" +
+				"elementType{" + this.getType().getName() + "} " +
+				"identifier{" + this.getIdentifier() + "} " +
+				"elementCount{" + this.getElementCount() + "}" +
+				"}";
 	}
 	
 	@Override

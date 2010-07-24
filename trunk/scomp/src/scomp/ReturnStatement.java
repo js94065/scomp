@@ -33,21 +33,22 @@ public class ReturnStatement extends AbstractStatement {
 	@Override
 	public final String toString() {
 		return
-			this.getClass().getSimpleName() + "{" +
-			"expression{" + this.getExpression() + "}" +
-			"}";
+				this.getClass().getSimpleName() + "{" +
+				"expression{" + this.getExpression() + "}" +
+				"}";
 	}
 	
 	@Override
 	protected final int doHashCode() {
-		return this.getExpression().hashCode();
+		return Tools.hashCode(this.getExpression());
 	}
 	
 	@Override
 	protected final boolean doEquals(final Object other) {
 		final ReturnStatement that = Tools.cast(this.getClass(), other);
 		
-		return super.doEquals(other) && Tools.equals(this.getExpression(), that.getExpression());
+		return super.doEquals(other) &&
+				Tools.equals(this.getExpression(), that.getExpression());
 	}
 	
 }
