@@ -1,7 +1,8 @@
 package scomp;
 
-import static org.junit.Assert.*;
 import static scomp.DecafParserSymbols.*;
+
+import static org.junit.Assert.assertArrayEquals;
 
 import org.junit.Assert;
 import org.junit.Test;
