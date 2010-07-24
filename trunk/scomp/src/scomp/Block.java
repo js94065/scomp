@@ -52,6 +52,15 @@ public final class Block extends AbstractNode {
 	}
 	
 	@Override
+	public final String toString() {
+		return
+			this.getClass().getSimpleName() + "{" +
+			"variableDeclarations{" + this.getVariableDeclarations() + "} " +
+			"statements{" + this.getStatements() + "}" +
+			"}";
+	}
+	
+	@Override
 	protected final int doHashCode() {
 		return this.getVariableDeclarations().hashCode() + this.getStatements().hashCode();
 	}

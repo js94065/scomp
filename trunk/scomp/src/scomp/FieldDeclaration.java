@@ -21,4 +21,13 @@ public final class FieldDeclaration extends AbstractTypedEntityDeclaration {
 		super(type, identifier);
 	}
 	
+	@Override
+	public final String toString() {
+		return
+			this.getClass().getSimpleName() + "{" +
+			"elementType{" + this.getType().getName() + "} " +
+			"identifier{" + this.getIdentifier() + "}" +
+			"}";
+	}
+	
 }

@@ -17,7 +17,7 @@ public final class JLexTools {
 		// Do nothing
 	}
 	
-    private static final int DEBUG_STACK_OFFSET = getDebugStackOffset();
+    public static final int DEBUG_STACK_OFFSET = getDebugStackOffset();
     
 	/**
 	 * Returns "src/package/name/" ("src\\package\\name\\" on Windows)
