@@ -258,7 +258,27 @@ public class DecafSemanticsTest {
 						assertEquals(0, literal.getValue());
 					}
 				}
-				assertNotNull(statement.getThenBlock());
+				{
+					final Block block = statement.getThenBlock();
+					
+					assertNotNull(block);
+					assertNotNull(block.getVariableDeclarations());
+					assertTrue(block.getVariableDeclarations().isEmpty());
+					assertNotNull(block.getStatements());
+					
+					final ReturnStatement returnStatement = (ReturnStatement) block.getStatements().get(0);
+					
+					assertNotNull(returnStatement);
+					
+					final LiteralExpression returnExpression = (LiteralExpression) returnStatement.getExpression();
+					
+					assertNotNull(returnExpression);
+					
+					final IntLiteral literal = (IntLiteral) returnExpression.getLiteral();
+					
+					assertNotNull(literal);
+					assertEquals(1, literal.getValue());
+				}
 				assertNull(statement.getElseBlock());
 			}
 			{
@@ -328,7 +348,27 @@ public class DecafSemanticsTest {
 						assertEquals(0, literal.getValue());
 					}
 				}
-				assertNotNull(statement.getThenBlock());
+				{
+					final Block block = statement.getThenBlock();
+					
+					assertNotNull(block);
+					assertNotNull(block.getVariableDeclarations());
+					assertTrue(block.getVariableDeclarations().isEmpty());
+					assertNotNull(block.getStatements());
+					
+					final ReturnStatement returnStatement = (ReturnStatement) block.getStatements().get(0);
+					
+					assertNotNull(returnStatement);
+					
+					final LiteralExpression returnExpression = (LiteralExpression) returnStatement.getExpression();
+					
+					assertNotNull(returnExpression);
+					
+					final IntLiteral literal = (IntLiteral) returnExpression.getLiteral();
+					
+					assertNotNull(literal);
+					assertEquals(1, literal.getValue());
+				}
 				assertNull(statement.getElseBlock());
 			}
 			{
