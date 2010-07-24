@@ -64,6 +64,16 @@ public final class BinaryOperation extends AbstractExpression {
 	}
 	
 	@Override
+	public final String toString() {
+		return
+				this.getClass().getSimpleName() + "{" +
+				"left{" + this.getLeft() + "} " +
+				"operator{" + this.getOperator() + "} " +
+				"right{" + this.getRight() + "}" +
+				"}";
+	}
+	
+	@Override
 	protected final int doHashCode() {
 		return this.getLeft().hashCode() + this.getOperator().hashCode() + this.getRight().hashCode();
 	}

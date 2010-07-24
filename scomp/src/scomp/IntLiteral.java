@@ -28,6 +28,14 @@ public final class IntLiteral extends AbstractLiteral {
 	}
 	
 	@Override
+	public final String toString() {
+		return
+				this.getClass().getSimpleName() + "{" +
+				"value{" + this.getValue() + "}" +
+				"}";
+	}
+	
+	@Override
 	protected final int doHashCode() {
 		return Integer.valueOf(this.getValue()).hashCode();
 	}

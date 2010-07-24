@@ -62,4 +62,29 @@ public final class IfStatement extends AbstractStatement {
 		return this.elseBlock;
 	}
 	
+	@Override
+	public final String toString() {
+		return
+				this.getClass().getSimpleName() + "{" +
+				"condition{" + this.getCondition() + "} " +
+				"thenBlock{" + this.getThenBlock() + "} " +
+				"elseBlock{" + this.getElseBlock() + "}" +
+				"}";
+	}
+	
+	@Override
+	protected final int doHashCode() {
+		return this.getCondition().hashCode() + this.getThenBlock().hashCode() + Tools.hashCode(this.getElseBlock());
+	}
+	
+	@Override
+	protected final boolean doEquals(final Object other) {
+		final IfStatement that = Tools.cast(this.getClass(), other);
+		
+		return super.doEquals(other) &&
+				this.getCondition().equals(that.getCondition()) &&
+				this.getThenBlock().equals(that.getThenBlock()) &&
+				Tools.equals(this.getElseBlock(), that.getElseBlock());
+	}
+	
 }

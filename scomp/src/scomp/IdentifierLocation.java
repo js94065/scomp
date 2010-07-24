@@ -17,4 +17,12 @@ public final class IdentifierLocation extends AbstractLocation {
 		super(identifier);
 	}
 	
+	@Override
+	public final String toString() {
+		return
+				this.getClass().getSimpleName() + "{" +
+				"identifier{" + this.getIdentifier() + "}" +
+				"}";
+	}
+	
 }

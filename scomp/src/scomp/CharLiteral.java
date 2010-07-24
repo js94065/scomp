@@ -29,6 +29,14 @@ public final class CharLiteral extends AbstractLiteral{
 	}
 	
 	@Override
+	public final String toString() {
+		return
+				this.getClass().getSimpleName() + "{" +
+				"value{" + this.getValue() + "}" +
+				"}";
+	}
+	
+	@Override
 	protected final int doHashCode() {
 		return Character.valueOf(this.getValue()).hashCode();
 	}

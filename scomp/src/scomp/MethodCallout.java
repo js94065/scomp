@@ -22,4 +22,13 @@ public final class MethodCallout extends AbstractMethodCall<AbstractCalloutArgum
 		super(stringLiteral, arguments);
 	}
 	
+	@Override
+	public final String toString() {
+		return
+				this.getClass().getSimpleName() + "{" +
+				"stringLiteral{" + this.getMethodName() + "} " +
+				"arguments{" + this.getArguments() + "}" +
+				"}";
+	}
+	
 }

@@ -30,6 +30,14 @@ public final class LiteralExpression extends AbstractExpression {
 	}
 	
 	@Override
+	public final String toString() {
+		return
+				this.getClass().getSimpleName() + "{" +
+				"literal{" + this.getLiteral() + "}" +
+				"}";
+	}
+	
+	@Override
 	protected final int doHashCode() {
 		return this.getLiteral().hashCode();
 	}
