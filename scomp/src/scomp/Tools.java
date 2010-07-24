@@ -3,6 +3,8 @@ package scomp;
 import java.util.Collections;
 import java.util.List;
 
+import jlex.tools.JLexTools;
+
 /**
  * 
  * @author codistmonk (creation 2010-06-07)
@@ -16,6 +18,8 @@ public final class Tools {
 	private Tools() {
 		// Do nothing
 	}
+	
+    public static final int DEBUG_STACK_OFFSET = JLexTools.DEBUG_STACK_OFFSET;
 	
 	/**
 	 * 
@@ -72,29 +76,32 @@ public final class Tools {
 	public static final int hashCode(final Object object) {
 		return object == null ? 0 : object.hashCode();
 	}
-	
-    /**
-     * Concatenates the source location of the call and the string representations of the parameters separated by spaces.
-     * <br>This is method helps to perform console debugging using System.out or System.err.
-     * 
-     * @param stackIndex 1 is the source of this method, 2 is the source of the call, 3 is the source of the call's caller, and so forth
-     * <br>Range: {@code [O .. Integer.MAX_VALUE]}
-     * @param objects
-     * <br>Should not be null
-     * @return
-     * <br>A new value
-     * <br>A non-null value
-     * @throws IndexOutOfBoundsException if {@code stackIndex} is invalid
-     */
-    public static final String debug(final int stackIndex, final Object... objects) {
-        final StringBuilder builder = new StringBuilder(Thread.currentThread().getStackTrace()[stackIndex].toString());
 
-        for (final Object object : objects) {
-            builder.append(" ").append(object);
-        }
-
-        return builder.toString();
-    }
+	/**
+	 * Concatenates the source location of the call and
+	 * the string representations of the parameters separated by spaces.
+	 * <br>This is method helps to perform console debugging using System.out or System.err.
+	 *
+	 * @param stackOffset {@link #DEBUG_STACK_OFFSET} is the source of the call,
+	 * {@code DEBUG_STACK_OFFSET + 1} is the source of the call's caller, and so forth
+	 * <br>Range: {@code [O .. Integer.MAX_VALUE]}
+	 * @param objects
+	 * <br>Not null
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 * @throws IndexOutOfBoundsException if {@code stackIndex} is invalid
+	 */
+	public static final String debug(final int stackOffset, final Object... objects) {
+		final StringBuilder builder = new StringBuilder(
+				Thread.currentThread().getStackTrace()[stackOffset + 1].toString());
+		
+		for (final Object object : objects) {
+			builder.append(" ").append(object);
+		}
+		
+		return builder.toString();
+	}
     
     /**
      * Prints on the standard output the concatenation of the source location of the call
@@ -104,7 +111,7 @@ public final class Tools {
      * <br>Should not be null
      */
     public static final void debugPrint(final Object... objects) {
-        System.out.println(debug(3, objects));
+        System.out.println(debug(DEBUG_STACK_OFFSET + 1, objects));
     }
 	
 }

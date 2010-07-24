@@ -13,7 +13,7 @@ public class ReturnStatement extends AbstractStatement {
 	/**
 	 * 
 	 * @param abstractExpression
-	 * <br>Not null
+	 * <br>Maybe null
 	 * <br>Shared
 	 */
 	public ReturnStatement(final AbstractExpression abstractExpression) {
@@ -23,11 +23,31 @@ public class ReturnStatement extends AbstractStatement {
 	/**
 	 * 
 	 * @return
-	 * <br>Not null
+	 * <br>Maybe null
 	 * <br>Shared
 	 */
 	public final AbstractExpression getExpression() {
 		return this.abstractExpression;
+	}
+	
+	@Override
+	public final String toString() {
+		return
+			this.getClass().getSimpleName() + "{" +
+			"expression{" + this.getExpression() + "}" +
+			"}";
+	}
+	
+	@Override
+	protected final int doHashCode() {
+		return this.getExpression().hashCode();
+	}
+	
+	@Override
+	protected final boolean doEquals(final Object other) {
+		final ReturnStatement that = Tools.cast(this.getClass(), other);
+		
+		return super.doEquals(other) && Tools.equals(this.getExpression(), that.getExpression());
 	}
 	
 }

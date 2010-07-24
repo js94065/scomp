@@ -52,6 +52,15 @@ public final class Program extends AbstractNode {
 	}
 	
 	@Override
+	public final String toString() {
+		return
+			this.getClass().getSimpleName() + "{" +
+			"fieldDeclarations{" + this.getFieldDeclarations() + "} " +
+			"methodDeclarations{" + this.getMethodDeclarations() + "}" +
+			"}";
+	}
+	
+	@Override
 	protected final int doHashCode() {
 		return this.getFieldDeclarations().hashCode() + this.getMethodDeclarations().hashCode();
 	}

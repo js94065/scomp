@@ -59,4 +59,28 @@ public final class MethodDeclaration extends AbstractTypedEntityDeclaration {
 		return this.block;
 	}
 	
+	@Override
+	protected final int doHashCode() {
+		return super.doHashCode() + this.getParameterDeclarations().hashCode() + this.getBlock().hashCode();
+	}
+	
+	@Override
+	protected final boolean doEquals(final Object other) {
+		final MethodDeclaration that = Tools.cast(this.getClass(), other);
+		
+		return super.doEquals(other) &&
+				this.getParameterDeclarations().equals(that.getParameterDeclarations()) &&
+				this.getBlock().equals(that.getBlock());
+	}
+	
+	@Override
+	public final String toString() {
+		return
+				this.getClass().getSimpleName() + "{" +
+				"returnType{" + this.getType().getName() + "} " +
+				"identifier{" + this.getIdentifier() + "} " +
+				"block{" + this.getBlock() + "}" +
+				"}";
+	}
+	
 }

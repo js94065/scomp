@@ -1,5 +1,7 @@
 package scomp;
 
+import static scomp.Tools.*;
+
 /**
  * This is the base class for all elements of the intermediate representation tree.
  * 
@@ -24,7 +26,9 @@ public abstract class AbstractNode {
 		final boolean result = this.doEquals(other);
 		
 		if (!result) {
-			Tools.debugPrint("\n", "Not equal:", this, "\n", other);
+			debugPrint(
+					"\nExpected:", this,
+					"\nActual:  ", other);
 		}
 		
 		return result;

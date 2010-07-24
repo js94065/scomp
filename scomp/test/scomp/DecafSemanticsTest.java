@@ -43,7 +43,7 @@ public class DecafSemanticsTest {
 		final Program expectedProgram = new Program(
 				null,
 				methods(
-						method(void.class, "f")
+						method(void.class, "f", null, block(null, null))
 				)
 		);
 		
@@ -52,46 +52,23 @@ public class DecafSemanticsTest {
 	
 	@Test
 	public final void testProgramWithAFieldAndAMethod() throws Exception {
-		final Program program = parse(PROGRAM_WITH_A_FIELD_AND_A_METHOD);
+		final Program expectedProgram = new Program(
+				fields(
+						array(int.class, "x", 42)
+				),
+				methods(
+						method(boolean.class, "f", parameters(parameter(int.class, "y")),
+								block(
+										null,
+										statements(
+												returnStatement(operation(expression("y"), "==", expression(42)))
+										)
+								)
+						)
+				)
+		);
 		
-		assertNotNull(program);
-		assertNotNull(program.getFieldDeclarations());
-		{
-			final ArrayFieldDeclaration fieldDeclaration = (ArrayFieldDeclaration) program.getFieldDeclarations().get(0);
-			
-			assertEquals(int.class, fieldDeclaration.getType());
-			assertEquals("x", fieldDeclaration.getIdentifier());
-			assertEquals(42, fieldDeclaration.getElementCount());
-		}
-		assertEquals(1, program.getFieldDeclarations().size());
-		assertNotNull(program.getMethodDeclarations());
-		{
-			final MethodDeclaration methodDeclaration = program.getMethodDeclarations().get(0);
-			
-			assertEquals(boolean.class, methodDeclaration.getType());
-			assertEquals("f", methodDeclaration.getIdentifier());
-			{
-				final FieldDeclaration parameterDeclaration = methodDeclaration.getParameterDeclarations().get(0);
-				
-				assertEquals(int.class, parameterDeclaration.getType());
-				assertEquals("y", parameterDeclaration.getIdentifier());
-			}
-			assertEquals(1, methodDeclaration.getParameterDeclarations().size());
-			
-			final Block methodBlock = methodDeclaration.getBlock();
-			
-			assertNotNull(methodBlock);
-			assertNotNull(methodBlock.getVariableDeclarations());
-			assertTrue(methodBlock.getVariableDeclarations().isEmpty());
-			assertNotNull(methodBlock.getStatements());
-			{
-				final ReturnStatement statement = (ReturnStatement) methodBlock.getStatements().get(0);
-				
-				assertNotNull(statement);
-			}
-			assertEquals(1, methodBlock.getStatements().size());
-		}
-		assertEquals(1, program.getMethodDeclarations().size());
+		assertEquals(expectedProgram, parse(PROGRAM_WITH_A_FIELD_AND_A_METHOD));
 	}
 	
 	@Test
@@ -427,12 +404,132 @@ public class DecafSemanticsTest {
 	 * @param identifier
 	 * <br>Not null
 	 * <br>Shared
+	 * @param parameters
+	 * <br>Maybe null
+	 * <br>Shared
+	 * @param block
+	 * <br>Not null
+	 * <br>Shared
 	 * @return
 	 * <br>Not null
 	 * <br>New
 	 */
-	private static final MethodDeclaration method(final Class<?> returnType, final String identifier) {
-		return new MethodDeclaration(returnType, identifier, null, null);
+	private static final MethodDeclaration method(final Class<?> returnType, final String identifier,
+			final List<FieldDeclaration> parameters, final Block block) {
+		return new MethodDeclaration(returnType, identifier, parameters, block);
+	}
+	
+	/**
+	 * 
+	 * @param fields
+	 * <br>Not null
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final List<FieldDeclaration> parameters(final FieldDeclaration... fields) {
+		return Arrays.asList(fields);
+	}
+	
+	/**
+	 * 
+	 * @param type
+	 * <br>Not null
+	 * <br>Shared
+	 * @param identifier
+	 * <br>Not null
+	 * <br>Shared
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final FieldDeclaration parameter(final Class<?> type, final String identifier) {
+		return new FieldDeclaration(type, identifier);
+	}
+	
+	/**
+	 * 
+	 * @param variables
+	 * <br>Not null
+	 * <br>Shared
+	 * @param statements
+	 * <br>Not null
+	 * <br>Shared
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final Block block(final List<VariableDeclaration> variables, final List<AbstractStatement> statements) {
+		return new Block(variables, statements);
+	}
+	
+	/**
+	 * 
+	 * @param statements
+	 * <br>Not null
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final List<AbstractStatement> statements(final AbstractStatement... statements) {
+		return Arrays.asList(statements);
+	}
+	
+	/**
+	 * 
+	 * @param expression
+	 * <br>Not null
+	 * <br>Shared
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final ReturnStatement returnStatement(final AbstractExpression expression) {
+		return new ReturnStatement(expression);
+	}
+	
+	/**
+	 * 
+	 * @param identifier
+	 * <br>Not null
+	 * <br>Shared
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final LocationExpression expression(final String identifier) {
+		return new LocationExpression(new IdentifierLocation(identifier));
+	}
+	
+	/**
+	 * 
+	 * @param value
+	 * <br>Range: any integer
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final LiteralExpression expression(final int value) {
+		return new LiteralExpression(new IntLiteral(value));
+	}
+	
+	/**
+	 * 
+	 * @param left
+	 * <br>Not null
+	 * <br>Shared
+	 * @param operator
+	 * <br>Not null
+	 * <br>Shared
+	 * @param right
+	 * <br>Not null
+	 * <br>Shared
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final BinaryOperation operation(final AbstractExpression left, final String operator, final AbstractExpression right) {
+		return new BinaryOperation(left, operator, right);
 	}
 	
 }
