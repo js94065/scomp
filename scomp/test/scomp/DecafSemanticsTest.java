@@ -18,7 +18,7 @@ public class DecafSemanticsTest {
 	
 	@Test
 	public final void testSmallestProgram() throws Exception {
-		final Program expectedProgram = new Program(
+		final Program expectedProgram = program(
 				null,
 				null
 		);
@@ -28,7 +28,7 @@ public class DecafSemanticsTest {
 	
 	@Test
 	public final void testProgramWithAField() throws Exception {
-		final Program expectedProgram = new Program(
+		final Program expectedProgram = program(
 				fields(
 						field(int.class, "x")
 				),
@@ -40,10 +40,15 @@ public class DecafSemanticsTest {
 	
 	@Test
 	public final void testProgramWithAMethod() throws Exception {
-		final Program expectedProgram = new Program(
+		final Program expectedProgram = program(
 				null,
 				methods(
-						method(void.class, "f", null, block(null, null))
+						method(void.class, "f", null,
+								block(
+										null,
+										null
+								)
+						)
 				)
 		);
 		
@@ -52,9 +57,9 @@ public class DecafSemanticsTest {
 	
 	@Test
 	public final void testProgramWithAFieldAndAMethod() throws Exception {
-		final Program expectedProgram = new Program(
+		final Program expectedProgram = program(
 				fields(
-						array(int.class, "x", 42)
+						field(int.class, "x", 42)
 				),
 				methods(
 						method(boolean.class, "f", parameters(parameter(int.class, "y")),
@@ -73,88 +78,34 @@ public class DecafSemanticsTest {
 	
 	@Test
 	public final void testProgramWithFieldsAndMethods() throws Exception {
-		final Program program = parse(PROGRAM_WITH_FIELDS_AND_METHODS);
+		final Program expectedProgram = program(
+				fields(
+						field(int.class, "x"),
+						field(int.class, "y", 1),
+						field(int.class, "z"),
+						field(boolean.class, "a"),
+						field(boolean.class, "b", 2),
+						field(boolean.class, "c")
+				),
+				methods(
+						method(void.class, "f", null,
+								block(
+										null,
+										null
+								)
+						),
+						method(int.class, "g", null,
+								block(
+										null,
+										statements(
+												returnStatement(expression(42))
+										)
+								)
+						)
+				)
+		);
 		
-		assertNotNull(program);
-		assertNotNull(program.getFieldDeclarations());
-		{
-			final FieldDeclaration fieldDeclaration = (FieldDeclaration) program.getFieldDeclarations().get(0);
-			
-			assertEquals(int.class, fieldDeclaration.getType());
-			assertEquals("x", fieldDeclaration.getIdentifier());
-		}
-		{
-			final ArrayFieldDeclaration fieldDeclaration = (ArrayFieldDeclaration) program.getFieldDeclarations().get(1);
-			
-			assertEquals(int.class, fieldDeclaration.getType());
-			assertEquals("y", fieldDeclaration.getIdentifier());
-			assertEquals(1, fieldDeclaration.getElementCount());
-		}
-		{
-			final FieldDeclaration fieldDeclaration = (FieldDeclaration) program.getFieldDeclarations().get(2);
-			
-			assertEquals(int.class, fieldDeclaration.getType());
-			assertEquals("z", fieldDeclaration.getIdentifier());
-		}
-		{
-			final FieldDeclaration fieldDeclaration = (FieldDeclaration) program.getFieldDeclarations().get(3);
-			
-			assertEquals(boolean.class, fieldDeclaration.getType());
-			assertEquals("a", fieldDeclaration.getIdentifier());
-		}
-		{
-			final ArrayFieldDeclaration fieldDeclaration = (ArrayFieldDeclaration) program.getFieldDeclarations().get(4);
-			
-			assertEquals(boolean.class, fieldDeclaration.getType());
-			assertEquals("b", fieldDeclaration.getIdentifier());
-			assertEquals(2, fieldDeclaration.getElementCount());
-		}
-		{
-			final FieldDeclaration fieldDeclaration = (FieldDeclaration) program.getFieldDeclarations().get(5);
-			
-			assertEquals(boolean.class, fieldDeclaration.getType());
-			assertEquals("c", fieldDeclaration.getIdentifier());
-		}
-		assertEquals(6, program.getFieldDeclarations().size());
-		assertNotNull(program.getMethodDeclarations());
-		{
-			final MethodDeclaration methodDeclaration = program.getMethodDeclarations().get(0);
-			
-			assertEquals(void.class, methodDeclaration.getType());
-			assertEquals("f", methodDeclaration.getIdentifier());
-			assertNotNull(methodDeclaration.getParameterDeclarations());
-			assertTrue(methodDeclaration.getParameterDeclarations().isEmpty());
-			
-			final Block methodBlock = methodDeclaration.getBlock();
-			
-			assertNotNull(methodBlock);
-			assertNotNull(methodBlock.getVariableDeclarations());
-			assertTrue(methodBlock.getVariableDeclarations().isEmpty());
-			assertNotNull(methodBlock.getStatements());
-			assertTrue(methodBlock.getStatements().isEmpty());
-		}
-		{
-			final MethodDeclaration methodDeclaration = program.getMethodDeclarations().get(1);
-			
-			assertEquals(int.class, methodDeclaration.getType());
-			assertEquals("g", methodDeclaration.getIdentifier());
-			assertNotNull(methodDeclaration.getParameterDeclarations());
-			assertTrue(methodDeclaration.getParameterDeclarations().isEmpty());
-			
-			final Block methodBlock = methodDeclaration.getBlock();
-			
-			assertNotNull(methodBlock);
-			assertNotNull(methodBlock.getVariableDeclarations());
-			assertTrue(methodBlock.getVariableDeclarations().isEmpty());
-			assertNotNull(methodBlock.getStatements());
-			{
-				final ReturnStatement statement = (ReturnStatement) methodBlock.getStatements().get(0);
-				
-				assertNotNull(statement);
-			}
-			assertEquals(1, methodBlock.getStatements().size());
-		}
-		assertEquals(2, program.getMethodDeclarations().size());
+		assertEquals(expectedProgram, parse(PROGRAM_WITH_FIELDS_AND_METHODS));
 	}
 	
 	@Test
@@ -340,6 +291,22 @@ public class DecafSemanticsTest {
 	/**
 	 * 
 	 * @param fields
+	 * <br>Maybe null
+	 * <br>Shared
+	 * @param methods
+	 * <br>Maybe null
+	 * <br>Shared
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final Program program(final List<AbstractTypedEntityDeclaration> fields, final List<MethodDeclaration> methods) {
+		return new Program(fields, methods);
+	}
+	
+	/**
+	 * 
+	 * @param fields
 	 * <br>Not null
 	 * @return
 	 * <br>Not null
@@ -364,7 +331,7 @@ public class DecafSemanticsTest {
 	 * <br>Not null
 	 * <br>New
 	 */
-	private static final ArrayFieldDeclaration array(final Class<?> elementType, final String identifier, final int elementCount) {
+	private static final ArrayFieldDeclaration field(final Class<?> elementType, final String identifier, final int elementCount) {
 		return new ArrayFieldDeclaration(elementType, identifier, elementCount);
 	}
 	
