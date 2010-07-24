@@ -6,7 +6,6 @@ package scomp;
  * @author js94065 (creation 2010-07-17)
  *
  */
-
-public class ContinueStatement extends AbstractStatement {
-
+public final class ContinueStatement extends AbstractStatement {
+	// Deliberately left empty
 }

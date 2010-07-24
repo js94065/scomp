@@ -1,5 +1,5 @@
 package scomp;
-import static scomp.Tools.*;
+
 import java.util.List;
 
 /**
@@ -7,22 +7,19 @@ import java.util.List;
  * 
  * @author Wilson (creation 2010-07-19)
  */
-
-public class MethodCallout extends MethodCall{
+public final class MethodCallout extends AbstractMethodCall<AbstractCalloutArgument> {
 	
-	private final String stringLiteral;
-	private final List<CalloutArgument> calloutArguments;
-	
-	public MethodCallout(final String stringLiteral, final List<CalloutArgument> calloutArguments) {
-		this.stringLiteral = stringLiteral;
-		this.calloutArguments = emptyIfNull(calloutArguments);
+	/**
+	 * 
+	 * @param stringLiteral
+	 * <br>Not null
+	 * <br>Shared
+	 * @param arguments
+	 * <br>Maybe null
+	 * <br>Shared
+	 */
+	public MethodCallout(final String stringLiteral, final List<AbstractCalloutArgument> arguments) {
+		super(stringLiteral, arguments);
 	}
 	
-	public final String getStringLiteral(){
-		return this.stringLiteral;
-	}
-	
-	public final List<CalloutArgument> getCalloutArguments(){
-		return this.calloutArguments;
-	}
 }

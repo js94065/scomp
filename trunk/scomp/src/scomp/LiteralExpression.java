@@ -29,4 +29,18 @@ public final class LiteralExpression extends AbstractExpression {
 		return this.literal;
 	}
 	
+	@Override
+	protected final int doHashCode() {
+		return this.getLiteral().hashCode();
+	}
+	
+	@Override
+	protected final boolean doEquals(final Object other) {
+		final LiteralExpression that = Tools.cast(this.getClass(), other);
+		
+		return this == that ||
+				that != null &&
+				this.getLiteral().equals(that.getLiteral());
+	}
+	
 }

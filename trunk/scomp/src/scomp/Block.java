@@ -49,6 +49,21 @@ public final class Block extends AbstractNode {
 	 */
 	public final List<AbstractStatement> getStatements() {
 		return this.abstractStatements;
-	}	
+	}
+	
+	@Override
+	protected final int doHashCode() {
+		return this.getVariableDeclarations().hashCode() + this.getStatements().hashCode();
+	}
+	
+	@Override
+	protected final boolean doEquals(final Object other) {
+		final Block that = Tools.cast(this.getClass(), other);
+		
+		return this == that ||
+				that != null &&
+				this.getVariableDeclarations().equals(that.getVariableDeclarations()) &&
+				this.getStatements().equals(that.getStatements());
+	}
 	
 }

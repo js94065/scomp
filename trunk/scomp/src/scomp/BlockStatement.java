@@ -30,4 +30,18 @@ public final class BlockStatement extends AbstractStatement {
 		return this.block;
 	}
 	
+	@Override
+	protected final int doHashCode() {
+		return this.getBlock().hashCode();
+	}
+	
+	@Override
+	protected final boolean doEquals(final Object other) {
+		final BlockStatement that = Tools.cast(this.getClass(), other);
+		
+		return this == that ||
+				that != null &&
+				this.getBlock().equals(that.getBlock());
+	}
+	
 }

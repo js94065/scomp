@@ -5,8 +5,6 @@ package scomp;
  * 
  * @author Wilson (creation 2010-07-19)
  */
-
-public abstract class CalloutArgument extends AbstractNode{
-
-	
+public abstract class AbstractCalloutArgument extends AbstractNode {
+	// Deliberately left empty
 }

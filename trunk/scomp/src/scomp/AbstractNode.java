@@ -8,26 +8,44 @@ package scomp;
  */
 public abstract class AbstractNode {
 	
-	private AbstractNode parent;
+	@Override
+	public final int hashCode() {
+		return this.doHashCode();
+	}
 	
 	/**
-	 * 
-	 * @param parent
-	 * <br>Maybe null
-	 * <br>Shared
+	 * Indicates whether some other object is "equal to" this one.
+	 * <br>Also prints a message on the standard output when the result is {@code false}.
+	 * <br>The reason for this behavior is to make testing easier.
+	 * <br>The actual comparison is performed by {@link #doEquals(Object)}.
 	 */
-	public final void setParent(final AbstractNode parent) {
-		this.parent = parent;
+	@Override
+	public final boolean equals(Object other) {
+		final boolean result = this.doEquals(other);
+		
+		if (!result) {
+			Tools.debugPrint("\n", "Not equal:", this, "\n", other);
+		}
+		
+		return result;
 	}
-
+	
 	/**
+	 * Should do what is specified in {@link Object#hashCode()}.
 	 * 
 	 * @return
-	 * <br>Maybe null
-	 * <br>Shared
+	 * <br>Range: any integer
 	 */
-	public final AbstractNode getParent() {
-		return this.parent;
-	}
+	protected abstract int doHashCode();
+	
+	/**
+	 * Should do what is specified in {@link Object#equals(Object)}.
+	 * 
+	 * @param other The reference object with which to compare
+	 * <br>Maybe null
+	 * @return
+	 * <br>Range: any boolean
+	 */
+	protected abstract boolean doEquals(final Object other);
 	
 }
