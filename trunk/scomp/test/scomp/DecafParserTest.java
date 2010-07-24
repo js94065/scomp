@@ -1,10 +1,11 @@
 package scomp;
 
-import static org.junit.Assert.*;
-
-import java_cup.runtime.Symbol;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
+
+import java_cup.runtime.Symbol;
 
 /**
  * 
