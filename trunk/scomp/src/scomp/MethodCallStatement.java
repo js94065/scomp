@@ -7,11 +7,11 @@ package scomp;
  *
  */
 
-public class StatementMethodCall extends AbstractStatement {
+public class MethodCallStatement extends AbstractStatement {
 
 	private final MethodCall methodCall;
 	
-	public StatementMethodCall(MethodCall methodCall) {
+	public MethodCallStatement(MethodCall methodCall) {
 		this.methodCall = methodCall;
 	}
 

@@ -354,12 +354,12 @@ Statements ::=
 Statement ::=
 	Location:location ASSIGN Expression:expression SEMI_COLON
 	{:
-		RESULT = new StatementLocation(location, expression);
+		RESULT = new LocationStatement(location, expression);
 	:}
 	|
 	MethodCall:methodCall SEMI_COLON
 	{:
-		RESULT = new StatementMethodCall(methodCall);
+		RESULT = new MethodCallStatement(methodCall);
 	:}
 	|
 	IF LEFT_PARENTHESIS Expression:expression RIGHT_PARENTHESIS Block:block
@@ -374,7 +374,7 @@ Statement ::=
 	|
 	WHILE LEFT_PARENTHESIS Expression:expression RIGHT_PARENTHESIS Block:block
 	{:
-		RESULT = new StatementWhile(expression, block);
+		RESULT = new WhileStatement(expression, block);
 	:}
 	|
 	RETURN SEMI_COLON
@@ -389,12 +389,12 @@ Statement ::=
 	|
 	BREAK SEMI_COLON
 	{:
-		RESULT = new StatementBreak();
+		RESULT = new BreakStatement();
 	:}
 	|
 	CONTINUE SEMI_COLON
 	{:
-		RESULT = new StatementContinue();
+		RESULT = new ContinueStatement();
 	:}
 	|
 	Block:block

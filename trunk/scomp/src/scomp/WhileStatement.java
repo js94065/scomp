@@ -7,13 +7,13 @@ package scomp;
  *
  */
 
-public class StatementWhile extends AbstractStatement {
+public class WhileStatement extends AbstractStatement {
 
 	private final AbstractExpression abstractExpression;
 	
 	private final Block block;
 	
-	public StatementWhile(AbstractExpression abstractExpression, Block block) {
+	public WhileStatement(AbstractExpression abstractExpression, Block block) {
 		this.abstractExpression = abstractExpression;
 		this.block = block;
 	}
