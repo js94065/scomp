@@ -34,6 +34,7 @@ Here are some preliminary steps for getting started.
   * Instance attributes should be private. 
   * Braces should start on the same line as function name.  
   * Use imports and static imports (do not use java.io.Scanner).
+  * Avoid using the * modifier for imports.  Instead import the actual classes being used.  Example: don't use "import java.util.*", instead use "import java.util.Stack".
 
 == Example of Coding Conventions ===
 
