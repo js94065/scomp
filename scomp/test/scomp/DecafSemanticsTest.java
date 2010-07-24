@@ -1,15 +1,13 @@
 package scomp;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 import static scomp.DecafParserTest.*;
 
+import java.util.Arrays;
+import java.util.List;
 
+import org.junit.Test;
 
 /**
  * 
@@ -20,55 +18,36 @@ public class DecafSemanticsTest {
 	
 	@Test
 	public final void testSmallestProgram() throws Exception {
-		final Program program = parse(SMALLEST_PROGRAM);
+		final Program expectedProgram = new Program(
+				null,
+				null
+		);
 		
-		assertNotNull(program);
-		assertNotNull(program.getFieldDeclarations());
-		assertTrue(program.getFieldDeclarations().isEmpty());
-		assertNotNull(program.getMethodDeclarations());
-		assertTrue(program.getMethodDeclarations().isEmpty());
+		assertEquals(expectedProgram, parse(SMALLEST_PROGRAM));
 	}
 	
 	@Test
 	public final void testProgramWithAField() throws Exception {
-		final Program program = parse(PROGRAM_WITH_A_FIELD);
+		final Program expectedProgram = new Program(
+				fields(
+						field(int.class, "x")
+				),
+				null
+		);
 		
-		assertNotNull(program);
-		assertNotNull(program.getFieldDeclarations());
-		{
-			final FieldDeclaration fieldDeclaration = (FieldDeclaration) program.getFieldDeclarations().get(0);
-			
-			assertEquals(int.class, fieldDeclaration.getType());
-			assertEquals("x", fieldDeclaration.getIdentifier());
-		}
-		assertEquals(1, program.getFieldDeclarations().size());
-		assertNotNull(program.getMethodDeclarations());
-		assertTrue(program.getMethodDeclarations().isEmpty());
+		assertEquals(expectedProgram, parse(PROGRAM_WITH_A_FIELD));
 	}
 	
 	@Test
 	public final void testProgramWithAMethod() throws Exception {
-		final Program program = parse(PROGRAM_WITH_A_METHOD);
+		final Program expectedProgram = new Program(
+				null,
+				methods(
+						method(void.class, "f")
+				)
+		);
 		
-		assertNotNull(program);
-		assertNotNull(program.getFieldDeclarations());
-		assertTrue(program.getFieldDeclarations().isEmpty());
-		assertNotNull(program.getMethodDeclarations());
-		{
-			final MethodDeclaration methodDeclaration = program.getMethodDeclarations().get(0);
-			
-			assertEquals(void.class, methodDeclaration.getType());
-			assertEquals("f", methodDeclaration.getIdentifier());
-			
-			final Block methodBlock = methodDeclaration.getBlock();
-			
-			assertNotNull(methodBlock);
-			assertNotNull(methodBlock.getVariableDeclarations());
-			assertTrue(methodBlock.getVariableDeclarations().isEmpty());
-			assertNotNull(methodBlock.getStatements());
-			assertTrue(methodBlock.getStatements().isEmpty());
-		}
-		assertEquals(1, program.getMethodDeclarations().size());
+		assertEquals(expectedProgram, parse(PROGRAM_WITH_A_METHOD));
 	}
 	
 	@Test
@@ -379,6 +358,81 @@ public class DecafSemanticsTest {
 			assertEquals(2, methodBlock.getStatements().size());
 		}
 		assertEquals(1, program.getMethodDeclarations().size());
+	}
+	
+	/**
+	 * 
+	 * @param fields
+	 * <br>Not null
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final List<AbstractTypedEntityDeclaration> fields(final AbstractTypedEntityDeclaration... fields) {
+		return Arrays.asList(fields);
+	}
+	
+	/**
+	 * 
+	 * @param elementType
+	 * <br>Not null
+	 * <br>Shared
+	 * @param identifier
+	 * <br>Not null
+	 * <br>Shared
+	 * @param elementCount
+	 * <br>Not null
+	 * <br>Shared
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final ArrayFieldDeclaration array(final Class<?> elementType, final String identifier, final int elementCount) {
+		return new ArrayFieldDeclaration(elementType, identifier, elementCount);
+	}
+	
+	/**
+	 * 
+	 * @param type
+	 * <br>Not null
+	 * <br>Shared
+	 * @param identifier
+	 * <br>Not null
+	 * <br>Shared
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final FieldDeclaration field(final Class<?> type, final String identifier) {
+		return new FieldDeclaration(type, identifier);
+	}
+	
+	/**
+	 * 
+	 * @param methods
+	 * <br>Not null
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final List<MethodDeclaration> methods(final MethodDeclaration... methods) {
+		return Arrays.asList(methods);
+	}
+	
+	/**
+	 * 
+	 * @param returnType
+	 * <br>Not null
+	 * <br>Shared
+	 * @param identifier
+	 * <br>Not null
+	 * <br>Shared
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final MethodDeclaration method(final Class<?> returnType, final String identifier) {
+		return new MethodDeclaration(returnType, identifier, null, null);
 	}
 	
 }
