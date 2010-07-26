@@ -267,7 +267,7 @@ public class DecafSemanticsTest {
 	 * <br>New
 	 */
 	private static final MethodDeclaration method(final Class<?> returnType, final String identifier,
-			final List<FieldDeclaration> parameters, final Block block) {
+			final List<ParameterDeclaration> parameters, final Block block) {
 		return new MethodDeclaration(returnType, identifier, parameters, block);
 	}
 	
@@ -279,7 +279,7 @@ public class DecafSemanticsTest {
 	 * <br>Not null
 	 * <br>New
 	 */
-	private static final List<FieldDeclaration> parameters(final FieldDeclaration... fields) {
+	private static final List<ParameterDeclaration> parameters(final ParameterDeclaration... fields) {
 		return Arrays.asList(fields);
 	}
 	
@@ -295,8 +295,8 @@ public class DecafSemanticsTest {
 	 * <br>Not null
 	 * <br>New
 	 */
-	private static final FieldDeclaration parameter(final Class<?> type, final String identifier) {
-		return new FieldDeclaration(type, identifier);
+	private static final ParameterDeclaration parameter(final Class<?> type, final String identifier) {
+		return new ParameterDeclaration(type, identifier);
 	}
 	
 	/**
