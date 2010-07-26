@@ -596,8 +596,8 @@ public class DecafSemanticsTest {
 	 * <br>Not null
 	 * <br>New
 	 */
-	public static final NegationExpression not(final AbstractExpression expression) {
-		return new NegationExpression(expression);
+	public static final Negation not(final AbstractExpression expression) {
+		return new Negation(expression);
 	}
 	
 	/**
