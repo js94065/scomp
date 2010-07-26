@@ -500,7 +500,7 @@ Expression ::=
 	|
 	Expression:left BinaryOperator:operator Expression:right
 	{:
-		RESULT = new BinaryOperation(left, operator, right);
+		RESULT = new BinaryOperationExpression(left, operator, right);
 	:}
 	|
 	MINUS Expression:expression
@@ -510,7 +510,7 @@ Expression ::=
 	|
 	NOT Expression:expression
 	{:
-		RESULT = new Negation(expression);
+		RESULT = new NegationExpression(expression);
 	:}
 	|
 	LEFT_PARENTHESIS Expression:expression RIGHT_PARENTHESIS
