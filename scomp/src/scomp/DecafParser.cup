@@ -503,11 +503,20 @@ Expression ::=
 		RESULT = new BinaryOperation(left, operator, right);
 	:}
 	|
-	MINUS Expression
+	MINUS Expression:expression
+	{:
+		RESULT = new MinusExpression(expression);
+	:}
 	|
-	NOT Expression
+	NOT Expression:expression
+	{:
+		RESULT = new Negation(expression);
+	:}
 	|
-	LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS
+	LEFT_PARENTHESIS Expression:expression RIGHT_PARENTHESIS
+	{:
+		RESULT = expression;
+	:}
 	;
 
 BinaryOperator ::=
