@@ -6,7 +6,7 @@ package scomp;
  * @author codistmonk (creation 2010-07-13)
  *
  */
-public final class ArrayFieldDeclaration extends AbstractTypedEntityDeclaration {
+public final class ArrayFieldDeclaration extends AbstractFieldDeclaration {
 	
 	private final int elementCount;
 	

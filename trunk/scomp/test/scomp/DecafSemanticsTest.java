@@ -185,7 +185,7 @@ public class DecafSemanticsTest {
 	 * <br>Not null
 	 * <br>New
 	 */
-	private static final Program program(final List<AbstractTypedEntityDeclaration> fields, final List<MethodDeclaration> methods) {
+	private static final Program program(final List<AbstractFieldDeclaration> fields, final List<MethodDeclaration> methods) {
 		return new Program(fields, methods);
 	}
 	
@@ -197,7 +197,7 @@ public class DecafSemanticsTest {
 	 * <br>Not null
 	 * <br>New
 	 */
-	private static final List<AbstractTypedEntityDeclaration> fields(final AbstractTypedEntityDeclaration... fields) {
+	private static final List<AbstractFieldDeclaration> fields(final AbstractFieldDeclaration... fields) {
 		return Arrays.asList(fields);
 	}
 	
