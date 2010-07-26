@@ -5,7 +5,7 @@ package scomp;
  * @author codistmonk (creation 2010-07-26)
  *
  */
-public final class Negation extends AbstractExpression {
+public final class NegationExpression extends AbstractExpression {
 	
 	private final AbstractExpression expression;
 	
@@ -15,7 +15,7 @@ public final class Negation extends AbstractExpression {
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	public Negation(final AbstractExpression expression) {
+	public NegationExpression(final AbstractExpression expression) {
 		this.expression = expression;
 	}
 	
@@ -43,7 +43,7 @@ public final class Negation extends AbstractExpression {
 	
 	@Override
 	protected final boolean doEquals(final Object other) {
-		final Negation that = Tools.cast(this.getClass(), other);
+		final NegationExpression that = Tools.cast(this.getClass(), other);
 		
 		return this == that ||
 				that != null &&

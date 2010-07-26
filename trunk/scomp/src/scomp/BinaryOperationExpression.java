@@ -6,7 +6,7 @@ package scomp;
  * @author codistmonk (creation 2010-07-23)
  *
  */
-public final class BinaryOperation extends AbstractExpression {
+public final class BinaryOperationExpression extends AbstractExpression {
 	
 	private final AbstractExpression left;
 	
@@ -26,7 +26,7 @@ public final class BinaryOperation extends AbstractExpression {
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	public BinaryOperation(final AbstractExpression left,
+	public BinaryOperationExpression(final AbstractExpression left,
 			final String operator, final AbstractExpression right) {
 		this.left = left;
 		this.operator = operator;
@@ -80,7 +80,7 @@ public final class BinaryOperation extends AbstractExpression {
 	
 	@Override
 	protected final boolean doEquals(final Object other) {
-		final BinaryOperation that = Tools.cast(this.getClass(), other);
+		final BinaryOperationExpression that = Tools.cast(this.getClass(), other);
 		
 		return this == that ||
 				that != null &&
