@@ -6,24 +6,67 @@ package scomp;
  * @author js94065 (creation 2010-07-17)
  *
  */
-
-public class WhileStatement extends AbstractStatement {
-
-	private final AbstractExpression abstractExpression;
+public final class WhileStatement extends AbstractStatement {
+	
+	private final AbstractExpression condition;
 	
 	private final Block block;
 	
-	public WhileStatement(AbstractExpression abstractExpression, Block block) {
-		this.abstractExpression = abstractExpression;
+	/**
+	 * 
+	 * @param condition
+	 * <br>Not null
+	 * <br>Shared
+	 * @param block
+	 * <br>Not null
+	 * <br>Shared
+	 */
+	public WhileStatement(final AbstractExpression condition, final Block block) {
+		this.condition = condition;
 		this.block = block;
 	}
-
-	public AbstractExpression getExpr() {
-		return abstractExpression;
+	
+	/**
+	 * 
+	 * @return
+	 * <br>Not null
+	 * <br>Shared
+	 */
+	public final AbstractExpression getCondition() {
+		return this.condition;
 	}
-
-	public Block getBlock() {
-		return block;
+	
+	/**
+	 * 
+	 * @return
+	 * <br>Not null
+	 * <br>Shared
+	 */
+	public final Block getBlock() {
+		return this.block;
+	}
+	
+	@Override
+	public final String toString() {
+		return
+				this.getClass().getSimpleName() + "{" +
+				"condition{" + this.getCondition() + "} " +
+				"block{" + this.getBlock() + "}" +
+				"}";
+	}
+	
+	@Override
+	protected final int doHashCode() {
+		return this.getCondition().hashCode() + this.getBlock().hashCode();
+	}
+	
+	@Override
+	protected final boolean doEquals(final Object other) {
+		final WhileStatement that = Tools.cast(this.getClass(), other);
+		
+		return super.doEquals(other) &&
+				this.getCondition().equals(that.getCondition()) &&
+				this.getBlock().equals(that.getBlock());
 	}
 	
 }

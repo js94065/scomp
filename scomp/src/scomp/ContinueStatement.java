@@ -7,5 +7,10 @@ package scomp;
  *
  */
 public final class ContinueStatement extends AbstractStatement {
-	// Deliberately left empty
+	
+	@Override
+	public final String toString() {
+		return this.getClass().getSimpleName() + "{}";
+	}
+	
 }
