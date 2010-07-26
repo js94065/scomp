@@ -6,7 +6,7 @@ package scomp;
  * @author codistmonk (creation 2010-07-12)
  *
  */
-public final class FieldDeclaration extends AbstractTypedEntityDeclaration {
+public final class FieldDeclaration extends AbstractFieldDeclaration {
 	
 	/**
 	 * 
