@@ -173,6 +173,53 @@ public class DecafSemanticsTest {
 		assertEquals(expectedProgram, parse(PROGRAM_WITH_A_RECURSIVE_METHOD_2));
 	}
 	
+	@Test
+	public final void testProgramWithAMethodWithALoop() throws Exception {
+		final Program expectedProgram = program(
+				null,
+				methods(
+						method(int.class, "factorial", parameters(parameter(int.class, "n")),
+								block(
+										variables(
+												variable(int.class, "result"),
+												variable(int.class, "i")
+										),
+										statements(
+												assign("result", expression(1)),
+												assign("i", expression("n")),
+												whileStatement(operation(expression("i"), ">", expression(1)),
+														block(
+																null,
+																statements(
+																		assign("result", operation(expression("result"), "*", expression("i"))),
+																		assign("i", operation(expression("i"), "-", expression(1))),
+																		ifStatement(not(operation(expression("i"), "!=", expression(1))),
+																				block(
+																						null,
+																						statements(
+																								breakStatement()
+																						)
+																				),
+																				block(
+																						null,
+																						statements(
+																								continueStatement()
+																						)
+																				)
+																		)
+																)
+														)
+												),
+												returnStatement(expression("result"))
+										)
+								)
+						)
+				)
+		);
+		
+		assertEquals(expectedProgram, parse(PROGRAM_WITH_A_METHOD_WITH_A_LOOP));
+	}
+	
 	/**
 	 * 
 	 * @param fields
@@ -462,6 +509,22 @@ public class DecafSemanticsTest {
 	
 	/**
 	 * 
+	 * @param condition
+	 * <br>Not null
+	 * <br>Shared
+	 * @param block
+	 * <br>Not null
+	 * <br>Shared
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final WhileStatement whileStatement(final AbstractExpression condition, final Block block) {
+		return new WhileStatement(condition, block);
+	}
+	
+	/**
+	 * 
 	 * @param methodName
 	 * <br>Not null
 	 * <br>Shared
@@ -502,6 +565,36 @@ public class DecafSemanticsTest {
 	 */
 	private static final AssignmentStatement assign(final String identifier, final AbstractExpression expression) {
 		return new AssignmentStatement(new IdentifierLocation(identifier), expression);
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	public static final BreakStatement breakStatement() {
+		return new BreakStatement();
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	public static final ContinueStatement continueStatement() {
+		return new ContinueStatement();
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	public static final NegationExpression not(final AbstractExpression expression) {
+		return new NegationExpression(expression);
 	}
 	
 }

@@ -45,13 +45,18 @@ public class DecafParserTest {
 	}
 	
 	@Test
-	public final void testProgramARecursiveMethod1() throws Exception {
+	public final void testProgramWithARecursiveMethod1() throws Exception {
 		parse(PROGRAM_WITH_A_RECURSIVE_METHOD_1);
 	}
 	
 	@Test
-	public final void testProgramARecursiveMethod2() throws Exception {
+	public final void testProgramWithARecursiveMethod2() throws Exception {
 		parse(PROGRAM_WITH_A_RECURSIVE_METHOD_2);
+	}
+	
+	@Test
+	public final void testProgramWithAMethodWithALoop() throws Exception {
+		parse(PROGRAM_WITH_A_METHOD_WITH_A_LOOP);
 	}
 	
 	@Test
@@ -308,6 +313,34 @@ public class DecafParserTest {
 		"\n" +
 		"			return result;\n" +
 		"		}\n" +
+		"	}\n" +
+		"\n" +
+		"}";
+	
+	/**
+	 * {@value}.
+	 */
+	public static final String PROGRAM_WITH_A_METHOD_WITH_A_LOOP =
+		"class Program {\n" +
+		"\n" +
+		"	int factorial(int n) {\n" +
+		"		int result, i;\n" +
+		"\n" +
+		"		result = 1;\n" +
+		"		i = n;\n" +
+		"\n" +
+		"		while (i > 1) {\n" +
+		"			result = result * i;\n" +
+		"			i = i - 1;\n" +
+		"\n" +
+		"			if (!(i != 1)) {\n" +
+		"				break;\n" +
+		"			} else {\n" +
+		"				continue;\n" +
+		"			}\n" +
+		"		}\n" +
+		"\n" +
+		"		return result;\n" +
 		"	}\n" +
 		"\n" +
 		"}";
