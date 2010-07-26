@@ -92,7 +92,7 @@ non terminal String Field;
 non terminal List MethodDeclarations;
 non terminal MethodDeclaration MethodDeclaration;
 non terminal List ParameterDeclarations;
-non terminal FieldDeclaration ParameterDeclaration;
+non terminal ParameterDeclaration ParameterDeclaration;
 non terminal List VariableDeclarations;
 non terminal List IdentifierList;
 non terminal List Statements;
@@ -244,14 +244,14 @@ MethodDeclaration ::=
 ParameterDeclarations ::= 
 	ParameterDeclaration:parameterDeclaration
 	{:
-		RESULT = new ArrayList<FieldDeclaration>();
+		RESULT = new ArrayList<ParameterDeclaration>();
 		
 		RESULT.add(parameterDeclaration);
 	:}
 	|
 	ParameterDeclarations:parameterDeclarations COMMA ParameterDeclaration:parameterDeclaration
 	{:
-		RESULT = new ArrayList<FieldDeclaration>(parameterDeclarations);
+		RESULT = new ArrayList<ParameterDeclaration>(parameterDeclarations);
 		
 		RESULT.add(parameterDeclaration);
 	:}
@@ -260,7 +260,7 @@ ParameterDeclarations ::=
 ParameterDeclaration ::=
 	Type:type IDENTIFIER:identifier
 	{:
-		RESULT = new FieldDeclaration(type, identifier);
+		RESULT = new ParameterDeclaration(type, identifier);
 	:}
 	;
 
