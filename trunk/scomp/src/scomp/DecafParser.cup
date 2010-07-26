@@ -355,7 +355,7 @@ Statements ::=
 Statement ::=
 	Location:location ASSIGN Expression:expression SEMI_COLON
 	{:
-		RESULT = new LocationStatement(location, expression);
+		RESULT = new AssignmentStatement(location, expression);
 	:}
 	|
 	MethodCall:methodCall SEMI_COLON

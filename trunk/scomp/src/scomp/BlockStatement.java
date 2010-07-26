@@ -31,6 +31,11 @@ public final class BlockStatement extends AbstractStatement {
 	}
 	
 	@Override
+	public final String toString() {
+		return this.getBlock().toString();
+	}
+	
+	@Override
 	protected final int doHashCode() {
 		return this.getBlock().hashCode();
 	}

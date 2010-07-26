@@ -138,92 +138,39 @@ public class DecafSemanticsTest {
 	
 	@Test
 	public final void testProgramWithARecursiveMethod2() throws Exception {
-		final Program program = parse(PROGRAM_WITH_A_RECURSIVE_METHOD_2);
+		final Program expectedProgram = program(
+				null,
+				methods(
+						method(int.class, "factorial", parameters(parameter(int.class, "n")),
+								block(
+										null,
+										statements(
+												ifStatement(operation(expression("n"), "<=", expression(0)),
+														block(
+																null,
+																statements(
+																		returnStatement(expression(1))
+																)
+														),
+														null
+												),
+												blockStatement(
+														variables(
+																variable(int.class, "result")
+														),
+														statements(
+																assign("result", expression("n")),
+																assign("result", operation(expression("result"), "*", expression(call("factorial", arguments(operation(expression("n"), "-", expression(1))))))),
+																returnStatement(expression("result"))
+														)
+												)
+										)
+								)
+						)
+				)
+		);
 		
-		assertNotNull(program);
-		assertNotNull(program.getFieldDeclarations());
-		assertTrue(program.getFieldDeclarations().isEmpty());
-		assertNotNull(program.getMethodDeclarations());
-		{
-			final MethodDeclaration methodDeclaration = program.getMethodDeclarations().get(0);
-			
-			assertEquals(int.class, methodDeclaration.getType());
-			assertEquals("factorial", methodDeclaration.getIdentifier());
-			{
-				final FieldDeclaration parameterDeclaration = methodDeclaration.getParameterDeclarations().get(0);
-				
-				assertEquals(int.class, parameterDeclaration.getType());
-				assertEquals("n", parameterDeclaration.getIdentifier());
-			}
-			assertEquals(1, methodDeclaration.getParameterDeclarations().size());
-			
-			final Block methodBlock = methodDeclaration.getBlock();
-			
-			assertNotNull(methodBlock);
-			assertNotNull(methodBlock.getVariableDeclarations());
-			assertTrue(methodBlock.getVariableDeclarations().isEmpty());
-			assertNotNull(methodBlock.getStatements());
-			{
-				final IfStatement statement = (IfStatement) methodBlock.getStatements().get(0);
-				
-				assertNotNull(statement);
-				{
-					final BinaryOperation condition = (BinaryOperation) statement.getCondition();
-					
-					assertNotNull(condition);
-					{
-						final LocationExpression left = (LocationExpression) condition.getLeft();
-						
-						assertNotNull(left);
-						
-						final IdentifierLocation location = (IdentifierLocation) left.getLocation();
-						
-						assertNotNull(location);
-						assertEquals("n", location.getIdentifier());
-					}
-					assertEquals("<=", condition.getOperator());
-					{
-						final LiteralExpression right = (LiteralExpression) condition.getRight();
-						
-						assertNotNull(right);
-						
-						final IntLiteral literal = (IntLiteral) right.getLiteral();
-						
-						assertNotNull(literal);
-						assertEquals(0, literal.getValue());
-					}
-				}
-				{
-					final Block block = statement.getThenBlock();
-					
-					assertNotNull(block);
-					assertNotNull(block.getVariableDeclarations());
-					assertTrue(block.getVariableDeclarations().isEmpty());
-					assertNotNull(block.getStatements());
-					
-					final ReturnStatement returnStatement = (ReturnStatement) block.getStatements().get(0);
-					
-					assertNotNull(returnStatement);
-					
-					final LiteralExpression returnExpression = (LiteralExpression) returnStatement.getExpression();
-					
-					assertNotNull(returnExpression);
-					
-					final IntLiteral literal = (IntLiteral) returnExpression.getLiteral();
-					
-					assertNotNull(literal);
-					assertEquals(1, literal.getValue());
-				}
-				assertNull(statement.getElseBlock());
-			}
-			{
-				final BlockStatement statement = (BlockStatement) methodBlock.getStatements().get(1);
-				
-				assertNotNull(statement);
-			}
-			assertEquals(2, methodBlock.getStatements().size());
-		}
-		assertEquals(1, program.getMethodDeclarations().size());
+		assertEquals(expectedProgram, parse(PROGRAM_WITH_A_RECURSIVE_METHOD_2));
 	}
 	
 	/**
@@ -356,6 +303,34 @@ public class DecafSemanticsTest {
 	 * 
 	 * @param variables
 	 * <br>Not null
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final List<VariableDeclaration> variables(final VariableDeclaration... variables) {
+		return Arrays.asList(variables);
+	}
+	
+	/**
+	 * 
+	 * @param type
+	 * <br>Not null
+	 * <br>Shared
+	 * @param identifier
+	 * <br>Not null
+	 * <br>Shared
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final VariableDeclaration variable(final Class<?> type, final String identifier) {
+		return new VariableDeclaration(type, identifier);
+	}
+	
+	/**
+	 * 
+	 * @param variables
+	 * <br>Not null
 	 * <br>Shared
 	 * @param statements
 	 * <br>Not null
@@ -366,6 +341,22 @@ public class DecafSemanticsTest {
 	 */
 	private static final Block block(final List<VariableDeclaration> variables, final List<AbstractStatement> statements) {
 		return new Block(variables, statements);
+	}
+	
+	/**
+	 * 
+	 * @param variables
+	 * <br>Not null
+	 * <br>Shared
+	 * @param statements
+	 * <br>Not null
+	 * <br>Shared
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final BlockStatement blockStatement(final List<VariableDeclaration> variables, final List<AbstractStatement> statements) {
+		return new BlockStatement(new Block(variables, statements));
 	}
 	
 	/**
@@ -495,6 +486,22 @@ public class DecafSemanticsTest {
 	 */
 	private static final List<AbstractExpression> arguments(final AbstractExpression... arguments) {
 		return Arrays.asList(arguments);
+	}
+	
+	/**
+	 * 
+	 * @param identifier
+	 * <br>Not null
+	 * <br>Shared
+	 * @param expression
+	 * <br>Not null
+	 * <br>Shared
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final AssignmentStatement assign(final String identifier, final AbstractExpression expression) {
+		return new AssignmentStatement(new IdentifierLocation(identifier), expression);
 	}
 	
 }

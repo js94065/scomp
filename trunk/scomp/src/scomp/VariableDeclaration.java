@@ -21,4 +21,13 @@ public final class VariableDeclaration extends AbstractTypedEntityDeclaration {
 		super(type, identifier);
 	}
 	
+	@Override
+	public final String toString() {
+		return
+				this.getClass().getSimpleName() + "{" +
+				"type{" + this.getType() + "} " +
+				"identifier{" + this.getIdentifier() + "}" +
+				"}";
+	}
+	
 }
