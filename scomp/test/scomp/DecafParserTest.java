@@ -333,7 +333,7 @@ public class DecafParserTest {
 		"			result = result * i;\n" +
 		"			i = i - 1;\n" +
 		"\n" +
-		"			if (!(i != 1)) {\n" +
+		"			if (!(-i != -1)) {\n" +
 		"				break;\n" +
 		"			} else {\n" +
 		"				continue;\n" +

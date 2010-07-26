@@ -193,7 +193,7 @@ public class DecafSemanticsTest {
 																statements(
 																		assign("result", operation(expression("result"), "*", expression("i"))),
 																		assign("i", operation(expression("i"), "-", expression(1))),
-																		ifStatement(not(operation(expression("i"), "!=", expression(1))),
+																		ifStatement(not(operation(minus(expression("i")), "!=", minus(expression(1)))),
 																				block(
 																						null,
 																						statements(
@@ -589,12 +589,28 @@ public class DecafSemanticsTest {
 	
 	/**
 	 * 
+	 * @param expression 
+	 * <br>Not null
+	 * <br>Shared
 	 * @return
 	 * <br>Not null
 	 * <br>New
 	 */
 	public static final NegationExpression not(final AbstractExpression expression) {
 		return new NegationExpression(expression);
+	}
+	
+	/**
+	 * 
+	 * @param expression 
+	 * <br>Not null
+	 * <br>Shared
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	public static final MinusExpression minus(final AbstractExpression expression) {
+		return new MinusExpression(expression);
 	}
 	
 }
