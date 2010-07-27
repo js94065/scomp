@@ -11,14 +11,23 @@ parser code
 	
 	private final Logger logger = Logger.getLogger(DecafParser.class.getName());
 	
-	private boolean hasErrors = false;
+	private List<String> errors = new ArrayList<String>();
+	
+	/**
+	 * @return
+	 * <br>Not null
+	 * <br>Shared
+	 */
+	public final List<String> getErrors() {
+		return this.errors;
+	}
 	
 	/**
 	 * @param message
 	 * <br>Maybe null
 	 */
 	public final void logError(final String message) {
-		this.hasErrors = true;
+		this.getErrors().add(message);
 		this.logger.log(Level.SEVERE, message);
 	}
 	
@@ -27,7 +36,7 @@ parser code
 	 * <br>Range: any boolean
 	 */
 	public final boolean hasErrors() {
-		return this.hasErrors;
+		return !this.getErrors().isEmpty();
 	}
 	
 	/**
@@ -93,6 +102,7 @@ parser code
 	@Override
 	public final void unrecovered_syntax_error(final Symbol currentToken) throws Exception {
 		Tools.debugPrint(currentToken);
+		throw new RuntimeException(this.getErrors().toString());
 	}
 	
 :}
@@ -372,11 +382,6 @@ VariableDeclarations ::=
 			RESULT.add(new VariableDeclaration(type, (String) identifier));
 		}
 		
-	:}
-	|
-	error SEMICOLON
-	{:
-		this.logError("Missing \";\"");
 	:}
 	;
 	
