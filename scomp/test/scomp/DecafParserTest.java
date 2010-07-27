@@ -89,8 +89,6 @@ public class DecafParserTest {
 	public final void testMalformedProgram1() {
 		try {
 			assertEquals(null, parse(MALFORMED_PROGRAM_1));
-			
-			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
 			assertTrue(exception.getMessage(), exception.getMessage().startsWith("["));
 		}
@@ -104,8 +102,6 @@ public class DecafParserTest {
 	public final void testMalformedProgram2() {
 		try {
 			assertEquals(null, parse(MALFORMED_PROGRAM_2));
-			
-			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
 			assertTrue(exception.getMessage(), exception.getMessage().startsWith("["));
 		}
@@ -119,8 +115,6 @@ public class DecafParserTest {
 	public final void testMalformedProgram3() {
 		try {
 			assertEquals(null, parse(MALFORMED_PROGRAM_3));
-			
-			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
 			assertTrue(exception.getMessage(), exception.getMessage().startsWith("["));
 		}
@@ -134,8 +128,6 @@ public class DecafParserTest {
 	public final void testProgramWithUnmatchedBraces1() {
 		try {
 			assertEquals(null, parse(PROGRAM_WITH_UNMATCHED_BRACES_1));
-			
-			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
 			assertTrue(exception.getMessage(), exception.getMessage().startsWith("["));
 		}
@@ -149,8 +141,6 @@ public class DecafParserTest {
 	public final void testProgramWithUnmatchedBraces2() {
 		try {
 			assertEquals(null, parse(PROGRAM_WITH_UNMATCHED_BRACES_2));
-			
-			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
 			assertTrue(exception.getMessage(), exception.getMessage().startsWith("["));
 		}
@@ -164,8 +154,6 @@ public class DecafParserTest {
 	public final void testProgramWithMismatchingParentheses1() {
 		try {
 			assertEquals(null, parse(PROGRAM_WITH_MISMATCHING_PARENTHESES_1));
-			
-			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
 			assertTrue(exception.getMessage(), exception.getMessage().startsWith("["));
 		}
@@ -179,8 +167,6 @@ public class DecafParserTest {
 	public final void testProgramWithMismatchingParentheses2() {
 		try {
 			assertEquals(null, parse(PROGRAM_WITH_MISMATCHING_PARENTHESES_2));
-			
-			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
 			assertTrue(exception.getMessage(), exception.getMessage().startsWith("["));
 		}
@@ -194,8 +180,6 @@ public class DecafParserTest {
 	public final void testProgramWithMismatchingParentheses3() {
 		try {
 			assertEquals(null, parse(PROGRAM_WITH_MISMATCHING_PARENTHESES_3));
-			
-			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
 			assertTrue(exception.getMessage(), exception.getMessage().startsWith("["));
 		}
@@ -209,8 +193,6 @@ public class DecafParserTest {
 	public final void testProgramWithMissingSemiColon() {
 		try {
 			assertEquals(null, parse(PROGRAM_WITH_MISSING_SEMICOLON));
-			
-			fail("This line shouldn't be reached");
 		} catch (final Exception exception) {
 			assertTrue(exception.getMessage(), exception.getMessage().startsWith("["));
 		}
