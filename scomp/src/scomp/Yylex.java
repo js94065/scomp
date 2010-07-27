@@ -532,7 +532,7 @@ class Yylex implements java_cup.runtime.Scanner {
 					case -12:
 						break;
 					case 12:
-						{ return this.newToken(DecafParserSymbols.SEMI_COLON); }
+						{ return this.newToken(DecafParserSymbols.SEMICOLON); }
 					case -13:
 						break;
 					case 13:

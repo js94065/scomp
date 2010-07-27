@@ -144,7 +144,7 @@ while { return this.newToken(DecafParserSymbols.WHILE); }
 [0-9]+ { return this.newToken(DecafParserSymbols.INT_LITERAL, this.yytext()); }
 
 "," { return this.newToken(DecafParserSymbols.COMMA); }
-";" { return this.newToken(DecafParserSymbols.SEMI_COLON); }
+";" { return this.newToken(DecafParserSymbols.SEMICOLON); }
 "!" { return this.newToken(DecafParserSymbols.NOT); }
 "+" { return this.newToken(DecafParserSymbols.PLUS); }
 "-" { return this.newToken(DecafParserSymbols.MINUS); }

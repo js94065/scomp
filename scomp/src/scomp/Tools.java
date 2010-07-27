@@ -36,6 +36,25 @@ public final class Tools {
 	}
 	
 	/**
+	 * Returns an instance of {@link RuntimeException} which is either {@code cause} itself,
+	 * if it is already a runtime exception, or a new runtime exception wrapping {@code cause}.
+	 * <br>It is up to the caller to decide what to do with the returned exception.
+	 *
+	 * @param cause
+	 * <br>Not null
+	 * @return
+	 * <br>Not null
+	 * <br>Maybe new
+	 */
+	public static final RuntimeException unchecked(final Throwable cause) {
+		if (cause instanceof RuntimeException) {
+			return (RuntimeException) cause;
+		}
+	
+		return new RuntimeException(cause);
+	}
+	
+	/**
 	 * Does the same thing as {@link Class#cast(Object)}, but returns {@code null} instead of throwing an exception if the cast cannot be performed.
 	 * 
 	 * @param <T> the type into which {@code object} is tentatively being cast

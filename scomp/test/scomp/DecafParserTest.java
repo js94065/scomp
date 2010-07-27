@@ -1,8 +1,16 @@
 package scomp;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
+import static scomp.Tools.unchecked;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
+
+import org.junit.Before;
 import org.junit.Test;
 
 import java_cup.runtime.Symbol;
@@ -10,9 +18,17 @@ import java_cup.runtime.Symbol;
 /**
  * 
  * @author codistmonk (creation 2010-06-09)
- *
  */
 public class DecafParserTest {
+	
+	private MessageRecorder recorder;
+	
+	@Before
+	public final void beforeEachTest() {
+		this.recorder = new MessageRecorder();
+		
+		setHandler(Logger.getLogger(DecafParser.class.getName()), this.recorder);
+	}
 	
 	@Test
 	public final void testSmallestProgram() throws Exception {
@@ -71,90 +87,75 @@ public class DecafParserTest {
 	
 	@Test
 	public final void testMalformedProgram1() {
-		try {
-			parse(MALFORMED_PROGRAM_1);
-			
-			fail("This line shouldn't be reached");
-		} catch (final Exception exception) {
-			assertEquals("(:1:1) Parse error", exception.getMessage());
-		}
+		assertNull(parse(MALFORMED_PROGRAM_1));
+		assertEquals(Arrays.asList(
+				"(:1:1) Parse error"
+		), this.recorder.getMessages());
 	}
 	
 	@Test
 	public final void testMalformedProgram2() {
-		try {
-			parse(MALFORMED_PROGRAM_2);
-			
-			fail("This line shouldn't be reached");
-		} catch (final Exception exception) {
-			assertEquals("(:1:6) Parse error", exception.getMessage());
-		}
+		assertNull(parse(MALFORMED_PROGRAM_2));
+		assertEquals(Arrays.asList(
+				"(:1:6) Parse error"
+		), this.recorder.getMessages());
 	}
 	
 	@Test
 	public final void testMalformedProgram3() {
-		try {
-			parse(MALFORMED_PROGRAM_3);
-			
-			fail("This line shouldn't be reached");
-		} catch (final Exception exception) {
-			assertEquals("(:1:14) Parse error", exception.getMessage());
-		}
+		assertNull(parse(MALFORMED_PROGRAM_3));
+		assertEquals(Arrays.asList(
+				"(:1:14) Parse error"
+		), this.recorder.getMessages());
 	}
 	
 	@Test
 	public final void testProgramWithUnmatchedBraces1() {
-		try {
-			parse(PROGRAM_WITH_UNMATCHED_BRACES_1);
-			
-			fail("This line shouldn't be reached");
-		} catch (final Exception exception) {
-			assertEquals("(:1:16) Missing \"}\"", exception.getMessage());
-		}
+		assertNull(parse(PROGRAM_WITH_UNMATCHED_BRACES_1));
+		assertEquals(Arrays.asList(
+				"(:1:16) Missing \"}\""
+		), this.recorder.getMessages());
 	}
 	
 	@Test
 	public final void testProgramWithUnmatchedBraces2() {
-		try {
-			parse(PROGRAM_WITH_UNMATCHED_BRACES_2);
-			
-			fail("This line shouldn't be reached");
-		} catch (final Exception exception) {
-			assertEquals("(:1:15) Unexpected \"}\"", exception.getMessage());
-		}
+		assertNull(parse(PROGRAM_WITH_UNMATCHED_BRACES_2));
+		assertEquals(Arrays.asList(
+				"(:1:15) Unexpected \"}\""
+		), this.recorder.getMessages());
 	}
 	
 	@Test
 	public final void testProgramWithMismatchingParentheses1() {
-		try {
-			parse(PROGRAM_WITH_MISMATCHING_PARENTHESES_1);
-			
-			fail("This line shouldn't be reached");
-		} catch (final Exception exception) {
-			assertEquals("(:4:16) Unexpected \";\"", exception.getMessage());
-		}
+		assertNull(parse(PROGRAM_WITH_MISMATCHING_PARENTHESES_1));
+		assertEquals(Arrays.asList(
+				"(:4:16) Unexpected \"}\""
+		), this.recorder.getMessages());
 	}
 	
 	@Test
 	public final void testProgramWithMismatchingParentheses2() {
-		try {
-			parse(PROGRAM_WITH_MISMATCHING_PARENTHESES_2);
-			
-			fail("This line shouldn't be reached");
-		} catch (final Exception exception) {
-			assertEquals("(:4:17) Unexpected \")\"", exception.getMessage());
-		}
+		assertNull(parse(PROGRAM_WITH_MISMATCHING_PARENTHESES_2));
+		assertEquals(Arrays.asList(
+				"(:4:17) Unexpected \")\""
+		), this.recorder.getMessages());
 	}
 	
 	@Test
 	public final void testProgramWithMismatchingParentheses3() {
-		try {
-			parse(PROGRAM_WITH_MISMATCHING_PARENTHESES_3);
-			
-			fail("This line shouldn't be reached");
-		} catch (final Exception exception) {
-			assertEquals("(:4:12) Unexpected \";\"", exception.getMessage());
-		}
+		assertNull(parse(PROGRAM_WITH_MISMATCHING_PARENTHESES_3));
+		assertEquals(Arrays.asList(
+				"(:4:12) Unexpected \";\""
+		), this.recorder.getMessages());
+	}
+	
+	@Test
+	public final void testProgramWithMissingSemiColon() {
+		assertNull(parse(PROGRAM_WITH_MISSING_SEMICOLON));
+		assertEquals(Arrays.asList(
+				"(:5:3) Unexpected \"return\"",
+				"Missing \";\""
+		), this.recorder.getMessages());
 	}
 	
 	/**
@@ -450,20 +451,105 @@ public class DecafParserTest {
 		"}";
 	
 	/**
+	 * {@value}.
+	 */
+	public static final String PROGRAM_WITH_MISSING_SEMICOLON =
+		"class Program {\n" +
+		"\n" +
+		"	int f() {\n" +
+		"		int x\n" +
+		"		return 42;\n" +
+		"	}\n" +
+		"\n" +
+		"}";
+	
+	/**
 	 * 
 	 * @param <T> The expected return type
 	 * @param input
 	 * <br>Not null
 	 * @return
 	 * <br>Maybe null
-	 * @throws Exception If an error occurs
+	 * @throws RuntimeException If an error occurs
 	 */
 	@SuppressWarnings("unchecked")
-	public static final <T> T parse(final String input) throws Exception {
+	public static final <T> T parse(final String input) {
 		final DecafParser parser = new DecafParser(DecafScannerTest.createScanner(input));
-		final Symbol parseResult = parser.parse();
+		try {
+			final Symbol parseResult = parser.parse();
+			
+			return (T) (parseResult == null ? null : parseResult.value);
+		} catch (final Exception exception) {
+			throw unchecked(exception);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param logger
+	 * <br>Not null
+	 * <br>Input-output
+	 */
+	public static final void clearHandlersAndDontUseParentHandlers(final Logger logger) {
+		for (final Handler handler : logger.getHandlers()) {
+			logger.removeHandler(handler);
+		}
 		
-		return (T) (parseResult == null ? null : parseResult.value);
+		logger.setUseParentHandlers(false);
+	}
+	
+	/**
+	 * 
+	 * @param logger
+	 * <br>Not null
+	 * <br>Input-output
+	 * @param handler
+	 * <br>Not null
+	 * <br>Shared
+	 */
+	public static final void setHandler(final Logger logger, final Handler handler) {
+		clearHandlersAndDontUseParentHandlers(logger);
+		
+		logger.addHandler(handler);
+	}
+	
+	/**
+	 * 
+	 * @author codistmonk (creation 2010-07-27)
+	 */
+	public static final class MessageRecorder extends Handler {
+		
+		private final List<String> messages;
+		
+		public MessageRecorder() {
+			this.messages = new ArrayList<String>();
+		}
+		
+		/**
+		 * 
+		 * @return
+		 * <br>Not null
+		 * <br>Shared
+		 */
+		public final List<String> getMessages() {
+			return this.messages;
+		}
+		
+		@Override
+		public final void publish(final LogRecord record) {
+			this.messages.add(record.getMessage());
+		}
+		
+		@Override
+		public final void flush() {
+			// Do nothing
+		}
+
+		@Override
+		public final void close() throws SecurityException {
+			// Do nothing
+		}
+		
 	}
 	
 }

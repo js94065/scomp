@@ -72,7 +72,7 @@ public class DecafScannerTest {
 	public final void testOperators() throws IOException {
 		match(", ; ! + - * % << >> >>> < > <= >= == != && || =", 
 				token(COMMA),
-				token(SEMI_COLON),
+				token(SEMICOLON),
 				token(NOT),
 				token(PLUS),
 				token(MINUS),
