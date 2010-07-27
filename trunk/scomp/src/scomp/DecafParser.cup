@@ -1,13 +1,43 @@
 package scomp;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.logging.*;
 
 import java_cup.runtime.*;
 
 
 parser code
 {:
+	
+	private final Logger logger = Logger.getLogger(DecafParser.class.getName());
+	
+	private boolean hasErrors = false;
+	
+	/**
+	 * @param message
+	 * <br>Maybe null
+	 */
+	public final void logError(final String message) {
+		this.hasErrors = true;
+		this.logger.log(Level.SEVERE, message);
+	}
+	
+	/**
+	 * @return
+	 * <br>Range: any boolean
+	 */
+	public final boolean hasErrors() {
+		return this.hasErrors;
+	}
+	
+	/**
+	 * @return
+	 * <br>Maybe null
+	 * <br>Shared
+	 */
+	public final Symbol getStackTop() {
+		return (Symbol) this.stack.peek();
+	}
 	
 	@Override
 	public final void report_error(final String message, final Object info) {
@@ -57,16 +87,53 @@ parser code
 			errorMessage = "Unexpected \"" + token.getInputString() + "\"";
 		}
 		
-		throw new RuntimeException("(:" + row + ":" + column + ") " + errorMessage);
+		this.logError("(:" + row + ":" + column + ") " + errorMessage);
 	}
 	
 	@Override
-	public final void unrecovered_syntax_error(final Symbol currentToken) {
+	public final void unrecovered_syntax_error(final Symbol currentToken) throws Exception {
 		Tools.debugPrint(currentToken);
-		
-		final DecafToken lastToken = (DecafToken) currentToken;
-		
-		throw new RuntimeException("(:" + lastToken.getRow() + ":" + lastToken.getColumn() + ") Parse error");
+	}
+	
+:}
+
+action code
+{:
+	
+	/**
+	 * @return
+	 * <br>Not null
+	 * <br>Shared
+	 */
+	public final DecafParser getParser() {
+		return this.parser;
+	}
+	
+	/**
+	 * @return
+	 * <br>Maybe null
+	 * <br>Shared
+	 */
+	public final Symbol getStackTop() {
+		return this.getParser().getStackTop();
+	}
+	
+	/**
+	 * @param message
+	 * <br>Maybe null
+	 */
+	public final void logError(final String message) {
+		this.getParser().logError(message);
+	}
+	
+	/**
+	 * @param program
+	 * <br>Maybe null
+	 * @return {@code program} or {@code null} if there was an error
+	 * <br>Maybe null
+	 */
+	public final Program nullIfErrors(final Program program) {
+		return this.getParser().hasErrors() ? null : program;
 	}
 	
 :}
@@ -74,7 +141,7 @@ parser code
 terminal BOOLEAN, BREAK, CALLOUT, CLASS, CONTINUE, ELSE, IF, INT, RETURN, VOID, WHILE;
 terminal LEFT_PARENTHESIS, RIGHT_PARENTHESIS, LEFT_BRACE, RIGHT_BRACE, LEFT_BRACKET, RIGHT_BRACKET;
 terminal ASSIGN; // "=", not to be confused with "=="  which is EQUAL
-terminal COMMA, SEMI_COLON;
+terminal COMMA, SEMICOLON;
 terminal String NOT, PLUS, MINUS, TIMES, DIVIDE, MODULO;
 terminal String ARITHMETIC_SHIFT_LEFT, ARITHMETIC_SHIFT_RIGHT, BITWISE_ROTATE_RIGHT;
 terminal String LESS, GREATER, LESS_OR_EQUAL, GREATER_OR_EQUAL, EQUAL, NOT_EQUAL, AND, OR;
@@ -120,22 +187,22 @@ precedence left NOT;
 Program ::=
 	CLASS IDENTIFIER LEFT_BRACE RIGHT_BRACE
 	{:
-		RESULT = new Program(null, null);
+		RESULT = this.nullIfErrors(new Program(null, null));
 	:}
 	|
 	CLASS IDENTIFIER LEFT_BRACE FieldDeclarations:fieldDeclarations RIGHT_BRACE
 	{:
-		RESULT = new Program(fieldDeclarations, null);
+		RESULT = this.nullIfErrors(new Program(fieldDeclarations, null));
 	:}
 	|
 	CLASS IDENTIFIER LEFT_BRACE MethodDeclarations:methodDeclarations RIGHT_BRACE
 	{:
-		RESULT = new Program(null, methodDeclarations);
+		RESULT = this.nullIfErrors(new Program(null, methodDeclarations));
 	:}
 	|
 	CLASS IDENTIFIER LEFT_BRACE FieldDeclarations:fieldDeclarations MethodDeclarations:methodDeclarations RIGHT_BRACE
 	{:
-		RESULT = new Program(fieldDeclarations, methodDeclarations);
+		RESULT = this.nullIfErrors(new Program(fieldDeclarations, methodDeclarations));
 	:}
 	;
 
@@ -154,7 +221,7 @@ FieldDeclarations ::=
 	;
 
 FieldDeclaration ::=
-	Type:type Fields:fields SEMI_COLON
+	Type:type Fields:fields SEMICOLON
 	{:
 		RESULT = new ArrayList<FieldDeclaration>();
 		
@@ -287,7 +354,7 @@ Block ::=
 	;
 	
 VariableDeclarations ::=
-	Type:type IdentifierList:identifierList SEMI_COLON
+	Type:type IdentifierList:identifierList SEMICOLON
 	{:
 		RESULT = new ArrayList<FieldDeclaration>();
 		
@@ -297,7 +364,7 @@ VariableDeclarations ::=
 
 	:}
 	|
-	VariableDeclarations:variableDeclarations Type:type IdentifierList:identifierList SEMI_COLON
+	VariableDeclarations:variableDeclarations Type:type IdentifierList:identifierList SEMICOLON
 	{:
 		RESULT = new ArrayList<VariableDeclaration>(variableDeclarations);
 		
@@ -305,6 +372,11 @@ VariableDeclarations ::=
 			RESULT.add(new VariableDeclaration(type, (String) identifier));
 		}
 		
+	:}
+	|
+	error SEMICOLON
+	{:
+		this.logError("Missing \";\"");
 	:}
 	;
 	
@@ -353,12 +425,12 @@ Statements ::=
 	;
 
 Statement ::=
-	Location:location ASSIGN Expression:expression SEMI_COLON
+	Location:location ASSIGN Expression:expression SEMICOLON
 	{:
 		RESULT = new AssignmentStatement(location, expression);
 	:}
 	|
-	MethodCall:methodCall SEMI_COLON
+	MethodCall:methodCall SEMICOLON
 	{:
 		RESULT = new MethodCallStatement(methodCall);
 	:}
@@ -378,22 +450,22 @@ Statement ::=
 		RESULT = new WhileStatement(expression, block);
 	:}
 	|
-	RETURN SEMI_COLON
+	RETURN SEMICOLON
 	{:
 		RESULT = new ReturnStatement(null);
 	:}
 	|
-	RETURN Expression:expression SEMI_COLON
+	RETURN Expression:expression SEMICOLON
 	{:
 		RESULT = new ReturnStatement(expression);
 	:}
 	|
-	BREAK SEMI_COLON
+	BREAK SEMICOLON
 	{:
 		RESULT = new BreakStatement();
 	:}
 	|
-	CONTINUE SEMI_COLON
+	CONTINUE SEMICOLON
 	{:
 		RESULT = new ContinueStatement();
 	:}
@@ -544,88 +616,88 @@ BinaryOperator ::=
 ArithmeticOperator ::=
 	PLUS
 	{:
-		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+		RESULT = ((DecafToken) this.getStackTop()).getInputString();
 	:}
 	|
 	MINUS
 	{:
-		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+		RESULT = ((DecafToken) this.getStackTop()).getInputString();
 	:}
 	|
 	TIMES
 	{:
-		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+		RESULT = ((DecafToken) this.getStackTop()).getInputString();
 	:}
 	|
 	DIVIDE
 	{:
-		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+		RESULT = ((DecafToken) this.getStackTop()).getInputString();
 	:}
 	|
 	MODULO
 	{:
-		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+		RESULT = ((DecafToken) this.getStackTop()).getInputString();
 	:}
 	|
 	ARITHMETIC_SHIFT_LEFT
 	{:
-		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+		RESULT = ((DecafToken) this.getStackTop()).getInputString();
 	:}
 	|
 	ARITHMETIC_SHIFT_RIGHT
 	{:
-		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+		RESULT = ((DecafToken) this.getStackTop()).getInputString();
 	:}
 	|
 	BITWISE_ROTATE_RIGHT
 	{:
-		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+		RESULT = ((DecafToken) this.getStackTop()).getInputString();
 	:}
 	;
 
 RelationOperator ::=
 	LESS
 	{:
-		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+		RESULT = ((DecafToken) this.getStackTop()).getInputString();
 	:}
 	|
 	GREATER
 	{:
-		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+		RESULT = ((DecafToken) this.getStackTop()).getInputString();
 	:}
 	|
 	LESS_OR_EQUAL
 	{:
-		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+		RESULT = ((DecafToken) this.getStackTop()).getInputString();
 	:}
 	|
 	GREATER_OR_EQUAL
 	{:
-		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+		RESULT = ((DecafToken) this.getStackTop()).getInputString();
 	:}
 	;
 	
 EqualityOperator ::=
 	EQUAL
 	{:
-		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+		RESULT = ((DecafToken) this.getStackTop()).getInputString();
 	:}
 	|
 	NOT_EQUAL
 	{:
-		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+		RESULT = ((DecafToken) this.getStackTop()).getInputString();
 	:}
 	;
 
 ConditionalOperator ::=
 	AND
 	{:
-		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+		RESULT = ((DecafToken) this.getStackTop()).getInputString();
 	:}
 	|
 	OR
 	{:
-		RESULT = ((DecafToken) CUP$DecafParser$stack.elementAt(CUP$DecafParser$top)).getInputString();
+		RESULT = ((DecafToken) this.getStackTop()).getInputString();
 	:}
 	;
 	
