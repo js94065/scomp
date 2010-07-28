@@ -35,8 +35,15 @@ public final class Program extends AbstractNode {
 	
 	@Override
 	public final void accept(final Visitor visitor) {
-		// TODO
-		Tools.debugPrint("TODO");
+		visitor.visit(this);
+		
+		for (final AbstractFieldDeclaration fieldDeclaration : this.getFieldDeclarations()) {
+			fieldDeclaration.accept(visitor);
+		}
+		
+		for (final MethodDeclaration methodDeclaration : this.getMethodDeclarations()) {
+			methodDeclaration.accept(visitor);
+		}
 	}
 	
 	/**
