@@ -28,6 +28,12 @@ public final class WhileStatement extends AbstractStatement {
 		this.block = block;
 	}
 	
+	@Override
+	public final void accept(final Visitor visitor) {
+		// TODO
+		Tools.debugPrint("TODO");
+	}
+	
 	/**
 	 * 
 	 * @return

@@ -25,6 +25,12 @@ public final class ArrayLocation extends AbstractLocation {
 		this.offset = offset;
 	}
 	
+	@Override
+	public final void accept(final Visitor visitor) {
+		// TODO
+		Tools.debugPrint("TODO");
+	}
+	
 	/**
 	 * 
 	 * @return

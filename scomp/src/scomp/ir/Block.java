@@ -33,6 +33,12 @@ public final class Block extends AbstractNode {
 		this.abstractStatements = emptyIfNull(abstractStatements);
 	}
 	
+	@Override
+	public final void accept(final Visitor visitor) {
+		// TODO
+		Tools.debugPrint("TODO");
+	}
+	
 	/**
 	 * 
 	 * @return

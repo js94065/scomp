@@ -41,6 +41,12 @@ public final class MethodDeclaration extends AbstractTypedEntityDeclaration {
 		this.block = block;
 	}
 	
+	@Override
+	public final void accept(final Visitor visitor) {
+		// TODO
+		Tools.debugPrint("TODO");
+	}
+	
 	/**
 	 * 
 	 * @return

@@ -1,5 +1,7 @@
 package scomp.ir;
 
+import scomp.Tools;
+
 
 /**
  * This class defines a Decaf break statement.
@@ -8,6 +10,12 @@ package scomp.ir;
  *
  */
 public final class BreakStatement extends AbstractStatement {
+	
+	@Override
+	public final void accept(final Visitor visitor) {
+		// TODO
+		Tools.debugPrint("TODO");
+	}
 	
 	@Override
 	public final String toString() {

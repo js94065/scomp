@@ -34,6 +34,12 @@ public final class IfStatement extends AbstractStatement {
 		this.elseBlock = elseBlock;
 	}
 	
+	@Override
+	public final void accept(final Visitor visitor) {
+		// TODO
+		Tools.debugPrint("TODO");
+	}
+	
 	/**
 	 * 
 	 * @return

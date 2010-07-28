@@ -35,6 +35,13 @@ public abstract class AbstractNode {
 	}
 	
 	/**
+	 * 
+	 * @param visitor
+	 * <br>Not null
+	 */
+	public abstract void accept(Visitor visitor);
+	
+	/**
 	 * Should do what is specified in {@link Object#hashCode()}.
 	 * 
 	 * @return

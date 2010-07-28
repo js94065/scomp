@@ -1,6 +1,5 @@
 package scomp.ir;
 
-
 /**
  * This class defines Decaf CalloutArgument.
  * 

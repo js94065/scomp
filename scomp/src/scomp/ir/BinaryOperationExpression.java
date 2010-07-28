@@ -35,6 +35,12 @@ public final class BinaryOperationExpression extends AbstractExpression {
 		this.right = right;
 	}
 	
+	@Override
+	public final void accept(final Visitor visitor) {
+		// TODO
+		Tools.debugPrint("TODO");
+	}
+	
 	/**
 	 * 
 	 * @return

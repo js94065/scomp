@@ -1,5 +1,6 @@
 package scomp.ir;
 
+import scomp.Tools;
 
 /**
  * This class defines a Decaf Variable Declaration.
@@ -20,6 +21,12 @@ public final class VariableDeclaration extends AbstractTypedEntityDeclaration {
 	 */
 	public VariableDeclaration(final Class<?> type, String identifier) {
 		super(type, identifier);
+	}
+	
+	@Override
+	public final void accept(final Visitor visitor) {
+		// TODO
+		Tools.debugPrint("TODO");
 	}
 	
 	@Override
