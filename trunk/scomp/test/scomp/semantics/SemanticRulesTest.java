@@ -32,25 +32,44 @@ public final class SemanticRulesTest {
 	
 	@Test
 	public final void testRule1() {
-		final Program program = parse(PROGRAM_WITH_DUPLICATE_FIELDS);
+		final Program program = parse(PROGRAM_WITH_DUPLICATE_IDENTIFIERS);
 		
 		program.accept(new SemanticRules());
 		
 		assertEquals(Arrays.asList(
-				"(:4:9) Duplicate identifier y",
-				"(:5:10) Duplicate identifier x"
+				"(:5:9) Duplicate identifier y",
+				"(:7:10) Duplicate identifier x",
+				"(:9:7) Duplicate identifier x",
+				"(:9:24) Duplicate identifier z",
+				"(:10:11) Duplicate identifier a",
+				"(:17:12) Duplicate identifier y",
+				"(:17:15) Duplicate identifier z"
 		), this.recorder.getMessages());
 	}
 	
 	/**
 	 * {@value}.
 	 */
-	public static final String PROGRAM_WITH_DUPLICATE_FIELDS =
+	public static final String PROGRAM_WITH_DUPLICATE_IDENTIFIERS =
 		"class Program {\n" +
 		"\n" +
 		"	boolean y;\n" +
+		"\n" +
 		"	int x, y;\n" +
+		"\n" +
 		"	boolean x[1];\n" +
+		"\n" +
+		"	void x(int z, boolean z, int a) {\n" +
+		"		boolean a, b;\n" +
+		"	}\n" +
+		"\n" +
+		"	void f() {\n" +
+		"		boolean a, b;\n" +
+		"\n" +
+		"		{\n" +
+		"			boolean y, z;\n" +
+		"		}\n" +
+		"	}\n" +
 		"\n" +
 		"}";
 	
