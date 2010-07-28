@@ -220,6 +220,13 @@ public class DecafSemanticsTest {
 		assertEquals(expectedProgram, parse(PROGRAM_WITH_A_METHOD_WITH_A_LOOP));
 	}
 	
+	public final void testProgramWithMethodWithVariousExpressions() throws Exception {
+		/*Program expectedProgram = program(null,
+				method());
+		
+		assertEquals(expectedProgram, parse(PROGRAM_WITH_METHOD_WITH_VARIOUS_EXPRESSIONS));*/
+	}
+	
 	/**
 	 * 
 	 * @param fields
