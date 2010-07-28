@@ -2,7 +2,6 @@ package scomp.ir;
 
 import scomp.Tools;
 
-
 /**
  * This class defines a Decaf field declaration.
  * 

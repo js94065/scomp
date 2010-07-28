@@ -1,7 +1,13 @@
 package scomp;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
+
+import java_cup.runtime.Symbol;
 
 import jlex.tools.JLexTools;
 
@@ -132,5 +138,94 @@ public final class Tools {
     public static final void debugPrint(final Object... objects) {
         System.out.println(debug(DEBUG_STACK_OFFSET + 1, objects));
     }
+	
+	/**
+	 * 
+	 * @param <T> The expected return type
+	 * @param input
+	 * <br>Not null
+	 * @return
+	 * <br>Maybe null
+	 * @throws RuntimeException If an error occurs
+	 */
+	@SuppressWarnings("unchecked")
+	public static final <T> T parse(final String input) {
+		final DecafParser parser = new DecafParser(DecafScannerTest.createScanner(input));
+		try {
+			final Symbol parseResult = parser.parse();
+			
+			return (T) (parseResult == null ? null : parseResult.value);
+		} catch (final Exception exception) {
+			throw unchecked(exception);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param logger
+	 * <br>Not null
+	 * <br>Input-output
+	 */
+	public static final void clearHandlersAndDontUseParentHandlers(final Logger logger) {
+		for (final Handler handler : logger.getHandlers()) {
+			logger.removeHandler(handler);
+		}
+		
+		logger.setUseParentHandlers(false);
+	}
+	
+	/**
+	 * 
+	 * @param logger
+	 * <br>Not null
+	 * <br>Input-output
+	 * @param handler
+	 * <br>Not null
+	 * <br>Shared
+	 */
+	public static final void setHandler(final Logger logger, final Handler handler) {
+		clearHandlersAndDontUseParentHandlers(logger);
+		
+		logger.addHandler(handler);
+	}
+	
+	/**
+	 * 
+	 * @author codistmonk (creation 2010-07-27)
+	 */
+	public static final class MessageRecorder extends Handler {
+		
+		private final List<String> messages;
+		
+		public MessageRecorder() {
+			this.messages = new ArrayList<String>();
+		}
+		
+		/**
+		 * 
+		 * @return
+		 * <br>Not null
+		 * <br>Shared
+		 */
+		public final List<String> getMessages() {
+			return this.messages;
+		}
+		
+		@Override
+		public final void publish(final LogRecord record) {
+			this.messages.add(record.getMessage());
+		}
+		
+		@Override
+		public final void flush() {
+			// Do nothing
+		}
+
+		@Override
+		public final void close() throws SecurityException {
+			// Do nothing
+		}
+		
+	}
 	
 }

@@ -3,6 +3,7 @@ package scomp.ir;
 import static org.junit.Assert.*;
 
 import static scomp.DecafParserTest.*;
+import static scomp.Tools.*;
 
 import java.util.Arrays;
 import java.util.List;

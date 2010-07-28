@@ -6,6 +6,7 @@ import scomp.Tools;
  * This class defines a Decaf int literal.
  * 
  * @author Wilson (creation 2010-07-21)
+ * 
  */
 public final class IntLiteral extends AbstractLiteral {
 	

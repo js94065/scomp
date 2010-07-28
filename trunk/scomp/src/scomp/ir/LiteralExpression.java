@@ -6,6 +6,7 @@ import scomp.Tools;
  * This class defines a Decaf expression for a literal.
  * 
  * @author Wilson (creation 2010-07-22)
+ * 
  */
 public final class LiteralExpression extends AbstractExpression {
 	

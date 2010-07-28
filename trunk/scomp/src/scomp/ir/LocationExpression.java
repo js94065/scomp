@@ -6,6 +6,7 @@ import scomp.Tools;
  * This class defines part of the Decaf expression grammar; Location.
  * 
  * @author Wilson (creation 2010-07-21)
+ * 
  */
 public final class LocationExpression extends AbstractExpression {
 	

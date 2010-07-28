@@ -6,6 +6,7 @@ import scomp.Tools;
  * This class defines a Decaf location.
  * 
  * @author Wilson (creation 2010-07-20)
+ * 
  */
 public abstract class AbstractLocation extends AbstractNode {
 	
