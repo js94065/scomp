@@ -12,7 +12,14 @@ public interface Visitor {
 	 * @param program
 	 * <br>Not null
 	 */
-	public abstract void visit(Program program);
+	public abstract void beginVisit(Program program);
+	
+	/**
+	 * 
+	 * @param program
+	 * <br>Not null
+	 */
+	public abstract void endVisit(Program program);
 	
 	/**
 	 * 
@@ -33,7 +40,14 @@ public interface Visitor {
 	 * @param methodDeclaration
 	 * <br>Not null
 	 */
-	public abstract void visit(MethodDeclaration methodDeclaration);
+	public abstract void beginVisit(MethodDeclaration methodDeclaration);
+	
+	/**
+	 * 
+	 * @param methodDeclaration
+	 * <br>Not null
+	 */
+	public abstract void endVisit(MethodDeclaration methodDeclaration);
 	
 	/**
 	 * 
@@ -51,16 +65,16 @@ public interface Visitor {
 	
 	/**
 	 * 
-	 * @param blockStatement
+	 * @param block
 	 * <br>Not null
 	 */
-	public abstract void visit(BlockStatement blockStatement);
+	public abstract void beginVisit(Block block);
 	
 	/**
 	 * 
 	 * @param block
 	 * <br>Not null
 	 */
-	public abstract void visit(Block block);
+	public abstract void endVisit(Block block);
 	
 }

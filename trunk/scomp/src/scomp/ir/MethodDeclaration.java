@@ -44,8 +44,15 @@ public final class MethodDeclaration extends AbstractTypedEntityDeclaration {
 	
 	@Override
 	public final void accept(final Visitor visitor) {
-		// TODO
-		Tools.debugPrint("TODO");
+		visitor.beginVisit(this);
+		
+		for (final ParameterDeclaration parameterDeclaration : this.getParameterDeclarations()) {
+			parameterDeclaration.accept(visitor);
+		}
+		
+		this.getBlock().accept(visitor);
+		
+		visitor.endVisit(this);
 	}
 	
 	/**

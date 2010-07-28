@@ -8,11 +8,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import scomp.DecafParser;
-import scomp.Tools;
 import scomp.ir.AbstractTypedEntityDeclaration;
 import scomp.ir.ArrayFieldDeclaration;
 import scomp.ir.Block;
-import scomp.ir.BlockStatement;
 import scomp.ir.FieldDeclaration;
 import scomp.ir.MethodDeclaration;
 import scomp.ir.ParameterDeclaration;
@@ -38,8 +36,13 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	@Override
-	public final void visit(final Program program) {
-		this.scopes.push(new LinkedHashMap<String, AbstractTypedEntityDeclaration>());
+	public final void beginVisit(final Program program) {
+		this.pushNewScope();
+	}
+	
+	@Override
+	public final void endVisit(final Program program) {
+		this.popCurrentScope();
 	}
 	
 	@Override
@@ -53,33 +56,47 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	@Override
-	public final void visit(final MethodDeclaration methodDeclaration) {
-		// TODO
-		Tools.debugPrint("TODO");
+	public final void beginVisit(final MethodDeclaration methodDeclaration) {
+		this.pushNewScope();
+		
+		this.visit(methodDeclaration);
+	}
+	
+	@Override
+	public final void endVisit(final MethodDeclaration methodDeclaration) {
+		this.popCurrentScope();
 	}
 	
 	@Override
 	public final void visit(final ParameterDeclaration parameterDeclaration) {
-		// TODO
-		Tools.debugPrint("TODO");
+		this.visit((AbstractTypedEntityDeclaration) parameterDeclaration);
 	}
 	
 	@Override
 	public final void visit(final VariableDeclaration variableDeclaration) {
-		// TODO
-		Tools.debugPrint("TODO");
+		this.visit((AbstractTypedEntityDeclaration) variableDeclaration);
 	}
 	
 	@Override
-	public final void visit(final BlockStatement blockStatement) {
-		// TODO
-		Tools.debugPrint("TODO");
+	public final void beginVisit(final Block block) {
+		this.pushNewScope();
 	}
 	
 	@Override
-	public final void visit(final Block block) {
-		// TODO
-		Tools.debugPrint("TODO");
+	public final void endVisit(final Block block) {
+		this.popCurrentScope();
+	}
+	
+	private final void pushNewScope() {
+		if (this.scopes.isEmpty()) {
+			this.scopes.push(new LinkedHashMap<String, AbstractTypedEntityDeclaration>());
+		} else {
+			this.scopes.push(new LinkedHashMap<String, AbstractTypedEntityDeclaration>(this.getCurrentScope()));
+		}
+	}
+	
+	private final void popCurrentScope() {
+		this.scopes.pop();
 	}
 	
 	/**
