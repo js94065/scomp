@@ -1,5 +1,7 @@
 package scomp.ir;
 
+import scomp.Tools;
+
 
 /**
  * This class defines a Decaf method call statement.
@@ -19,6 +21,12 @@ public final class MethodCallStatement extends AbstractStatement {
 	 */
 	public MethodCallStatement(final AbstractMethodCall<?> methodCall) {
 		this.methodCall = methodCall;
+	}
+	
+	@Override
+	public final void accept(final Visitor visitor) {
+		// TODO
+		Tools.debugPrint("TODO");
 	}
 	
 	/**

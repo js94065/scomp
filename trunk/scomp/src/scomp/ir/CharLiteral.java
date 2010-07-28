@@ -21,6 +21,12 @@ public final class CharLiteral extends AbstractLiteral{
 		this.value = value;
 	}
 	
+	@Override
+	public final void accept(final Visitor visitor) {
+		// TODO
+		Tools.debugPrint("TODO");
+	}
+	
 	/**
 	 * 
 	 * @return

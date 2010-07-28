@@ -1,5 +1,7 @@
 package scomp.ir;
 
+import scomp.Tools;
+
 
 /**
  * Defines part of the location grammar.
@@ -16,6 +18,12 @@ public final class IdentifierLocation extends AbstractLocation {
 	 */
 	public IdentifierLocation(final String identifier) {
 		super(identifier);
+	}
+	
+	@Override
+	public final void accept(final Visitor visitor) {
+		// TODO
+		Tools.debugPrint("TODO");
 	}
 	
 	@Override

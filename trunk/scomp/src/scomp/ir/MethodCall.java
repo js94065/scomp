@@ -2,6 +2,8 @@ package scomp.ir;
 
 import java.util.List;
 
+import scomp.Tools;
+
 
 /**
  * The Decaf method name.
@@ -21,6 +23,12 @@ public final class MethodCall extends AbstractMethodCall<AbstractExpression> {
 	 */
 	public MethodCall(final String methodName, final List<AbstractExpression> arguments) {
 		super(methodName, arguments);
+	}
+	
+	@Override
+	public final void accept(final Visitor visitor) {
+		// TODO
+		Tools.debugPrint("TODO");
 	}
 	
 	@Override

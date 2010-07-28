@@ -21,6 +21,12 @@ public final class MinusExpression extends AbstractExpression {
 		this.expression = expression;
 	}
 	
+	@Override
+	public final void accept(final Visitor visitor) {
+		// TODO
+		Tools.debugPrint("TODO");
+	}
+	
 	/**
 	 * 
 	 * @return

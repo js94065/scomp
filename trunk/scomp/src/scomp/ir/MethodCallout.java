@@ -2,6 +2,8 @@ package scomp.ir;
 
 import java.util.List;
 
+import scomp.Tools;
+
 
 /**
  * The Decaf method callout.
@@ -21,6 +23,12 @@ public final class MethodCallout extends AbstractMethodCall<AbstractCalloutArgum
 	 */
 	public MethodCallout(final String stringLiteral, final List<AbstractCalloutArgument> arguments) {
 		super(stringLiteral, arguments);
+	}
+	
+	@Override
+	public final void accept(final Visitor visitor) {
+		// TODO
+		Tools.debugPrint("TODO");
 	}
 	
 	@Override

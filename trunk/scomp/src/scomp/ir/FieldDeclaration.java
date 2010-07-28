@@ -1,5 +1,7 @@
 package scomp.ir;
 
+import scomp.Tools;
+
 
 /**
  * This class defines a Decaf field declaration.
@@ -20,6 +22,12 @@ public final class FieldDeclaration extends AbstractFieldDeclaration {
 	 */
 	public FieldDeclaration(final Class<?> type, final String identifier) {
 		super(type, identifier);
+	}
+	
+	@Override
+	public final void accept(final Visitor visitor) {
+		// TODO
+		Tools.debugPrint("TODO");
 	}
 	
 	@Override

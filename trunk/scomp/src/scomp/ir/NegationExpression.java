@@ -21,6 +21,12 @@ public final class NegationExpression extends AbstractExpression {
 		this.expression = expression;
 	}
 	
+	@Override
+	public final void accept(final Visitor visitor) {
+		// TODO
+		Tools.debugPrint("TODO");
+	}
+	
 	/**
 	 * 
 	 * @return

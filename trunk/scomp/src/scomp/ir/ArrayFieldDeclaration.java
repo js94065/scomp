@@ -27,7 +27,12 @@ public final class ArrayFieldDeclaration extends AbstractFieldDeclaration {
 		super(type, identifier);
 		this.elementCount = elementCount;
 	}
-
+	
+	@Override
+	public final void accept(final Visitor visitor) {
+		visitor.visit(this);
+	}
+	
 	/**
 	 * 
 	 * @return

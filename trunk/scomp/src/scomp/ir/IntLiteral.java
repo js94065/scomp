@@ -20,6 +20,12 @@ public final class IntLiteral extends AbstractLiteral {
 		this.value = value;
 	}
 	
+	@Override
+	public final void accept(final Visitor visitor) {
+		// TODO
+		Tools.debugPrint("TODO");
+	}
+	
 	/**
 	 * 
 	 * @return

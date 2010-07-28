@@ -33,6 +33,12 @@ public final class Program extends AbstractNode {
 		this.methodDeclarations = emptyIfNull(methodDeclarations);
 	}
 	
+	@Override
+	public final void accept(final Visitor visitor) {
+		// TODO
+		Tools.debugPrint("TODO");
+	}
+	
 	/**
 	 * 
 	 * @return
