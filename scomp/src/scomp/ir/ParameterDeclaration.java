@@ -1,7 +1,6 @@
 package scomp.ir;
 
 import scomp.DecafToken;
-import scomp.Tools;
 
 /**
  * This class defines a Decaf field declaration.
@@ -26,8 +25,7 @@ public final class ParameterDeclaration extends AbstractTypedEntityDeclaration {
 	
 	@Override
 	public final void accept(final Visitor visitor) {
-		// TODO
-		Tools.debugPrint("TODO");
+		visitor.visit(this);
 	}
 	
 	@Override

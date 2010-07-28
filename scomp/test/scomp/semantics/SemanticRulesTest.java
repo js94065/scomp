@@ -43,7 +43,7 @@ public final class SemanticRulesTest {
 				"(:9:24) Duplicate identifier z",
 				"(:10:11) Duplicate identifier a",
 				"(:17:12) Duplicate identifier y",
-				"(:17:15) Duplicate identifier z"
+				"(:17:15) Duplicate identifier x"
 		), this.recorder.getMessages());
 	}
 	
@@ -67,7 +67,7 @@ public final class SemanticRulesTest {
 		"		boolean a, b;\n" +
 		"\n" +
 		"		{\n" +
-		"			boolean y, z;\n" +
+		"			boolean y, x;\n" +
 		"		}\n" +
 		"	}\n" +
 		"\n" +

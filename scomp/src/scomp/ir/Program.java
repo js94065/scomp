@@ -35,7 +35,7 @@ public final class Program extends AbstractNode {
 	
 	@Override
 	public final void accept(final Visitor visitor) {
-		visitor.visit(this);
+		visitor.beginVisit(this);
 		
 		for (final AbstractFieldDeclaration fieldDeclaration : this.getFieldDeclarations()) {
 			fieldDeclaration.accept(visitor);
@@ -44,6 +44,8 @@ public final class Program extends AbstractNode {
 		for (final MethodDeclaration methodDeclaration : this.getMethodDeclarations()) {
 			methodDeclaration.accept(visitor);
 		}
+		
+		visitor.endVisit(this);
 	}
 	
 	/**
