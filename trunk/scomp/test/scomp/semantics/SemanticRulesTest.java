@@ -37,8 +37,8 @@ public final class SemanticRulesTest {
 		program.accept(new SemanticRules());
 		
 		assertEquals(Arrays.asList(
-				"(:4:9) Duplicate field y",
-				"(:5:10) Duplicate field x"
+				"(:4:9) Duplicate identifier y",
+				"(:5:10) Duplicate identifier x"
 		), this.recorder.getMessages());
 	}
 	
