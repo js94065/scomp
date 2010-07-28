@@ -47,19 +47,19 @@ public final class SemanticRules implements Visitor {
 	
 	@Override
 	public final void visit(final ArrayFieldDeclaration arrayFieldDeclaration) {
-		this.visit((AbstractTypedEntityDeclaration) arrayFieldDeclaration);
+		this.checkRule1(arrayFieldDeclaration);
 	}
 	
 	@Override
 	public final void visit(final FieldDeclaration fieldDeclaration) {
-		this.visit((AbstractTypedEntityDeclaration) fieldDeclaration);
+		this.checkRule1(fieldDeclaration);
 	}
 	
 	@Override
 	public final void beginVisit(final MethodDeclaration methodDeclaration) {
 		this.pushNewScope();
 		
-		this.visit(methodDeclaration);
+		this.checkRule1(methodDeclaration);
 	}
 	
 	@Override
@@ -69,12 +69,12 @@ public final class SemanticRules implements Visitor {
 	
 	@Override
 	public final void visit(final ParameterDeclaration parameterDeclaration) {
-		this.visit((AbstractTypedEntityDeclaration) parameterDeclaration);
+		this.checkRule1(parameterDeclaration);
 	}
 	
 	@Override
 	public final void visit(final VariableDeclaration variableDeclaration) {
-		this.visit((AbstractTypedEntityDeclaration) variableDeclaration);
+		this.checkRule1(variableDeclaration);
 	}
 	
 	@Override
@@ -104,7 +104,7 @@ public final class SemanticRules implements Visitor {
 	 * @param entityDeclaration
 	 * <br>Not null
 	 */
-	private final void visit(final AbstractTypedEntityDeclaration entityDeclaration) {
+	private final void checkRule1(final AbstractTypedEntityDeclaration entityDeclaration) {
 		if (this.getCurrentScope().containsKey(entityDeclaration.getIdentifier())) {
 			this.logError("(:" + entityDeclaration.getIdentifierRow() + ":" + entityDeclaration.getIdentifierColumn() +
 					") Duplicate identifier " + entityDeclaration.getIdentifier());
