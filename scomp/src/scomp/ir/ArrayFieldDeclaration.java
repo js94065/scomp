@@ -1,5 +1,6 @@
 package scomp.ir;
 
+import scomp.DecafToken;
 import scomp.Tools;
 
 /**
@@ -23,7 +24,7 @@ public final class ArrayFieldDeclaration extends AbstractFieldDeclaration {
 	 * @param elementCount 
 	 * <br>Range: {@code [0 .. Integer.MAX_VALUE]}
 	 */
-	public ArrayFieldDeclaration(final Class<?> type, final String identifier, final int elementCount) {
+	public ArrayFieldDeclaration(final Class<?> type, final DecafToken identifier, final int elementCount) {
 		super(type, identifier);
 		this.elementCount = elementCount;
 	}

@@ -184,7 +184,7 @@ public class DecafScannerTest {
 	 * <br>A new value
 	 * @throws IOException if an error occurs while reading the input
 	 */
-	private static final List<DecafToken> scan(final String input) throws IOException {
+	public static final List<DecafToken> scan(final String input) throws IOException {
 		final Yylex scanner = createScanner(input);
 		final List<DecafToken> result = new ArrayList<DecafToken>();
 		DecafToken token = (DecafToken) scanner.next_token();
@@ -208,7 +208,7 @@ public class DecafScannerTest {
 	 * <br>A non-null value
 	 * <br>A new value
 	 */
-	private static final DecafToken token(final int symbolId, final Object value) {
+	public static final DecafToken token(final int symbolId, final Object value) {
 		return new DecafToken(symbolId, value, UNSPECIFIED_ROW, UNSPECIFIED_COLUMN, value == null ? "" : value.toString());
 	}
 	
@@ -220,7 +220,7 @@ public class DecafScannerTest {
 	 * <br>A non-null value
 	 * <br>A new value
 	 */
-	private static final DecafToken token(final int symbolId) {
+	public static final DecafToken token(final int symbolId) {
 		return token(symbolId, null);
 	}
 	

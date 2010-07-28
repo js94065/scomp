@@ -10,6 +10,9 @@ import java.util.List;
 
 import org.junit.Test;
 
+import scomp.DecafParserSymbols;
+import scomp.DecafScannerTest;
+import scomp.DecafToken;
 import scomp.ir.AbstractExpression;
 import scomp.ir.AbstractFieldDeclaration;
 import scomp.ir.AbstractMethodCall;
@@ -300,7 +303,7 @@ public class DecafIRTest {
 	 * <br>New
 	 */
 	private static final ArrayFieldDeclaration field(final Class<?> elementType, final String identifier, final int elementCount) {
-		return new ArrayFieldDeclaration(elementType, identifier, elementCount);
+		return new ArrayFieldDeclaration(elementType, identifier(identifier), elementCount);
 	}
 	
 	/**
@@ -316,7 +319,7 @@ public class DecafIRTest {
 	 * <br>New
 	 */
 	private static final FieldDeclaration field(final Class<?> type, final String identifier) {
-		return new FieldDeclaration(type, identifier);
+		return new FieldDeclaration(type, identifier(identifier));
 	}
 	
 	/**
@@ -351,7 +354,7 @@ public class DecafIRTest {
 	 */
 	private static final MethodDeclaration method(final Class<?> returnType, final String identifier,
 			final List<ParameterDeclaration> parameters, final Block block) {
-		return new MethodDeclaration(returnType, identifier, parameters, block);
+		return new MethodDeclaration(returnType, identifier(identifier), parameters, block);
 	}
 	
 	/**
@@ -379,7 +382,7 @@ public class DecafIRTest {
 	 * <br>New
 	 */
 	private static final ParameterDeclaration parameter(final Class<?> type, final String identifier) {
-		return new ParameterDeclaration(type, identifier);
+		return new ParameterDeclaration(type, identifier(identifier));
 	}
 	
 	/**
@@ -407,7 +410,7 @@ public class DecafIRTest {
 	 * <br>New
 	 */
 	private static final VariableDeclaration variable(final Class<?> type, final String identifier) {
-		return new VariableDeclaration(type, identifier);
+		return new VariableDeclaration(type, identifier(identifier));
 	}
 	
 	/**
@@ -647,6 +650,19 @@ public class DecafIRTest {
 	 */
 	public static final MinusExpression minus(final AbstractExpression expression) {
 		return new MinusExpression(expression);
+	}
+	
+	/**
+	 * 
+	 * @param identifier
+	 * <br>Not null
+	 * <br>Shared
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	public static final DecafToken identifier(final String identifier) {
+		return DecafScannerTest.token(DecafParserSymbols.IDENTIFIER, identifier);
 	}
 	
 }

@@ -1,5 +1,6 @@
 package scomp.ir;
 
+import scomp.DecafToken;
 import scomp.Tools;
 
 /**
@@ -19,7 +20,7 @@ public final class VariableDeclaration extends AbstractTypedEntityDeclaration {
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	public VariableDeclaration(final Class<?> type, String identifier) {
+	public VariableDeclaration(final Class<?> type, DecafToken identifier) {
 		super(type, identifier);
 	}
 	

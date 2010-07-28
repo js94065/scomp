@@ -1,5 +1,7 @@
 package scomp.ir;
 
+import scomp.DecafToken;
+
 /**
  * This is the base class for Decaf field declarations.
  * 
@@ -17,7 +19,7 @@ public abstract class AbstractFieldDeclaration extends AbstractTypedEntityDeclar
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	public AbstractFieldDeclaration(final Class<?> type, final String identifier) {
+	public AbstractFieldDeclaration(final Class<?> type, final DecafToken identifier) {
 		super(type, identifier);
 	}
 	

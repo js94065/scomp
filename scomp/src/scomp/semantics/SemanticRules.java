@@ -21,6 +21,7 @@ import scomp.ir.VariableDeclaration;
 import scomp.ir.Visitor;
 
 /**
+ * This is the visitor responsible for checking the Decaf semantic rules.
  * 
  * @author codistmonk (creation 2010-07-28)
  *
@@ -43,20 +44,12 @@ public final class SemanticRules implements Visitor {
 	
 	@Override
 	public final void visit(final ArrayFieldDeclaration arrayFieldDeclaration) {
-		if (this.getCurrentScope().containsKey(arrayFieldDeclaration.getIdentifier())) {
-			this.logError("Duplicate field " + arrayFieldDeclaration.getIdentifier());
-		} else {
-			this.getCurrentScope().put(arrayFieldDeclaration.getIdentifier(), arrayFieldDeclaration);
-		}
+		this.visit((AbstractTypedEntityDeclaration) arrayFieldDeclaration);
 	}
 	
 	@Override
 	public final void visit(final FieldDeclaration fieldDeclaration) {
-		if (this.getCurrentScope().containsKey(fieldDeclaration.getIdentifier())) {
-			this.logError("Duplicate field " + fieldDeclaration.getIdentifier());
-		} else {
-			this.getCurrentScope().put(fieldDeclaration.getIdentifier(), fieldDeclaration);
-		}
+		this.visit((AbstractTypedEntityDeclaration) fieldDeclaration);
 	}
 	
 	@Override
@@ -87,6 +80,20 @@ public final class SemanticRules implements Visitor {
 	public final void visit(final Block block) {
 		// TODO
 		Tools.debugPrint("TODO");
+	}
+	
+	/**
+	 * 
+	 * @param entityDeclaration
+	 * <br>Not null
+	 */
+	private final void visit(final AbstractTypedEntityDeclaration entityDeclaration) {
+		if (this.getCurrentScope().containsKey(entityDeclaration.getIdentifier())) {
+			this.logError("(:" + entityDeclaration.getIdentifierRow() + ":" + entityDeclaration.getIdentifierColumn() +
+					") Duplicate identifier " + entityDeclaration.getIdentifier());
+		} else {
+			this.getCurrentScope().put(entityDeclaration.getIdentifier(), entityDeclaration);
+		}
 	}
 	
 	/**

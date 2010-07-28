@@ -4,6 +4,7 @@ import static scomp.Tools.*;
 
 import java.util.List;
 
+import scomp.DecafToken;
 import scomp.Tools;
 
 /**
@@ -33,7 +34,7 @@ public final class MethodDeclaration extends AbstractTypedEntityDeclaration {
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	public MethodDeclaration(final Class<?> type, final String identifier,
+	public MethodDeclaration(final Class<?> type, final DecafToken identifier,
 			final List<ParameterDeclaration> parameterDeclarations,
 			final Block block) {
 		super(type, identifier);
