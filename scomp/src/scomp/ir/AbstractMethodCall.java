@@ -12,6 +12,7 @@ import scomp.Tools;
  * @param <A> The type of the call arguments
  * 
  * @author Wilson (creation 2010-07-19)
+ * 
  */
 public abstract class AbstractMethodCall<A> extends AbstractNode {
 	

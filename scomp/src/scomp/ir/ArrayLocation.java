@@ -6,6 +6,7 @@ import scomp.Tools;
  * Defines part of the location grammar.
  * 
  * @author Wilson (creation 2010-07-20)
+ * 
  */
 public final class ArrayLocation extends AbstractLocation {
 	

@@ -1,19 +1,14 @@
 package scomp;
 
 import static org.junit.Assert.*;
-import static scomp.Tools.unchecked;
 
-import java.util.ArrayList;
+import static scomp.Tools.*;
+
 import java.util.Arrays;
-import java.util.List;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import java_cup.runtime.Symbol;
 
 /**
  * 
@@ -506,94 +501,5 @@ public class DecafParserTest {
 		"	}\n" +
 		"\n" +
 		"}";
-	
-	/**
-	 * 
-	 * @param <T> The expected return type
-	 * @param input
-	 * <br>Not null
-	 * @return
-	 * <br>Maybe null
-	 * @throws RuntimeException If an error occurs
-	 */
-	@SuppressWarnings("unchecked")
-	public static final <T> T parse(final String input) {
-		final DecafParser parser = new DecafParser(DecafScannerTest.createScanner(input));
-		try {
-			final Symbol parseResult = parser.parse();
-			
-			return (T) (parseResult == null ? null : parseResult.value);
-		} catch (final Exception exception) {
-			throw unchecked(exception);
-		}
-	}
-	
-	/**
-	 * 
-	 * @param logger
-	 * <br>Not null
-	 * <br>Input-output
-	 */
-	public static final void clearHandlersAndDontUseParentHandlers(final Logger logger) {
-		for (final Handler handler : logger.getHandlers()) {
-			logger.removeHandler(handler);
-		}
-		
-		logger.setUseParentHandlers(false);
-	}
-	
-	/**
-	 * 
-	 * @param logger
-	 * <br>Not null
-	 * <br>Input-output
-	 * @param handler
-	 * <br>Not null
-	 * <br>Shared
-	 */
-	public static final void setHandler(final Logger logger, final Handler handler) {
-		clearHandlersAndDontUseParentHandlers(logger);
-		
-		logger.addHandler(handler);
-	}
-	
-	/**
-	 * 
-	 * @author codistmonk (creation 2010-07-27)
-	 */
-	public static final class MessageRecorder extends Handler {
-		
-		private final List<String> messages;
-		
-		public MessageRecorder() {
-			this.messages = new ArrayList<String>();
-		}
-		
-		/**
-		 * 
-		 * @return
-		 * <br>Not null
-		 * <br>Shared
-		 */
-		public final List<String> getMessages() {
-			return this.messages;
-		}
-		
-		@Override
-		public final void publish(final LogRecord record) {
-			this.messages.add(record.getMessage());
-		}
-		
-		@Override
-		public final void flush() {
-			// Do nothing
-		}
-
-		@Override
-		public final void close() throws SecurityException {
-			// Do nothing
-		}
-		
-	}
 	
 }
