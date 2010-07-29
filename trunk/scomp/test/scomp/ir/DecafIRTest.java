@@ -253,8 +253,24 @@ public class DecafIRTest {
 	}
 	
 	public final void testProgramWithMethodWithVariousExpressions() throws Exception {
-		/*Program expectedProgram = program(null,
-				method());
+	/*	Program expectedProgram = program(
+				null,
+				methods(
+						method(void.class,"f",null,
+								block(
+										variables(
+												variable(int.class,"a"),
+												variable(int.class,"b"),
+												variable(boolean.class,"c"),
+												variable(boolean.class,"d")), 
+												statements(
+														assign("a",minus(expression(42))),
+														assign("b",expression(0x33))
+														)
+												)
+										)
+						)
+				);
 		
 		assertEquals(expectedProgram, parse(PROGRAM_WITH_METHOD_WITH_VARIOUS_EXPRESSIONS));*/
 	}
