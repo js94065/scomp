@@ -252,8 +252,9 @@ public class DecafIRTest {
 		assertEquals(expectedProgram, parse(PROGRAM_WITH_A_METHOD_WITH_A_LOOP));
 	}
 	
+	@Test
 	public final void testProgramWithMethodWithVariousExpressions() throws Exception {
-	/*	Program expectedProgram = program(
+		Program expectedProgram = program(
 				null,
 				methods(
 						method(void.class,"f",null,
@@ -265,14 +266,46 @@ public class DecafIRTest {
 												variable(boolean.class,"d")), 
 												statements(
 														assign("a",minus(expression(42))),
-														assign("b",expression(0x33))
+														assign("b",expression(0x33)),
+														assign("a",expression('a')),
+														assign("a",operation(expression("a"),"+",expression("b"))),
+														assign("a",operation(expression("a"),"-",expression("b"))),
+														assign("a",operation(expression("a"),"*",expression("b"))),
+														assign("a",operation(expression("a"),"/",expression("b"))),
+														assign("a",operation(expression("a"),"%",expression("b"))),
+														assign("a",operation(expression("a"),"<<",expression("b"))),
+														assign("a",operation(expression("a"),">>",expression("b"))),
+														assign("a",operation(expression("a"),">>>",expression("b"))),
+														assign("c",expression(true)),
+														assign("d",expression(false)),
+														assign("c",not(expression("d"))),
+														assign("c",operation(expression("a"),"<",expression("b"))),
+														assign("c",operation(expression("a"),">",expression("b"))),
+														assign("c",operation(expression("a"),"<=",expression("b"))),
+														assign("c",operation(expression("a"),">=",expression("b"))),
+														assign("c",operation(expression("c"),"==",expression("d"))),
+														assign("c",operation(expression("c"),"!=",expression("d"))),
+														assign("c",operation(expression("c"),"&&",expression("d"))),
+														assign("c",operation(expression("c"),"||",expression("d"))),
+														assign("a",operation(expression("a"),"+",operation(expression("b"),"+",expression("a")))),
+														assign("a",operation(expression("a"),"+",operation(expression("b"),"-",expression("a")))),
+														assign("a",operation(expression("a"),"+",operation(expression("b"),"*",expression("a")))),
+														assign("a",operation(expression("a"),"+",operation(expression("b"),"/",expression("a")))),
+														assign("a",operation(expression("a"),"+",operation(expression("b"),"%",expression("a")))),
+														assign("a",operation(expression("a"),"+",operation(expression("b"),"<<",expression("a")))),
+														assign("a",operation(expression("a"),"+",operation(expression("b"),">>",expression("a")))),
+														assign("a",operation(expression("a"),"+",operation(expression("b"),">>>",expression("a")))),
+														assign("c",operation(expression("a"),"<",operation(expression("b"),"==",expression("d")))),
+														assign("c",operation(expression("a"),">",operation(expression("b"),"!=",expression("d")))),
+														assign("c",operation(expression("a"),"<=",operation(expression("b"),"&&",expression("d")))),
+														assign("c",operation(expression("a"),">=",operation(expression("b"),"||",expression("d"))))
 														)
 												)
 										)
 						)
 				);
 		
-		assertEquals(expectedProgram, parse(PROGRAM_WITH_METHOD_WITH_VARIOUS_EXPRESSIONS));*/
+		assertEquals(expectedProgram, parse(PROGRAM_WITH_METHOD_WITH_VARIOUS_EXPRESSIONS));
 	}
 	
 	/**
@@ -509,6 +542,30 @@ public class DecafIRTest {
 	 */
 	private static final LiteralExpression expression(final int value) {
 		return new LiteralExpression(new IntLiteral(value));
+	}
+	
+	/**
+	*
+	* @param value
+	* <br> Range: any char
+	* @return
+	* <br> Not null
+	* <br> New
+	*/
+	private static final LiteralExpression expression(final char value) {
+		return new LiteralExpression(new CharLiteral(value));
+	}
+	
+	/**
+	*
+	* @param value
+	* <br> Range: true or false
+	* @return
+	* <br> Not null
+	* <br> New
+	*/
+	private static final LiteralExpression expression(final boolean value) {
+		return new LiteralExpression(new BooleanLiteral(value));
 	}
 	
 	/**
