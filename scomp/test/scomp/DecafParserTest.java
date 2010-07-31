@@ -424,6 +424,16 @@ public class DecafParserTest {
 		"}";
 	
 	/**
+	 * 
+	 */
+	public static final String PRECEDENCE_BUG =
+		"class Program {\n" +
+		"\n" + 
+		"	boolean b; void f() { b = 43 % 42 == 0; }" +
+		"\n" +
+		"}";
+		
+	/**
 	 * {@value}.
 	 */
 	public static final String MALFORMED_PROGRAM_1 =
