@@ -721,11 +721,8 @@ public class DecafIRTest {
 	
 	/**
 	 * 
-	 * @param methodName
+	 * @param methodCall
 	 * <br>Not null
-	 * <br>Shared
-	 * @param arguments
-	 * <br>Maybe null
 	 * <br>Shared
 	 * @return
 	 * <br>Not null
@@ -737,11 +734,8 @@ public class DecafIRTest {
 	
 	/**
 	 * 
-	 * @param methodName
+	 * @param methodCallout
 	 * <br>Not null
-	 * <br>Shared
-	 * @param arguments
-	 * <br>Maybe null
 	 * <br>Shared
 	 * @return
 	 * <br>Not null
