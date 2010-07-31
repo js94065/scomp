@@ -308,6 +308,23 @@ public class DecafIRTest {
 		assertEquals(expectedProgram, parse(PROGRAM_WITH_METHOD_WITH_VARIOUS_EXPRESSIONS));
 	}
 	
+	public final void testProgramWithMethodWithParametersAndComplexBlock() throws Exception {
+		Program expectedProgram = new Program(null,
+				methods(
+						method(
+								boolean.class,
+								"f",
+								parameters(
+										parameter(int.class, "a"),
+										parameter(boolean.class, "b")),
+								block(null, null)
+								))
+				);
+		
+		
+		assertEquals(expectedProgram, parse(PROGRAM_WITH_METHOD_WITH_PARAMETERS_AND_COMPLEX_BLOCK));
+	}
+	
 	/**
 	 * 
 	 * @param fields
