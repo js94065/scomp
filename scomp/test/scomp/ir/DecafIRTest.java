@@ -308,21 +308,72 @@ public class DecafIRTest {
 		assertEquals(expectedProgram, parse(PROGRAM_WITH_METHOD_WITH_VARIOUS_EXPRESSIONS));
 	}
 	
-	public final void testProgramWithMethodWithParametersAndComplexBlock() throws Exception {
-		Program expectedProgram = new Program(null,
+	@Test
+	public final void testProgramWithMethodWithParametersAndComplexBlock() {
+		Program expectedProgram = program(
+				null,
 				methods(
-						method(
-								boolean.class,
-								"f",
-								parameters(
-										parameter(int.class, "a"),
-										parameter(boolean.class, "b")),
-								block(null, null)
-								))
-				);
-		
-		
-		assertEquals(expectedProgram, parse(PROGRAM_WITH_METHOD_WITH_PARAMETERS_AND_COMPLEX_BLOCK));
+						method(boolean.class, "f", parameters(
+								parameter(int.class, "a"), 
+								parameter(boolean.class, "b")),
+								block(
+										variables(
+												variable(int.class,"c"),
+												variable(int.class,"d"),
+												variable(boolean.class,"e"),
+												variable(boolean.class,"f")
+										),
+										statements(
+												assign("c",expression("a")),
+												assign("d",operation(expression("a"),"+",expression("b"))),
+												assign("e",operation(expression("a"),"<",expression("d"))),
+												ifStatement(expression("e"),
+														block(null,
+																statements(
+																		assign("f", (
+																				operation(expression("b"),"&&",
+																						operation(
+																							operation(
+																									operation(
+																											operation(expression("a"),"/",expression("c")),
+																											"-",
+																											operation(expression("d"),"*",expression("d"))
+																									),
+																									"%",
+																									expression(42)),
+																							"==",
+																							expression(0)
+																						)
+																				)
+																			)
+																		)
+																)
+														),
+														block(null,
+																statements( assign("f",expression(false)) )
+														)
+												),
+												methodCallStatement(methodCallout(
+													"printf",
+													arguments(calloutArgExpression(expression("Hello World!"))))
+												),
+												whileStatement(
+														operation(expression("c"),"!=",expression(0)),
+														block(null,statements(
+																assign("c",operation(expression("c"),"/",expression(2))),
+																ifStatement(operation(expression("c"),"<",expression(0)),
+																		block(null,statements(breakStatement())),
+																		block(null,statements(continueStatement()))
+																)
+															)
+														)
+												),
+												returnStatement(expression("f"))
+										)
+								)
+						)
+				)
+		);
 	}
 	
 	/**
@@ -670,6 +721,67 @@ public class DecafIRTest {
 	
 	/**
 	 * 
+	 * @param methodName
+	 * <br>Not null
+	 * <br>Shared
+	 * @param arguments
+	 * <br>Maybe null
+	 * <br>Shared
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final MethodCallStatement methodCallStatement(MethodCall methodCall) {
+		return new MethodCallStatement(methodCall);
+	}
+	
+	/**
+	 * 
+	 * @param methodName
+	 * <br>Not null
+	 * <br>Shared
+	 * @param arguments
+	 * <br>Maybe null
+	 * <br>Shared
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final MethodCallStatement methodCallStatement(MethodCallout methodCallout) {
+		return new MethodCallStatement(methodCallout);
+	}
+	
+	/**
+	 * 
+	 * @param methodName
+	 * <br>Not null
+	 * <br>Shared
+	 * @param arguments
+	 * <br>Maybe null
+	 * <br>Shared
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final MethodCallout methodCallout(final String methodName, final List<AbstractCalloutArgument> arguments) {
+		return new MethodCallout(methodName, arguments);
+	}
+	
+	/**
+	 * 
+	 * @param expression
+	 * <br>Not null
+	 * <br>Shared
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final CalloutArgumentExpression calloutArgExpression(final AbstractExpression expression) {
+		return new CalloutArgumentExpression(expression);
+	}
+	
+	/**
+	 * 
 	 * @param arguments
 	 * <br>Not null
 	 * @return
@@ -677,6 +789,18 @@ public class DecafIRTest {
 	 * <br>New
 	 */
 	private static final List<AbstractExpression> arguments(final AbstractExpression... arguments) {
+		return Arrays.asList(arguments);
+	}
+	
+	/**
+	 * 
+	 * @param arguments
+	 * <br>Not null
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final List<AbstractCalloutArgument> arguments(final AbstractCalloutArgument... arguments) {
 		return Arrays.asList(arguments);
 	}
 	
