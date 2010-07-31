@@ -12,10 +12,11 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
-/*
- * This is the command line interpreter for scomp
+/**
+ * This is the command line interpreter for scomp.
  * 
  * @author js94065 (creation 2010-07-25)
+ * 
  */
 
 public class Compiler {
@@ -73,10 +74,8 @@ public class Compiler {
             return;
         }
 
-        // this will redirect the output to the specified output
-        // System.out.println(out);
-
-        if (out!=null) {
+        if (out!=null) { 
+        	// do things to the output code
         	System.out.println("Output file will be " + out);
         }
             
