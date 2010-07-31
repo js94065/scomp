@@ -309,6 +309,26 @@ public class DecafIRTest {
 	}
 	
 	@Test
+	public final void testPrecedenceBug() {
+		Program expectedProgram = program(
+				fields(field(boolean.class,"b")),
+				methods(
+						method(void.class, "f", null, block(null,
+								statements(
+										assign("b",operation(
+												operation(expression(43),"%",expression(42)),
+												"==",
+												expression(0)))
+								)
+							)
+						)
+				)
+		);
+		
+		assertEquals(expectedProgram, parse(PRECEDENCE_BUG));
+	}
+	
+	@Test
 	public final void testProgramWithMethodWithParametersAndComplexBlock() {
 		Program expectedProgram = program(
 				null,
@@ -378,6 +398,7 @@ public class DecafIRTest {
 		
 		assertEquals(expectedProgram, parse(PROGRAM_WITH_METHOD_WITH_PARAMETERS_AND_COMPLEX_BLOCK));
 	}
+	
 	
 	/**
 	 * 
