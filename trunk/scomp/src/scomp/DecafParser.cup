@@ -188,7 +188,7 @@ non terminal String BinaryOperator, ArithmeticOperator, RelationOperator, Equali
 
 precedence left OR;
 precedence left AND;
-precedence left EQUAL, NOT_EQUAL;
+precedence nonassoc EQUAL, NOT_EQUAL;
 precedence left LESS, GREATER, LESS_OR_EQUAL, GREATER_OR_EQUAL;
 precedence left ARITHMETIC_SHIFT_LEFT, ARITHMETIC_SHIFT_RIGHT, BITWISE_ROTATE_RIGHT;
 precedence left PLUS, MINUS;
@@ -701,12 +701,12 @@ EqualityOperator ::=
 	EQUAL
 	{:
 		RESULT = ((DecafToken) this.getStackTop()).getInputString();
-	:}
+	:} 
 	|
 	NOT_EQUAL
 	{:
 		RESULT = ((DecafToken) this.getStackTop()).getInputString();
-	:}
+	:} 
 	;
 
 ConditionalOperator ::=

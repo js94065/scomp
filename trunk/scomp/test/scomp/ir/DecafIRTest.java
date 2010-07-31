@@ -325,7 +325,7 @@ public class DecafIRTest {
 										),
 										statements(
 												assign("c",expression("a")),
-												assign("d",operation(expression("a"),"+",expression("b"))),
+												assign("d",operation(expression("a"),"+",expression("c"))),
 												assign("e",operation(expression("a"),"<",expression("d"))),
 												ifStatement(expression("e"),
 														block(null,
@@ -340,7 +340,8 @@ public class DecafIRTest {
 																											operation(expression("d"),"*",expression("d"))
 																									),
 																									"%",
-																									expression(42)),
+																									expression(42)
+																							),
 																							"==",
 																							expression(0)
 																						)
@@ -374,6 +375,8 @@ public class DecafIRTest {
 						)
 				)
 		);
+		
+		assertEquals(expectedProgram, parse(PROGRAM_WITH_METHOD_WITH_PARAMETERS_AND_COMPLEX_BLOCK));
 	}
 	
 	/**
