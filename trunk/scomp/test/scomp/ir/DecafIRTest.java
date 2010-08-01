@@ -257,48 +257,48 @@ public class DecafIRTest {
 		Program expectedProgram = program(
 				null,
 				methods(
-						method(void.class,"f",null,
+						method(void.class, "f", null,
 								block(
 										variables(
-												variable(int.class,"a"),
-												variable(int.class,"b"),
-												variable(boolean.class,"c"),
-												variable(boolean.class,"d")), 
+												variable(int.class, "a"),
+												variable(int.class, "b"),
+												variable(boolean.class, "c"),
+												variable(boolean.class, "d")), 
 												statements(
-														assign("a",minus(expression(42))),
-														assign("b",expression(0x33)),
-														assign("a",expression('a')),
-														assign("a",operation(expression("a"),"+",expression("b"))),
-														assign("a",operation(expression("a"),"-",expression("b"))),
-														assign("a",operation(expression("a"),"*",expression("b"))),
-														assign("a",operation(expression("a"),"/",expression("b"))),
-														assign("a",operation(expression("a"),"%",expression("b"))),
-														assign("a",operation(expression("a"),"<<",expression("b"))),
-														assign("a",operation(expression("a"),">>",expression("b"))),
-														assign("a",operation(expression("a"),">>>",expression("b"))),
-														assign("c",expression(true)),
-														assign("d",expression(false)),
-														assign("c",not(expression("d"))),
-														assign("c",operation(expression("a"),"<",expression("b"))),
-														assign("c",operation(expression("a"),">",expression("b"))),
-														assign("c",operation(expression("a"),"<=",expression("b"))),
-														assign("c",operation(expression("a"),">=",expression("b"))),
-														assign("c",operation(expression("c"),"==",expression("d"))),
-														assign("c",operation(expression("c"),"!=",expression("d"))),
-														assign("c",operation(expression("c"),"&&",expression("d"))),
-														assign("c",operation(expression("c"),"||",expression("d"))),
-														assign("a",operation(expression("a"),"+",operation(expression("b"),"+",expression("a")))),
-														assign("a",operation(expression("a"),"+",operation(expression("b"),"-",expression("a")))),
-														assign("a",operation(expression("a"),"+",operation(expression("b"),"*",expression("a")))),
-														assign("a",operation(expression("a"),"+",operation(expression("b"),"/",expression("a")))),
-														assign("a",operation(expression("a"),"+",operation(expression("b"),"%",expression("a")))),
-														assign("a",operation(expression("a"),"+",operation(expression("b"),"<<",expression("a")))),
-														assign("a",operation(expression("a"),"+",operation(expression("b"),">>",expression("a")))),
-														assign("a",operation(expression("a"),"+",operation(expression("b"),">>>",expression("a")))),
-														assign("c",operation(expression("a"),"<",operation(expression("b"),"==",expression("d")))),
-														assign("c",operation(expression("a"),">",operation(expression("b"),"!=",expression("d")))),
-														assign("c",operation(expression("a"),"<=",operation(expression("b"),"&&",expression("d")))),
-														assign("c",operation(expression("a"),">=",operation(expression("b"),"||",expression("d"))))
+														assign("a", minus(expression(42))),
+														assign("b", expression(0x33)),
+														assign("a", expression('a')),
+														assign("a", operation(expression("a"),"+", expression("b"))),
+														assign("a", operation(expression("a"),"-", expression("b"))),
+														assign("a", operation(expression("a"),"*", expression("b"))),
+														assign("a", operation(expression("a"),"/", expression("b"))),
+														assign("a", operation(expression("a"),"%", expression("b"))),
+														assign("a", operation(expression("a"),"<<", expression("b"))),
+														assign("a", operation(expression("a"),">>", expression("b"))),
+														assign("a", operation(expression("a"),">>>", expression("b"))),
+														assign("c", expression(true)),
+														assign("d", expression(false)),
+														assign("c", not(expression("d"))),
+														assign("c", operation(expression("a"), "<", expression("b"))),
+														assign("c", operation(expression("a"), ">", expression("b"))),
+														assign("c", operation(expression("a"), "<=", expression("b"))),
+														assign("c", operation(expression("a"), ">=", expression("b"))),
+														assign("c", operation(expression("c"), "==", expression("d"))),
+														assign("c", operation(expression("c"), "!=", expression("d"))),
+														assign("c", operation(expression("c"), "&&", expression("d"))),
+														assign("c", operation(expression("c"), "||", expression("d"))),
+														assign("a", operation(expression("a"), "+", operation(expression("b"), "+", expression("a")))),
+														assign("a", operation(expression("a"), "+", operation(expression("b"), "-", expression("a")))),
+														assign("a", operation(expression("a"), "+", operation(expression("b"), "*", expression("a")))),
+														assign("a", operation(expression("a"), "+", operation(expression("b"), "/", expression("a")))),
+														assign("a", operation(expression("a"), "+", operation(expression("b"), "%", expression("a")))),
+														assign("a", operation(expression("a"), "+", operation(expression("b"), "<<", expression("a")))),
+														assign("a", operation(expression("a"), "+", operation(expression("b"), ">>", expression("a")))),
+														assign("a", operation(expression("a"), "+", operation(expression("b"), ">>>", expression("a")))),
+														assign("c", operation(expression("a"), "<", operation(expression("b"), "==", expression("d")))),
+														assign("c", operation(expression("a"), ">", operation(expression("b"), "!=", expression("d")))),
+														assign("c", operation(expression("a"), "<=", operation(expression("b"), "&&", expression("d")))),
+														assign("c", operation(expression("a"), ">=", operation(expression("b"), "||", expression("d"))))
 														)
 												)
 										)
@@ -309,15 +309,17 @@ public class DecafIRTest {
 	}
 	
 	@Test
-	public final void testPrecedenceBug() {
-		Program expectedProgram = program(
-				fields(field(boolean.class,"b")),
+	public final void testProgramUsingPrecedence() {
+		final Program expectedProgram = program(
+				fields(
+						field(boolean.class, "b")
+				),
 				methods(
 						method(void.class, "f", null, block(null,
 								statements(
-										assign("b",operation(
-												operation(expression(43),"%",expression(42)),
-												"==",
+										assign("b", operation(
+												operation(expression(43), "*", expression(42)),
+												"+",
 												expression(0)))
 								)
 							)
@@ -325,39 +327,41 @@ public class DecafIRTest {
 				)
 		);
 		
-		assertEquals(expectedProgram, parse(PRECEDENCE_BUG));
+		assertEquals(expectedProgram, parse(PROGRAM_USING_PRECEDENCE));
 	}
 	
 	@Test
 	public final void testProgramWithMethodWithParametersAndComplexBlock() {
-		Program expectedProgram = program(
+		final Program expectedProgram = program(
 				null,
 				methods(
-						method(boolean.class, "f", parameters(
-								parameter(int.class, "a"), 
-								parameter(boolean.class, "b")),
+						method(boolean.class, "f",
+								parameters(
+										parameter(int.class, "a"), 
+										parameter(boolean.class, "b")
+								),
 								block(
 										variables(
-												variable(int.class,"c"),
-												variable(int.class,"d"),
-												variable(boolean.class,"e"),
-												variable(boolean.class,"f")
+												variable(int.class, "c"),
+												variable(int.class, "d"),
+												variable(boolean.class, "e"),
+												variable(boolean.class, "f")
 										),
 										statements(
-												assign("c",expression("a")),
-												assign("d",operation(expression("a"),"+",expression("c"))),
-												assign("e",operation(expression("a"),"<",expression("d"))),
+												assign("c", expression("a")),
+												assign("d", operation(expression("a"), "+", expression("c"))),
+												assign("e", operation(expression("a"), "<", expression("d"))),
 												ifStatement(expression("e"),
 														block(null,
 																statements(
 																		assign("f", (
-																				operation(expression("b"),"&&",
+																				operation(expression("b"), "&&",
 																						operation(
 																							operation(
 																									operation(
-																											operation(expression("a"),"/",expression("c")),
+																											operation(expression("a"), "/", expression("c")),
 																											"-",
-																											operation(expression("d"),"*",expression("d"))
+																											operation(expression("d"), "*", expression("d"))
 																									),
 																									"%",
 																									expression(42)
@@ -375,17 +379,27 @@ public class DecafIRTest {
 														)
 												),
 												calloutStatement(
-													"printf",
-													arguments(calloutArgumentStringLiteral("Hello World!"))
+														"printf",
+														arguments(
+																calloutArgument("Hello World!")
+														)
 												),
 												whileStatement(
-														operation(expression("c"),"!=",expression(0)),
-														block(null,statements(
-																assign("c",operation(expression("c"),"/",expression(2))),
-																ifStatement(operation(expression("c"),"<",expression(0)),
-																		block(null,statements(breakStatement())),
-																		block(null,statements(continueStatement()))
-																)
+														operation(expression("c"), "!=", expression(0)),
+														block(
+																null,
+																statements(
+																	assign("c", operation(expression("c"), "/", expression(2))),
+																	ifStatement(operation(expression("c"), "<", expression(0)),
+																			block(
+																					null,
+																					statements(breakStatement())
+																			),
+																			block(
+																					null,
+																					statements(continueStatement())
+																			)
+																	)
 															)
 														)
 												),
@@ -399,6 +413,15 @@ public class DecafIRTest {
 		assertEquals(expectedProgram, parse(PROGRAM_WITH_METHOD_WITH_PARAMETERS_AND_COMPLEX_BLOCK));
 	}
 	
+	/**
+	 * {@value}.
+	 */
+	public static final String PROGRAM_USING_PRECEDENCE =
+		"class Program {\n" +
+		"\n" + 
+		"	boolean b; void f() { b = 43 * 42 + 0; }" +
+		"\n" +
+		"}";
 	
 	/**
 	 * 
@@ -745,36 +768,10 @@ public class DecafIRTest {
 	
 	/**
 	 * 
-	 * @param methodCall
-	 * <br>Not null
-	 * <br>Shared
-	 * @return
-	 * <br>Not null
-	 * <br>New
-	 */
-	private static final MethodCallStatement callStatement(final String methodName, final List<AbstractExpression> arguments) {
-		return new MethodCallStatement( new MethodCall(methodName, arguments) );
-	}
-	
-	/**
-	 * 
 	 * @param methodName
 	 * <br>Not null
 	 * <br>Shared
-	 * @param arguments
-	 * <br>Maybe null
-	 * <br>Shared
-	 * @return
-	 * <br>Not null
-	 * <br>New
-	 */
-	private static final MethodCallout callout(final String methodName, final List<AbstractCalloutArgument> arguments) {
-		return new MethodCallout(methodName, arguments);
-	}
-	
-	/**
-	 * 
-	 * @param methodCallout
+	 * @param arguments 
 	 * <br>Not null
 	 * <br>Shared
 	 * @return
@@ -782,7 +779,7 @@ public class DecafIRTest {
 	 * <br>New
 	 */
 	private static final MethodCallStatement calloutStatement(final String methodName, final List<AbstractCalloutArgument> arguments) {
-		return new MethodCallStatement( new MethodCallout(methodName, arguments) );
+		return new MethodCallStatement(new MethodCallout(methodName, arguments));
 	}
 	
 	/**
@@ -794,21 +791,8 @@ public class DecafIRTest {
 	 * <br>Not null
 	 * <br>New
 	 */
-	private static final CalloutArgumentStringLiteral calloutArgumentStringLiteral(final String string) {
-		return new CalloutArgumentStringLiteral(string);
-	}
-	
-	/**
-	 * 
-	 * @param expression
-	 * <br>Not null
-	 * <br>Shared
-	 * @return
-	 * <br>Not null
-	 * <br>New
-	 */
-	private static final CalloutArgumentExpression calloutArgumentExpression(final AbstractExpression expression) {
-		return new CalloutArgumentExpression(expression);
+	private static final StringCalloutArgument calloutArgument(final String string) {
+		return new StringCalloutArgument(string);
 	}
 	
 	/**

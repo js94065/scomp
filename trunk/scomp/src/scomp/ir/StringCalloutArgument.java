@@ -8,7 +8,7 @@ import scomp.Tools;
  * @author Wilson (creation 2010-07-20)
  * 
  */
-public class CalloutArgumentStringLiteral extends AbstractCalloutArgument {
+public class StringCalloutArgument extends AbstractCalloutArgument {
 	
 	private final String string;
 	
@@ -18,7 +18,7 @@ public class CalloutArgumentStringLiteral extends AbstractCalloutArgument {
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	public CalloutArgumentStringLiteral(final String string){
+	public StringCalloutArgument(final String string){
 		this.string = string;
 	}
 	
@@ -45,7 +45,7 @@ public class CalloutArgumentStringLiteral extends AbstractCalloutArgument {
 	
 	@Override
 	protected final boolean doEquals(final Object other) {
-		final CalloutArgumentStringLiteral that = Tools.cast(this.getClass(), other);
+		final StringCalloutArgument that = Tools.cast(this.getClass(), other);
 		
 		return this == that ||
 				that != null &&
