@@ -309,25 +309,51 @@ public class DecafIRTest {
 	}
 	
 	@Test
-	public final void testProgramUsingPrecedence() {
+	public final void testProgramUsingPrecedence1() {
 		final Program expectedProgram = program(
 				fields(
 						field(int.class, "b")
 				),
 				methods(
-						method(void.class, "f", null, block(null,
-								statements(
-										assign("b", operation(
-												operation(expression(43), "*", expression(42)),
-												"+",
-												expression(0)))
-								)
+						method(void.class, "f", null,
+								block(
+										null,
+										statements(
+												assign("b", operation(
+														operation(expression(43), "*", expression(42)),
+														"+",
+														expression(0)))
+										)
 							)
 						)
 				)
 		);
 		
-		assertEquals(expectedProgram, parse(PROGRAM_USING_PRECEDENCE));
+		assertEquals(expectedProgram, parse(PROGRAM_USING_PRECEDENCE_1));
+	}
+	
+	@Test
+	public final void testProgramUsingPrecedence2() {
+		final Program expectedProgram = program(
+				fields(
+						field(boolean.class, "b")
+				),
+				methods(
+						method(void.class, "f", null,
+								block(
+										null,
+										statements(
+												assign("b", operation(
+														operation(expression(43), "%", expression(42)),
+														"==",
+														expression(0)))
+										)
+								)
+						)
+				)
+		);
+		
+		assertEquals(expectedProgram, parse(PROGRAM_USING_PRECEDENCE_2));
 	}
 	
 	@Test
@@ -416,10 +442,20 @@ public class DecafIRTest {
 	/**
 	 * {@value}.
 	 */
-	public static final String PROGRAM_USING_PRECEDENCE =
+	public static final String PROGRAM_USING_PRECEDENCE_1 =
 		"class Program {\n" +
 		"\n" + 
 		"	int b; void f() { b = 43 * 42 + 0; }" +
+		"\n" +
+		"}";
+	
+	/**
+	 * {@value}.
+	 */
+	public static final String PROGRAM_USING_PRECEDENCE_2 =
+		"class Program {\n" +
+		"\n" + 
+		"	boolean b; void f() { b = 43 % 42 == 0; }" +
 		"\n" +
 		"}";
 	
