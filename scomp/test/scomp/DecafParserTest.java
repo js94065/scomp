@@ -197,6 +197,19 @@ public class DecafParserTest {
 		), this.recorder.getMessages());
 	}
 	
+	@Test
+	public final void testProgramWithChainedEqualities() {
+		try {
+			assertEquals(null, parse(PROGRAM_WITH_CHAINED_EQUALITIES));
+		} catch (final Exception exception) {
+			assertTrue(exception.getMessage(), exception.getMessage().startsWith("["));
+		}
+		
+		assertEquals(Arrays.asList(
+				"(:5:14) Unexpected \"==\""
+		), this.recorder.getMessages());
+	}
+	
 	/**
 	 * {@value}.
 	 */
@@ -424,16 +437,6 @@ public class DecafParserTest {
 		"}";
 	
 	/**
-	 * 
-	 */
-	public static final String PRECEDENCE_BUG =
-		"class Program {\n" +
-		"\n" + 
-		"	boolean b; void f() { b = 43 % 42 == 0; }" +
-		"\n" +
-		"}";
-		
-	/**
 	 * {@value}.
 	 */
 	public static final String MALFORMED_PROGRAM_1 =
@@ -508,6 +511,19 @@ public class DecafParserTest {
 		"	int f() {\n" +
 		"		int x\n" +
 		"		return 42;\n" +
+		"	}\n" +
+		"\n" +
+		"}";
+	
+	/**
+	 * {@value}.
+	 */
+	public static final String PROGRAM_WITH_CHAINED_EQUALITIES =
+		"class Program {\n" +
+		"\n" +
+		"	void f() {\n" +
+		"		boolean x;\n" +
+		"		x = 1 == 2 == 3;\n" +
 		"	}\n" +
 		"\n" +
 		"}";

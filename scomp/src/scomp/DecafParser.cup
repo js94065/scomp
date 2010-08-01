@@ -509,12 +509,12 @@ MethodCall ::=
 	|
 	CALLOUT LEFT_PARENTHESIS STRING_LITERAL:stringLiteral RIGHT_PARENTHESIS
 	{:
-		RESULT = new MethodCallout((String)stringLiteral, null);
+		RESULT = new MethodCallout(stringLiteral, null);
 	:}
 	|
 	CALLOUT LEFT_PARENTHESIS STRING_LITERAL:stringLiteral COMMA CalloutArguments:calloutArguments RIGHT_PARENTHESIS
 	{:
-		RESULT = new MethodCallout((String)stringLiteral, calloutArguments);
+		RESULT = new MethodCallout(stringLiteral, calloutArguments);
 	:}
 	;
 
@@ -537,12 +537,12 @@ CalloutArguments ::=
 CalloutArgument ::=
 	Expression:expression
 	{:
-		RESULT = new CalloutArgumentExpression(expression);
+		RESULT = new ExpressionCalloutArgument(expression);
 	:}
 	|
 	STRING_LITERAL:stringLiteral
 	{:
-		RESULT = new CalloutArgumentStringLiteral(stringLiteral);
+		RESULT = new StringCalloutArgument(stringLiteral);
 	:}
 	;
 
@@ -590,8 +590,115 @@ Expression ::=
 		RESULT = new LiteralExpression(literal);
 	:}
 	|
-	Expression:left BinaryOperator:operator Expression:right
+	Expression:left PLUS Expression:right
 	{:
+		final String operator = ((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 1)).getInputString();
+		
+		RESULT = new BinaryOperationExpression(left, operator, right);
+	:}
+	|
+	Expression:left MINUS Expression:right
+	{:
+		final String operator = ((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 1)).getInputString();
+		
+		RESULT = new BinaryOperationExpression(left, operator, right);
+	:}
+	|
+	Expression:left TIMES Expression:right
+	{:
+		final String operator = ((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 1)).getInputString();
+		
+		RESULT = new BinaryOperationExpression(left, operator, right);
+	:}
+	|
+	Expression:left DIVIDE Expression:right
+	{:
+		final String operator = ((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 1)).getInputString();
+		
+		RESULT = new BinaryOperationExpression(left, operator, right);
+	:}
+	|
+	Expression:left MODULO Expression:right
+	{:
+		final String operator = ((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 1)).getInputString();
+		
+		RESULT = new BinaryOperationExpression(left, operator, right);
+	:}
+	|
+	Expression:left ARITHMETIC_SHIFT_LEFT Expression:right
+	{:
+		final String operator = ((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 1)).getInputString();
+		
+		RESULT = new BinaryOperationExpression(left, operator, right);
+	:}
+	|
+	Expression:left ARITHMETIC_SHIFT_RIGHT Expression:right
+	{:
+		final String operator = ((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 1)).getInputString();
+		
+		RESULT = new BinaryOperationExpression(left, operator, right);
+	:}
+	|
+	Expression:left BITWISE_ROTATE_RIGHT Expression:right
+	{:
+		final String operator = ((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 1)).getInputString();
+		
+		RESULT = new BinaryOperationExpression(left, operator, right);
+	:}
+	|
+	Expression:left LESS Expression:right
+	{:
+		final String operator = ((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 1)).getInputString();
+		
+		RESULT = new BinaryOperationExpression(left, operator, right);
+	:}
+	|
+	Expression:left GREATER Expression:right
+	{:
+		final String operator = ((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 1)).getInputString();
+		
+		RESULT = new BinaryOperationExpression(left, operator, right);
+	:}
+	|
+	Expression:left LESS_OR_EQUAL Expression:right
+	{:
+		final String operator = ((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 1)).getInputString();
+		
+		RESULT = new BinaryOperationExpression(left, operator, right);
+	:}
+	|
+	Expression:left GREATER_OR_EQUAL Expression:right
+	{:
+		final String operator = ((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 1)).getInputString();
+		
+		RESULT = new BinaryOperationExpression(left, operator, right);
+	:}
+	|
+	Expression:left EQUAL Expression:right
+	{:
+		final String operator = ((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 1)).getInputString();
+		
+		RESULT = new BinaryOperationExpression(left, operator, right);
+	:}
+	|
+	Expression:left NOT_EQUAL Expression:right
+	{:
+		final String operator = ((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 1)).getInputString();
+		
+		RESULT = new BinaryOperationExpression(left, operator, right);
+	:}
+	|
+	Expression:left AND Expression:right
+	{:
+		final String operator = ((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 1)).getInputString();
+		
+		RESULT = new BinaryOperationExpression(left, operator, right);
+	:}
+	|
+	Expression:left OR Expression:right
+	{:
+		final String operator = ((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 1)).getInputString();
+		
 		RESULT = new BinaryOperationExpression(left, operator, right);
 	:}
 	|
@@ -611,116 +718,6 @@ Expression ::=
 	:}
 	;
 
-BinaryOperator ::=
-	ArithmeticOperator:operator
-	{:
-		RESULT = operator;
-	:}
-	|
-	RelationOperator:operator
-	{:
-		RESULT = operator;
-	:}
-	|
-	EqualityOperator:operator
-	{:
-		RESULT = operator;
-	:}
-	|
-	ConditionalOperator:operator
-	{:
-		RESULT = operator;
-	:}
-	;
-
-ArithmeticOperator ::=
-	PLUS
-	{:
-		RESULT = ((DecafToken) this.getStackTop()).getInputString();
-	:}
-	|
-	MINUS
-	{:
-		RESULT = ((DecafToken) this.getStackTop()).getInputString();
-	:}
-	|
-	TIMES
-	{:
-		RESULT = ((DecafToken) this.getStackTop()).getInputString();
-	:}
-	|
-	DIVIDE
-	{:
-		RESULT = ((DecafToken) this.getStackTop()).getInputString();
-	:}
-	|
-	MODULO
-	{:
-		RESULT = ((DecafToken) this.getStackTop()).getInputString();
-	:}
-	|
-	ARITHMETIC_SHIFT_LEFT
-	{:
-		RESULT = ((DecafToken) this.getStackTop()).getInputString();
-	:}
-	|
-	ARITHMETIC_SHIFT_RIGHT
-	{:
-		RESULT = ((DecafToken) this.getStackTop()).getInputString();
-	:}
-	|
-	BITWISE_ROTATE_RIGHT
-	{:
-		RESULT = ((DecafToken) this.getStackTop()).getInputString();
-	:}
-	;
-
-RelationOperator ::=
-	LESS
-	{:
-		RESULT = ((DecafToken) this.getStackTop()).getInputString();
-	:}
-	|
-	GREATER
-	{:
-		RESULT = ((DecafToken) this.getStackTop()).getInputString();
-	:}
-	|
-	LESS_OR_EQUAL
-	{:
-		RESULT = ((DecafToken) this.getStackTop()).getInputString();
-	:}
-	|
-	GREATER_OR_EQUAL
-	{:
-		RESULT = ((DecafToken) this.getStackTop()).getInputString();
-	:}
-	;
-	
-EqualityOperator ::=
-	EQUAL
-	{:
-		RESULT = ((DecafToken) this.getStackTop()).getInputString();
-	:} 
-	|
-	NOT_EQUAL
-	{:
-		RESULT = ((DecafToken) this.getStackTop()).getInputString();
-	:} 
-	;
-
-ConditionalOperator ::=
-	AND
-	{:
-		RESULT = ((DecafToken) this.getStackTop()).getInputString();
-	:}
-	|
-	OR
-	{:
-		RESULT = ((DecafToken) this.getStackTop()).getInputString();
-	:}
-	;
-	
 Literal ::=
 	INT_LITERAL:representation
 	{:
