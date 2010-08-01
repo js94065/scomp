@@ -374,9 +374,9 @@ public class DecafIRTest {
 																statements( assign("f",expression(false)) )
 														)
 												),
-												methodCallStatement(methodCallout(
+												calloutStatement(
 													"printf",
-													arguments(calloutArgExpression(expression("Hello World!"))))
+													arguments(calloutArgExpression(expression("Hello World!")))
 												),
 												whileStatement(
 														operation(expression("c"),"!=",expression(0)),
@@ -752,21 +752,8 @@ public class DecafIRTest {
 	 * <br>Not null
 	 * <br>New
 	 */
-	private static final MethodCallStatement methodCallStatement(MethodCall methodCall) {
-		return new MethodCallStatement(methodCall);
-	}
-	
-	/**
-	 * 
-	 * @param methodCallout
-	 * <br>Not null
-	 * <br>Shared
-	 * @return
-	 * <br>Not null
-	 * <br>New
-	 */
-	private static final MethodCallStatement methodCallStatement(MethodCallout methodCallout) {
-		return new MethodCallStatement(methodCallout);
+	private static final MethodCallStatement callStatement(final String methodName, final List<AbstractExpression> arguments) {
+		return new MethodCallStatement( new MethodCall(methodName, arguments) );
 	}
 	
 	/**
@@ -781,8 +768,21 @@ public class DecafIRTest {
 	 * <br>Not null
 	 * <br>New
 	 */
-	private static final MethodCallout methodCallout(final String methodName, final List<AbstractCalloutArgument> arguments) {
+	private static final MethodCallout callout(final String methodName, final List<AbstractCalloutArgument> arguments) {
 		return new MethodCallout(methodName, arguments);
+	}
+	
+	/**
+	 * 
+	 * @param methodCallout
+	 * <br>Not null
+	 * <br>Shared
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final MethodCallStatement calloutStatement(final String methodName, final List<AbstractCalloutArgument> arguments) {
+		return new MethodCallStatement( new MethodCallout(methodName, arguments) );
 	}
 	
 	/**
