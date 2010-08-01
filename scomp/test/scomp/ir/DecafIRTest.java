@@ -376,7 +376,7 @@ public class DecafIRTest {
 												),
 												calloutStatement(
 													"printf",
-													arguments(calloutArgStringLiteral("Hello World!"))
+													arguments(calloutArgumentStringLiteral("Hello World!"))
 												),
 												whileStatement(
 														operation(expression("c"),"!=",expression(0)),
@@ -794,7 +794,7 @@ public class DecafIRTest {
 	 * <br>Not null
 	 * <br>New
 	 */
-	private static final CalloutArgumentStringLiteral calloutArgStringLiteral(final String string) {
+	private static final CalloutArgumentStringLiteral calloutArgumentStringLiteral(final String string) {
 		return new CalloutArgumentStringLiteral(string);
 	}
 	
@@ -807,7 +807,7 @@ public class DecafIRTest {
 	 * <br>Not null
 	 * <br>New
 	 */
-	private static final CalloutArgumentExpression calloutArgExpression(final AbstractExpression expression) {
+	private static final CalloutArgumentExpression calloutArgumentExpression(final AbstractExpression expression) {
 		return new CalloutArgumentExpression(expression);
 	}
 	
