@@ -254,7 +254,7 @@ public class DecafIRTest {
 	
 	@Test
 	public final void testProgramWithMethodWithVariousExpressions() throws Exception {
-		Program expectedProgram = program(
+		final Program expectedProgram = program(
 				null,
 				methods(
 						method(void.class, "f", null,
@@ -268,14 +268,14 @@ public class DecafIRTest {
 														assign("a", minus(expression(42))),
 														assign("b", expression(0x33)),
 														assign("a", expression('a')),
-														assign("a", operation(expression("a"),"+", expression("b"))),
-														assign("a", operation(expression("a"),"-", expression("b"))),
-														assign("a", operation(expression("a"),"*", expression("b"))),
-														assign("a", operation(expression("a"),"/", expression("b"))),
-														assign("a", operation(expression("a"),"%", expression("b"))),
-														assign("a", operation(expression("a"),"<<", expression("b"))),
-														assign("a", operation(expression("a"),">>", expression("b"))),
-														assign("a", operation(expression("a"),">>>", expression("b"))),
+														assign("a", operation(expression("a"), "+", expression("b"))),
+														assign("a", operation(expression("a"), "-", expression("b"))),
+														assign("a", operation(expression("a"), "*", expression("b"))),
+														assign("a", operation(expression("a"), "/", expression("b"))),
+														assign("a", operation(expression("a"), "%", expression("b"))),
+														assign("a", operation(expression("a"), "<<", expression("b"))),
+														assign("a", operation(expression("a"), ">>", expression("b"))),
+														assign("a", operation(expression("a"), ">>>", expression("b"))),
 														assign("c", expression(true)),
 														assign("d", expression(false)),
 														assign("c", not(expression("d"))),
@@ -287,18 +287,18 @@ public class DecafIRTest {
 														assign("c", operation(expression("c"), "!=", expression("d"))),
 														assign("c", operation(expression("c"), "&&", expression("d"))),
 														assign("c", operation(expression("c"), "||", expression("d"))),
-														assign("a", operation(expression("a"), "+", operation(expression("b"), "+", expression("a")))),
-														assign("a", operation(expression("a"), "+", operation(expression("b"), "-", expression("a")))),
+														assign("a", operation(operation(expression("a"), "+", expression("b")), "+", expression("a"))),
+														assign("a", operation(operation(expression("a"), "+", expression("b")), "-", expression("a"))),
 														assign("a", operation(expression("a"), "+", operation(expression("b"), "*", expression("a")))),
 														assign("a", operation(expression("a"), "+", operation(expression("b"), "/", expression("a")))),
 														assign("a", operation(expression("a"), "+", operation(expression("b"), "%", expression("a")))),
-														assign("a", operation(expression("a"), "+", operation(expression("b"), "<<", expression("a")))),
-														assign("a", operation(expression("a"), "+", operation(expression("b"), ">>", expression("a")))),
-														assign("a", operation(expression("a"), "+", operation(expression("b"), ">>>", expression("a")))),
-														assign("c", operation(expression("a"), "<", operation(expression("b"), "==", expression("d")))),
-														assign("c", operation(expression("a"), ">", operation(expression("b"), "!=", expression("d")))),
-														assign("c", operation(expression("a"), "<=", operation(expression("b"), "&&", expression("d")))),
-														assign("c", operation(expression("a"), ">=", operation(expression("b"), "||", expression("d"))))
+														assign("a", operation(operation(expression("a"), "+", expression("b")), "<<", expression("a"))),
+														assign("a", operation(operation(expression("a"), "+", expression("b")), ">>", expression("a"))),
+														assign("a", operation(operation(expression("a"), "+", expression("b")), ">>>", expression("a"))),
+														assign("c", operation(operation(expression("a"), "<", expression("b")), "==", expression("d"))),
+														assign("c", operation(operation(expression("a"), ">", expression("b")), "!=", expression("d"))),
+														assign("c", operation(operation(expression("a"), "<=", expression("b")), "&&", expression("d"))),
+														assign("c", operation(operation(expression("a"), ">=", expression("b")), "||", expression("d")))
 														)
 												)
 										)
