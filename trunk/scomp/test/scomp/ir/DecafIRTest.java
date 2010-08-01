@@ -312,7 +312,7 @@ public class DecafIRTest {
 	public final void testProgramUsingPrecedence() {
 		final Program expectedProgram = program(
 				fields(
-						field(boolean.class, "b")
+						field(int.class, "b")
 				),
 				methods(
 						method(void.class, "f", null, block(null,
