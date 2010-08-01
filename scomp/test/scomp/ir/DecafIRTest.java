@@ -419,7 +419,7 @@ public class DecafIRTest {
 	public static final String PROGRAM_USING_PRECEDENCE =
 		"class Program {\n" +
 		"\n" + 
-		"	boolean b; void f() { b = 43 * 42 + 0; }" +
+		"	int b; void f() { b = 43 * 42 + 0; }" +
 		"\n" +
 		"}";
 	
