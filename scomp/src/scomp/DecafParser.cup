@@ -184,7 +184,6 @@ non terminal AbstractExpression Expression;
 non terminal AbstractCalloutArgument CalloutArgument;
 non terminal List CalloutArguments;
 non terminal AbstractLiteral Literal;
-non terminal String BinaryOperator, ArithmeticOperator, RelationOperator, EqualityOperator, ConditionalOperator;
 
 precedence left OR;
 precedence left AND;
