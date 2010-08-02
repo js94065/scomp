@@ -799,7 +799,7 @@ public class DecafIRTest {
 	 * <br>New
 	 */
 	private static final MethodCall call(final String methodName, final List<AbstractExpression> arguments) {
-		return new MethodCall(methodName, arguments);
+		return new MethodCall(identifier(methodName), arguments);
 	}
 	
 	/**

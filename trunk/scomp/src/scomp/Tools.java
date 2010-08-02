@@ -26,6 +26,19 @@ public final class Tools {
 	}
 	
     public static final int DEBUG_STACK_OFFSET = JLexTools.DEBUG_STACK_OFFSET;
+
+	/**
+	 *
+	 * @param <T> The common type of the elements
+	 * @param array
+	 * <br>Maybe null
+	 * @return
+	 * <br>Maybe null
+	 * <br>Maybe New
+	 */
+	public static final <T> T[] array(final T... array) {
+		return array;
+	}
 	
 	/**
 	 * 

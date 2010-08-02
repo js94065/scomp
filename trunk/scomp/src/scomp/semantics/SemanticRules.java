@@ -19,6 +19,8 @@ import scomp.ir.Block;
 import scomp.ir.FieldDeclaration;
 import scomp.ir.IdentifierLocation;
 import scomp.ir.LocationExpression;
+import scomp.ir.MethodCall;
+import scomp.ir.MethodCallExpression;
 import scomp.ir.MethodDeclaration;
 import scomp.ir.ParameterDeclaration;
 import scomp.ir.Program;
@@ -159,6 +161,30 @@ public final class SemanticRules implements Visitor {
 		this.checkRule2(location);
 	}
 	
+	@Override
+	public final void beginVisit(final MethodCallExpression methodCall) {
+		// TODO
+		Tools.debugPrint("TODO");
+	}
+	
+	@Override
+	public final void endVisit(final MethodCallExpression methodCall) {
+		// TODO
+		Tools.debugPrint("TODO");
+	}
+	
+	@Override
+	public final void beginVisit(final MethodCall methodCall) {
+		// TODO
+		Tools.debugPrint("TODO");
+	}
+	
+	@Override
+	public void endVisit(MethodCall methodCall) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	private final void pushNewScope() {
 		if (this.scopes.isEmpty()) {
 			this.scopes.push(new LinkedHashMap<String, AbstractTypedEntityDeclaration>());
