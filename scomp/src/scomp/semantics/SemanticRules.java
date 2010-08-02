@@ -175,16 +175,15 @@ public final class SemanticRules implements Visitor {
 	
 	@Override
 	public final void beginVisit(final MethodCall methodCall) {
+		this.checkRule2(methodCall);
+	}
+	
+	@Override
+	public final void endVisit(final MethodCall methodCall) {
 		// TODO
 		Tools.debugPrint("TODO");
 	}
 	
-	@Override
-	public void endVisit(MethodCall methodCall) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	private final void pushNewScope() {
 		if (this.scopes.isEmpty()) {
 			this.scopes.push(new LinkedHashMap<String, AbstractTypedEntityDeclaration>());
@@ -218,7 +217,20 @@ public final class SemanticRules implements Visitor {
 	 */
 	private final void checkRule2(final AbstractLocation location) {
 		if (!this.getCurrentScope().containsKey(location.getIdentifier())) {
-			this.logError(location.getIdentifierRow(), location.getIdentifierColumn(), "Undeclared identifier " + location.getIdentifier());
+			this.logError(location.getIdentifierRow(), location.getIdentifierColumn(),
+					"Undeclared identifier " + location.getIdentifier());
+		}
+	}
+	
+	/**
+	 * 
+	 * @param methodCall
+	 * <br>Not null
+	 */
+	private final void checkRule2(final MethodCall methodCall) {
+		if (!this.getCurrentScope().containsKey(methodCall.getMethodName())) {
+			this.logError(methodCall.getMethodNameIdentifierRow(), methodCall.getMethodNameIdentifierColumn(),
+					"Undeclared identifier " + methodCall.getMethodName());
 		}
 	}
 	
