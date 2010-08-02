@@ -56,7 +56,9 @@ public final class SemanticRulesTest {
 		assertEquals(Arrays.asList(
 				"(:10:4) Undeclared identifier b",
 				"(:10:6) Undeclared identifier d",
-				"(:13:10) Undeclared identifier a"
+				"(:10:11) Undeclared identifier f",
+				"(:11:4) Undeclared identifier g",
+				"(:14:10) Undeclared identifier a"
 		), this.recorder.getMessages());
 	}
 	
@@ -99,10 +101,15 @@ public final class SemanticRulesTest {
 		"			int d;\n" +
 		"		}\n" +
 		"		{\n" +
-		"			b[d] = y;\n" +
+		"			b[d] = f(y);\n" +
+		"			g();\n" +
 		"		}\n" +
 		"\n" +
 		"		return a + y + z;\n" +
+		"	}\n" +
+		"\n" +
+		"	void f() {\n" +
+		"		// Deliberately left empty\n" +
 		"	}\n" +
 		"\n" +
 		"}";

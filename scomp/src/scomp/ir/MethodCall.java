@@ -2,8 +2,7 @@ package scomp.ir;
 
 import java.util.List;
 
-import scomp.Tools;
-
+import scomp.DecafToken;
 
 /**
  * The Decaf method name.
@@ -13,23 +12,49 @@ import scomp.Tools;
  */
 public final class MethodCall extends AbstractMethodCall<AbstractExpression> {
 	
+	private final DecafToken methodNameIdentifier;
+	
 	/**
 	 * 
-	 * @param methodName
+	 * @param methodNameIdentifier
 	 * <br>Not null
 	 * <br>Shared
 	 * @param arguments
 	 * <br>Maybe null
 	 * <br>Shared
 	 */
-	public MethodCall(final String methodName, final List<AbstractExpression> arguments) {
-		super(methodName, arguments);
+	public MethodCall(final DecafToken methodNameIdentifier, final List<AbstractExpression> arguments) {
+		super(methodNameIdentifier.getValue().toString(), arguments);
+		this.methodNameIdentifier = methodNameIdentifier;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * <br>Range: {@code [1 .. Integer.MAX_VALUE]}
+	 */
+	public final int getMethodNameIdentifierRow() {
+		return this.methodNameIdentifier.getRow();
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * <br>Range: {@code [1 .. Integer.MAX_VALUE]}
+	 */
+	public final int getMethodNameIdentifierColumn() {
+		return this.methodNameIdentifier.getColumn();
 	}
 	
 	@Override
 	public final void accept(final Visitor visitor) {
-		// TODO
-		Tools.debugPrint("TODO");
+		visitor.beginVisit(this);
+		
+		for (final AbstractExpression argument : this.getArguments()) {
+			argument.accept(visitor);
+		}
+		
+		visitor.endVisit(this);
 	}
 	
 	@Override

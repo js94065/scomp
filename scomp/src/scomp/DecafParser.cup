@@ -496,14 +496,14 @@ Statement ::=
 	;
 	
 MethodCall ::= 
-	IDENTIFIER:identifier LEFT_PARENTHESIS RIGHT_PARENTHESIS
+	IDENTIFIER LEFT_PARENTHESIS RIGHT_PARENTHESIS
 	{:
-		RESULT = new MethodCall(identifier, null);
+		RESULT = new MethodCall((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 2), null);
 	:}
 	|
-	IDENTIFIER:identifier LEFT_PARENTHESIS Expressions:expressions RIGHT_PARENTHESIS
+	IDENTIFIER LEFT_PARENTHESIS Expressions:expressions RIGHT_PARENTHESIS
 	{:
-		RESULT = new MethodCall(identifier, expressions);
+		RESULT = new MethodCall((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 3), expressions);
 	:}
 	|
 	CALLOUT LEFT_PARENTHESIS STRING_LITERAL:stringLiteral RIGHT_PARENTHESIS

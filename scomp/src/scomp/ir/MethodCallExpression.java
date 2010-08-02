@@ -23,8 +23,11 @@ public final class MethodCallExpression extends AbstractExpression {
 	
 	@Override
 	public final void accept(final Visitor visitor) {
-		// TODO
-		Tools.debugPrint("TODO");
+		visitor.beginVisit(this);
+		
+		this.getMethodCall().accept(visitor);
+		
+		visitor.endVisit(this);
 	}
 	
 	/**

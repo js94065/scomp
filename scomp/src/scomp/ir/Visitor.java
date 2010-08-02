@@ -154,4 +154,32 @@ public interface Visitor {
 	 */
 	public abstract void visit(IdentifierLocation location);
 	
+	/**
+	 * 
+	 * @param methodCall
+	 * <br>Not null
+	 */
+	public abstract void beginVisit(MethodCallExpression methodCall);
+	
+	/**
+	 * 
+	 * @param methodCall
+	 * <br>Not null
+	 */
+	public abstract void endVisit(MethodCallExpression methodCall);
+	
+	/**
+	 * 
+	 * @param methodCall
+	 * <br>Not null
+	 */
+	public abstract void beginVisit(MethodCall methodCall);
+	
+	/**
+	 * 
+	 * @param methodCall
+	 * <br>Not null
+	 */
+	public abstract void endVisit(MethodCall methodCall);
+	
 }
