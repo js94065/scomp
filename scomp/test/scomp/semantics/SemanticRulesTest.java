@@ -98,6 +98,17 @@ public final class SemanticRulesTest {
 		), this.recorder.getMessages());
 	}
 	
+	@Test
+	public final void testRule6() {
+		final Program program = parse(PROGRAM_WITH_VOID_METHOD_CALL_USED_IN_EXPRESSION);
+		
+		program.accept(new SemanticRules());
+		
+		assertEquals(Arrays.asList(
+				"(:14:7) The method f has type void and cannot be used as an expression"
+		), this.recorder.getMessages());
+	}
+	
 	/**
 	 * {@value}.
 	 */
@@ -200,6 +211,28 @@ public final class SemanticRulesTest {
 		"		f(42);\n" +
 		"		g();\n" +
 		"		g(true);\n" +
+		"	}\n" +
+		"\n" +
+		"}";
+	
+	/**
+	 * {@value}.
+	 */
+	public static final String PROGRAM_WITH_VOID_METHOD_CALL_USED_IN_EXPRESSION =
+		"class Program {\n" +
+		"\n" +
+		"	void f() {\n" +
+		"		// Deliberately left empty\n" +
+		"	}\n" +
+		"\n" +
+		"	int g() {\n" +
+		"		return 42;\n" +
+		"	}\n" +
+		"\n" +
+		"	void main() {\n" +
+		"		int x;\n" +
+		"\n" +
+		"		x = f() + g();\n" +
 		"	}\n" +
 		"\n" +
 		"}";

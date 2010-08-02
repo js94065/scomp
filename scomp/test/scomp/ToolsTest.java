@@ -1,9 +1,9 @@
 package scomp;
 
+import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,12 +18,12 @@ public class ToolsTest {
 	
 	@Test
 	public final void testInvoke() {
-		assertEquals(Arrays.asList("42", "33"), toList(Tools.invoke(Arrays.asList(42, 33), "toString")));
+		assertEquals(asList("42", "33"), toList(Tools.invoke(asList(42, 33), "toString")));
 	}
 	
 	@Test
 	public final void testJoin() {
-		assertEquals("42,33", Tools.join(",", Arrays.asList(42, 33)));
+		assertEquals("42,33", Tools.join(",", asList(42, 33)));
 	}
 	
 	@Test
@@ -41,7 +41,7 @@ public class ToolsTest {
 		assertEquals(empty, Tools.emptyIfNull(null));
 		assertSame(empty, Tools.emptyIfNull(empty));
 		
-		final List<?> nonempty = Arrays.asList(42);
+		final List<?> nonempty = asList(42);
 		
 		assertSame(nonempty, Tools.emptyIfNull(nonempty));
 	}
