@@ -2,6 +2,7 @@ package scomp.ir;
 
 import static org.junit.Assert.*;
 
+import static scomp.DecafParserSymbols.*;
 import static scomp.DecafParserTest.*;
 import static scomp.DecafScannerTest.token;
 import static scomp.Tools.*;
@@ -503,7 +504,7 @@ public class DecafIRTest {
 	 * <br>New
 	 */
 	private static final ArrayFieldDeclaration field(final Class<?> elementType, final String identifier, final int elementCount) {
-		return new ArrayFieldDeclaration(elementType, identifier(identifier), elementCount);
+		return new ArrayFieldDeclaration(elementType, identifier(identifier), literal(elementCount));
 	}
 	
 	/**
@@ -692,7 +693,7 @@ public class DecafIRTest {
 	 * <br>New
 	 */
 	private static final LiteralExpression expression(final int value) {
-		return new LiteralExpression(new IntLiteral(value));
+		return new LiteralExpression(literal(value));
 	}
 	
 	/**
@@ -749,6 +750,18 @@ public class DecafIRTest {
 	 */
 	private static final BinaryOperationExpression operation(final AbstractExpression left, final String operator, final AbstractExpression right) {
 		return new BinaryOperationExpression(left, operator, right);
+	}
+	
+	/**
+	 * 
+	 * @param value
+	 * <br>Range: any integer
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final IntLiteral literal(final int value) {
+		return new IntLiteral(token(INT_LITERAL, "" + value));
 	}
 	
 	/**
@@ -927,7 +940,7 @@ public class DecafIRTest {
 	 * <br>New
 	 */
 	public static final DecafToken identifier(final String identifier) {
-		return token(DecafParserSymbols.IDENTIFIER, identifier);
+		return token(IDENTIFIER, identifier);
 	}
 	
 }

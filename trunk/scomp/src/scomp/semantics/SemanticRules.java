@@ -18,6 +18,7 @@ import scomp.ir.BinaryOperationExpression;
 import scomp.ir.Block;
 import scomp.ir.FieldDeclaration;
 import scomp.ir.IdentifierLocation;
+import scomp.ir.IntLiteral;
 import scomp.ir.LocationExpression;
 import scomp.ir.MethodCall;
 import scomp.ir.MethodCallExpression;
@@ -58,9 +59,15 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	@Override
-	public final void visit(final ArrayFieldDeclaration field) {
+	public final void beginVisit(final ArrayFieldDeclaration field) {
 		this.checkRule1(field);
 		this.checkRule4(field);
+	}
+	
+	@Override
+	public final void endVisit(final ArrayFieldDeclaration field) {
+		// TODO
+		Tools.debugPrint("TODO");
 	}
 	
 	@Override
@@ -187,6 +194,12 @@ public final class SemanticRules implements Visitor {
 		Tools.debugPrint("TODO");
 	}
 	
+	@Override
+	public final void visit(final IntLiteral literal) {
+		// TODO
+		Tools.debugPrint("TODO");
+	}
+	
 	private final void pushNewScope() {
 		if (this.scopes.isEmpty()) {
 			this.scopes.push(new LinkedHashMap<String, AbstractTypedEntityDeclaration>());
@@ -257,8 +270,10 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule4(final ArrayFieldDeclaration field) {
-		// TODO
-		Tools.debugPrint("TODO");
+		if (field.getElementCount().getValue() <= 0) {
+			this.logError(field.getElementCount().getRow(), field.getElementCount().getColumn(),
+					"Array size must be greater than 0");
+		}
 	}
 	
 	/**

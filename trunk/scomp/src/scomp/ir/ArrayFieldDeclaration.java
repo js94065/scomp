@@ -11,7 +11,7 @@ import scomp.Tools;
  */
 public final class ArrayFieldDeclaration extends AbstractFieldDeclaration {
 	
-	private final int elementCount;
+	private final IntLiteral elementCount;
 	
 	/**
 	 * 
@@ -24,14 +24,18 @@ public final class ArrayFieldDeclaration extends AbstractFieldDeclaration {
 	 * @param elementCount 
 	 * <br>Range: {@code [0 .. Integer.MAX_VALUE]}
 	 */
-	public ArrayFieldDeclaration(final Class<?> type, final DecafToken identifier, final int elementCount) {
+	public ArrayFieldDeclaration(final Class<?> type, final DecafToken identifier, final IntLiteral elementCount) {
 		super(type, identifier);
 		this.elementCount = elementCount;
 	}
 	
 	@Override
 	public final void accept(final Visitor visitor) {
-		visitor.visit(this);
+		visitor.beginVisit(this);
+		
+		this.getElementCount().accept(visitor);
+		
+		visitor.endVisit(this);
 	}
 	
 	/**
@@ -39,7 +43,7 @@ public final class ArrayFieldDeclaration extends AbstractFieldDeclaration {
 	 * @return
 	 * <br>Range: {@code [0 .. Integer.MAX_VALUE]}
 	 */
-	public final int getElementCount() {
+	public final IntLiteral getElementCount() {
 		return this.elementCount;
 	}
 	
@@ -55,7 +59,7 @@ public final class ArrayFieldDeclaration extends AbstractFieldDeclaration {
 	
 	@Override
 	protected final int doHashCode() {
-		return super.doHashCode() + this.getElementCount();
+		return super.doHashCode() + this.getElementCount().hashCode();
 	}
 	
 	@Override
@@ -63,7 +67,7 @@ public final class ArrayFieldDeclaration extends AbstractFieldDeclaration {
 		final ArrayFieldDeclaration that = Tools.cast(this.getClass(), other);
 		
 		return super.doEquals(other) &&
-				this.getElementCount() == that.getElementCount();
+				this.getElementCount().equals(that.getElementCount());
 	}
 	
 }

@@ -241,7 +241,7 @@ FieldDeclaration ::=
 				RESULT.add(new FieldDeclaration(type, (DecafToken) field[0]));
 				break;
 			case 2:
-				RESULT.add(new ArrayFieldDeclaration(type, (DecafToken) field[0], Integer.parseInt(field[1].toString())));
+				RESULT.add(new ArrayFieldDeclaration(type, (DecafToken) field[0], (IntLiteral) field[1]));
 				break;
 			default:
 				throw new IllegalArgumentException("" + Arrays.toString(field));
@@ -272,9 +272,12 @@ Field ::=
 		RESULT = new Object[] { CUP$DecafParser$stack.get(CUP$DecafParser$top - 0) };
 	:}
 	|
-	IDENTIFIER LEFT_BRACKET INT_LITERAL:elementCount RIGHT_BRACKET
+	IDENTIFIER LEFT_BRACKET INT_LITERAL RIGHT_BRACKET
 	{:
-		RESULT = new Object[] { CUP$DecafParser$stack.get(CUP$DecafParser$top - 3), elementCount };
+		RESULT = new Object[] {
+				CUP$DecafParser$stack.get(CUP$DecafParser$top - 3),
+				new IntLiteral((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 1))
+		};
 	:}
 	;
 
@@ -718,13 +721,9 @@ Expression ::=
 	;
 
 Literal ::=
-	INT_LITERAL:representation
+	INT_LITERAL
 	{:
-		if (representation.startsWith("0x")) {
-			RESULT = new IntLiteral(Integer.parseInt(representation.substring(2), 16));
-		} else {
-			RESULT = new IntLiteral(Integer.parseInt(representation));
-		}
+		RESULT = new IntLiteral((DecafToken) this.getStackTop());
 	:}
 	|
 	BOOLEAN_LITERAL:value
