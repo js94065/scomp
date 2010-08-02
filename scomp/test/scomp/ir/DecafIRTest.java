@@ -3,6 +3,7 @@ package scomp.ir;
 import static org.junit.Assert.*;
 
 import static scomp.DecafParserTest.*;
+import static scomp.DecafScannerTest.token;
 import static scomp.Tools.*;
 
 import java.util.Arrays;
@@ -11,7 +12,6 @@ import java.util.List;
 import org.junit.Test;
 
 import scomp.DecafParserSymbols;
-import scomp.DecafScannerTest;
 import scomp.DecafToken;
 import scomp.ir.AbstractExpression;
 import scomp.ir.AbstractFieldDeclaration;
@@ -472,7 +472,7 @@ public class DecafIRTest {
 	 * <br>New
 	 */
 	private static final Program program(final List<AbstractFieldDeclaration> fields, final List<MethodDeclaration> methods) {
-		return new Program(fields, methods);
+		return new Program(fields, methods, token(DecafParserSymbols.RIGHT_BRACE));
 	}
 	
 	/**
@@ -927,7 +927,7 @@ public class DecafIRTest {
 	 * <br>New
 	 */
 	public static final DecafToken identifier(final String identifier) {
-		return DecafScannerTest.token(DecafParserSymbols.IDENTIFIER, identifier);
+		return token(DecafParserSymbols.IDENTIFIER, identifier);
 	}
 	
 }

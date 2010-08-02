@@ -52,6 +52,8 @@ public final class SemanticRules implements Visitor {
 	
 	@Override
 	public final void endVisit(final Program program) {
+		this.checkRule3(program);
+		
 		this.popCurrentScope();
 	}
 	
@@ -67,9 +69,9 @@ public final class SemanticRules implements Visitor {
 	
 	@Override
 	public final void beginVisit(final MethodDeclaration method) {
-		this.pushNewScope();
-		
 		this.checkRule1(method);
+		
+		this.pushNewScope();
 	}
 	
 	@Override
@@ -231,6 +233,20 @@ public final class SemanticRules implements Visitor {
 		if (!this.getCurrentScope().containsKey(methodCall.getMethodName())) {
 			this.logError(methodCall.getMethodNameIdentifierRow(), methodCall.getMethodNameIdentifierColumn(),
 					"Undeclared identifier " + methodCall.getMethodName());
+		}
+	}
+	
+	/**
+	 * 
+	 * @param program
+	 * <br>Not null
+	 */
+	private final void checkRule3(final Program program) {
+		final MethodDeclaration mainMethod = Tools.cast(MethodDeclaration.class, this.getCurrentScope().get("main"));
+		
+		if (mainMethod == null || mainMethod.getParameterDeclarations().size() != 0) {
+			this.logError(program.getLastTokenRow(), program.getLastTokenColumn(),
+					"Missing method main(<no argument>)");
 		}
 	}
 	

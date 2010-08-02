@@ -43,7 +43,7 @@ public final class SemanticRulesTest {
 				"(:9:24) Duplicate identifier z",
 				"(:10:11) Duplicate identifier a",
 				"(:17:12) Duplicate identifier y",
-				"(:17:15) Duplicate identifier f"
+				"(:17:15) Duplicate identifier main"
 		), this.recorder.getMessages());
 	}
 	
@@ -57,8 +57,19 @@ public final class SemanticRulesTest {
 				"(:12:4) Undeclared identifier b",
 				"(:12:6) Undeclared identifier d",
 				"(:12:11) Undeclared identifier f",
-				"(:13:4) Undeclared identifier g",
+				"(:13:4) Undeclared identifier main",
 				"(:16:10) Undeclared identifier a"
+		), this.recorder.getMessages());
+	}
+	
+	@Test
+	public final void testRule3() {
+		final Program program = parse(PROGRAM_WITH_MISSING_MAIN);
+		
+		program.accept(new SemanticRules());
+		
+		assertEquals(Arrays.asList(
+				"(:7:1) Missing method main(<no argument>)"
 		), this.recorder.getMessages());
 	}
 	
@@ -78,11 +89,11 @@ public final class SemanticRulesTest {
 		"		boolean a, b;\n" +
 		"	}\n" +
 		"\n" +
-		"	void f() {\n" +
+		"	void main() {\n" +
 		"		boolean a, b;\n" +
 		"\n" +
 		"		{\n" +
-		"			boolean y, f;\n" +
+		"			boolean y, main;\n" +
 		"		}\n" +
 		"	}\n" +
 		"\n" +
@@ -104,13 +115,25 @@ public final class SemanticRulesTest {
 		"		}\n" +
 		"		{\n" +
 		"			b[d] = f(y);\n" +
-		"			g();\n" +
+		"			main();\n" +
 		"		}\n" +
 		"\n" +
 		"		return a + w + y + z;\n" +
 		"	}\n" +
 		"\n" +
-		"	void g() {\n" +
+		"	void main() {\n" +
+		"		// Deliberately left empty\n" +
+		"	}\n" +
+		"\n" +
+		"}";
+	
+	/**
+	 * {@value}.
+	 */
+	public static final String PROGRAM_WITH_MISSING_MAIN =
+		"class Program {\n" +
+		"\n" +
+		"	void main(int x) {\n" +
 		"		// Deliberately left empty\n" +
 		"	}\n" +
 		"\n" +
