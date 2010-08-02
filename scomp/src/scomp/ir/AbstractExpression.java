@@ -7,5 +7,12 @@ package scomp.ir;
  * 
  */
 public abstract class AbstractExpression extends AbstractNode {
-	// Deliberately left empty
+	
+	/**
+	 * 
+	 * @return
+	 * <br>Maybe null
+	 */
+	public abstract Class<?> getType();
+	
 }

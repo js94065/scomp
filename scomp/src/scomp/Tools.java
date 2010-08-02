@@ -1,7 +1,9 @@
 package scomp;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
@@ -26,7 +28,84 @@ public final class Tools {
 	}
 	
     public static final int DEBUG_STACK_OFFSET = JLexTools.DEBUG_STACK_OFFSET;
-
+	
+	/**
+	 * 
+	 * @param elements
+	 * <br>Not null
+	 * @param methodName
+	 * <br>Not null
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	public static final Iterable<?> invoke(final Iterable<?> elements, final String methodName) {
+		return new Iterable<Object>() {
+			
+			@Override
+			public final Iterator<Object> iterator() {
+				final Iterator<?> iterator = elements.iterator();
+				
+				return new Iterator<Object>() {
+					
+					@Override
+					public boolean hasNext() {
+						return iterator.hasNext();
+					}
+					
+					@Override
+					public final Object next() {
+						final Object object = iterator.next();
+						
+						if (object == null) {
+							return null;
+						}
+						
+						try {
+							final Method method = object.getClass().getMethod(methodName);
+							
+							return method.invoke(object);
+						} catch (final Exception exception) {
+							throw Tools.unchecked(exception);
+						}
+					}
+					
+					@Override
+					public final void remove() {
+						iterator.remove();
+					}
+					
+				};
+			}
+			
+		};
+	}
+	
+	/**
+	 * 
+	 * @param separator
+	 * <br>Maybe null
+	 * @param elements
+	 * <br>Maybe null
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	public static final String join(final String separator, final Iterable<?> elements) {
+		final StringBuilder result = new StringBuilder();
+		final Iterator<?> iterator = elements.iterator();
+		
+		while (iterator.hasNext()) {
+			result.append(iterator.next());
+			
+			if (iterator.hasNext()) {
+				result.append(separator);
+			}
+		}
+		
+		return result.toString();
+	}
+    
 	/**
 	 *
 	 * @param <T> The common type of the elements

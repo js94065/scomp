@@ -41,6 +41,14 @@ public final class MethodCallExpression extends AbstractExpression {
 	}
 	
 	@Override
+	public final Class<?> getType() {
+		// TODO
+		Tools.debugPrint("TODO");
+		
+		return null;
+	}
+	
+	@Override
 	public final String toString() {
 		return
 				this.getClass().getSimpleName() + "{" +
