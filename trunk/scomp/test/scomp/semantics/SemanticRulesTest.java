@@ -100,7 +100,7 @@ public final class SemanticRulesTest {
 	
 	@Test
 	public final void testRule6() {
-		final Program program = parse(PROGRAM_WITH_VOID_METHOD_CALL_USED_IN_EXPRESSION);
+		final Program program = parse(PROGRAM_WITH_VOID_METHOD_CALL_USED_AS_EXPRESSION);
 		
 		program.accept(new SemanticRules());
 		
@@ -218,7 +218,7 @@ public final class SemanticRulesTest {
 	/**
 	 * {@value}.
 	 */
-	public static final String PROGRAM_WITH_VOID_METHOD_CALL_USED_IN_EXPRESSION =
+	public static final String PROGRAM_WITH_VOID_METHOD_CALL_USED_AS_EXPRESSION =
 		"class Program {\n" +
 		"\n" +
 		"	void f() {\n" +
