@@ -28,8 +28,11 @@ public final class ArrayLocation extends AbstractLocation {
 	
 	@Override
 	public final void accept(final Visitor visitor) {
-		// TODO
-		Tools.debugPrint("TODO");
+		visitor.beginVisit(this);
+		
+		this.getOffset().accept(visitor);
+		
+		visitor.endVisit(this);
 	}
 	
 	/**

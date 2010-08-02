@@ -24,8 +24,13 @@ public class ReturnStatement extends AbstractStatement {
 	
 	@Override
 	public final void accept(final Visitor visitor) {
-		// TODO
-		Tools.debugPrint("TODO");
+		visitor.beginVisit(this);
+		
+		if (this.getExpression() != null) {
+			this.getExpression().accept(visitor);
+		}
+		
+		visitor.endVisit(this);
 	}
 	
 	/**
