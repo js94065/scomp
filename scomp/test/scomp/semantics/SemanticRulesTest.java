@@ -54,11 +54,11 @@ public final class SemanticRulesTest {
 		program.accept(new SemanticRules());
 		
 		assertEquals(Arrays.asList(
-				"(:10:4) Undeclared identifier b",
-				"(:10:6) Undeclared identifier d",
-				"(:10:11) Undeclared identifier f",
-				"(:11:4) Undeclared identifier g",
-				"(:14:10) Undeclared identifier a"
+				"(:12:4) Undeclared identifier b",
+				"(:12:6) Undeclared identifier d",
+				"(:12:11) Undeclared identifier f",
+				"(:13:4) Undeclared identifier g",
+				"(:16:10) Undeclared identifier a"
 		), this.recorder.getMessages());
 	}
 	
@@ -97,6 +97,8 @@ public final class SemanticRulesTest {
 		"	boolean y, c[1];\n" +
 		"\n" +
 		"	int x(int z) {\n" +
+		"		int w;\n" +
+		"\n" +
 		"		{\n" +
 		"			int d;\n" +
 		"		}\n" +
@@ -105,10 +107,10 @@ public final class SemanticRulesTest {
 		"			g();\n" +
 		"		}\n" +
 		"\n" +
-		"		return a + y + z;\n" +
+		"		return a + w + y + z;\n" +
 		"	}\n" +
 		"\n" +
-		"	void f() {\n" +
+		"	void g() {\n" +
 		"		// Deliberately left empty\n" +
 		"	}\n" +
 		"\n" +
