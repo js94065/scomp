@@ -1,5 +1,6 @@
 package scomp.ir;
 
+import scomp.DecafToken;
 import scomp.Tools;
 
 /**
@@ -10,7 +11,7 @@ import scomp.Tools;
  */
 public abstract class AbstractLocation extends AbstractNode {
 	
-	private final String identifier;
+	private final DecafToken identifier;
 	
 	/**
 	 * 
@@ -18,7 +19,7 @@ public abstract class AbstractLocation extends AbstractNode {
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	public AbstractLocation(final String identifier) {
+	public AbstractLocation(final DecafToken identifier) {
 		this.identifier = identifier;
 	}
 	
@@ -29,7 +30,25 @@ public abstract class AbstractLocation extends AbstractNode {
 	 * <br>Shared
 	 */
 	public final String getIdentifier() {
-		return this.identifier;
+		return this.identifier.getValue().toString();
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * <br>Range: {@code [1 .. Integer.MAX_VALUE]}
+	 */
+	public final int getIdentifierRow() {
+		return this.identifier.getRow();
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * <br>Range: {@code [1 .. Integer.MAX_VALUE]}
+	 */
+	public final int getIdentifierColumn() {
+		return this.identifier.getColumn();
 	}
 	
 	@Override

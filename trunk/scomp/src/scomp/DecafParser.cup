@@ -546,14 +546,14 @@ CalloutArgument ::=
 	;
 
 Location ::=
-	IDENTIFIER:identifier
+	IDENTIFIER
 	{:
-		RESULT = new IdentifierLocation(identifier);
+		RESULT = new IdentifierLocation((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 0));
 	:}
 	|
-	IDENTIFIER:identifier LEFT_BRACKET Expression:expression RIGHT_BRACKET
+	IDENTIFIER LEFT_BRACKET Expression:expression RIGHT_BRACKET
 	{:
-		RESULT = new ArrayLocation(identifier, expression);
+		RESULT = new ArrayLocation((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 3), expression);
 	:}
 	;
 

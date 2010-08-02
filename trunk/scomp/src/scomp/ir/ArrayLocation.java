@@ -1,5 +1,6 @@
 package scomp.ir;
 
+import scomp.DecafToken;
 import scomp.Tools;
 
 /**
@@ -21,7 +22,7 @@ public final class ArrayLocation extends AbstractLocation {
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	public ArrayLocation(final String identifier, final AbstractExpression offset) {
+	public ArrayLocation(final DecafToken identifier, final AbstractExpression offset) {
 		super(identifier);
 		this.offset = offset;
 	}

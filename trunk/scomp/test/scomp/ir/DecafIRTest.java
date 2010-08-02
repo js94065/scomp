@@ -680,7 +680,7 @@ public class DecafIRTest {
 	 * <br>New
 	 */
 	private static final LocationExpression expression(final String identifier) {
-		return new LocationExpression(new IdentifierLocation(identifier));
+		return new LocationExpression(new IdentifierLocation(identifier(identifier)));
 	}
 	
 	/**
@@ -868,7 +868,7 @@ public class DecafIRTest {
 	 * <br>New
 	 */
 	private static final AssignmentStatement assign(final String identifier, final AbstractExpression expression) {
-		return new AssignmentStatement(new IdentifierLocation(identifier), expression);
+		return new AssignmentStatement(new IdentifierLocation(identifier(identifier)), expression);
 	}
 	
 	/**
