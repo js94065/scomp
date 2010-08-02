@@ -8,13 +8,20 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import scomp.DecafParser;
+import scomp.Tools;
 import scomp.ir.AbstractTypedEntityDeclaration;
 import scomp.ir.ArrayFieldDeclaration;
+import scomp.ir.ArrayLocation;
+import scomp.ir.AssignmentStatement;
+import scomp.ir.BinaryOperationExpression;
 import scomp.ir.Block;
 import scomp.ir.FieldDeclaration;
+import scomp.ir.IdentifierLocation;
+import scomp.ir.LocationExpression;
 import scomp.ir.MethodDeclaration;
 import scomp.ir.ParameterDeclaration;
 import scomp.ir.Program;
+import scomp.ir.ReturnStatement;
 import scomp.ir.VariableDeclaration;
 import scomp.ir.Visitor;
 
@@ -46,35 +53,35 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	@Override
-	public final void visit(final ArrayFieldDeclaration arrayFieldDeclaration) {
-		this.checkRule1(arrayFieldDeclaration);
+	public final void visit(final ArrayFieldDeclaration field) {
+		this.checkRule1(field);
 	}
 	
 	@Override
-	public final void visit(final FieldDeclaration fieldDeclaration) {
-		this.checkRule1(fieldDeclaration);
+	public final void visit(final FieldDeclaration field) {
+		this.checkRule1(field);
 	}
 	
 	@Override
-	public final void beginVisit(final MethodDeclaration methodDeclaration) {
+	public final void beginVisit(final MethodDeclaration method) {
 		this.pushNewScope();
 		
-		this.checkRule1(methodDeclaration);
+		this.checkRule1(method);
 	}
 	
 	@Override
-	public final void endVisit(final MethodDeclaration methodDeclaration) {
+	public final void endVisit(final MethodDeclaration method) {
 		this.popCurrentScope();
 	}
 	
 	@Override
-	public final void visit(final ParameterDeclaration parameterDeclaration) {
-		this.checkRule1(parameterDeclaration);
+	public final void visit(final ParameterDeclaration parameter) {
+		this.checkRule1(parameter);
 	}
 	
 	@Override
-	public final void visit(final VariableDeclaration variableDeclaration) {
-		this.checkRule1(variableDeclaration);
+	public final void visit(final VariableDeclaration variable) {
+		this.checkRule1(variable);
 	}
 	
 	@Override
@@ -85,6 +92,72 @@ public final class SemanticRules implements Visitor {
 	@Override
 	public final void endVisit(final Block block) {
 		this.popCurrentScope();
+	}
+	
+	@Override
+	public final void beginVisit(final AssignmentStatement assignment) {
+		// TODO
+		Tools.debugPrint("TODO");
+	}
+	
+	@Override
+	public final void endVisit(final AssignmentStatement assignment) {
+		// TODO
+		Tools.debugPrint("TODO");
+	}
+	
+	@Override
+	public final void beginVisit(final ReturnStatement returnStatement) {
+		// TODO
+		Tools.debugPrint("TODO");
+	}
+	
+	@Override
+	public final void endVisit(final ReturnStatement returnStatement) {
+		// TODO
+		Tools.debugPrint("TODO");
+	}
+	
+	@Override
+	public void beginVisit(final ArrayLocation location) {
+		// TODO
+		Tools.debugPrint("TODO");
+	}
+	
+	@Override
+	public void endVisit(final ArrayLocation location) {
+		// TODO
+		Tools.debugPrint("TODO");
+	}
+	
+	@Override
+	public final void beginVisit(final BinaryOperationExpression operation) {
+		// TODO
+		Tools.debugPrint("TODO");
+	}
+	
+	@Override
+	public final void endVisit(final BinaryOperationExpression operation) {
+		// TODO
+		Tools.debugPrint("TODO");
+	}
+	
+	@Override
+	public final void beginVisit(final LocationExpression location) {
+		// TODO
+		Tools.debugPrint("TODO");
+	}
+	
+	@Override
+	public final void endVisit(final LocationExpression location) {
+		// TODO
+		Tools.debugPrint("TODO");
+	}
+	
+	@Override
+	public final void visit(final IdentifierLocation location) {
+		// TODO
+		Tools.debugPrint("TODO");
 	}
 	
 	private final void pushNewScope() {

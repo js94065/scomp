@@ -37,8 +37,12 @@ public final class BinaryOperationExpression extends AbstractExpression {
 	
 	@Override
 	public final void accept(final Visitor visitor) {
-		// TODO
-		Tools.debugPrint("TODO");
+		visitor.beginVisit(this);
+		
+		this.getLeft().accept(visitor);
+		this.getRight().accept(visitor);
+		
+		visitor.endVisit(this);
 	}
 	
 	/**

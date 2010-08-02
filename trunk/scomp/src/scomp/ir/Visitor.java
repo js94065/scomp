@@ -23,45 +23,45 @@ public interface Visitor {
 	
 	/**
 	 * 
-	 * @param arrayFieldDeclaration
+	 * @param field
 	 * <br>Not null
 	 */
-	public abstract void visit(ArrayFieldDeclaration arrayFieldDeclaration);
+	public abstract void visit(ArrayFieldDeclaration field);
 	
 	/**
 	 * 
-	 * @param fieldDeclaration
+	 * @param field
 	 * <br>Not null
 	 */
-	public abstract void visit(FieldDeclaration fieldDeclaration);
+	public abstract void visit(FieldDeclaration field);
 	
 	/**
 	 * 
-	 * @param methodDeclaration
+	 * @param method
 	 * <br>Not null
 	 */
-	public abstract void beginVisit(MethodDeclaration methodDeclaration);
+	public abstract void beginVisit(MethodDeclaration method);
 	
 	/**
 	 * 
-	 * @param methodDeclaration
+	 * @param method
 	 * <br>Not null
 	 */
-	public abstract void endVisit(MethodDeclaration methodDeclaration);
+	public abstract void endVisit(MethodDeclaration method);
 	
 	/**
 	 * 
-	 * @param parameterDeclaration
+	 * @param parameter
 	 * <br>Not null
 	 */
-	public abstract void visit(ParameterDeclaration parameterDeclaration);
+	public abstract void visit(ParameterDeclaration parameter);
 	
 	/**
 	 * 
-	 * @param variableDeclaration
+	 * @param variable
 	 * <br>Not null
 	 */
-	public abstract void visit(VariableDeclaration variableDeclaration);
+	public abstract void visit(VariableDeclaration variable);
 	
 	/**
 	 * 
@@ -76,5 +76,82 @@ public interface Visitor {
 	 * <br>Not null
 	 */
 	public abstract void endVisit(Block block);
+	
+	/**
+	 * 
+	 * @param assignment
+	 * <br>Not null
+	 */
+	public abstract void beginVisit(AssignmentStatement assignment);
+	
+	/**
+	 * 
+	 * @param assignment
+	 * <br>Not null
+	 */
+	public abstract void endVisit(AssignmentStatement assignment);
+	
+	/**
+	 * 
+	 * @param returnStatement
+	 * <br>Not null
+	 */
+	public abstract void beginVisit(ReturnStatement returnStatement);
+	
+	/**
+	 * 
+	 * @param returnStatement
+	 * <br>Not null
+	 */
+	public abstract void endVisit(ReturnStatement returnStatement);
+	
+	/**
+	 * 
+	 * @param location
+	 * <br>Not null
+	 */
+	public abstract void beginVisit(ArrayLocation location);
+	
+	/**
+	 * 
+	 * @param location
+	 * <br>Not null
+	 */
+	public abstract void endVisit(ArrayLocation location);
+	
+	/**
+	 * 
+	 * @param operation
+	 * <br>Not null
+	 */
+	public abstract void beginVisit(BinaryOperationExpression operation);
+	
+	/**
+	 * 
+	 * @param operation
+	 * <br>Not null
+	 */
+	public abstract void endVisit(BinaryOperationExpression operation);
+	
+	/**
+	 * 
+	 * @param location
+	 * <br>Not null
+	 */
+	public abstract void beginVisit(LocationExpression location);
+	
+	/**
+	 * 
+	 * @param location
+	 * <br>Not null
+	 */
+	public abstract void endVisit(LocationExpression location);
+	
+	/**
+	 * 
+	 * @param location
+	 * <br>Not null
+	 */
+	public abstract void visit(IdentifierLocation location);
 	
 }

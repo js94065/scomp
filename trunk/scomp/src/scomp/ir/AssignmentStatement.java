@@ -23,16 +23,19 @@ public final class AssignmentStatement extends AbstractStatement {
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	public AssignmentStatement(final AbstractLocation location, 
-			final AbstractExpression expression) {
+	public AssignmentStatement(final AbstractLocation location, final AbstractExpression expression) {
 		this.location = location;
 		this.expression = expression;
 	}
 	
 	@Override
 	public final void accept(final Visitor visitor) {
-		// TODO
-		Tools.debugPrint("TODO");
+		visitor.beginVisit(this);
+		
+		this.getLocation().accept(visitor);
+		this.getExpression().accept(visitor);
+		
+		visitor.endVisit(this);
 	}
 	
 	/**
