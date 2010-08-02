@@ -1,5 +1,7 @@
 package scomp.ir;
 
+import scomp.DecafToken;
+
 /**
  * Defines part of the location grammar.
  * 
@@ -14,7 +16,7 @@ public final class IdentifierLocation extends AbstractLocation {
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	public IdentifierLocation(final String identifier) {
+	public IdentifierLocation(final DecafToken identifier) {
 		super(identifier);
 	}
 	

@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 
 import scomp.DecafParser;
 import scomp.Tools;
+import scomp.ir.AbstractLocation;
 import scomp.ir.AbstractTypedEntityDeclaration;
 import scomp.ir.ArrayFieldDeclaration;
 import scomp.ir.ArrayLocation;
@@ -120,8 +121,7 @@ public final class SemanticRules implements Visitor {
 	
 	@Override
 	public void beginVisit(final ArrayLocation location) {
-		// TODO
-		Tools.debugPrint("TODO");
+		this.checkRule2(location);
 	}
 	
 	@Override
@@ -156,8 +156,7 @@ public final class SemanticRules implements Visitor {
 	
 	@Override
 	public final void visit(final IdentifierLocation location) {
-		// TODO
-		Tools.debugPrint("TODO");
+		this.checkRule2(location);
 	}
 	
 	private final void pushNewScope() {
@@ -174,16 +173,40 @@ public final class SemanticRules implements Visitor {
 	
 	/**
 	 * 
-	 * @param entityDeclaration
+	 * @param entity
 	 * <br>Not null
 	 */
-	private final void checkRule1(final AbstractTypedEntityDeclaration entityDeclaration) {
-		if (this.getCurrentScope().containsKey(entityDeclaration.getIdentifier())) {
-			this.logError("(:" + entityDeclaration.getIdentifierRow() + ":" + entityDeclaration.getIdentifierColumn() +
-					") Duplicate identifier " + entityDeclaration.getIdentifier());
+	private final void checkRule1(final AbstractTypedEntityDeclaration entity) {
+		if (this.getCurrentScope().containsKey(entity.getIdentifier())) {
+			this.logError(entity.getIdentifierRow(), entity.getIdentifierColumn(),
+					"Duplicate identifier " + entity.getIdentifier());
 		} else {
-			this.getCurrentScope().put(entityDeclaration.getIdentifier(), entityDeclaration);
+			this.getCurrentScope().put(entity.getIdentifier(), entity);
 		}
+	}
+	
+	/**
+	 * 
+	 * @param location
+	 * <br>Not null
+	 */
+	private final void checkRule2(final AbstractLocation location) {
+		if (!this.getCurrentScope().containsKey(location.getIdentifier())) {
+			this.logError(location.getIdentifierRow(), location.getIdentifierColumn(), "Undeclared identifier " + location.getIdentifier());
+		}
+	}
+	
+	/**
+	 * 
+	 * @param row
+	 * <br>Range: {@code [1 .. Integer.MAX_VALUE]}
+	 * @param column 
+	 * <br>Range: {@code [1 .. Integer.MAX_VALUE]}
+	 * @param message
+	 * <br>Maybe null
+	 */
+	private final void logError(final int row, final int column, final String message) {
+		this.logError("(:" + row + ":" + column + ") " + message);
 	}
 	
 	/**
