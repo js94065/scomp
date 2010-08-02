@@ -27,6 +27,11 @@ public final class BooleanLiteral extends AbstractLiteral {
 		Tools.debugPrint("TODO");
 	}
 	
+	@Override
+	public final Class<?> getType() {
+		return boolean.class;
+	}
+	
 	/**
 	 * 
 	 * @return

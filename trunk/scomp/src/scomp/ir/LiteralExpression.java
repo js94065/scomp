@@ -39,6 +39,11 @@ public final class LiteralExpression extends AbstractExpression {
 	}
 	
 	@Override
+	public final Class<?> getType() {
+		return this.getLiteral().getType();
+	}
+	
+	@Override
 	public final String toString() {
 		return
 				this.getClass().getSimpleName() + "{" +

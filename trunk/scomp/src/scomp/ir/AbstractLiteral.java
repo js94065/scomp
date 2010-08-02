@@ -7,5 +7,12 @@ package scomp.ir;
  *
  */
 public abstract class AbstractLiteral extends AbstractNode {
-	// Deliberately left empty
+	
+	/**
+	 * 
+	 * @return
+	 * <br>Not null
+	 */
+	public abstract Class<?> getType();
+	
 }

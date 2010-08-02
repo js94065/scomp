@@ -37,6 +37,11 @@ public final class IntLiteral extends AbstractLiteral {
 		visitor.visit(this);
 	}
 	
+	@Override
+	public final Class<?> getType() {
+		return int.class;
+	}
+	
 	/**
 	 * 
 	 * @return

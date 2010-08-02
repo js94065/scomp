@@ -1,5 +1,7 @@
 package scomp.semantics;
 
+import static scomp.Tools.*;
+
 import java.util.Deque;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -186,6 +188,7 @@ public final class SemanticRules implements Visitor {
 	@Override
 	public final void beginVisit(final MethodCall methodCall) {
 		this.checkRule2(methodCall);
+		this.checkRule5(methodCall);
 	}
 	
 	@Override
@@ -198,18 +201,6 @@ public final class SemanticRules implements Visitor {
 	public final void visit(final IntLiteral literal) {
 		// TODO
 		Tools.debugPrint("TODO");
-	}
-	
-	private final void pushNewScope() {
-		if (this.scopes.isEmpty()) {
-			this.scopes.push(new LinkedHashMap<String, AbstractTypedEntityDeclaration>());
-		} else {
-			this.scopes.push(new LinkedHashMap<String, AbstractTypedEntityDeclaration>(this.getCurrentScope()));
-		}
-	}
-	
-	private final void popCurrentScope() {
-		this.scopes.pop();
 	}
 	
 	/**
@@ -256,7 +247,7 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule3(final Program program) {
-		final MethodDeclaration mainMethod = Tools.cast(MethodDeclaration.class, this.getCurrentScope().get("main"));
+		final MethodDeclaration mainMethod = cast(MethodDeclaration.class, this.getCurrentScope().get("main"));
 		
 		if (mainMethod == null || mainMethod.getParameterDeclarations().size() != 0) {
 			this.logError(program.getLastTokenRow(), program.getLastTokenColumn(),
@@ -273,6 +264,27 @@ public final class SemanticRules implements Visitor {
 		if (field.getElementCount().getValue() <= 0) {
 			this.logError(field.getElementCount().getRow(), field.getElementCount().getColumn(),
 					"Array size must be greater than 0");
+		}
+	}
+	
+	/**
+	 * 
+	 * @param methodCall
+	 * <br>Not null
+	 */
+	private final void checkRule5(final MethodCall methodCall) {
+		final String methodName = methodCall.getMethodName();
+		final MethodDeclaration method = Tools.cast(MethodDeclaration.class, this.getCurrentScope().get(methodName));
+		
+		if (method != null) {
+			final String expectedSignature = getSignature(method.getParameterDeclarations());
+			final String actualSignature = getSignature(methodCall.getArguments());
+			
+			if (!expectedSignature.equals(actualSignature)) {
+				this.logError(methodCall.getMethodNameIdentifierRow(), methodCall.getMethodNameIdentifierColumn(),
+						"The method " + methodName + expectedSignature +
+						" is not applicable for the arguments " + actualSignature);
+			}
 		}
 	}
 	
@@ -298,6 +310,18 @@ public final class SemanticRules implements Visitor {
 		this.logger.log(Level.SEVERE, message);
 	}
 	
+	private final void pushNewScope() {
+		if (this.scopes.isEmpty()) {
+			this.scopes.push(new LinkedHashMap<String, AbstractTypedEntityDeclaration>());
+		} else {
+			this.scopes.push(new LinkedHashMap<String, AbstractTypedEntityDeclaration>(this.getCurrentScope()));
+		}
+	}
+	
+	private final void popCurrentScope() {
+		this.scopes.pop();
+	}
+	
 	/**
 	 * 
 	 * @return
@@ -306,6 +330,19 @@ public final class SemanticRules implements Visitor {
 	 */
 	private final Map<String, AbstractTypedEntityDeclaration> getCurrentScope() {
 		return this.scopes.peek();
+	}
+	
+	/**
+	 * Returns a string similar to "(int, boolean)", or "()" if {@code parametersOrArguments} is empty.
+	 * 
+	 * @param parametersOrArguments
+	 * <br>Not null
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final String getSignature(final Iterable<?> parametersOrArguments) {
+		return "(" + join(",", invoke(invoke(parametersOrArguments, "getType"), "getSimpleName")) + ")";
 	}
 	
 }

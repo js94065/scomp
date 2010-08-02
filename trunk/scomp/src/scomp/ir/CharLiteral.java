@@ -27,6 +27,11 @@ public final class CharLiteral extends AbstractLiteral{
 		Tools.debugPrint("TODO");
 	}
 	
+	@Override
+	public final Class<?> getType() {
+		return char.class;
+	}
+	
 	/**
 	 * 
 	 * @return
