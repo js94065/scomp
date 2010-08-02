@@ -10,7 +10,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import scomp.DecafParser;
-import scomp.Tools;
 import scomp.ir.AbstractLocation;
 import scomp.ir.AbstractTypedEntityDeclaration;
 import scomp.ir.ArrayFieldDeclaration;
@@ -69,7 +68,7 @@ public final class SemanticRules implements Visitor {
 	@Override
 	public final void endVisit(final ArrayFieldDeclaration field) {
 		// TODO
-		Tools.debugPrint("TODO");
+		debugPrint("TODO");
 	}
 	
 	@Override
@@ -112,25 +111,25 @@ public final class SemanticRules implements Visitor {
 	@Override
 	public final void beginVisit(final AssignmentStatement assignment) {
 		// TODO
-		Tools.debugPrint("TODO");
+		debugPrint("TODO");
 	}
 	
 	@Override
 	public final void endVisit(final AssignmentStatement assignment) {
 		// TODO
-		Tools.debugPrint("TODO");
+		debugPrint("TODO");
 	}
 	
 	@Override
 	public final void beginVisit(final ReturnStatement returnStatement) {
 		// TODO
-		Tools.debugPrint("TODO");
+		debugPrint("TODO");
 	}
 	
 	@Override
 	public final void endVisit(final ReturnStatement returnStatement) {
 		// TODO
-		Tools.debugPrint("TODO");
+		debugPrint("TODO");
 	}
 	
 	@Override
@@ -141,31 +140,31 @@ public final class SemanticRules implements Visitor {
 	@Override
 	public void endVisit(final ArrayLocation location) {
 		// TODO
-		Tools.debugPrint("TODO");
+		debugPrint("TODO");
 	}
 	
 	@Override
 	public final void beginVisit(final BinaryOperationExpression operation) {
 		// TODO
-		Tools.debugPrint("TODO");
+		debugPrint("TODO");
 	}
 	
 	@Override
 	public final void endVisit(final BinaryOperationExpression operation) {
 		// TODO
-		Tools.debugPrint("TODO");
+		debugPrint("TODO");
 	}
 	
 	@Override
 	public final void beginVisit(final LocationExpression location) {
 		// TODO
-		Tools.debugPrint("TODO");
+		debugPrint("TODO");
 	}
 	
 	@Override
 	public final void endVisit(final LocationExpression location) {
 		// TODO
-		Tools.debugPrint("TODO");
+		debugPrint("TODO");
 	}
 	
 	@Override
@@ -175,14 +174,13 @@ public final class SemanticRules implements Visitor {
 	
 	@Override
 	public final void beginVisit(final MethodCallExpression methodCall) {
-		// TODO
-		Tools.debugPrint("TODO");
+		this.checkRule6(methodCall);
 	}
 	
 	@Override
 	public final void endVisit(final MethodCallExpression methodCall) {
 		// TODO
-		Tools.debugPrint("TODO");
+		debugPrint("TODO");
 	}
 	
 	@Override
@@ -194,13 +192,13 @@ public final class SemanticRules implements Visitor {
 	@Override
 	public final void endVisit(final MethodCall methodCall) {
 		// TODO
-		Tools.debugPrint("TODO");
+		debugPrint("TODO");
 	}
 	
 	@Override
 	public final void visit(final IntLiteral literal) {
 		// TODO
-		Tools.debugPrint("TODO");
+		debugPrint("TODO");
 	}
 	
 	/**
@@ -274,7 +272,7 @@ public final class SemanticRules implements Visitor {
 	 */
 	private final void checkRule5(final MethodCall methodCall) {
 		final String methodName = methodCall.getMethodName();
-		final MethodDeclaration method = Tools.cast(MethodDeclaration.class, this.getCurrentScope().get(methodName));
+		final MethodDeclaration method = cast(MethodDeclaration.class, this.getCurrentScope().get(methodName));
 		
 		if (method != null) {
 			final String expectedSignature = getSignature(method.getParameterDeclarations());
@@ -285,6 +283,27 @@ public final class SemanticRules implements Visitor {
 						"The method " + methodName + expectedSignature +
 						" is not applicable for the arguments " + actualSignature);
 			}
+		}
+	}
+	
+	/**
+	 * 
+	 * @param methodCallExpression
+	 * <br>Not null
+	 */
+	private final void checkRule6(final MethodCallExpression methodCallExpression) {
+		final MethodCall methodCall = cast(MethodCall.class, methodCallExpression.getMethodCall());
+		
+		if (methodCall == null) {
+			return;
+		}
+		
+		final String methodName = methodCall.getMethodName();
+		final MethodDeclaration method = cast(MethodDeclaration.class, this.getCurrentScope().get(methodName));
+		
+		if (method != null && method.getType().equals(void.class)) {
+			this.logError(methodCall.getMethodNameIdentifierRow(), methodCall.getMethodNameIdentifierColumn(),
+					"The method " + methodName + " has type void and cannot be used as an expression");
 		}
 	}
 	
