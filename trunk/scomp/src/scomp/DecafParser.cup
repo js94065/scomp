@@ -197,22 +197,22 @@ precedence left NOT;
 Program ::=
 	CLASS IDENTIFIER LEFT_BRACE RIGHT_BRACE
 	{:
-		RESULT = this.nullIfErrors(new Program(null, null));
+		RESULT = this.nullIfErrors(new Program(null, null, (DecafToken) this.getStackTop()));
 	:}
 	|
 	CLASS IDENTIFIER LEFT_BRACE FieldDeclarations:fieldDeclarations RIGHT_BRACE
 	{:
-		RESULT = this.nullIfErrors(new Program(fieldDeclarations, null));
+		RESULT = this.nullIfErrors(new Program(fieldDeclarations, null, (DecafToken) this.getStackTop()));
 	:}
 	|
 	CLASS IDENTIFIER LEFT_BRACE MethodDeclarations:methodDeclarations RIGHT_BRACE
 	{:
-		RESULT = this.nullIfErrors(new Program(null, methodDeclarations));
+		RESULT = this.nullIfErrors(new Program(null, methodDeclarations, (DecafToken) this.getStackTop()));
 	:}
 	|
 	CLASS IDENTIFIER LEFT_BRACE FieldDeclarations:fieldDeclarations MethodDeclarations:methodDeclarations RIGHT_BRACE
 	{:
-		RESULT = this.nullIfErrors(new Program(fieldDeclarations, methodDeclarations));
+		RESULT = this.nullIfErrors(new Program(fieldDeclarations, methodDeclarations, (DecafToken) this.getStackTop()));
 	:}
 	;
 

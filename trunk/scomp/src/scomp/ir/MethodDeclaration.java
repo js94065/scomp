@@ -94,6 +94,7 @@ public final class MethodDeclaration extends AbstractTypedEntityDeclaration {
 		return
 				this.getClass().getSimpleName() + "{" +
 				"returnType{" + this.getType().getName() + "} " +
+				"parameterDeclarations{" + this.getParameterDeclarations() + "} " +
 				"identifier{" + this.getIdentifier() + "} " +
 				"block{" + this.getBlock() + "}" +
 				"}";
