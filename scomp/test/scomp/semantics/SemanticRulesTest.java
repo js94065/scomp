@@ -85,6 +85,19 @@ public final class SemanticRulesTest {
 		), this.recorder.getMessages());
 	}
 	
+	@Test
+	public final void testRule5() {
+		final Program program = parse(PROGRAM_WITH_INVALID_METHOD_CALLS);
+		
+		program.accept(new SemanticRules());
+		
+		assertEquals(Arrays.asList(
+				"(:14:3) The method f() is not applicable for the arguments (int)",
+				"(:15:3) The method g(int) is not applicable for the arguments ()",
+				"(:16:3) The method g(int) is not applicable for the arguments (boolean)"
+		), this.recorder.getMessages());
+	}
+	
 	/**
 	 * {@value}.
 	 */
@@ -163,6 +176,30 @@ public final class SemanticRulesTest {
 		"\n" +
 		"	void main() {\n" +
 		"		// Deliberately left empty\n" +
+		"	}\n" +
+		"\n" +
+		"}";
+	
+	/**
+	 * {@value}.
+	 */
+	public static final String PROGRAM_WITH_INVALID_METHOD_CALLS =
+		"class Program {\n" +
+		"\n" +
+		"	void f() {\n" +
+		"		// Deliberately left empty\n" +
+		"	}\n" +
+		"\n" +
+		"	void g(int x) {\n" +
+		"		// Deliberately left empty\n" +
+		"	}\n" +
+		"\n" +
+		"	void main() {\n" +
+		"		f();\n" +
+		"		g(42);\n" +
+		"		f(42);\n" +
+		"		g();\n" +
+		"		g(true);\n" +
 		"	}\n" +
 		"\n" +
 		"}";
