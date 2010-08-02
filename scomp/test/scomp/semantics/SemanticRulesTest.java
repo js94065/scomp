@@ -47,6 +47,19 @@ public final class SemanticRulesTest {
 		), this.recorder.getMessages());
 	}
 	
+	@Test
+	public final void testRule2() {
+		final Program program = parse(PROGRAM_WITH_UNDECLARED_IDENTIFIERS);
+		
+		program.accept(new SemanticRules());
+		
+		assertEquals(Arrays.asList(
+				"(:10:4) Undeclared identifier b",
+				"(:10:6) Undeclared identifier d",
+				"(:13:10) Undeclared identifier a"
+		), this.recorder.getMessages());
+	}
+	
 	/**
 	 * {@value}.
 	 */
@@ -69,6 +82,27 @@ public final class SemanticRulesTest {
 		"		{\n" +
 		"			boolean y, f;\n" +
 		"		}\n" +
+		"	}\n" +
+		"\n" +
+		"}";
+	
+	/**
+	 * {@value}.
+	 */
+	public static final String PROGRAM_WITH_UNDECLARED_IDENTIFIERS =
+		"class Program {\n" +
+		"\n" +
+		"	boolean y, c[1];\n" +
+		"\n" +
+		"	int x(int z) {\n" +
+		"		{\n" +
+		"			int d;\n" +
+		"		}\n" +
+		"		{\n" +
+		"			b[d] = y;\n" +
+		"		}\n" +
+		"\n" +
+		"		return a + y + z;\n" +
 		"	}\n" +
 		"\n" +
 		"}";
