@@ -73,6 +73,18 @@ public final class SemanticRulesTest {
 		), this.recorder.getMessages());
 	}
 	
+	@Test
+	public final void testRule4() {
+		final Program program = parse(PROGRAM_WITH_INVALID_ARRAY_DECLARATIONS);
+		
+		program.accept(new SemanticRules());
+		
+		assertEquals(Arrays.asList(
+				"(:3:8) Array size must be greater than 0",
+				"(:5:12) Array size must be greater than 0"
+		), this.recorder.getMessages());
+	}
+	
 	/**
 	 * {@value}.
 	 */
@@ -134,6 +146,22 @@ public final class SemanticRulesTest {
 		"class Program {\n" +
 		"\n" +
 		"	void main(int x) {\n" +
+		"		// Deliberately left empty\n" +
+		"	}\n" +
+		"\n" +
+		"}";
+	
+	/**
+	 * {@value}.
+	 */
+	public static final String PROGRAM_WITH_INVALID_ARRAY_DECLARATIONS =
+		"class Program {\n" +
+		"\n" +
+		"	int a[0], b[1];\n" +
+		"\n" +
+		"	boolean c[0], d[1];\n" +
+		"\n" +
+		"	void main() {\n" +
 		"		// Deliberately left empty\n" +
 		"	}\n" +
 		"\n" +

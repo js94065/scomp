@@ -60,6 +60,7 @@ public final class SemanticRules implements Visitor {
 	@Override
 	public final void visit(final ArrayFieldDeclaration field) {
 		this.checkRule1(field);
+		this.checkRule4(field);
 	}
 	
 	@Override
@@ -248,6 +249,16 @@ public final class SemanticRules implements Visitor {
 			this.logError(program.getLastTokenRow(), program.getLastTokenColumn(),
 					"Missing method main(<no argument>)");
 		}
+	}
+	
+	/**
+	 * 
+	 * @param field
+	 * <br>Not null
+	 */
+	private final void checkRule4(final ArrayFieldDeclaration field) {
+		// TODO
+		Tools.debugPrint("TODO");
 	}
 	
 	/**
