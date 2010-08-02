@@ -26,7 +26,21 @@ public interface Visitor {
 	 * @param field
 	 * <br>Not null
 	 */
-	public abstract void visit(ArrayFieldDeclaration field);
+	public abstract void beginVisit(ArrayFieldDeclaration field);
+	
+	/**
+	 * 
+	 * @param field
+	 * <br>Not null
+	 */
+	public abstract void endVisit(ArrayFieldDeclaration field);
+	
+	/**
+	 * 
+	 * @param literal
+	 * <br>Not null
+	 */
+	public abstract void visit(IntLiteral literal);
 	
 	/**
 	 * 

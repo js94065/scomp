@@ -1,5 +1,6 @@
 package scomp.ir;
 
+import scomp.DecafToken;
 import scomp.Tools;
 
 /**
@@ -10,21 +11,30 @@ import scomp.Tools;
  */
 public final class IntLiteral extends AbstractLiteral {
 	
+	private final DecafToken intLiteralToken;
+	
 	private final int value;
 	
 	/**
 	 * 
-	 * @param value
+	 * @param intLiteralToken
 	 * <br>Range: any integer
 	 */
-	public IntLiteral(final int value){
-		this.value = value;
+	public IntLiteral(final DecafToken intLiteralToken){
+		this.intLiteralToken = intLiteralToken;
+		
+		final String valueRepresentation = intLiteralToken.getInputString();
+		
+		if (valueRepresentation.startsWith("0x")) {
+			this.value = Integer.parseInt(valueRepresentation.substring(2), 16);
+		} else {
+			this.value = Integer.parseInt(valueRepresentation);
+		}
 	}
 	
 	@Override
 	public final void accept(final Visitor visitor) {
-		// TODO
-		Tools.debugPrint("TODO");
+		visitor.visit(this);
 	}
 	
 	/**
@@ -34,6 +44,24 @@ public final class IntLiteral extends AbstractLiteral {
 	 */
 	public final int getValue(){
 		return this.value;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * <br>Range: {@code [1 .. Integer.MAX_VALUE]}
+	 */
+	public final int getRow() {
+		return this.intLiteralToken.getRow();
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * <br>Range: {@code [1 .. Integer.MAX_VALUE]}
+	 */
+	public final int getColumn() {
+		return this.intLiteralToken.getColumn();
 	}
 	
 	@Override
