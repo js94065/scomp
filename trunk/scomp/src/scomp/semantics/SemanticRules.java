@@ -42,6 +42,8 @@ public final class SemanticRules implements Visitor {
 	
 	private final Logger logger;
 	
+	private String nameOfMethod = "";
+	
 	public SemanticRules() {
 		this.scopes = new LinkedList<Map<String,AbstractTypedEntityDeclaration>>();
 		this.logger = Logger.getLogger(DecafParser.class.getName());
@@ -78,6 +80,7 @@ public final class SemanticRules implements Visitor {
 	
 	@Override
 	public final void beginVisit(final MethodDeclaration method) {
+		this.nameOfMethod = method.getIdentifier();
 		this.checkRule1(method);
 		
 		this.pushNewScope();
@@ -122,8 +125,7 @@ public final class SemanticRules implements Visitor {
 	
 	@Override
 	public final void beginVisit(final ReturnStatement returnStatement) {
-		// TODO
-		debugPrint("TODO");
+		this.checkRule7(returnStatement);
 	}
 	
 	@Override
@@ -304,6 +306,20 @@ public final class SemanticRules implements Visitor {
 		if (method != null && method.getType().equals(void.class)) {
 			this.logError(methodCall.getMethodNameIdentifierRow(), methodCall.getMethodNameIdentifierColumn(),
 					"The method " + methodName + " has type void and cannot be used as an expression");
+		}
+	}
+	
+	/**
+	 * 
+	 * @param returnStatement
+	 * <br> not null
+	 */
+	private final void checkRule7(final ReturnStatement returnStatement) {
+		AbstractTypedEntityDeclaration method = this.getCurrentScope().get(this.nameOfMethod);
+		
+		if((method.getType() == void.class) && (returnStatement.getExpression() != null)){
+			this.logError(method.getIdentifierRow(), method.getIdentifierColumn(),
+					"The method " + this.nameOfMethod + " cannot have a return value");
 		}
 	}
 	
