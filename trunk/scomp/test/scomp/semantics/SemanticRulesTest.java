@@ -109,6 +109,17 @@ public final class SemanticRulesTest {
 		), this.recorder.getMessages());
 	}
 	
+	@Test
+	public final void testRule7(){
+		final Program program = parse(PROGRAM_WITH_VOID_METHOD_THAT_RETURNS_VALUE);
+		
+		program.accept(new SemanticRules());
+		
+		assertEquals(Arrays.asList(
+				"(:9:7) The method main cannot have a return value"
+				), this.recorder.getMessages());
+	}
+	
 	/**
 	 * {@value}.
 	 */
@@ -233,6 +244,25 @@ public final class SemanticRulesTest {
 		"		int x;\n" +
 		"\n" +
 		"		x = f() + g();\n" +
+		"	}\n" +
+		"\n" +
+		"}";
+	
+	/**
+	 * {@value}.
+	 * */
+	public static final String PROGRAM_WITH_VOID_METHOD_THAT_RETURNS_VALUE =
+		"class Program {\n" +
+		"\n" +
+		"	boolean x;\n" +
+		"\n" +
+		"	void y() {\n" +
+		"		return ;\n" +
+		"	}\n"+
+		"\n" +
+		"	void main() {\n" +
+		"		x = true;\n" +
+		"		return x;\n" +
 		"	}\n" +
 		"\n" +
 		"}";
