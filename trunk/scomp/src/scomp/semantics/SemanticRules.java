@@ -126,6 +126,7 @@ public final class SemanticRules implements Visitor {
 	@Override
 	public final void beginVisit(final ReturnStatement returnStatement) {
 		this.checkRule7(returnStatement);
+		this.checkRule8(returnStatement);
 	}
 	
 	@Override
@@ -317,9 +318,20 @@ public final class SemanticRules implements Visitor {
 	private final void checkRule7(final ReturnStatement returnStatement) {
 		AbstractTypedEntityDeclaration method = this.getCurrentScope().get(this.nameOfMethod);
 		
-		if((method.getType() == void.class) && (returnStatement.getExpression() != null)){
+		if( (method.getType() == void.class) && (returnStatement.getExpression() != null) ) {
 			this.logError(method.getIdentifierRow(), method.getIdentifierColumn(),
 					"The method " + this.nameOfMethod + " cannot have a return value");
+		}
+	}
+	
+	private final void checkRule8(final ReturnStatement returnStatement) {
+		AbstractTypedEntityDeclaration method = this.getCurrentScope().get(this.nameOfMethod);
+		
+		if( (method.getType() != void.class) && (returnStatement.getExpression() != null) ) {
+			if( method.getType() != returnStatement.getExpression().getType() ) {
+				this.logError(method.getIdentifierRow(), method.getIdentifierColumn(),
+						"The method " + this.nameOfMethod + " return type does not match the return value");
+			}
 		}
 	}
 	
