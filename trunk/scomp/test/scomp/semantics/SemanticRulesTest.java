@@ -53,6 +53,8 @@ public final class SemanticRulesTest {
 		
 		program.accept(new SemanticRules());
 		
+		//System.out.println("error: " + this.recorder.getMessages());
+		
 		assertEquals(Arrays.asList(
 				"(:12:4) Undeclared identifier b",
 				"(:12:6) Undeclared identifier d",
@@ -114,6 +116,8 @@ public final class SemanticRulesTest {
 		final Program program = parse(PROGRAM_WITH_VOID_METHOD_THAT_RETURNS_VALUE);
 		
 		program.accept(new SemanticRules());
+		
+		//System.out.println("error: " + this.recorder.getMessages());
 		
 		assertEquals(Arrays.asList(
 				"(:9:7) The method main cannot have a return value"
