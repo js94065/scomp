@@ -120,6 +120,18 @@ public final class SemanticRulesTest {
 				), this.recorder.getMessages());
 	}
 	
+	@Test
+	public final void testRule8(){
+		final Program program = parse(PROGRAM_WITH_METHODS_WITH_MISMATCH_RETURN_TYPES);
+		
+		program.accept(new SemanticRules());
+		
+		assertEquals(Arrays.asList(
+				"(:9:10) The method w return type does not match the return value",
+				"(:12:6) The method x return type does not match the return value"
+				), this.recorder.getMessages());
+	}
+	
 	/**
 	 * {@value}.
 	 */
@@ -266,5 +278,33 @@ public final class SemanticRulesTest {
 		"	}\n" +
 		"\n" +
 		"}";
+	
+	/**
+	 * {@value}
+	 */
+	public static final String PROGRAM_WITH_METHODS_WITH_MISMATCH_RETURN_TYPES =
+		"class Program {\n" +
+		"\n" +
+		"	boolean y() {\n" +
+		"		return true;" +
+		"	}\n" +
+		"\n" +
+		"	int z() {\n" +
+		"		return 1;" +
+		"	}\n" +
+		"\n" +
+		"	boolean w() {\n" +
+		"		return 2;" +
+		"	}\n" +
+		"\n" +
+		"	int x() {\n" +
+		"		return false;" +
+		"	}\n" +
+		"\n" +
+		"	void main() {\n" +
+		"	}\n" +
+		"\n" +
+		"}"
+		;
 	
 }
