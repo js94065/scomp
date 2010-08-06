@@ -77,10 +77,7 @@ public final class BinaryOperationExpression extends AbstractExpression {
 	
 	@Override
 	public final Class<?> getType() {
-		// TODO
-		Tools.debugPrint("TODO");
-		
-		return null;
+		return int.class;
 	}
 	
 	@Override
