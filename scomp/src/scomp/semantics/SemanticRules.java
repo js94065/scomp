@@ -19,6 +19,7 @@ import scomp.ir.BinaryOperationExpression;
 import scomp.ir.Block;
 import scomp.ir.FieldDeclaration;
 import scomp.ir.IdentifierLocation;
+import scomp.ir.IfStatement;
 import scomp.ir.IntLiteral;
 import scomp.ir.LocationExpression;
 import scomp.ir.MethodCall;
@@ -29,6 +30,7 @@ import scomp.ir.Program;
 import scomp.ir.ReturnStatement;
 import scomp.ir.VariableDeclaration;
 import scomp.ir.Visitor;
+import scomp.ir.WhileStatement;
 
 /**
  * This is the visitor responsible for checking the Decaf semantic rules.
@@ -204,6 +206,16 @@ public final class SemanticRules implements Visitor {
 		debugPrint("TODO");
 	}
 	
+	@Override
+	public final void beginVisit(final IfStatement ifStatement) {
+		this.checkRule11(ifStatement);
+	}
+	
+	@Override
+	public final void beginVisit(final WhileStatement whileStatement) {
+		this.checkRule11(whileStatement);
+	}
+	
 	/**
 	 * 
 	 * @param entity
@@ -324,6 +336,11 @@ public final class SemanticRules implements Visitor {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param returnStatement
+	 * <br> not null
+	 */
 	private final void checkRule8(final ReturnStatement returnStatement) {
 		AbstractTypedEntityDeclaration method = this.getCurrentScope().get(this.nameOfMethod);
 		
@@ -332,6 +349,23 @@ public final class SemanticRules implements Visitor {
 				this.logError(method.getIdentifierRow(), method.getIdentifierColumn(),
 						"The method " + this.nameOfMethod + " return type does not match the return value");
 			}
+		}
+	}
+	
+	/**
+	 * 
+	 * @param booleanExpression
+	 * <br> not null
+	 */
+	private final void checkRule11(final IfStatement ifStatement) {
+		if(ifStatement.getCondition().getType() != boolean.class) {
+			this.logError("If condition does not have a boolean type");
+		}
+	}
+	
+	private final void checkRule11(final WhileStatement whileStatement) {
+		if(whileStatement.getCondition().getType() != boolean.class) {
+			this.logError("While condition does not have a boolean type");
 		}
 	}
 	

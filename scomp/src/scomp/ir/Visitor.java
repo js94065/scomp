@@ -196,4 +196,17 @@ public interface Visitor {
 	 */
 	public abstract void endVisit(MethodCall methodCall);
 	
+	/**
+	 * 
+	 * @param ifStatement
+	 * <br>Not null
+	 */
+	public abstract void beginVisit(IfStatement ifStatement);
+	
+	/**
+	 * 
+	 * @param whileStatement
+	 * <br>Not null
+	 */
+	public abstract void beginVisit(WhileStatement whileStatement);
 }

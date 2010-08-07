@@ -36,8 +36,7 @@ public final class IfStatement extends AbstractStatement {
 	
 	@Override
 	public final void accept(final Visitor visitor) {
-		// TODO
-		Tools.debugPrint("TODO");
+		visitor.beginVisit(this);
 	}
 	
 	/**
