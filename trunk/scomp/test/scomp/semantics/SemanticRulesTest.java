@@ -110,7 +110,7 @@ public final class SemanticRulesTest {
 	}
 	
 	@Test
-	public final void testRule7(){
+	public final void testRule7() {
 		final Program program = parse(PROGRAM_WITH_VOID_METHOD_THAT_RETURNS_VALUE);
 		
 		program.accept(new SemanticRules());
@@ -121,7 +121,7 @@ public final class SemanticRulesTest {
 	}
 	
 	@Test
-	public final void testRule8(){
+	public final void testRule8() {
 		final Program program = parse(PROGRAM_WITH_METHODS_WITH_MISMATCH_RETURN_TYPES);
 		
 		program.accept(new SemanticRules());
@@ -129,6 +129,18 @@ public final class SemanticRulesTest {
 		assertEquals(Arrays.asList(
 				"(:9:10) The method w return type does not match the return value",
 				"(:12:6) The method x return type does not match the return value"
+				), this.recorder.getMessages());
+	}
+	
+	@Test
+	public final void testRule11() {
+		final Program program = parse(PROGRAM_WITH_IF_AND_WHILE_STATEMENTS);
+		
+		program.accept(new SemanticRules());
+		
+		assertEquals(Arrays.asList(
+				"If condition does not have a boolean type",
+				"While condition does not have a boolean type"
 				), this.recorder.getMessages());
 	}
 	
@@ -302,9 +314,43 @@ public final class SemanticRulesTest {
 		"	}\n" +
 		"\n" +
 		"	void main() {\n" +
+		"		// Deliberatly left empty\n" +
 		"	}\n" +
 		"\n" +
 		"}"
 		;
+	
+	public static final String PROGRAM_WITH_IF_AND_WHILE_STATEMENTS = 
+		"class Program {\n" +
+		"\n" +
+		"	boolean x, y;\n" +
+		"\n" +
+		"	void main() {\n" +
+		"		x = false;" +
+		"		y = true;" +
+		"\n" +
+		"		if(y) {\n" +
+		"			// Deliberatly left empty\n" +
+		"		}" +
+		"\n" +
+		"		while(x == false) {\n" +
+		"			// Deliberatly left empty\n" +
+		"		}\n" +
+		"\n" +
+		"		if(42 > 2) {\n" +
+		"			// Deliberatly left empty\n" +
+		"		}\n" +
+		"\n" +
+		"		if(1 + 2) {\n" +
+		"			// Deliberatly left empty\n" +
+		"		}\n" +
+		"\n" +
+		"		while('n') {\n" +
+		"			// Deliberatly left empty\n" +
+		"		}\n" +
+		"\n" +
+		"	}\n" +
+		"\n" +
+		"}";
 	
 }

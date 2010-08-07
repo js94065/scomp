@@ -46,7 +46,8 @@ public final class LocationExpression extends AbstractExpression {
 		// TODO
 		Tools.debugPrint("TODO");
 		
-		return null;
+		//return null;
+		return boolean.class;
 	}
 	
 	@Override
