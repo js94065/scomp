@@ -358,8 +358,6 @@ public final class SemanticRules implements Visitor {
 	 * <br> not null
 	 */
 	private final void checkRule11(final IfStatement ifStatement) {
-		
-		System.out.println(ifStatement.getCondition().toString());
 		if(ifStatement.getCondition().getType() != boolean.class) {
 			this.logError("If condition does not have a boolean type");
 		}
