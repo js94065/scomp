@@ -286,7 +286,7 @@ public final class SemanticRulesTest {
 		"class Program {\n" +
 		"\n" +
 		"	boolean y() {\n" +
-		"		return true;" +
+		"		return 1 < 2 * 1;" +
 		"	}\n" +
 		"\n" +
 		"	int z() {\n" +

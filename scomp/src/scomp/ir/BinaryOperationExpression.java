@@ -77,6 +77,18 @@ public final class BinaryOperationExpression extends AbstractExpression {
 	
 	@Override
 	public final Class<?> getType() {
+		
+		if(this.operator.equals("<") ||
+				this.operator.equals(">") ||
+				this.operator.equals("<=") ||
+				this.operator.equals(">=") ||
+				this.operator.equals("==") ||
+				this.operator.equals("!=") ||
+				this.operator.equals("&&") ||
+				this.operator.equals("||")) {
+			return boolean.class;
+		}
+		
 		return int.class;
 	}
 	
