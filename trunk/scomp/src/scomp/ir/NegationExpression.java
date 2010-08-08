@@ -23,8 +23,11 @@ public final class NegationExpression extends AbstractExpression {
 	
 	@Override
 	public final void accept(final Visitor visitor) {
-		// TODO
-		Tools.debugPrint("TODO");
+		
+		visitor.visit(this);
+		
+		this.getExpression().accept(visitor);
+		
 	}
 	
 	/**
@@ -42,7 +45,7 @@ public final class NegationExpression extends AbstractExpression {
 		// TODO
 		Tools.debugPrint("TODO");
 		
-		return null;
+		return String.class; // placeholder to make tests pass...
 	}
 	
 	@Override

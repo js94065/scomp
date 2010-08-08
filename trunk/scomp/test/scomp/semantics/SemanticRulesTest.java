@@ -181,6 +181,7 @@ public final class SemanticRulesTest {
 		
 		assertEquals(Arrays.asList(
 				"Operand of conditional operations and logical not must have type boolean.",
+				"Operand of conditional operations and logical not must have type boolean.",
 				"Operand of conditional operations and logical not must have type boolean."
 				), this.recorder.getMessages());
 		
@@ -429,7 +430,7 @@ public final class SemanticRulesTest {
 		"		boolean x,y,z;\n" +
 		"		x = 2 && true;\n" +
 		"		y = 2 || true;\n" +
-		"		z = !(3+5);\n" +
+		"		z = !3;\n" +
 		"	}\n" +
 		"\n" +
 		"	void main() {\n" +
@@ -438,5 +439,4 @@ public final class SemanticRulesTest {
 		"\n" +
 		"}";
 
-	
 }
