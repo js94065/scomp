@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 
 import scomp.DecafParser;
 import scomp.ir.AbstractLocation;
+import scomp.ir.AbstractStatement;
 import scomp.ir.AbstractTypedEntityDeclaration;
 import scomp.ir.ArrayFieldDeclaration;
 import scomp.ir.ArrayLocation;
@@ -47,6 +48,8 @@ public final class SemanticRules implements Visitor {
 	private final Logger logger;
 	
 	private String nameOfMethod = "";
+	private String variableName = "";
+	private int variableRow = 0, variableColumn = 0;
 	
 	public SemanticRules() {
 		this.scopes = new LinkedList<Map<String,AbstractTypedEntityDeclaration>>();
@@ -360,8 +363,14 @@ public final class SemanticRules implements Visitor {
 	 * <br> not null
 	 */
 	private final void checkRule11(final IfStatement ifStatement) {
-		if(ifStatement.getCondition().getType() != boolean.class) {
+		
+		if(ifStatement.getCondition().getClass().getSimpleName().equals("BinaryOperationExpression")) {
+			if(ifStatement.getCondition().getType() != boolean.class)
 			this.logError("If condition does not have a boolean type");
+		}
+		else if(this.getVariableType(ifStatement) != boolean.class) {
+			this.logError(this.variableRow, this.variableColumn,
+					this.variableName + " is not a boolean type");
 		}
 	}
 	
@@ -371,8 +380,17 @@ public final class SemanticRules implements Visitor {
 	 * <br> not null
 	 */
 	private final void checkRule11(final WhileStatement whileStatement) {
-		if(whileStatement.getCondition().getType() != boolean.class) {
+		
+		if(whileStatement.getCondition().getClass().getSimpleName().equals("BinaryOperationExpression")) {
+			if(whileStatement.getCondition().getType() != boolean.class)
+			this.logError("While condition contains a binary operation expression");
+		}
+		else if(whileStatement.getCondition().getClass().getSimpleName().equals("LiteralExpression")) {
 			this.logError("While condition does not have a boolean type");
+		}
+		else if(this.getVariableType(whileStatement) != boolean.class) {
+			this.logError(this.variableRow, this.variableColumn,
+					this.variableName + " is not a boolean type");
 		}
 	}
 	
@@ -514,6 +532,34 @@ public final class SemanticRules implements Visitor {
 	 */
 	private static final String getSignature(final Iterable<?> parametersOrArguments) {
 		return "(" + join(",", invoke(invoke(parametersOrArguments, "getType"), "getSimpleName")) + ")";
+	}
+	
+	@SuppressWarnings("null")
+	private final Class<?> getVariableType(AbstractStatement statement) {
+		
+		LocationExpression locationExpression = null;
+		
+		if(statement.getClass().getSimpleName().equals("IfStatement")) {
+			locationExpression = (LocationExpression)((IfStatement)statement).getCondition();
+		}
+		else if(statement.getClass().getSimpleName().equals("WhileStatement")) {
+			locationExpression = (LocationExpression)((WhileStatement)statement).getCondition();
+		}
+		
+		if(locationExpression.getLocation().getClass().getSimpleName().equals("IdentifierLocation")) {
+			String variable = ((IdentifierLocation)locationExpression.getLocation()).getIdentifier();
+			
+			Class<?> variableType = this.getCurrentScope().get(variable).getType();
+			
+			if(variableType == boolean.class) {
+				this.variableName = this.getCurrentScope().get(variable).getIdentifier();
+				this.variableRow = this.getCurrentScope().get(variable).getIdentifierRow();
+				this.variableColumn = this.getCurrentScope().get(variable).getIdentifierColumn();
+				return variableType;
+			}
+		}
+		
+		return null;
 	}
 	
 }
