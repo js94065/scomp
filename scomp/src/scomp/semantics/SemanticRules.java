@@ -21,6 +21,7 @@ import scomp.ir.FieldDeclaration;
 import scomp.ir.IdentifierLocation;
 import scomp.ir.IfStatement;
 import scomp.ir.IntLiteral;
+import scomp.ir.LiteralExpression;
 import scomp.ir.LocationExpression;
 import scomp.ir.MethodCall;
 import scomp.ir.MethodCallExpression;
@@ -149,18 +150,6 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	@Override
-	public final void beginVisit(final BinaryOperationExpression operation) {
-		// TODO
-		debugPrint("TODO");
-	}
-	
-	@Override
-	public final void endVisit(final BinaryOperationExpression operation) {
-		// TODO
-		debugPrint("TODO");
-	}
-	
-	@Override
 	public final void beginVisit(final LocationExpression location) {
 		// TODO
 		debugPrint("TODO");
@@ -214,6 +203,11 @@ public final class SemanticRules implements Visitor {
 	@Override
 	public final void beginVisit(final WhileStatement whileStatement) {
 		this.checkRule11(whileStatement);
+	}
+	
+	@Override
+	public final void visit(final BinaryOperationExpression operation) {
+		this.checkRule12(operation);
 	}
 	
 	/**
@@ -372,6 +366,37 @@ public final class SemanticRules implements Visitor {
 		if(whileStatement.getCondition().getType() != boolean.class) {
 			this.logError("While condition does not have a boolean type");
 		}
+	}
+	
+	/**
+	 * 
+	 * @param operation
+	 * <br> not null
+	 */
+	private final void checkRule12(BinaryOperationExpression operation) {
+		if ( operation.getOperator().equals("+") ||
+				operation.getOperator().equals("-") ||
+				operation.getOperator().equals("*") ||
+				operation.getOperator().equals("/") ||
+				operation.getOperator().equals("%") ||
+				operation.getOperator().equals("<<") ||
+				operation.getOperator().equals(">>") ||
+				operation.getOperator().equals(">>>") || 
+				operation.getOperator().equals("<") ||
+				operation.getOperator().equals(">") ||
+				operation.getOperator().equals("<=") ||
+				operation.getOperator().equals(">=") ) {
+			if (!operation.getLeft().getType().equals(int.class)) {
+				System.out.println("LEFT TYPE: " + operation.getLeft().getType());
+				this.logError("Operand of arithmetic and relational operations must " +
+						"have type int.");
+			} 
+			if (!operation.getRight().getType().equals(int.class)) {
+				System.out.println("RIGHT TYPE: " + operation.getRight().getClass());
+				this.logError("Operand of arithmetic and relational operations must " +
+						"have type int.");
+			}
+		} 
 	}
 	
 	/**
