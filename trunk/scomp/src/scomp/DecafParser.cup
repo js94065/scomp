@@ -61,9 +61,6 @@ parser code
 	
 	@Override
 	public final void syntax_error(final Symbol currentToken) {
-		Tools.debugPrint(currentToken);
-		Tools.debugPrint(this.stack);
-		
 		final Yylex scanner = (Yylex) this.getScanner();
 		
 		scanner.updateLocation();
@@ -102,7 +99,6 @@ parser code
 	
 	@Override
 	public final void unrecovered_syntax_error(final Symbol currentToken) throws Exception {
-		Tools.debugPrint(currentToken);
 		throw new RuntimeException(this.getErrors().toString());
 	}
 	
