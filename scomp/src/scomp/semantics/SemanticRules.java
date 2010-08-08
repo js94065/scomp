@@ -26,6 +26,7 @@ import scomp.ir.LocationExpression;
 import scomp.ir.MethodCall;
 import scomp.ir.MethodCallExpression;
 import scomp.ir.MethodDeclaration;
+import scomp.ir.NegationExpression;
 import scomp.ir.ParameterDeclaration;
 import scomp.ir.Program;
 import scomp.ir.ReturnStatement;
@@ -207,7 +208,15 @@ public final class SemanticRules implements Visitor {
 	
 	@Override
 	public final void visit(final BinaryOperationExpression operation) {
-		this.checkRules12Through14(operation);
+		this.checkRule12(operation);
+		this.checkRule13(operation);
+		this.checkRule14(operation);
+	}
+	
+	@Override
+	public final void visit(final NegationExpression operation) {
+		System.out.println("AAAAA");
+		this.checkRule14(operation);
 	}
 	
 	/**
@@ -373,7 +382,7 @@ public final class SemanticRules implements Visitor {
 	 * @param operation
 	 * <br> not null
 	 */
-	private final void checkRules12Through14(BinaryOperationExpression operation) {
+	private final void checkRule12(BinaryOperationExpression operation) {
 		if ( operation.getOperator().equals("+") ||
 				operation.getOperator().equals("-") ||
 				operation.getOperator().equals("*") ||
@@ -390,12 +399,23 @@ public final class SemanticRules implements Visitor {
 				this.logError("Operand of arithmetic and relational operations must " +
 						"have type int.");
 			} 
+			// left and right have distinct error locations
+			// update later with actual positions
 			if (!operation.getRight().getType().equals(int.class)) {
 				this.logError("Operand of arithmetic and relational operations must " +
 						"have type int.");
 			}
-		} 
-		else if ( operation.getOperator().equals("==") ) {
+		}
+	}
+	
+	/**
+	 * 
+	 * @param operation
+	 * <br> not null
+	 */
+	private final void checkRule13(BinaryOperationExpression operation) {
+		if ( operation.getOperator().equals("==") ||
+				operation.getOperator().equals("!=") ) {
 			if (operation.getLeft().getType().equals(int.class) && 
 					operation.getRight().getType().equals(int.class)) {
 				// do nothing
@@ -407,6 +427,37 @@ public final class SemanticRules implements Visitor {
 				this.logError("Operand of equality operator must have same type, " +
 						"either int or boolean.");
 			}
+		}
+	}
+	
+	/**
+	 * 
+	 * @param operation
+	 * <br> not null
+	 */
+	private final void checkRule14(BinaryOperationExpression operation) {
+		if ( operation.getOperator().equals("&&") ||
+				operation.getOperator().equals("||") ) {
+			if (!operation.getLeft().getType().equals(boolean.class) ) {
+				this.logError("Operand of conditional operations and logical not must have type boolean.");
+			} 
+			// left and right have distinct error locations
+			// update later with actual positions
+			if (!operation.getRight().getType().equals(boolean.class) ) { 
+				this.logError("Operand of conditional operations and logical not must have type boolean.");
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 * @param negation
+	 * <br> not null
+	 */
+	private final void checkRule14(NegationExpression negation) {
+		System.out.println("NEGATION");
+		if (!negation.getType().equals(boolean.class)) {
+			this.logError("Operand of conditional operations and logical not must have type boolean.");
 		}
 	}
 	

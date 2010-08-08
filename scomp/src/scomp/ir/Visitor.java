@@ -202,4 +202,11 @@ public interface Visitor {
 	 * <br>Not null
 	 */
 	public abstract void visit(BinaryOperationExpression operation);
+	
+	/**
+	 * 
+	 * @param negation
+	 * <br>Not null
+	 */
+	public abstract void visit(NegationExpression negation);
 }
