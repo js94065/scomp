@@ -18,6 +18,7 @@ import scomp.ir.ArrayLocation;
 import scomp.ir.AssignmentStatement;
 import scomp.ir.BinaryOperationExpression;
 import scomp.ir.Block;
+import scomp.ir.CharLiteral;
 import scomp.ir.FieldDeclaration;
 import scomp.ir.IdentifierLocation;
 import scomp.ir.IfStatement;
@@ -382,11 +383,21 @@ public final class SemanticRules implements Visitor {
 	private final void checkRule11(final WhileStatement whileStatement) {
 		
 		if(whileStatement.getCondition().getClass().getSimpleName().equals("BinaryOperationExpression")) {
-			if(whileStatement.getCondition().getType() != boolean.class)
-			this.logError("While condition contains a binary operation expression");
+			if(whileStatement.getCondition().getType() != boolean.class) {
+				this.logError("While condition contains a binary operation expression");
+			}
 		}
 		else if(whileStatement.getCondition().getClass().getSimpleName().equals("LiteralExpression")) {
-			this.logError("While condition does not have a boolean type");
+			if( ((LiteralExpression)(whileStatement.getCondition())).getLiteral().getClass().getSimpleName().equals("IntLiteral") ) {
+				
+				IntLiteral intLiteral = (IntLiteral)((LiteralExpression)(whileStatement.getCondition())).getLiteral();
+				this.logError(intLiteral.getRow(), intLiteral.getColumn(),
+						"While condition contains an int value " + intLiteral.getValue());
+			}
+			else {
+				CharLiteral charLiteral = (CharLiteral)((LiteralExpression)(whileStatement.getCondition())).getLiteral();
+				this.logError("While condition contains an char value " + charLiteral.getValue());
+			}
 		}
 		else if(this.getVariableType(whileStatement) != boolean.class) {
 			this.logError(this.variableRow, this.variableColumn,
@@ -534,6 +545,13 @@ public final class SemanticRules implements Visitor {
 		return "(" + join(",", invoke(invoke(parametersOrArguments, "getType"), "getSimpleName")) + ")";
 	}
 	
+	/**
+	 * Returns Location -> Identifier
+	 * 
+	 * @param statement
+	 * @return
+	 * <br> null
+	 */
 	@SuppressWarnings("null")
 	private final Class<?> getVariableType(AbstractStatement statement) {
 		
