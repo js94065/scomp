@@ -49,8 +49,6 @@ public final class SemanticRules implements Visitor {
 	private final Logger logger;
 	
 	private String nameOfMethod = "";
-	private String variableName = "";
-	private int variableRow = 0, variableColumn = 0;
 	
 	public SemanticRules() {
 		this.scopes = new LinkedList<Map<String,AbstractTypedEntityDeclaration>>();
@@ -363,17 +361,23 @@ public final class SemanticRules implements Visitor {
 	 * @param booleanExpression
 	 * <br> not null
 	 */
+	
 	private final void checkRule11(final IfStatement ifStatement) {
 		
 		if(ifStatement.getCondition().getClass().getSimpleName().equals("BinaryOperationExpression")) {
-			if(ifStatement.getCondition().getType() != boolean.class)
-			this.logError("If condition does not have a boolean type");
+			this.checkBinaryOperationType(ifStatement);
 		}
-		else if(this.getVariableType(ifStatement) != boolean.class) {
-			this.logError(this.variableRow, this.variableColumn,
-					this.variableName + " is not a boolean type");
+		else if(ifStatement.getCondition().getClass().getSimpleName().equals("LiteralExpression")) {
+			this.checkLiteralExpression(ifStatement);
+		}
+		else if(ifStatement.getCondition().getClass().getSimpleName().equals("NegationExpression")) {
+			this.logError("While condition contains a negation expression");
+		}
+		else if(ifStatement.getCondition().getClass().getSimpleName().equals("LocationExpression")) {
+			this.checkLocationType(ifStatement);
 		}
 	}
+	
 	
 	/**
 	 * 
@@ -383,25 +387,16 @@ public final class SemanticRules implements Visitor {
 	private final void checkRule11(final WhileStatement whileStatement) {
 		
 		if(whileStatement.getCondition().getClass().getSimpleName().equals("BinaryOperationExpression")) {
-			if(whileStatement.getCondition().getType() != boolean.class) {
-				this.logError("While condition contains a binary operation expression");
-			}
+			this.checkBinaryOperationType(whileStatement);
 		}
 		else if(whileStatement.getCondition().getClass().getSimpleName().equals("LiteralExpression")) {
-			if( ((LiteralExpression)(whileStatement.getCondition())).getLiteral().getClass().getSimpleName().equals("IntLiteral") ) {
-				
-				IntLiteral intLiteral = (IntLiteral)((LiteralExpression)(whileStatement.getCondition())).getLiteral();
-				this.logError(intLiteral.getRow(), intLiteral.getColumn(),
-						"While condition contains an int value " + intLiteral.getValue());
-			}
-			else {
-				CharLiteral charLiteral = (CharLiteral)((LiteralExpression)(whileStatement.getCondition())).getLiteral();
-				this.logError("While condition contains an char value " + charLiteral.getValue());
-			}
+			this.checkLiteralExpression(whileStatement);
 		}
-		else if(this.getVariableType(whileStatement) != boolean.class) {
-			this.logError(this.variableRow, this.variableColumn,
-					this.variableName + " is not a boolean type");
+		else if(whileStatement.getCondition().getClass().getSimpleName().equals("NegationExpression")) {
+			this.logError("While condition contains a negation expression");
+		}
+		else if(whileStatement.getCondition().getClass().getSimpleName().equals("LocationExpression")) {
+			this.checkLocationType(whileStatement);
 		}
 	}
 	
@@ -546,38 +541,115 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	/**
-	 * Returns Location -> Identifier
+	 * 
+	 * @param statement
+	 */
+	@SuppressWarnings("null")
+	private final void checkLiteralExpression(AbstractStatement statement) {
+		LiteralExpression literalExpression = null;
+		boolean anIfStatement = true;
+		
+		if(statement.getClass().getSimpleName().equals("IfStatement")) {
+			literalExpression = (LiteralExpression)((IfStatement)statement).getCondition();
+		}
+		else if(statement.getClass().getSimpleName().equals("WhileStatement")) {
+			literalExpression = (LiteralExpression)((WhileStatement)statement).getCondition();
+			anIfStatement = !anIfStatement;
+		}
+		
+		if(literalExpression.getLiteral().getClass().getSimpleName().equals("IntLiteral")) {
+			IntLiteral intLiteral = (IntLiteral)literalExpression.getLiteral();
+			
+			if(anIfStatement) {
+				this.logError(intLiteral.getRow(), intLiteral.getColumn(),
+						"If condition contains an int value " + intLiteral.getValue());
+			}
+			else {
+				this.logError(intLiteral.getRow(), intLiteral.getColumn(),
+						"While condition contains an int value " + intLiteral.getValue());
+			}
+		}
+		else {
+			CharLiteral charLiteral = (CharLiteral)literalExpression.getLiteral();
+			
+			if(anIfStatement) {
+				this.logError("If condition contains a char value " + charLiteral.getValue());
+			}
+			else {
+				this.logError("While condition contains a char value " + charLiteral.getValue());
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 * @param statement
+	 */
+	@SuppressWarnings("null")
+	private final void checkBinaryOperationType(AbstractStatement statement) {
+		BinaryOperationExpression operationExpression = null;
+		boolean anIfStatement = true;
+		
+		if(statement.getClass().getSimpleName().equals("IfStatement")) {
+			operationExpression = (BinaryOperationExpression)((IfStatement)statement).getCondition();
+		}
+		else if(statement.getClass().getSimpleName().equals("WhileStatement")) {
+			operationExpression = (BinaryOperationExpression)((WhileStatement)statement).getCondition();
+			anIfStatement = !anIfStatement;
+		}
+		
+		if(operationExpression.getType() != boolean.class) {
+			if(anIfStatement) {
+				this.logError("If condition contains an arithmetic operation expression " + operationExpression.getOperator());
+			}
+			else {
+				this.logError("While condition contains an arithmetic operation expression " + operationExpression.getOperator());
+			}
+		}
+	}
+	
+	/**
+	 * Returns an already declared identifier
 	 * 
 	 * @param statement
 	 * @return
 	 * <br> null
 	 */
 	@SuppressWarnings("null")
-	private final Class<?> getVariableType(AbstractStatement statement) {
-		
+	private final void checkLocationType(AbstractStatement statement) {
 		LocationExpression locationExpression = null;
+		boolean anIfStatement = true;
 		
 		if(statement.getClass().getSimpleName().equals("IfStatement")) {
 			locationExpression = (LocationExpression)((IfStatement)statement).getCondition();
 		}
 		else if(statement.getClass().getSimpleName().equals("WhileStatement")) {
 			locationExpression = (LocationExpression)((WhileStatement)statement).getCondition();
+			anIfStatement = !anIfStatement;
 		}
 		
 		if(locationExpression.getLocation().getClass().getSimpleName().equals("IdentifierLocation")) {
-			String variable = ((IdentifierLocation)locationExpression.getLocation()).getIdentifier();
+			String identifier = ((IdentifierLocation)locationExpression.getLocation()).getIdentifier();
 			
-			Class<?> variableType = this.getCurrentScope().get(variable).getType();
+			// NEED ARRAY LOCATION
 			
-			if(variableType == boolean.class) {
-				this.variableName = this.getCurrentScope().get(variable).getIdentifier();
-				this.variableRow = this.getCurrentScope().get(variable).getIdentifierRow();
-				this.variableColumn = this.getCurrentScope().get(variable).getIdentifierColumn();
-				return variableType;
+			Class<?> identifierType = this.getCurrentScope().get(identifier).getType();
+			
+			if(identifierType == boolean.class) {
+				String identifierName = this.getCurrentScope().get(identifier).getIdentifier();
+				int identifierRow = this.getCurrentScope().get(identifier).getIdentifierRow();
+				int identifierColumn = this.getCurrentScope().get(identifier).getIdentifierColumn();
+				
+				if(anIfStatement) {
+					this.logError(identifierRow, identifierColumn,
+							"If condition contains the identifier " + identifierName + " that is not a boolean type");
+				}
+				else {
+					this.logError(identifierRow, identifierColumn,
+							"While condition contains the identifier " + identifierName + " that is not a boolean type");
+				}
 			}
 		}
-		
-		return null;
 	}
 	
 }
