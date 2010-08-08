@@ -372,6 +372,19 @@ public final class SemanticRulesTest {
 		"\n" +
 		"}";
 	
+	public static final String PROGRAM_WITH_MISMATCH_ARITHMETIC_OPERATOR=
+		"class Program {\n" +
+		"	boolean f() {\n" +
+		"		int x;\n" +
+		"		x = true + 2;\n" +
+		"	}\n" +
+		"\n" +
+		"	void main() {\n" +
+		"		// Deliberatly left empty\n" +
+		"	}\n" +
+		"\n" +
+		"}";
+
 	public static final String PROGRAM_WITH_MANY_EQUALITY_STATEMENTS =
 		"class Program {\n" +
 		"	boolean f() {\n" +
