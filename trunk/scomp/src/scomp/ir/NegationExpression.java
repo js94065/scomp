@@ -42,10 +42,7 @@ public final class NegationExpression extends AbstractExpression {
 	
 	@Override
 	public final Class<?> getType() {
-		// TODO
-		Tools.debugPrint("TODO");
-		
-		return String.class; // placeholder to make tests pass...
+		return this.getExpression().getType();
 	}
 	
 	@Override
