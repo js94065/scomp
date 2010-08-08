@@ -173,6 +173,19 @@ public final class SemanticRulesTest {
 				), this.recorder.getMessages());
 	}
 	
+	@Test
+	public final void testRule14() {
+		final Program program = parse(PROGRAM_WITH_CONDITIONAL_OPERATORS_AND_LOGICAL_NOT);
+		
+		program.accept(new SemanticRules());
+		
+		assertEquals(Arrays.asList(
+				"Operand of conditional operations and logical not must have type boolean.",
+				"Operand of conditional operations and logical not must have type boolean."
+				), this.recorder.getMessages());
+		
+	}
+	
 	/**
 	 * {@value}.
 	 */
@@ -402,6 +415,21 @@ public final class SemanticRulesTest {
 		"		x = 3 == 2;\n" +
 		"		y = true == 2;\n" +
 		"		z = 'c' == 2;\n" +
+		"	}\n" +
+		"\n" +
+		"	void main() {\n" +
+		"		// Deliberatly left empty\n" +
+		"	}\n" +
+		"\n" +
+		"}";
+	
+	public static final String PROGRAM_WITH_CONDITIONAL_OPERATORS_AND_LOGICAL_NOT = 
+		"class Program {\n" +
+		"	boolean f() {\n" +
+		"		boolean x,y,z;\n" +
+		"		x = 2 && true;\n" +
+		"		y = 2 || true;\n" +
+		"		z = !(3+5);\n" +
 		"	}\n" +
 		"\n" +
 		"	void main() {\n" +
