@@ -37,12 +37,10 @@ public final class BinaryOperationExpression extends AbstractExpression {
 	
 	@Override
 	public final void accept(final Visitor visitor) {
-		visitor.beginVisit(this);
+		visitor.visit(this);
 		
 		this.getLeft().accept(visitor);
 		this.getRight().accept(visitor);
-		
-		visitor.endVisit(this);
 	}
 	
 	/**

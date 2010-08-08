@@ -135,20 +135,6 @@ public interface Visitor {
 	
 	/**
 	 * 
-	 * @param operation
-	 * <br>Not null
-	 */
-	public abstract void beginVisit(BinaryOperationExpression operation);
-	
-	/**
-	 * 
-	 * @param operation
-	 * <br>Not null
-	 */
-	public abstract void endVisit(BinaryOperationExpression operation);
-	
-	/**
-	 * 
 	 * @param location
 	 * <br>Not null
 	 */
@@ -209,4 +195,11 @@ public interface Visitor {
 	 * <br>Not null
 	 */
 	public abstract void beginVisit(WhileStatement whileStatement);
+	
+	/**
+	 * 
+	 * @param operation
+	 * <br>Not null
+	 */
+	public abstract void visit(BinaryOperationExpression operation);
 }
