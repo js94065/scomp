@@ -215,7 +215,6 @@ public final class SemanticRules implements Visitor {
 	
 	@Override
 	public final void visit(final NegationExpression operation) {
-		System.out.println("AAAAA");
 		this.checkRule14(operation);
 	}
 	
@@ -455,7 +454,6 @@ public final class SemanticRules implements Visitor {
 	 * <br> not null
 	 */
 	private final void checkRule14(NegationExpression negation) {
-		System.out.println("NEGATION");
 		if (!negation.getType().equals(boolean.class)) {
 			this.logError("Operand of conditional operations and logical not must have type boolean.");
 		}
