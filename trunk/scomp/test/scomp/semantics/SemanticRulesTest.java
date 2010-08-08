@@ -232,7 +232,7 @@ public final class SemanticRulesTest {
 		"			main();\n" +
 		"		}\n" +
 		"\n" +
-		"		return a + w + y + z;\n" +
+		"		return a + w + z;\n" +
 		"	}\n" +
 		"\n" +
 		"	void main() {\n" +
