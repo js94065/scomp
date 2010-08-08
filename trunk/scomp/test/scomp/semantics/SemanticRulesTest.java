@@ -161,6 +161,17 @@ public final class SemanticRulesTest {
 				), this.recorder.getMessages());
 	}
 
+	@Test
+	public final void testRule13() {
+		final Program program = parse(PROGRAM_WITH_MANY_EQUALITY_STATEMENTS);
+		
+		program.accept(new SemanticRules());
+		
+		assertEquals(Arrays.asList(
+				"Operand of equality operator must have same type, either int or boolean.",
+				"Operand of equality operator must have same type, either int or boolean."
+				), this.recorder.getMessages());
+	}
 	
 	/**
 	 * {@value}.
@@ -376,6 +387,21 @@ public final class SemanticRulesTest {
 		"	boolean f() {\n" +
 		"		int x;\n" +
 		"		x = true + 2;\n" +
+		"	}\n" +
+		"\n" +
+		"	void main() {\n" +
+		"		// Deliberatly left empty\n" +
+		"	}\n" +
+		"\n" +
+		"}";
+	
+	public static final String PROGRAM_WITH_MANY_EQUALITY_STATEMENTS =
+		"class Program {\n" +
+		"	boolean f() {\n" +
+		"		boolean x,y,z;\n" +
+		"		x = 3 == 2;\n" +
+		"		y = true == 2;\n" +
+		"		z = 'c' == 2;\n" +
 		"	}\n" +
 		"\n" +
 		"	void main() {\n" +

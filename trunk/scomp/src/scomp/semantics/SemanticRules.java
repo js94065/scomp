@@ -207,7 +207,7 @@ public final class SemanticRules implements Visitor {
 	
 	@Override
 	public final void visit(final BinaryOperationExpression operation) {
-		this.checkRule12(operation);
+		this.checkRules12Through14(operation);
 	}
 	
 	/**
@@ -373,7 +373,7 @@ public final class SemanticRules implements Visitor {
 	 * @param operation
 	 * <br> not null
 	 */
-	private final void checkRule12(BinaryOperationExpression operation) {
+	private final void checkRules12Through14(BinaryOperationExpression operation) {
 		if ( operation.getOperator().equals("+") ||
 				operation.getOperator().equals("-") ||
 				operation.getOperator().equals("*") ||
@@ -387,16 +387,27 @@ public final class SemanticRules implements Visitor {
 				operation.getOperator().equals("<=") ||
 				operation.getOperator().equals(">=") ) {
 			if (!operation.getLeft().getType().equals(int.class)) {
-				System.out.println("LEFT TYPE: " + operation.getLeft().getType());
 				this.logError("Operand of arithmetic and relational operations must " +
 						"have type int.");
 			} 
 			if (!operation.getRight().getType().equals(int.class)) {
-				System.out.println("RIGHT TYPE: " + operation.getRight().getClass());
 				this.logError("Operand of arithmetic and relational operations must " +
 						"have type int.");
 			}
 		} 
+		else if ( operation.getOperator().equals("==") ) {
+			if (operation.getLeft().getType().equals(int.class) && 
+					operation.getRight().getType().equals(int.class)) {
+				// do nothing
+			} 
+			else if (operation.getLeft().getType().equals(boolean.class) && 
+					operation.getRight().getType().equals(boolean.class)) {
+				// do nothing
+			} else {
+				this.logError("Operand of equality operator must have same type, " +
+						"either int or boolean.");
+			}
+		}
 	}
 	
 	/**
