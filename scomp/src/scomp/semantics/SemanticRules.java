@@ -358,7 +358,7 @@ public final class SemanticRules implements Visitor {
 	
 	/**
 	 * 
-	 * @param booleanExpression
+	 * @param ifStatement
 	 * <br> not null
 	 */
 	
@@ -371,7 +371,7 @@ public final class SemanticRules implements Visitor {
 			this.checkLiteralExpression(ifStatement);
 		}
 		else if(ifStatement.getCondition().getClass().getSimpleName().equals("NegationExpression")) {
-			this.logError("While condition contains a negation expression");
+			this.logError("If condition contains a negation expression");
 		}
 		else if(ifStatement.getCondition().getClass().getSimpleName().equals("LocationExpression")) {
 			this.checkLocationType(ifStatement);
@@ -541,6 +541,7 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	/**
+	 * Checks what type of literal expression at the if or while conditions
 	 * 
 	 * @param statement
 	 */
@@ -582,6 +583,7 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	/**
+	 * Checks the binary operation type at the if or while conditions
 	 * 
 	 * @param statement
 	 */
@@ -609,11 +611,9 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	/**
-	 * Returns an already declared identifier
+	 * Checks the location type at the if or while conditions
 	 * 
 	 * @param statement
-	 * @return
-	 * <br> null
 	 */
 	@SuppressWarnings("null")
 	private final void checkLocationType(AbstractStatement statement) {
