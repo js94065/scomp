@@ -144,6 +144,8 @@ public final class SemanticRulesTest {
 		
 		program.accept(new SemanticRules());
 		
+		System.out.println("error: " + this.recorder.getMessages());
+		
 		assertEquals(Arrays.asList(
 				"If condition does not have a boolean type",
 				"While condition does not have a boolean type"
