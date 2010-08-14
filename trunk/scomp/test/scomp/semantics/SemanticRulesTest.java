@@ -60,6 +60,7 @@ public final class SemanticRulesTest {
 				"(:12:11) Undeclared identifier f",
 				"(:13:4) Undeclared identifier main",
 				"Operand of arithmetic and relational operations must have type int.",
+				"Operand of arithmetic and relational operations must have type int.",
 				"(:16:10) Undeclared identifier a"
 		), this.recorder.getMessages());
 	}
