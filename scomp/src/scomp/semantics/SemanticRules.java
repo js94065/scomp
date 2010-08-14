@@ -491,6 +491,8 @@ public final class SemanticRules implements Visitor {
 	private final void checkRule12(BinaryOperationExpression operation) {
 		if (operation.getLeft().getType()==null || operation.getRight().getType()==null) {
 			// fix to handle conflicts with rule 2 with undeclared identifiers (test 2)
+			// if we see a violation of rule 2, then rule 2 takes precedence  
+			// and we do not indicate error for current rule 
 			// the only case where the type will be null is 
 			// if we have an undeclared identifier
 			return;
@@ -530,6 +532,8 @@ public final class SemanticRules implements Visitor {
 	private final void checkRule13(BinaryOperationExpression operation) {
 		if (operation.getLeft().getType()==null || operation.getRight().getType()==null) {
 			// fix to handle conflicts with rule 2 with undeclared identifiers (test 2)
+			// if we see a violation of rule 2, then rule 2 takes precedence and  
+			// we do not indicate error for current rule
 			// the only case where the type will be null is 
 			// if we have an undeclared identifier
 			return;
@@ -558,6 +562,8 @@ public final class SemanticRules implements Visitor {
 	private final void checkRule14(BinaryOperationExpression operation) {
 		if (operation.getLeft().getType()==null || operation.getRight().getType()==null) {
 			// fix to handle conflicts with rule 2 with undeclared identifiers (test 2)
+			// if we see a violation of rule 2, then rule 2 takes precedence  
+			// and we do not indicate error for current rule
 			// the only case where the type will be null is 
 			// if we have an undeclared identifier
 			return;
