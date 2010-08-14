@@ -49,14 +49,10 @@ public final class SemanticRulesTest {
 	
 	@Test
 	public final void testRule2() {
+		
 		final Program program = parse(PROGRAM_WITH_UNDECLARED_IDENTIFIERS);
 		
-		try{
-			program.accept(new SemanticRules());
-		} catch(NullPointerException e) {
-			// ignore null pointers since we can't test rule 2 
-			// and have rule 12 at the same time.
-		}
+		program.accept(new SemanticRules());
 		
 		assertEquals(Arrays.asList(
 				"(:12:4) Undeclared identifier b",
