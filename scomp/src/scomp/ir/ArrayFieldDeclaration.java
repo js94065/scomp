@@ -31,11 +31,7 @@ public final class ArrayFieldDeclaration extends AbstractFieldDeclaration {
 	
 	@Override
 	public final void accept(final Visitor visitor) {
-		visitor.beginVisit(this);
-		
-		this.getElementCount().accept(visitor);
-		
-		visitor.endVisit(this);
+		visitor.visit(this);
 	}
 	
 	/**

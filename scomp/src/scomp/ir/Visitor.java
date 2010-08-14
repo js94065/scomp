@@ -12,28 +12,14 @@ public interface Visitor {
 	 * @param program
 	 * <br>Not null
 	 */
-	public abstract void beginVisit(Program program);
-	
-	/**
-	 * 
-	 * @param program
-	 * <br>Not null
-	 */
-	public abstract void endVisit(Program program);
+	public abstract void visit(Program program);
 	
 	/**
 	 * 
 	 * @param field
 	 * <br>Not null
 	 */
-	public abstract void beginVisit(ArrayFieldDeclaration field);
-	
-	/**
-	 * 
-	 * @param field
-	 * <br>Not null
-	 */
-	public abstract void endVisit(ArrayFieldDeclaration field);
+	public abstract void visit(ArrayFieldDeclaration field);
 	
 	/**
 	 * 
@@ -54,14 +40,7 @@ public interface Visitor {
 	 * @param method
 	 * <br>Not null
 	 */
-	public abstract void beginVisit(MethodDeclaration method);
-	
-	/**
-	 * 
-	 * @param method
-	 * <br>Not null
-	 */
-	public abstract void endVisit(MethodDeclaration method);
+	public abstract void visit(MethodDeclaration method);
 	
 	/**
 	 * 
@@ -82,29 +61,15 @@ public interface Visitor {
 	 * @param block
 	 * <br>Not null
 	 */
-	public abstract void beginVisit(Block block);
-	
-	/**
-	 * 
-	 * @param block
-	 * <br>Not null
-	 */
-	public abstract void endVisit(Block block);
+	public abstract void visit(Block block);
 	
 	/**
 	 * 
 	 * @param assignment
 	 * <br>Not null
 	 */
-	public abstract void beginVisit(AssignmentStatement assignment);
-	
-	/**
-	 * 
-	 * @param assignment
-	 * <br>Not null
-	 */
-	public abstract void endVisit(AssignmentStatement assignment);
-	
+	public abstract void visit(AssignmentStatement assignment);
+
 	/**
 	 * 
 	 * @param returnStatement
@@ -209,4 +174,5 @@ public interface Visitor {
 	 * <br>Not null
 	 */
 	public abstract void visit(NegationExpression negation);
+
 }

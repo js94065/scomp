@@ -35,17 +35,7 @@ public final class Block extends AbstractNode {
 	
 	@Override
 	public final void accept(final Visitor visitor) {
-		visitor.beginVisit(this);
-		
-		for (final VariableDeclaration variableDeclaration : this.getVariableDeclarations()) {
-			variableDeclaration.accept(visitor);
-		}
-		
-		for (final AbstractStatement statement : this.getStatements()) {
-			statement.accept(visitor);
-		}
-		
-		visitor.endVisit(this);
+		visitor.visit(this);
 	}
 	
 	/**
