@@ -30,12 +30,7 @@ public final class AssignmentStatement extends AbstractStatement {
 	
 	@Override
 	public final void accept(final Visitor visitor) {
-		visitor.beginVisit(this);
-		
-		this.getLocation().accept(visitor);
-		this.getExpression().accept(visitor);
-		
-		visitor.endVisit(this);
+		visitor.visit(this);
 	}
 	
 	/**

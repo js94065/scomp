@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import scomp.DecafParser;
+import scomp.ir.AbstractFieldDeclaration;
 import scomp.ir.AbstractLocation;
 import scomp.ir.AbstractStatement;
 import scomp.ir.AbstractTypedEntityDeclaration;
@@ -57,28 +58,27 @@ public final class SemanticRules implements Visitor {
 		this.logger = Logger.getLogger(DecafParser.class.getName());
 	}
 	
-	@Override
-	public final void beginVisit(final Program program) {
+	@Override 
+	public final void visit(final Program program) {
 		this.pushNewScope();
-	}
-	
-	@Override
-	public final void endVisit(final Program program) {
+		
+		for (final AbstractFieldDeclaration fieldDeclaration : program.getFieldDeclarations()) {
+			fieldDeclaration.accept(this);
+		}
+		
+		for (final MethodDeclaration methodDeclaration : program.getMethodDeclarations()) {
+			methodDeclaration.accept(this);
+		}
+		
 		this.checkRule3(program);
 		
 		this.popCurrentScope();
 	}
 	
 	@Override
-	public final void beginVisit(final ArrayFieldDeclaration field) {
+	public final void visit(final ArrayFieldDeclaration field) {
 		this.checkRule1(field);
 		this.checkRule4(field);
-	}
-	
-	@Override
-	public final void endVisit(final ArrayFieldDeclaration field) {
-		// TODO
-		debugPrint("TODO");
 	}
 	
 	@Override
@@ -87,15 +87,18 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	@Override
-	public final void beginVisit(final MethodDeclaration method) {
+	public final void visit(final MethodDeclaration method) {
 		this.nameOfMethod = method.getIdentifier();
 		this.checkRule1(method);
 		
 		this.pushNewScope();
-	}
-	
-	@Override
-	public final void endVisit(final MethodDeclaration method) {
+		
+		for (final ParameterDeclaration parameterDeclaration : method.getParameterDeclarations()) {
+			parameterDeclaration.accept(this);
+		}
+		
+		method.getBlock().accept(this);
+		
 		this.popCurrentScope();
 	}
 	
@@ -110,25 +113,25 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	@Override
-	public final void beginVisit(final Block block) {
+	public final void visit(final Block block) {
 		this.pushNewScope();
-	}
-	
-	@Override
-	public final void endVisit(final Block block) {
+		
+		for (final VariableDeclaration variableDeclaration : block.getVariableDeclarations()) {
+			variableDeclaration.accept(this);
+		}
+		
+		for (final AbstractStatement statement : block.getStatements()) {
+			statement.accept(this);
+		}
+		
 		this.popCurrentScope();
 	}
 	
-	@Override
-	public final void beginVisit(final AssignmentStatement assignment) {
-		// TODO
-		debugPrint("TODO");
-	}
 	
 	@Override
-	public final void endVisit(final AssignmentStatement assignment) {
-		// TODO
-		debugPrint("TODO");
+	public final void visit(final AssignmentStatement assignment) {
+		assignment.getLocation().accept(this);
+		assignment.getExpression().accept(this);
 	}
 	
 	@Override
@@ -216,12 +219,8 @@ public final class SemanticRules implements Visitor {
 			System.out.println("BinaryOperationExpression has null arguments");
 		}
 		Set<String> keys = this.getCurrentScope().keySet();
-		Collection<AbstractTypedEntityDeclaration> values = this.getCurrentScope().values();
-		System.out.println("AAAAAA");
-		System.out.println(operation.getLeft());
-		System.out.println(operation.getLeft().getType());
-		System.out.println(operation.getRight());
-		System.out.println(operation.getRight().getType());
+		// for locations and method calls we must get set the type using 
+		// the scopes
 		if (operation.getLeft().isLocation()) {
 			LocationExpression locationExpression = (LocationExpression) operation.getLeft();
 			String leftIdentifier = locationExpression.getLocation().getIdentifier();
@@ -480,6 +479,7 @@ public final class SemanticRules implements Visitor {
 			}
 		}
 	}
+	
 	
 	/**
 	 * 
