@@ -2,10 +2,12 @@ package scomp.semantics;
 
 import static scomp.Tools.*;
 
+import java.util.Collection;
 import java.util.Deque;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -210,6 +212,53 @@ public final class SemanticRules implements Visitor {
 	
 	@Override
 	public final void visit(final BinaryOperationExpression operation) {
+		if (operation.getLeft()==null || operation.getRight() == null) {
+			System.out.println("BinaryOperationExpression has null arguments");
+		}
+		Set<String> keys = this.getCurrentScope().keySet();
+		Collection<AbstractTypedEntityDeclaration> values = this.getCurrentScope().values();
+		System.out.println("AAAAAA");
+		System.out.println(operation.getLeft());
+		System.out.println(operation.getLeft().getType());
+		System.out.println(operation.getRight());
+		System.out.println(operation.getRight().getType());
+		if (operation.getLeft().isLocation()) {
+			LocationExpression locationExpression = (LocationExpression) operation.getLeft();
+			String leftIdentifier = locationExpression.getLocation().getIdentifier();
+			for (String s: keys) {
+				if (s.equals(leftIdentifier)) {
+					locationExpression.setType(this.getCurrentScope().get(s).getClass());
+				}
+			}
+		}
+		if (operation.getRight().isLocation()) {
+			LocationExpression locationExpression = (LocationExpression) operation.getRight();
+			String rightIdentifier = locationExpression.getLocation().getIdentifier();
+			for (String s: keys) {
+				if (s.equals(rightIdentifier)) {
+					locationExpression.setType(this.getCurrentScope().get(s).getClass());
+				}
+			}
+		}
+		if (operation.getLeft().isMethodCall()) {
+			MethodCallExpression methodCallExpression = (MethodCallExpression) operation.getLeft();
+			String leftIdentifier = methodCallExpression.getMethodCall().getMethodName();
+			for (String s: keys) {
+				if (s.equals(leftIdentifier)) {
+					methodCallExpression.setType(this.getCurrentScope().get(s).getClass());
+				}
+			}
+		}
+		if (operation.getRight().isMethodCall()) {
+			MethodCallExpression methodCallExpression = (MethodCallExpression) operation.getRight();
+			String rightIdentifier = methodCallExpression.getMethodCall().getMethodName();
+			for (String s: keys) {
+				if (s.equals(rightIdentifier)) {
+					methodCallExpression.setType(this.getCurrentScope().get(s).getClass());
+				}
+			}
+		}
+		
 		this.checkRule12(operation);
 		this.checkRule13(operation);
 		this.checkRule14(operation);
@@ -417,7 +466,8 @@ public final class SemanticRules implements Visitor {
 				operation.getOperator().equals("<") ||
 				operation.getOperator().equals(">") ||
 				operation.getOperator().equals("<=") ||
-				operation.getOperator().equals(">=") ) {
+				operation.getOperator().equals(">=") 
+			) {
 			if (!operation.getLeft().getType().equals(int.class)) {
 				this.logError("Operand of arithmetic and relational operations must " +
 						"have type int.");

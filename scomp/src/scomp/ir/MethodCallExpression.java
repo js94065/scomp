@@ -11,6 +11,8 @@ public final class MethodCallExpression extends AbstractExpression {
 	
 	private final AbstractMethodCall<?> methodCall;
 	
+	private Class<?> type;
+	
 	/**
 	 * 
 	 * @param methodCall
@@ -19,6 +21,15 @@ public final class MethodCallExpression extends AbstractExpression {
 	 */
 	public MethodCallExpression(final AbstractMethodCall<?> methodCall){
 		this.methodCall = methodCall;
+	}
+	
+	@Override
+	public final boolean isLocation() {
+		return false;
+	}
+	
+	public final void setType(Class<?> type) {
+		this.type = type;
 	}
 	
 	@Override
@@ -42,10 +53,7 @@ public final class MethodCallExpression extends AbstractExpression {
 	
 	@Override
 	public final Class<?> getType() {
-		// TODO
-		Tools.debugPrint("TODO");
-		
-		return String.class; // placeholder to make some tests pass...
+		return this.type;
 	}
 	
 	@Override
@@ -68,6 +76,11 @@ public final class MethodCallExpression extends AbstractExpression {
 		return this == that ||
 				that != null &&
 				this.getMethodCall().equals(that.getMethodCall());
+	}
+
+	@Override
+	public boolean isMethodCall() {
+		return true;
 	}
 	
 }
