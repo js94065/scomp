@@ -27,8 +27,7 @@ public final class MethodCallout extends AbstractMethodCall<AbstractCalloutArgum
 	
 	@Override
 	public final void accept(final Visitor visitor) {
-		// TODO
-		Tools.debugPrint("TODO");
+		visitor.visit(this);
 	}
 	
 	@Override

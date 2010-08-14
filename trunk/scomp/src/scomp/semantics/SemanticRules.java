@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import scomp.DecafParser;
+import scomp.ir.AbstractExpression;
 import scomp.ir.AbstractFieldDeclaration;
 import scomp.ir.AbstractLocation;
 import scomp.ir.AbstractStatement;
@@ -21,7 +22,12 @@ import scomp.ir.ArrayLocation;
 import scomp.ir.AssignmentStatement;
 import scomp.ir.BinaryOperationExpression;
 import scomp.ir.Block;
+import scomp.ir.BlockStatement;
+import scomp.ir.BooleanLiteral;
+import scomp.ir.BreakStatement;
 import scomp.ir.CharLiteral;
+import scomp.ir.ContinueStatement;
+import scomp.ir.ExpressionCalloutArgument;
 import scomp.ir.FieldDeclaration;
 import scomp.ir.IdentifierLocation;
 import scomp.ir.IfStatement;
@@ -30,11 +36,15 @@ import scomp.ir.LiteralExpression;
 import scomp.ir.LocationExpression;
 import scomp.ir.MethodCall;
 import scomp.ir.MethodCallExpression;
+import scomp.ir.MethodCallStatement;
+import scomp.ir.MethodCallout;
 import scomp.ir.MethodDeclaration;
+import scomp.ir.MinusExpression;
 import scomp.ir.NegationExpression;
 import scomp.ir.ParameterDeclaration;
 import scomp.ir.Program;
 import scomp.ir.ReturnStatement;
+import scomp.ir.StringCalloutArgument;
 import scomp.ir.VariableDeclaration;
 import scomp.ir.Visitor;
 import scomp.ir.WhileStatement;
@@ -127,6 +137,11 @@ public final class SemanticRules implements Visitor {
 		this.popCurrentScope();
 	}
 	
+	@Override
+	public final void visit(final BlockStatement block) {
+		block.getBlock().accept(this);
+	}
+	
 	
 	@Override
 	public final void visit(final AssignmentStatement assignment) {
@@ -135,66 +150,48 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	@Override
-	public final void beginVisit(final ReturnStatement returnStatement) {
+	public final void visit(final ReturnStatement returnStatement) {
 		this.checkRule7(returnStatement);
 		this.checkRule8(returnStatement);
+		
+		if (returnStatement.getExpression() != null) {
+			returnStatement.getExpression().accept(this);
+		}
+		
 	}
 	
 	@Override
-	public final void endVisit(final ReturnStatement returnStatement) {
-		// TODO
-		debugPrint("TODO");
-	}
-	
-	@Override
-	public void beginVisit(final ArrayLocation location) {
+	public void visit(final ArrayLocation location) {
 		this.checkRule2(location);
+		
+		location.getOffset().accept(this);
 	}
 	
 	@Override
-	public void endVisit(final ArrayLocation location) {
-		// TODO
-		debugPrint("TODO");
+	public final void visit(final LocationExpression location) {
+		location.getLocation().accept(this);
 	}
-	
-	@Override
-	public final void beginVisit(final LocationExpression location) {
-		// TODO
-		debugPrint("TODO");
-	}
-	
-	@Override
-	public final void endVisit(final LocationExpression location) {
-		// TODO
-		debugPrint("TODO");
-	}
-	
+
 	@Override
 	public final void visit(final IdentifierLocation location) {
 		this.checkRule2(location);
 	}
 	
 	@Override
-	public final void beginVisit(final MethodCallExpression methodCall) {
+	public final void visit(final MethodCallExpression methodCall) {
 		this.checkRule6(methodCall);
+		
+		methodCall.getMethodCall().accept(this);
 	}
 	
 	@Override
-	public final void endVisit(final MethodCallExpression methodCall) {
-		// TODO
-		debugPrint("TODO");
-	}
-	
-	@Override
-	public final void beginVisit(final MethodCall methodCall) {
+	public final void visit(final MethodCall methodCall) {
 		this.checkRule2(methodCall);
 		this.checkRule5(methodCall);
-	}
-	
-	@Override
-	public final void endVisit(final MethodCall methodCall) {
-		// TODO
-		debugPrint("TODO");
+		
+		for (final AbstractExpression argument : methodCall.getArguments()) {
+			argument.accept(this);
+		}
 	}
 	
 	@Override
@@ -204,13 +201,20 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	@Override
-	public final void beginVisit(final IfStatement ifStatement) {
+	public final void visit(final IfStatement ifStatement) {
 		this.checkRule11(ifStatement);
+		
+		ifStatement.getCondition().accept(this);
+		ifStatement.getElseBlock().accept(this);
+		ifStatement.getThenBlock().accept(this);
 	}
 	
 	@Override
-	public final void beginVisit(final WhileStatement whileStatement) {
+	public final void visit(final WhileStatement whileStatement) {
 		this.checkRule11(whileStatement);
+		
+		whileStatement.getCondition().accept(this);
+		whileStatement.getBlock().accept(this);
 	}
 	
 	@Override
@@ -261,11 +265,16 @@ public final class SemanticRules implements Visitor {
 		this.checkRule12(operation);
 		this.checkRule13(operation);
 		this.checkRule14(operation);
+		
+		operation.getLeft().accept(this);
+		operation.getRight().accept(this);
 	}
 	
 	@Override
 	public final void visit(final NegationExpression operation) {
 		this.checkRule14(operation);
+		
+		operation.getExpression().accept(this);
 	}
 	
 	/**
@@ -700,6 +709,66 @@ public final class SemanticRules implements Visitor {
 				}
 			}
 		}
+	}
+
+	@Override
+	public void visit(BooleanLiteral booleanLiteral) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visit(BreakStatement breakStatement) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visit(CharLiteral charLiteral) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visit(ContinueStatement continueStatement) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visit(ExpressionCalloutArgument expressionCalloutArgument) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visit(LiteralExpression literalExpression) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visit(MethodCallStatement methodCallStatement) {
+		methodCallStatement.getMethodCall().accept(this);
+		
+	}
+
+	@Override
+	public void visit(MethodCallout methodCallout) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visit(MinusExpression minusExpression) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visit(StringCalloutArgument stringCalloutArgument) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

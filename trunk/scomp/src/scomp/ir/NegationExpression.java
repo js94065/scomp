@@ -28,11 +28,7 @@ public final class NegationExpression extends AbstractExpression {
 	
 	@Override
 	public final void accept(final Visitor visitor) {
-		
 		visitor.visit(this);
-		
-		this.getExpression().accept(visitor);
-		
 	}
 	
 	/**

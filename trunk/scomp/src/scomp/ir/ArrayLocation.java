@@ -29,11 +29,7 @@ public final class ArrayLocation extends AbstractLocation {
 	
 	@Override
 	public final void accept(final Visitor visitor) {
-		visitor.beginVisit(this);
-		
-		this.getOffset().accept(visitor);
-		
-		visitor.endVisit(this);
+		visitor.visit(this);
 	}
 	
 	/**
