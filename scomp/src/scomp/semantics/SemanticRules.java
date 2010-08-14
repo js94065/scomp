@@ -272,6 +272,32 @@ public final class SemanticRules implements Visitor {
 	
 	@Override
 	public final void visit(final NegationExpression operation) {
+		
+		if (operation.getExpression()==null) {
+			System.out.println("NegationExpression has null arguments");
+		}
+		Set<String> keys = this.getCurrentScope().keySet();
+		// for locations and method calls we must get set the type using 
+		// the scopes
+		if (operation.getExpression().isLocation()) {
+			LocationExpression locationExpression = (LocationExpression) operation.getExpression();
+			String identifier = locationExpression.getLocation().getIdentifier();
+			for (String s: keys) {
+				if (s.equals(identifier)) {
+					locationExpression.setType(this.getCurrentScope().get(s).getClass());
+				}
+			}
+		}
+		if (operation.getExpression().isMethodCall()) {
+			MethodCallExpression methodCallExpression = (MethodCallExpression) operation.getExpression();
+			String identifier = methodCallExpression.getMethodCall().getMethodName();
+			for (String s: keys) {
+				if (s.equals(identifier)) {
+					methodCallExpression.setType(this.getCurrentScope().get(s).getClass());
+				}
+			}
+		}
+		
 		this.checkRule14(operation);
 		
 		operation.getExpression().accept(this);
@@ -463,6 +489,12 @@ public final class SemanticRules implements Visitor {
 	 * <br> not null
 	 */
 	private final void checkRule12(BinaryOperationExpression operation) {
+		if (operation.getLeft().getType()==null || operation.getRight().getType()==null) {
+			// fix to handle conflicts with rule 2 with undeclared identifiers (test 2)
+			// the only case where the type will be null is 
+			// if we have an undeclared identifier
+			return;
+		}
 		if ( operation.getOperator().equals("+") ||
 				operation.getOperator().equals("-") ||
 				operation.getOperator().equals("*") ||
@@ -479,7 +511,7 @@ public final class SemanticRules implements Visitor {
 			if (!operation.getLeft().getType().equals(int.class)) {
 				this.logError("Operand of arithmetic and relational operations must " +
 						"have type int.");
-			} 
+			}
 			// left and right have distinct error locations
 			// update later with actual positions
 			if (!operation.getRight().getType().equals(int.class)) {
@@ -496,6 +528,12 @@ public final class SemanticRules implements Visitor {
 	 * <br> not null
 	 */
 	private final void checkRule13(BinaryOperationExpression operation) {
+		if (operation.getLeft().getType()==null || operation.getRight().getType()==null) {
+			// fix to handle conflicts with rule 2 with undeclared identifiers (test 2)
+			// the only case where the type will be null is 
+			// if we have an undeclared identifier
+			return;
+		}
 		if ( operation.getOperator().equals("==") ||
 				operation.getOperator().equals("!=") ) {
 			if (operation.getLeft().getType().equals(int.class) && 
@@ -518,6 +556,12 @@ public final class SemanticRules implements Visitor {
 	 * <br> not null
 	 */
 	private final void checkRule14(BinaryOperationExpression operation) {
+		if (operation.getLeft().getType()==null || operation.getRight().getType()==null) {
+			// fix to handle conflicts with rule 2 with undeclared identifiers (test 2)
+			// the only case where the type will be null is 
+			// if we have an undeclared identifier
+			return;
+		}
 		if ( operation.getOperator().equals("&&") ||
 				operation.getOperator().equals("||") ) {
 			if (!operation.getLeft().getType().equals(boolean.class) ) {
