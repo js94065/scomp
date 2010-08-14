@@ -121,6 +121,7 @@ public class DecafParserTest {
 	
 	@Test
 	public final void testProgramWithUnmatchedBraces1() {
+		beforeEachTest();
 		try {
 			assertEquals(null, parse(PROGRAM_WITH_UNMATCHED_BRACES_1));
 		} catch (final Exception exception) {

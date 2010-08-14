@@ -12,6 +12,8 @@ public final class LocationExpression extends AbstractExpression {
 	
 	private final AbstractLocation location;
 	
+	private Class<?> type;
+	
 	/**
 	 * 
 	 * @param location
@@ -20,6 +22,11 @@ public final class LocationExpression extends AbstractExpression {
 	 */
 	public LocationExpression(final AbstractLocation location){
 		this.location = location;
+	}
+	
+	@Override
+	public final boolean isLocation() {
+		return true;
 	}
 	
 	@Override
@@ -41,12 +48,13 @@ public final class LocationExpression extends AbstractExpression {
 		return this.location;
 	}
 	
+	public void setType(Class<?> type) {
+		this.type = type;
+	}
+	
 	@Override
-	public final Class<?> getType() {
-		// TODO
-		Tools.debugPrint("TODO");
-		
-		return null;
+	public final Class<?> getType() {		
+		return this.type;
 	}
 	
 	@Override
@@ -69,6 +77,11 @@ public final class LocationExpression extends AbstractExpression {
 		return this == that ||
 				that != null &&
 				this.getLocation().equals(that.getLocation());
+	}
+
+	@Override
+	public boolean isMethodCall() {
+		return false;
 	}
 	
 }
