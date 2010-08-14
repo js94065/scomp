@@ -28,8 +28,7 @@ public final class MinusExpression extends AbstractExpression {
 	
 	@Override
 	public final void accept(final Visitor visitor) {
-		// TODO
-		Tools.debugPrint("TODO");
+		visitor.visit(this);
 	}
 	
 	/**

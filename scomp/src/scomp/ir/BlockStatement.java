@@ -24,7 +24,7 @@ public final class BlockStatement extends AbstractStatement {
 	
 	@Override
 	public final void accept(final Visitor visitor) {
-		this.getBlock().accept(visitor);
+		visitor.visit(this);
 	}
 	
 	/**

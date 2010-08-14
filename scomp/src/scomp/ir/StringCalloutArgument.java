@@ -24,8 +24,7 @@ public class StringCalloutArgument extends AbstractCalloutArgument {
 	
 	@Override
 	public final void accept(final Visitor visitor) {
-		// TODO
-		Tools.debugPrint("TODO");
+		visitor.visit(this);
 	}
 	
 	/**

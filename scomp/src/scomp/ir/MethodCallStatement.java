@@ -22,7 +22,7 @@ public final class MethodCallStatement extends AbstractStatement {
 	
 	@Override
 	public final void accept(final Visitor visitor) {
-		this.getMethodCall().accept(visitor);
+		visitor.visit(this);
 	}
 	
 	/**

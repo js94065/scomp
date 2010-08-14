@@ -30,7 +30,7 @@ public final class WhileStatement extends AbstractStatement {
 	
 	@Override
 	public final void accept(final Visitor visitor) {
-		visitor.beginVisit(this);
+		visitor.visit(this);
 	}
 	
 	/**

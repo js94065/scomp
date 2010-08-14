@@ -13,8 +13,7 @@ public final class ContinueStatement extends AbstractStatement {
 	
 	@Override
 	public final void accept(final Visitor visitor) {
-		// TODO
-		Tools.debugPrint("TODO");
+		visitor.visit(this);
 	}
 	
 	@Override

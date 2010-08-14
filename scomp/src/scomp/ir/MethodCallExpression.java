@@ -34,11 +34,7 @@ public final class MethodCallExpression extends AbstractExpression {
 	
 	@Override
 	public final void accept(final Visitor visitor) {
-		visitor.beginVisit(this);
-		
-		this.getMethodCall().accept(visitor);
-		
-		visitor.endVisit(this);
+		visitor.visit(this);
 	}
 	
 	/**

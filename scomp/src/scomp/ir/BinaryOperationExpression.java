@@ -43,11 +43,6 @@ public final class BinaryOperationExpression extends AbstractExpression {
 	@Override
 	public final void accept(final Visitor visitor) {
 		visitor.visit(this);
-		
-		this.getLeft().accept(visitor);
-		System.out.println("GGGG");
-		this.getRight().accept(visitor);
-		System.out.println("GGGG");
 	}
 	
 	/**

@@ -31,11 +31,7 @@ public final class LocationExpression extends AbstractExpression {
 	
 	@Override
 	public final void accept(final Visitor visitor) {
-		visitor.beginVisit(this);
-		
-		this.getLocation().accept(visitor);
-		
-		visitor.endVisit(this);
+		visitor.visit(this);
 	}
 	
 	/**
