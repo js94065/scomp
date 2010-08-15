@@ -89,8 +89,8 @@ public final class Guess {
 	/**
 	 * 
 	 * @return
-	 * <br>A non-null value
-	 * <br>A shared value
+	 * <br>Not null
+	 * <br>Shared
 	 */
 	public final String getAnswer() {
 		return this.answer;
@@ -99,8 +99,8 @@ public final class Guess {
 	/**
 	 * 
 	 * @return
-	 * <br>A possibly null value
-	 * <br>A shared value
+	 * <br>Maybe null
+	 * <br>Shared
 	 */
 	public final Scanner getScanner() {
 		return this.scanner;
@@ -109,8 +109,8 @@ public final class Guess {
 	/**
 	 * 
 	 * @param scanner
-	 * <br>Can be null
-	 * <br>Shared parameter
+	 * <br>Maybe null
+	 * <br>Shared
 	 */
 	public final void setScanner(final Scanner scanner) {
 		this.scanner = scanner;
@@ -119,15 +119,15 @@ public final class Guess {
 	public static final String QUESTION = "Heads or tails?";
 	
 	/**
-	 * Duration in milliseconds.
+	 * {@value} milliseconds.
 	 */
 	public static final long SUSPENSE_DURATION = 1000L;
 	
 	/**
 	 * 
 	 * @param scanner
-	 * <br>Should not be null
-	 * <br>Input-output parameter
+	 * <br>Not null
+	 * <br>Input-output
 	 */
 	private static final void analyseAnswerAndPrintResult(final Scanner scanner) {
 		switch (Coin.valueOf(scanner.next())) {
@@ -147,10 +147,10 @@ public final class Guess {
 	 * Creates an input stream from {@code string}.
 	 * 
 	 * @param string
-	 * <br>Should not be null
+	 * <br>Not null
 	 * @return
-	 * <br>A non-null value
-	 * <br>A new value
+	 * <br>Not null
+	 * <br>New
 	 */
 	public static final InputStream toInputStream(final String string) {
 		return new ByteArrayInputStream(string.getBytes());
@@ -179,8 +179,8 @@ public final class Guess {
 		 * <br>Note that {@link #EDGE} has a very low probability.
 		 * 
 		 * @return
-		 * <br>A non-null value
-		 * <br>A shared value
+		 * <br>Not null
+		 * <br>Shared
 		 * <br>Range: { {@link #HEADS}, {@link #TAILS}, {@link #EDGE} }
 		 */
 		public static final Coin flip() {
@@ -195,6 +195,9 @@ public final class Guess {
 			}
 		}
 		
+		/*
+		 * {@value}.
+		 */
 		private static final double HEADS_PROBABILITY = 0.5;
 		
 	}
