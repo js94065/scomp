@@ -222,10 +222,6 @@ public final class SemanticRules implements Visitor {
 		// the manual typesetting here is probably not the best solution
 		// It might be cleaner to assign the types inside of the checkRule* 
 		// functions, but then there might be some repeated code
-		// A better solution might be to have the types assigned when
-		// we visit the left and right children, but this might require
-		// two visitor traversals, one to assign the types, and another to
-		// do the semantic checks.
 		// there is a lot of repeated code for typesetting
 		// we should probably simplify into functions later.
 		if (operation.getLeft()==null || operation.getRight() == null) {
