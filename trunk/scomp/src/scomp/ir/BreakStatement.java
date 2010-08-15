@@ -1,6 +1,6 @@
 package scomp.ir;
 
-import scomp.Tools;
+import scomp.DecafToken;
 
 
 /**
@@ -10,6 +10,16 @@ import scomp.Tools;
  *
  */
 public final class BreakStatement extends AbstractStatement {
+	
+	/**
+	 * 
+	 * @param token
+	 * <br>Not null
+	 * <br>Shared
+	 */
+	public BreakStatement(final DecafToken token) {
+		super(token);
+	}
 	
 	@Override
 	public final void accept(final Visitor visitor) {

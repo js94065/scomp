@@ -24,7 +24,7 @@ public final class MethodCall extends AbstractMethodCall<AbstractExpression> {
 	 * <br>Shared
 	 */
 	public MethodCall(final DecafToken methodNameIdentifier, final List<AbstractExpression> arguments) {
-		super(methodNameIdentifier.getValue().toString(), arguments);
+		super(methodNameIdentifier, methodNameIdentifier.getValue().toString(), arguments);
 		this.methodNameIdentifier = methodNameIdentifier;
 	}
 	

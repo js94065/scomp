@@ -2,7 +2,6 @@ package scomp.semantics;
 
 import static scomp.Tools.*;
 
-import java.util.Collection;
 import java.util.Deque;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -438,7 +437,7 @@ public final class SemanticRules implements Visitor {
 	 */
 	private final void checkRule1(final AbstractTypedEntityDeclaration entity) {
 		if (this.getCurrentScope().containsKey(entity.getIdentifier())) {
-			this.logError(entity.getIdentifierRow(), entity.getIdentifierColumn(),
+			this.logError(entity.getTokenRow(), entity.getTokenColumn(),
 					"Duplicate identifier " + entity.getIdentifier());
 		} else {
 			this.getCurrentScope().put(entity.getIdentifier(), entity);
@@ -452,7 +451,7 @@ public final class SemanticRules implements Visitor {
 	 */
 	private final void checkRule2(final AbstractLocation location) {
 		if (!this.getCurrentScope().containsKey(location.getIdentifier())) {
-			this.logError(location.getIdentifierRow(), location.getIdentifierColumn(),
+			this.logError(location.getTokenRow(), location.getTokenColumn(),
 					"Undeclared identifier " + location.getIdentifier());
 		}
 	}
@@ -478,7 +477,7 @@ public final class SemanticRules implements Visitor {
 		final MethodDeclaration mainMethod = cast(MethodDeclaration.class, this.getCurrentScope().get("main"));
 		
 		if (mainMethod == null || mainMethod.getParameterDeclarations().size() != 0) {
-			this.logError(program.getLastTokenRow(), program.getLastTokenColumn(),
+			this.logError(program.getTokenRow(), program.getTokenColumn(),
 					"Missing method main(<no argument>)");
 		}
 	}
@@ -490,7 +489,7 @@ public final class SemanticRules implements Visitor {
 	 */
 	private final void checkRule4(final ArrayFieldDeclaration field) {
 		if (field.getElementCount().getValue() <= 0) {
-			this.logError(field.getElementCount().getRow(), field.getElementCount().getColumn(),
+			this.logError(field.getElementCount().getTokenRow(), field.getElementCount().getTokenColumn(),
 					"Array size must be greater than 0");
 		}
 	}
@@ -546,7 +545,7 @@ public final class SemanticRules implements Visitor {
 		AbstractTypedEntityDeclaration method = this.getCurrentScope().get(this.nameOfMethod);
 		
 		if( (method.getType() == void.class) && (returnStatement.getExpression() != null) ) {
-			this.logError(method.getIdentifierRow(), method.getIdentifierColumn(),
+			this.logError(method.getTokenRow(), method.getTokenColumn(),
 					"The method " + this.nameOfMethod + " cannot have a return value");
 		}
 	}
@@ -561,7 +560,7 @@ public final class SemanticRules implements Visitor {
 		
 		if( (method.getType() != void.class) && (returnStatement.getExpression() != null) ) {
 			if( method.getType() != returnStatement.getExpression().getType() ) {
-				this.logError(method.getIdentifierRow(), method.getIdentifierColumn(),
+				this.logError(method.getTokenRow(), method.getTokenColumn(),
 						"The method " + this.nameOfMethod + " return type does not match the return value");
 			}
 		}
@@ -780,7 +779,7 @@ public final class SemanticRules implements Visitor {
 	 * @param statement
 	 */
 	@SuppressWarnings("null")
-	private final void checkLiteralExpression(AbstractStatement statement) {
+	private final void checkLiteralExpression(final AbstractStatement statement) {
 		LiteralExpression literalExpression = null;
 		boolean anIfStatement = true;
 		
@@ -796,11 +795,11 @@ public final class SemanticRules implements Visitor {
 			IntLiteral intLiteral = (IntLiteral)literalExpression.getLiteral();
 			
 			if(anIfStatement) {
-				this.logError(intLiteral.getRow(), intLiteral.getColumn(),
+				this.logError(intLiteral.getTokenRow(), intLiteral.getTokenColumn(),
 						"If condition contains an int value " + intLiteral.getValue());
 			}
 			else {
-				this.logError(intLiteral.getRow(), intLiteral.getColumn(),
+				this.logError(intLiteral.getTokenRow(), intLiteral.getTokenColumn(),
 						"While condition contains an int value " + intLiteral.getValue());
 			}
 		}
@@ -871,8 +870,8 @@ public final class SemanticRules implements Visitor {
 			
 			if(identifierType == boolean.class) {
 				String identifierName = this.getCurrentScope().get(identifier).getIdentifier();
-				int identifierRow = this.getCurrentScope().get(identifier).getIdentifierRow();
-				int identifierColumn = this.getCurrentScope().get(identifier).getIdentifierColumn();
+				int identifierRow = this.getCurrentScope().get(identifier).getTokenRow();
+				int identifierColumn = this.getCurrentScope().get(identifier).getTokenColumn();
 				
 				if(anIfStatement) {
 					this.logError(identifierRow, identifierColumn,

@@ -1,5 +1,6 @@
 package scomp.ir;
 
+import scomp.DecafToken;
 import scomp.Tools;
 
 /**
@@ -16,6 +17,9 @@ public final class WhileStatement extends AbstractStatement {
 	
 	/**
 	 * 
+	 * @param token 
+	 * <br>Not null
+	 * <br>Shared
 	 * @param condition
 	 * <br>Not null
 	 * <br>Shared
@@ -23,7 +27,8 @@ public final class WhileStatement extends AbstractStatement {
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	public WhileStatement(final AbstractExpression condition, final Block block) {
+	public WhileStatement(final DecafToken token, final AbstractExpression condition, final Block block) {
+		super(token);
 		this.condition = condition;
 		this.block = block;
 	}

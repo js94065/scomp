@@ -2,7 +2,7 @@ package scomp.ir;
 
 import java.util.List;
 
-import scomp.Tools;
+import scomp.DecafToken;
 
 /**
  * The Decaf method callout.
@@ -14,15 +14,15 @@ public final class MethodCallout extends AbstractMethodCall<AbstractCalloutArgum
 	
 	/**
 	 * 
-	 * @param stringLiteral
+	 * @param token
 	 * <br>Not null
 	 * <br>Shared
 	 * @param arguments
 	 * <br>Maybe null
 	 * <br>Shared
 	 */
-	public MethodCallout(final String stringLiteral, final List<AbstractCalloutArgument> arguments) {
-		super(stringLiteral, arguments);
+	public MethodCallout(final DecafToken token, final List<AbstractCalloutArgument> arguments) {
+		super(token, token.getValue().toString(), arguments);
 	}
 	
 	@Override

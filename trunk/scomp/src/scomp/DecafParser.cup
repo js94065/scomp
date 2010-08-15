@@ -357,22 +357,22 @@ ParameterDeclaration ::=
 Block ::=
 	LEFT_BRACE RIGHT_BRACE
 	{:
-		RESULT = new Block(null, null);
+		RESULT = new Block((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 1), null, null);
 	:}
 	|
 	LEFT_BRACE VariableDeclarations:variableDeclarations RIGHT_BRACE
 	{:
-		RESULT = new Block(variableDeclarations, null);
+		RESULT = new Block((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 2), variableDeclarations, null);
 	:}
 	|
 	LEFT_BRACE Statements:statements RIGHT_BRACE
 	{:
-		RESULT = new Block(null, statements);
+		RESULT = new Block((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 2), null, statements);
 	:}
 	|
 	LEFT_BRACE VariableDeclarations:variableDeclarations Statements:statements RIGHT_BRACE
 	{:
-		RESULT = new Block(variableDeclarations, statements);
+		RESULT = new Block((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 3), variableDeclarations, statements);
 	:}
 	;
 	
@@ -455,37 +455,37 @@ Statement ::=
 	|
 	IF LEFT_PARENTHESIS Expression:expression RIGHT_PARENTHESIS Block:block
 	{:
-		RESULT = new IfStatement(expression, block, null);
+		RESULT = new IfStatement((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 4), expression, block, null);
 	:}
 	|
 	IF LEFT_PARENTHESIS Expression:expression RIGHT_PARENTHESIS Block:thenBlock ELSE Block:elseBlock
 	{:
-		RESULT = new IfStatement(expression, thenBlock, elseBlock);
+		RESULT = new IfStatement((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 6), expression, thenBlock, elseBlock);
 	:}
 	|
 	WHILE LEFT_PARENTHESIS Expression:expression RIGHT_PARENTHESIS Block:block
 	{:
-		RESULT = new WhileStatement(expression, block);
+		RESULT = new WhileStatement((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 4), expression, block);
 	:}
 	|
 	RETURN SEMICOLON
 	{:
-		RESULT = new ReturnStatement(null);
+		RESULT = new ReturnStatement((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 1), null);
 	:}
 	|
 	RETURN Expression:expression SEMICOLON
 	{:
-		RESULT = new ReturnStatement(expression);
+		RESULT = new ReturnStatement((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 2), expression);
 	:}
 	|
 	BREAK SEMICOLON
 	{:
-		RESULT = new BreakStatement();
+		RESULT = new BreakStatement((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 1));
 	:}
 	|
 	CONTINUE SEMICOLON
 	{:
-		RESULT = new ContinueStatement();
+		RESULT = new ContinueStatement((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 1));
 	:}
 	|
 	Block:block
@@ -505,14 +505,14 @@ MethodCall ::=
 		RESULT = new MethodCall((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 3), expressions);
 	:}
 	|
-	CALLOUT LEFT_PARENTHESIS STRING_LITERAL:stringLiteral RIGHT_PARENTHESIS
+	CALLOUT LEFT_PARENTHESIS STRING_LITERAL RIGHT_PARENTHESIS
 	{:
-		RESULT = new MethodCallout(stringLiteral, null);
+		RESULT = new MethodCallout((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 1), null);
 	:}
 	|
-	CALLOUT LEFT_PARENTHESIS STRING_LITERAL:stringLiteral COMMA CalloutArguments:calloutArguments RIGHT_PARENTHESIS
+	CALLOUT LEFT_PARENTHESIS STRING_LITERAL COMMA CalloutArguments:calloutArguments RIGHT_PARENTHESIS
 	{:
-		RESULT = new MethodCallout(stringLiteral, calloutArguments);
+		RESULT = new MethodCallout((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 3), calloutArguments);
 	:}
 	;
 
@@ -538,9 +538,9 @@ CalloutArgument ::=
 		RESULT = new ExpressionCalloutArgument(expression);
 	:}
 	|
-	STRING_LITERAL:stringLiteral
+	STRING_LITERAL
 	{:
-		RESULT = new StringCalloutArgument(stringLiteral);
+		RESULT = new StringCalloutArgument((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 0));
 	:}
 	;
 
@@ -702,12 +702,12 @@ Expression ::=
 	|
 	MINUS Expression:expression
 	{:
-		RESULT = new MinusExpression(expression);
+		RESULT = new MinusExpression((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 1), expression);
 	:}
 	|
 	NOT Expression:expression
 	{:
-		RESULT = new NegationExpression(expression);
+		RESULT = new NegationExpression((DecafToken) CUP$DecafParser$stack.get(CUP$DecafParser$top - 1), expression);
 	:}
 	|
 	LEFT_PARENTHESIS Expression:expression RIGHT_PARENTHESIS
@@ -724,11 +724,11 @@ Literal ::=
 	|
 	BOOLEAN_LITERAL:value
 	{:
-		RESULT = new BooleanLiteral(value);
+		RESULT = new BooleanLiteral((DecafToken) this.getStackTop());
 	:}
 	|
 	CHAR_LITERAL:value
 	{:
-		RESULT = new CharLiteral(value);
+		RESULT = new CharLiteral((DecafToken) this.getStackTop());
 	:}
 	;

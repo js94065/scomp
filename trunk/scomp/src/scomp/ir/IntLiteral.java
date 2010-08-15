@@ -11,8 +11,6 @@ import scomp.Tools;
  */
 public final class IntLiteral extends AbstractLiteral {
 	
-	private final DecafToken intLiteralToken;
-	
 	private final int value;
 	
 	/**
@@ -21,7 +19,7 @@ public final class IntLiteral extends AbstractLiteral {
 	 * <br>Range: any integer
 	 */
 	public IntLiteral(final DecafToken intLiteralToken){
-		this.intLiteralToken = intLiteralToken;
+		super(intLiteralToken);
 		
 		final String valueRepresentation = intLiteralToken.getInputString();
 		
@@ -49,24 +47,6 @@ public final class IntLiteral extends AbstractLiteral {
 	 */
 	public final int getValue(){
 		return this.value;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 * <br>Range: {@code [1 .. Integer.MAX_VALUE]}
-	 */
-	public final int getRow() {
-		return this.intLiteralToken.getRow();
-	}
-	
-	/**
-	 * 
-	 * @return
-	 * <br>Range: {@code [1 .. Integer.MAX_VALUE]}
-	 */
-	public final int getColumn() {
-		return this.intLiteralToken.getColumn();
 	}
 	
 	@Override

@@ -1,5 +1,6 @@
 package scomp.ir;
 
+import scomp.DecafToken;
 import scomp.Tools;
 
 /**
@@ -14,11 +15,15 @@ public class ReturnStatement extends AbstractStatement {
 	
 	/**
 	 * 
+	 * @param token 
+	 * <br>Not null
+	 * <br>Shared
 	 * @param abstractExpression
 	 * <br>Maybe null
 	 * <br>Shared
 	 */
-	public ReturnStatement(final AbstractExpression abstractExpression) {
+	public ReturnStatement(final DecafToken token, final AbstractExpression abstractExpression) {
+		super(token);
 		this.abstractExpression = abstractExpression;
 	}
 	

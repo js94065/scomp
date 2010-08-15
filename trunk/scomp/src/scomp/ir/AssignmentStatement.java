@@ -24,6 +24,7 @@ public final class AssignmentStatement extends AbstractStatement {
 	 * <br>Shared
 	 */
 	public AssignmentStatement(final AbstractLocation location, final AbstractExpression expression) {
+		super(location.getToken());
 		this.location = location;
 		this.expression = expression;
 	}

@@ -1,5 +1,6 @@
 package scomp.ir;
 
+import scomp.DecafToken;
 import scomp.Tools;
 
 /**
@@ -10,15 +11,14 @@ import scomp.Tools;
  */
 public final class CharLiteral extends AbstractLiteral{
 	
-	private final char value;
-	
 	/**
 	 * 
-	 * @param value
-	 * <br>Range: any char
+	 * @param token
+	 * <br>Not null
+	 * <br>Shared
 	 */
-	public CharLiteral(final char value){
-		this.value = value;
+	public CharLiteral(final DecafToken token){
+		super(token);
 	}
 	
 	@Override
@@ -37,7 +37,7 @@ public final class CharLiteral extends AbstractLiteral{
 	 * <br>Range: any char
 	 */
 	public final char getValue(){
-		return this.value;
+		return (Character) this.getToken().getValue();
 	}
 	
 	@Override

@@ -19,6 +19,7 @@ public final class ExpressionCalloutArgument extends AbstractCalloutArgument {
 	 * <br>Shared
 	 */
 	public ExpressionCalloutArgument(final AbstractExpression expression){
+		super(expression.getToken());
 		this.expression = expression;
 	}
 	

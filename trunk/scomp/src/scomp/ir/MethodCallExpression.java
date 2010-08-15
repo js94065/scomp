@@ -20,6 +20,7 @@ public final class MethodCallExpression extends AbstractExpression {
 	 * <br>Shared
 	 */
 	public MethodCallExpression(final AbstractMethodCall<?> methodCall){
+		super(methodCall.getToken());
 		this.methodCall = methodCall;
 	}
 

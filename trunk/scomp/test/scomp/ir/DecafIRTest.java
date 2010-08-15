@@ -627,7 +627,7 @@ public class DecafIRTest {
 	 * <br>New
 	 */
 	private static final Block block(final List<VariableDeclaration> variables, final List<AbstractStatement> statements) {
-		return new Block(variables, statements);
+		return new Block(token(LEFT_BRACE), variables, statements);
 	}
 	
 	/**
@@ -643,7 +643,7 @@ public class DecafIRTest {
 	 * <br>New
 	 */
 	private static final BlockStatement blockStatement(final List<VariableDeclaration> variables, final List<AbstractStatement> statements) {
-		return new BlockStatement(new Block(variables, statements));
+		return new BlockStatement(block(variables, statements));
 	}
 	
 	/**
@@ -668,7 +668,7 @@ public class DecafIRTest {
 	 * <br>New
 	 */
 	private static final ReturnStatement returnStatement(final AbstractExpression expression) {
-		return new ReturnStatement(expression);
+		return new ReturnStatement(token(RETURN), expression);
 	}
 	
 	/**
@@ -705,7 +705,7 @@ public class DecafIRTest {
 	* <br> New
 	*/
 	private static final LiteralExpression expression(final char value) {
-		return new LiteralExpression(new CharLiteral(value));
+		return new LiteralExpression(new CharLiteral(token(CHAR_LITERAL, value)));
 	}
 	
 	/**
@@ -717,7 +717,7 @@ public class DecafIRTest {
 	* <br> New
 	*/
 	private static final LiteralExpression expression(final boolean value) {
-		return new LiteralExpression(new BooleanLiteral(value));
+		return new LiteralExpression(new BooleanLiteral(token(BOOLEAN_LITERAL, value)));
 	}
 	
 	/**
@@ -780,7 +780,7 @@ public class DecafIRTest {
 	 * <br>New
 	 */
 	private static final IfStatement ifStatement(final AbstractExpression condition, final Block thenBlock, final Block elseBlock) {
-		return new IfStatement(condition, thenBlock, elseBlock);
+		return new IfStatement(token(IF), condition, thenBlock, elseBlock);
 	}
 	
 	/**
@@ -796,7 +796,7 @@ public class DecafIRTest {
 	 * <br>New
 	 */
 	private static final WhileStatement whileStatement(final AbstractExpression condition, final Block block) {
-		return new WhileStatement(condition, block);
+		return new WhileStatement(token(WHILE), condition, block);
 	}
 	
 	/**
@@ -828,7 +828,7 @@ public class DecafIRTest {
 	 * <br>New
 	 */
 	private static final MethodCallStatement calloutStatement(final String methodName, final List<AbstractCalloutArgument> arguments) {
-		return new MethodCallStatement(new MethodCallout(methodName, arguments));
+		return new MethodCallStatement(new MethodCallout(token(STRING_LITERAL, methodName), arguments));
 	}
 	
 	/**
@@ -841,7 +841,7 @@ public class DecafIRTest {
 	 * <br>New
 	 */
 	private static final StringCalloutArgument calloutArgument(final String string) {
-		return new StringCalloutArgument(string);
+		return new StringCalloutArgument(token(STRING_LITERAL, string));
 	}
 	
 	/**
@@ -891,7 +891,7 @@ public class DecafIRTest {
 	 * <br>New
 	 */
 	public static final BreakStatement breakStatement() {
-		return new BreakStatement();
+		return new BreakStatement(token(BREAK));
 	}
 	
 	/**
@@ -901,7 +901,7 @@ public class DecafIRTest {
 	 * <br>New
 	 */
 	public static final ContinueStatement continueStatement() {
-		return new ContinueStatement();
+		return new ContinueStatement(token(CONTINUE));
 	}
 	
 	/**
@@ -914,7 +914,7 @@ public class DecafIRTest {
 	 * <br>New
 	 */
 	public static final NegationExpression not(final AbstractExpression expression) {
-		return new NegationExpression(expression);
+		return new NegationExpression(token(NOT), expression);
 	}
 	
 	/**
@@ -927,7 +927,7 @@ public class DecafIRTest {
 	 * <br>New
 	 */
 	public static final MinusExpression minus(final AbstractExpression expression) {
-		return new MinusExpression(expression);
+		return new MinusExpression(token(MINUS), expression);
 	}
 	
 	/**

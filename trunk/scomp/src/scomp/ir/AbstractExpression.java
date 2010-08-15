@@ -1,5 +1,7 @@
 package scomp.ir;
 
+import scomp.DecafToken;
+
 /**
  * This is the base class for all Decaf expressions.
  * 
@@ -7,6 +9,16 @@ package scomp.ir;
  * 
  */
 public abstract class AbstractExpression extends AbstractNode {
+	
+	/**
+	 * 
+	 * @param token
+	 * <br>Not null
+	 * <br>Shared
+	 */
+	public AbstractExpression(final DecafToken token) {
+		super(token);
+	}
 	
 	/**
 	 * 
