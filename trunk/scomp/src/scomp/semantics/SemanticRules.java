@@ -168,6 +168,15 @@ public final class SemanticRules implements Visitor {
 	
 	@Override
 	public final void visit(final LocationExpression location) {
+		
+		// Set LocationExpression types
+		String identifier = location.getLocation().getIdentifier();
+		for (String s: this.getCurrentScope().keySet()) {
+			if (s.equals(identifier)) {
+				location.setType(this.getCurrentScope().get(s).getType());
+			}
+		}
+		
 		location.getLocation().accept(this);
 	}
 
@@ -177,10 +186,19 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	@Override
-	public final void visit(final MethodCallExpression methodCall) {
-		this.checkRule6(methodCall);
+	public final void visit(final MethodCallExpression methodCallExpression) {
 		
-		methodCall.getMethodCall().accept(this);
+		// Set MethodCallExpression types
+		String identifier = methodCallExpression.getMethodCall().getMethodName();
+		for (String s: this.getCurrentScope().keySet()) {
+			if (s.equals(identifier)) {
+				methodCallExpression.setType(this.getCurrentScope().get(s).getType());
+			}
+		}
+		
+		this.checkRule6(methodCallExpression);
+		
+		methodCallExpression.getMethodCall().accept(this);
 	}
 	
 	@Override
@@ -218,160 +236,31 @@ public final class SemanticRules implements Visitor {
 	
 	@Override
 	public final void visit(final BinaryOperationExpression operation) {
-		// the manual typesetting here is probably not the best solution
-		// It might be cleaner to assign the types inside of the checkRule* 
-		// functions, but then there might be some repeated code
-		// there is a lot of repeated code for typesetting
-		// we should probably simplify into functions later.
+		// for locations and method calls we must get set the type using 
+		// the scopes
 		if (operation.getLeft()==null || operation.getRight() == null) {
 			System.out.println("BinaryOperationExpression has null arguments");
 		}
-		Set<String> keys = this.getCurrentScope().keySet();
-		// for locations and method calls we must get set the type using 
-		// the scopes
-		// Set LocationExpression types
-		if (operation.getLeft().getClass().equals(LocationExpression.class)) {
-			LocationExpression locationExpression = (LocationExpression) operation.getLeft();
-			String leftIdentifier = locationExpression.getLocation().getIdentifier();
-			for (String s: keys) {
-				if (s.equals(leftIdentifier)) {
-					locationExpression.setType(this.getCurrentScope().get(s).getType());
-				}
-			}
-		}
-		if (operation.getRight().getClass().equals(LocationExpression.class)) {
-			LocationExpression locationExpression = (LocationExpression) operation.getRight();
-			String rightIdentifier = locationExpression.getLocation().getIdentifier();
-			for (String s: keys) {
-				if (s.equals(rightIdentifier)) {
-					locationExpression.setType(this.getCurrentScope().get(s).getType());
-				}
-			}
-		}
-		// Set MethodCallExpression types
-		if (operation.getLeft().getClass().equals(MethodCallExpression.class)) {
-			MethodCallExpression methodCallExpression = (MethodCallExpression) operation.getLeft();
-			String leftIdentifier = methodCallExpression.getMethodCall().getMethodName();
-			for (String s: keys) {
-				if (s.equals(leftIdentifier)) {
-					methodCallExpression.setType(this.getCurrentScope().get(s).getType());
-				}
-			}
-		}
-		if (operation.getRight().getClass().equals(MethodCallExpression.class)) {
-			MethodCallExpression methodCallExpression = (MethodCallExpression) operation.getRight();
-			String rightIdentifier = methodCallExpression.getMethodCall().getMethodName();
-			for (String s: keys) {
-				if (s.equals(rightIdentifier)) {
-					methodCallExpression.setType(this.getCurrentScope().get(s).getType());
-				}
-			}
-		}
-		// Set MinusExpression types
-		// the reason we have to do this is because we don't visit the MinusExpression
-		// until after we finish visiting the parent (the current method), but we perform
-		// type checkRule12 in this method, so we have to assign the type earlier.
-		if (operation.getLeft().getClass().equals(MinusExpression.class)) {
-			MinusExpression expr = (MinusExpression) operation.getLeft();
-			if (expr.getExpression().getClass().equals(LocationExpression.class)) {
-				String leftIdentifier = ((LocationExpression) expr.getExpression()).getLocation().getIdentifier();
-				for (String s: keys) {
-					if (s.equals(leftIdentifier)) {
-						expr.setType(this.getCurrentScope().get(s).getType());
-					}
-				}
-			}
-			if (expr.getExpression().getClass().equals(MethodCallExpression.class)) {
-				String leftIdentifier = ((MethodCallExpression) expr.getExpression()).getMethodCall().getMethodName();
-				for (String s: keys) {
-					if (s.equals(leftIdentifier)) {
-						expr.setType(this.getCurrentScope().get(s).getType());
-					}
-				}
-			}
-			if (expr.getExpression().getClass().equals(LiteralExpression.class)) {
-				Class<?> type = ((LiteralExpression) expr.getExpression()).getType();
-				expr.setType(type);
-			}
-		}
-		if (operation.getRight().getClass().equals(MinusExpression.class)) {
-			MinusExpression expr = (MinusExpression) operation.getRight();
-			if (expr.getExpression().getClass().equals(LocationExpression.class)) {
-				String leftIdentifier = ((LocationExpression) expr.getExpression()).getLocation().getIdentifier();
-				for (String s: keys) {
-					if (s.equals(leftIdentifier)) {
-						expr.setType(this.getCurrentScope().get(s).getType());
-					}
-				}
-			}
-			if (expr.getExpression().getClass().equals(MethodCallExpression.class)) {
-				String leftIdentifier = ((MethodCallExpression) expr.getExpression()).getMethodCall().getMethodName();
-				for (String s: keys) {
-					if (s.equals(leftIdentifier)) {
-						expr.setType(this.getCurrentScope().get(s).getType());
-					}
-				}
-			}
-			if (expr.getExpression().getClass().equals(LiteralExpression.class)) {
-				Class<?> type = ((LiteralExpression) expr.getExpression()).getType();
-				expr.setType(type);
-			}
-		}
-		// Set NegationExpression types
-		// reasoning for this is same as for MinusExpression
-		if (operation.getLeft().getClass().equals(NegationExpression.class)) {
-			NegationExpression expr = (NegationExpression) operation.getLeft();
-			if (expr.getExpression().getClass().equals(LocationExpression.class)) {
-				String leftIdentifier = ((LocationExpression) expr.getExpression()).getLocation().getIdentifier();
-				for (String s: keys) {
-					if (s.equals(leftIdentifier)) {
-						expr.setType(this.getCurrentScope().get(s).getType());
-					}
-				}
-			}
-			if (expr.getExpression().getClass().equals(MethodCallExpression.class)) {
-				String leftIdentifier = ((MethodCallExpression) expr.getExpression()).getMethodCall().getMethodName();
-				for (String s: keys) {
-					if (s.equals(leftIdentifier)) {
-						expr.setType(this.getCurrentScope().get(s).getType());
-					}
-				}
-			}
-			if (expr.getExpression().getClass().equals(LiteralExpression.class)) {
-				Class<?> type = ((LiteralExpression) expr.getExpression()).getType();
-				expr.setType(type);
-			}
-		}
-		if (operation.getRight().getClass().equals(NegationExpression.class)) {
-			NegationExpression expr = (NegationExpression) operation.getRight();
-			if (expr.getExpression().getClass().equals(LocationExpression.class)) {
-				String leftIdentifier = ((LocationExpression) expr.getExpression()).getLocation().getIdentifier();
-				for (String s: keys) {
-					if (s.equals(leftIdentifier)) {
-						expr.setType(this.getCurrentScope().get(s).getType());
-					}
-				}
-			}
-			if (expr.getExpression().getClass().equals(MethodCallExpression.class)) {
-				String leftIdentifier = ((MethodCallExpression) expr.getExpression()).getMethodCall().getMethodName();
-				for (String s: keys) {
-					if (s.equals(leftIdentifier)) {
-						expr.setType(this.getCurrentScope().get(s).getType());
-					}
-				}
-			}
-			if (expr.getExpression().getClass().equals(LiteralExpression.class)) {
-				Class<?> type = ((LiteralExpression) expr.getExpression()).getType();
-				expr.setType(type);
-			}
-		}
 
+		operation.getLeft().accept(this);
+		operation.getRight().accept(this);
+		
 		this.checkRule12(operation);
 		this.checkRule13(operation);
 		this.checkRule14(operation);
 		
-		operation.getLeft().accept(this);
-		operation.getRight().accept(this);
+	}
+	
+
+	@Override
+	public void visit(MinusExpression minusExpression) {
+		
+		// visit child first, then we can use the child's
+		// type as the minus expression's type.
+		minusExpression.getExpression().accept(this);
+		
+		minusExpression.setType(minusExpression.getExpression().getType());
+		
 	}
 	
 	@Override
@@ -379,55 +268,14 @@ public final class SemanticRules implements Visitor {
 		if (operation.getExpression()==null) {
             System.out.println("NegationExpression has null arguments");
 	    }
-	    Set<String> keys = this.getCurrentScope().keySet();
-	    // for locations and method calls we must get the type using 
-	    // the scopes
 	    
-	    if (operation.getExpression().getClass().equals(LocationExpression.class)) {
-	            LocationExpression locationExpression = (LocationExpression) operation.getExpression();
-	            String identifier = locationExpression.getLocation().getIdentifier();
-	            for (String s: keys) {
-	                    if (s.equals(identifier)) {
-	                            locationExpression.setType(this.getCurrentScope().get(s).getType());
-	                    }
-	            }
-	    }
-	    if (operation.getExpression().getClass().equals(MethodCallExpression.class)) {
-	            MethodCallExpression methodCallExpression = (MethodCallExpression) operation.getExpression();
-	            String identifier = methodCallExpression.getMethodCall().getMethodName();
-	            for (String s: keys) {
-	                    if (s.equals(identifier)) {
-	                            methodCallExpression.setType(this.getCurrentScope().get(s).getType());
-	                    }
-	            }
-	    }
-	    if (operation.getExpression().getClass().equals(MinusExpression.class)) {
-	            MinusExpression minusExpression = (MinusExpression) operation.getExpression();
-	            if (minusExpression.getExpression().getClass().equals(LocationExpression.class)) {
-	                    String identifier = ((LocationExpression) minusExpression.getExpression()).getLocation().getIdentifier();
-	                    for (String s: keys) {
-	                            if (s.equals(identifier)) {
-	                                    minusExpression.setType(this.getCurrentScope().get(s).getType());
-	                            }
-	                    }
-	            }
-	            if (minusExpression.getExpression().getClass().equals(MethodCallExpression.class)) {
-	                    String identifier = ((MethodCallExpression) minusExpression.getExpression()).getMethodCall().getMethodName();
-	                    for (String s: keys) {
-	                            if (s.equals(identifier)) {
-	                                    minusExpression.setType(this.getCurrentScope().get(s).getType());
-	                            }
-	                    }
-	            }
-	    }
-	    if (operation.getExpression().getClass().equals(LiteralExpression.class)) {
-			Class<?> type = ((LiteralExpression) operation.getExpression()).getType();
-			operation.setType(type);
-		}
+	    operation.getExpression().accept(this);
+	    
+	    operation.setType(operation.getExpression().getType());
 
 		this.checkRule14(operation);
 		
-		operation.getExpression().accept(this);
+		
 	}
 	
 	/**
@@ -931,11 +779,6 @@ public final class SemanticRules implements Visitor {
 	public void visit(MethodCallout methodCallout) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public void visit(MinusExpression minusExpression) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override

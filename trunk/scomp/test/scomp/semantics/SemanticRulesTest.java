@@ -106,8 +106,8 @@ public final class SemanticRulesTest {
 		program.accept(new SemanticRules());
 		
 		assertEquals(Arrays.asList(
-				"Operand of arithmetic and relational operations must have type int.",
-				"(:14:7) The method f has type void and cannot be used as an expression"
+				"(:14:7) The method f has type void and cannot be used as an expression",
+				"Operand of arithmetic and relational operations must have type int."
 		), this.recorder.getMessages());
 	}
 	
