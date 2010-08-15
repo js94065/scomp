@@ -147,7 +147,7 @@ public final class SemanticRules implements Visitor {
 		assignment.getLocation().accept(this);
 		assignment.getExpression().accept(this);
 		
-		//checkRule15(assignment);
+		checkRule15(assignment);
 	}
 	
 	@Override
@@ -577,15 +577,13 @@ public final class SemanticRules implements Visitor {
 		Class<?> locationType = null;
 		Class<?> expressionType = null;
 		if (this.getCurrentScope().containsKey(assignment.getLocation().getIdentifier())) {
-			locationType = this.getCurrentScope().get(assignment.getLocation()).getType();
+			locationType = this.getCurrentScope().get(assignment.getLocation().getIdentifier()).getType();
 		}
 		expressionType = assignment.getExpression().getType();
 		
-		if (locationType==null) {
-			this.logError("Assignment location is null");
-		}
-		else if (expressionType==null) {
-			this.logError("Assignment expression is null");
+		if (locationType==null || expressionType == null) {
+			// if null -> rule 2 violation 
+			return;
 		}
 		else if (!locationType.equals(expressionType)) {
 			this.logError("Assignment location and expression have different types");
