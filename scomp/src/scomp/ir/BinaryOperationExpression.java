@@ -36,11 +36,6 @@ public final class BinaryOperationExpression extends AbstractExpression {
 	}
 	
 	@Override
-	public final boolean isLocation() {
-		return false;
-	}
-	
-	@Override
 	public final void accept(final Visitor visitor) {
 		visitor.visit(this);
 	}
@@ -118,9 +113,4 @@ public final class BinaryOperationExpression extends AbstractExpression {
 				this.getRight().equals(that.getRight());
 	}
 
-	@Override
-	public boolean isMethodCall() {
-		return false;
-	}
-	
 }

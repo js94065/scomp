@@ -23,12 +23,7 @@ public final class LocationExpression extends AbstractExpression {
 	public LocationExpression(final AbstractLocation location){
 		this.location = location;
 	}
-	
-	@Override
-	public final boolean isLocation() {
-		return true;
-	}
-	
+
 	@Override
 	public final void accept(final Visitor visitor) {
 		visitor.visit(this);
@@ -49,7 +44,7 @@ public final class LocationExpression extends AbstractExpression {
 	}
 	
 	@Override
-	public final Class<?> getType() {		
+	public final Class<?> getType() {
 		return this.type;
 	}
 	
@@ -75,9 +70,4 @@ public final class LocationExpression extends AbstractExpression {
 				this.getLocation().equals(that.getLocation());
 	}
 
-	@Override
-	public boolean isMethodCall() {
-		return false;
-	}
-	
 }

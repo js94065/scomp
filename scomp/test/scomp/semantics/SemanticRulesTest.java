@@ -59,8 +59,6 @@ public final class SemanticRulesTest {
 				"(:12:6) Undeclared identifier d",
 				"(:12:11) Undeclared identifier f",
 				"(:13:4) Undeclared identifier main",
-				"Operand of arithmetic and relational operations must have type int.",
-				"Operand of arithmetic and relational operations must have type int.",
 				"(:16:10) Undeclared identifier a"
 		), this.recorder.getMessages());
 	}
@@ -108,7 +106,6 @@ public final class SemanticRulesTest {
 		program.accept(new SemanticRules());
 		
 		assertEquals(Arrays.asList(
-				"Operand of arithmetic and relational operations must have type int.",
 				"Operand of arithmetic and relational operations must have type int.",
 				"(:14:7) The method f has type void and cannot be used as an expression"
 		), this.recorder.getMessages());
@@ -374,10 +371,11 @@ public final class SemanticRulesTest {
 	public static final String PROGRAM_WITH_MISMATCH_ARITHMETIC_OPERATOR=
 		"class Program {\n" +
 		"	boolean f() {\n" +
-		"		int x;\n" +
-		"		int y;\n" +
+		"		int x,y;\n" +
+		"		boolean z;\n" +
 		"		y = 4;\n" +
 		"		x = y + 2;\n" +
+		"		x = -z + 2;\n" +
 		"	}\n" +
 		"\n" +
 		"	void main() {\n" +

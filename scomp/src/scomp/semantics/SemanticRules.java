@@ -219,45 +219,87 @@ public final class SemanticRules implements Visitor {
 	
 	@Override
 	public final void visit(final BinaryOperationExpression operation) {
+		// the manual typesetting here is probably not the best solution
+		// there is a lot of repeated code for typesetting
+		// we can simplify it into functions later
 		if (operation.getLeft()==null || operation.getRight() == null) {
 			System.out.println("BinaryOperationExpression has null arguments");
 		}
 		Set<String> keys = this.getCurrentScope().keySet();
 		// for locations and method calls we must get set the type using 
 		// the scopes
-		if (operation.getLeft().isLocation()) {
+		if (operation.getLeft().getClass().equals(LocationExpression.class)) {
 			LocationExpression locationExpression = (LocationExpression) operation.getLeft();
 			String leftIdentifier = locationExpression.getLocation().getIdentifier();
 			for (String s: keys) {
 				if (s.equals(leftIdentifier)) {
-					locationExpression.setType(this.getCurrentScope().get(s).getClass());
+					locationExpression.setType(this.getCurrentScope().get(s).getType());
 				}
 			}
 		}
-		if (operation.getRight().isLocation()) {
+		if (operation.getRight().getClass().equals(LocationExpression.class)) {
 			LocationExpression locationExpression = (LocationExpression) operation.getRight();
 			String rightIdentifier = locationExpression.getLocation().getIdentifier();
 			for (String s: keys) {
 				if (s.equals(rightIdentifier)) {
-					locationExpression.setType(this.getCurrentScope().get(s).getClass());
+					locationExpression.setType(this.getCurrentScope().get(s).getType());
 				}
 			}
 		}
-		if (operation.getLeft().isMethodCall()) {
+		if (operation.getLeft().getClass().equals(MethodCallExpression.class)) {
 			MethodCallExpression methodCallExpression = (MethodCallExpression) operation.getLeft();
 			String leftIdentifier = methodCallExpression.getMethodCall().getMethodName();
 			for (String s: keys) {
 				if (s.equals(leftIdentifier)) {
-					methodCallExpression.setType(this.getCurrentScope().get(s).getClass());
+					methodCallExpression.setType(this.getCurrentScope().get(s).getType());
 				}
 			}
 		}
-		if (operation.getRight().isMethodCall()) {
+		if (operation.getRight().getClass().equals(MethodCallExpression.class)) {
 			MethodCallExpression methodCallExpression = (MethodCallExpression) operation.getRight();
 			String rightIdentifier = methodCallExpression.getMethodCall().getMethodName();
 			for (String s: keys) {
 				if (s.equals(rightIdentifier)) {
-					methodCallExpression.setType(this.getCurrentScope().get(s).getClass());
+					methodCallExpression.setType(this.getCurrentScope().get(s).getType());
+				}
+			}
+		}
+		// this sucks... but there is no other way
+		if (operation.getLeft().getClass().equals(MinusExpression.class)) {
+			MinusExpression minusExpression = (MinusExpression) operation.getLeft();
+			if (minusExpression.getExpression().getClass().equals(LocationExpression.class)) {
+				String leftIdentifier = ((LocationExpression) minusExpression.getExpression()).getLocation().getIdentifier();
+				for (String s: keys) {
+					if (s.equals(leftIdentifier)) {
+						minusExpression.setType(this.getCurrentScope().get(s).getType());
+					}
+				}
+			}
+			if (minusExpression.getExpression().getClass().equals(MethodCallExpression.class)) {
+				String leftIdentifier = ((MethodCallExpression) minusExpression.getExpression()).getMethodCall().getMethodName();
+				for (String s: keys) {
+					if (s.equals(leftIdentifier)) {
+						minusExpression.setType(this.getCurrentScope().get(s).getType());
+					}
+				}
+			}
+		}
+		if (operation.getRight().getClass().equals(MinusExpression.class)) {
+			MinusExpression minusExpression = (MinusExpression) operation.getLeft();
+			if (minusExpression.getExpression().getClass().equals(LocationExpression.class)) {
+				String leftIdentifier = ((LocationExpression) minusExpression.getExpression()).getLocation().getIdentifier();
+				for (String s: keys) {
+					if (s.equals(leftIdentifier)) {
+						minusExpression.setType(this.getCurrentScope().get(s).getType());
+					}
+				}
+			}
+			if (minusExpression.getExpression().getClass().equals(MethodCallExpression.class)) {
+				String leftIdentifier = ((MethodCallExpression) minusExpression.getExpression()).getMethodCall().getMethodName();
+				for (String s: keys) {
+					if (s.equals(leftIdentifier)) {
+						minusExpression.setType(this.getCurrentScope().get(s).getType());
+					}
 				}
 			}
 		}
@@ -272,31 +314,51 @@ public final class SemanticRules implements Visitor {
 	
 	@Override
 	public final void visit(final NegationExpression operation) {
-		
 		if (operation.getExpression()==null) {
 			System.out.println("NegationExpression has null arguments");
 		}
 		Set<String> keys = this.getCurrentScope().keySet();
 		// for locations and method calls we must get the type using 
 		// the scopes
-		if (operation.getExpression().isLocation()) {
+		
+		if (operation.getExpression().getClass().equals(LocationExpression.class)) {
 			LocationExpression locationExpression = (LocationExpression) operation.getExpression();
 			String identifier = locationExpression.getLocation().getIdentifier();
 			for (String s: keys) {
 				if (s.equals(identifier)) {
-					locationExpression.setType(this.getCurrentScope().get(s).getClass());
+					locationExpression.setType(this.getCurrentScope().get(s).getType());
 				}
 			}
 		}
-		if (operation.getExpression().isMethodCall()) {
+		if (operation.getExpression().getClass().equals(MethodCallExpression.class)) {
 			MethodCallExpression methodCallExpression = (MethodCallExpression) operation.getExpression();
 			String identifier = methodCallExpression.getMethodCall().getMethodName();
 			for (String s: keys) {
 				if (s.equals(identifier)) {
-					methodCallExpression.setType(this.getCurrentScope().get(s).getClass());
+					methodCallExpression.setType(this.getCurrentScope().get(s).getType());
 				}
 			}
 		}
+		if (operation.getExpression().getClass().equals(MinusExpression.class)) {
+			MinusExpression minusExpression = (MinusExpression) operation.getExpression();
+			if (minusExpression.getExpression().getClass().equals(LocationExpression.class)) {
+				String identifier = ((LocationExpression) minusExpression.getExpression()).getLocation().getIdentifier();
+				for (String s: keys) {
+					if (s.equals(identifier)) {
+						minusExpression.setType(this.getCurrentScope().get(s).getType());
+					}
+				}
+			}
+			if (minusExpression.getExpression().getClass().equals(MethodCallExpression.class)) {
+				String identifier = ((MethodCallExpression) minusExpression.getExpression()).getMethodCall().getMethodName();
+				for (String s: keys) {
+					if (s.equals(identifier)) {
+						minusExpression.setType(this.getCurrentScope().get(s).getType());
+					}
+				}
+			}
+		}
+
 		
 		this.checkRule14(operation);
 		
@@ -809,7 +871,6 @@ public final class SemanticRules implements Visitor {
 	@Override
 	public void visit(MinusExpression minusExpression) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

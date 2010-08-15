@@ -15,8 +15,4 @@ public abstract class AbstractExpression extends AbstractNode {
 	 */
 	public abstract Class<?> getType();
 	
-	public abstract boolean isLocation();
-	
-	public abstract boolean isMethodCall();
-	
 }

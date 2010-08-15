@@ -22,12 +22,7 @@ public final class MethodCallExpression extends AbstractExpression {
 	public MethodCallExpression(final AbstractMethodCall<?> methodCall){
 		this.methodCall = methodCall;
 	}
-	
-	@Override
-	public final boolean isLocation() {
-		return false;
-	}
-	
+
 	public final void setType(Class<?> type) {
 		this.type = type;
 	}
@@ -74,9 +69,4 @@ public final class MethodCallExpression extends AbstractExpression {
 				this.getMethodCall().equals(that.getMethodCall());
 	}
 
-	@Override
-	public boolean isMethodCall() {
-		return true;
-	}
-	
 }

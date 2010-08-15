@@ -20,12 +20,7 @@ public final class NegationExpression extends AbstractExpression {
 	public NegationExpression(final AbstractExpression expression) {
 		this.expression = expression;
 	}
-	
-	@Override
-	public final boolean isLocation() {
-		return this.getExpression().isLocation();
-	}
-	
+
 	@Override
 	public final void accept(final Visitor visitor) {
 		visitor.visit(this);
@@ -67,9 +62,4 @@ public final class NegationExpression extends AbstractExpression {
 				this.getExpression().equals(that.getExpression());
 	}
 
-	@Override
-	public boolean isMethodCall() {
-		return false;
-	}
-	
 }
