@@ -147,6 +147,7 @@ public final class SemanticRules implements Visitor {
 		assignment.getLocation().accept(this);
 		assignment.getExpression().accept(this);
 		
+		//checkRule15(assignment);
 	}
 	
 	@Override
@@ -248,8 +249,9 @@ public final class SemanticRules implements Visitor {
 		
 		// Set MethodCallExpression types
 		String identifier = methodCallExpression.getMethodCall().getMethodName();
-		if (this.getCurrentScope().containsKey(identifier)) 
+		if (this.getCurrentScope().containsKey(identifier)) {
 			methodCallExpression.setType(this.getCurrentScope().get(identifier).getType());
+		}
 		
 		this.checkRule6(methodCallExpression);
 		
@@ -262,8 +264,9 @@ public final class SemanticRules implements Visitor {
 		
 		// Set LocationExpression types
 		String identifier = location.getLocation().getIdentifier();
-		if (this.getCurrentScope().containsKey(identifier)) 
+		if (this.getCurrentScope().containsKey(identifier)) {
 			location.setType(this.getCurrentScope().get(identifier).getType());
+		}
 		
 		location.getLocation().accept(this);
 	}
@@ -571,8 +574,23 @@ public final class SemanticRules implements Visitor {
 	 * <br> not null
 	 */
 	private final void checkRule15(AssignmentStatement assignment) {
-//		String type = this.getCurrentScope().get(assignment.getLocation());
-//		if (assignment.getLocation().getType().equals(assignment.getExpression().getType())
+		Class<?> locationType = null;
+		Class<?> expressionType = null;
+		if (this.getCurrentScope().containsKey(assignment.getLocation().getIdentifier())) {
+			locationType = this.getCurrentScope().get(assignment.getLocation()).getType();
+		}
+		expressionType = assignment.getExpression().getType();
+		
+		if (locationType==null) {
+			this.logError("Assignment location is null");
+		}
+		else if (expressionType==null) {
+			this.logError("Assignment expression is null");
+		}
+		else if (!locationType.equals(expressionType)) {
+			this.logError("Assignment location and expression have different types");
+		}
+		
 	}
 	
 	/**
