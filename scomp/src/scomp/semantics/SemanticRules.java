@@ -166,20 +166,6 @@ public final class SemanticRules implements Visitor {
 		
 		location.getOffset().accept(this);
 	}
-	
-	@Override
-	public final void visit(final LocationExpression location) {
-		
-		// Set LocationExpression types
-		String identifier = location.getLocation().getIdentifier();
-		for (String s: this.getCurrentScope().keySet()) {
-			if (s.equals(identifier)) {
-				location.setType(this.getCurrentScope().get(s).getType());
-			}
-		}
-		
-		location.getLocation().accept(this);
-	}
 
 	@Override
 	public final void visit(final IdentifierLocation location) {
@@ -262,15 +248,24 @@ public final class SemanticRules implements Visitor {
 		
 		// Set MethodCallExpression types
 		String identifier = methodCallExpression.getMethodCall().getMethodName();
-		for (String s: this.getCurrentScope().keySet()) {
-			if (s.equals(identifier)) {
-				methodCallExpression.setType(this.getCurrentScope().get(s).getType());
-			}
-		}
+		if (this.getCurrentScope().containsKey(identifier)) 
+			methodCallExpression.setType(this.getCurrentScope().get(identifier).getType());
 		
 		this.checkRule6(methodCallExpression);
 		
 		methodCallExpression.getMethodCall().accept(this);
+	}
+	
+	
+	@Override
+	public final void visit(final LocationExpression location) {
+		
+		// Set LocationExpression types
+		String identifier = location.getLocation().getIdentifier();
+		if (this.getCurrentScope().containsKey(identifier)) 
+			location.setType(this.getCurrentScope().get(identifier).getType());
+		
+		location.getLocation().accept(this);
 	}
 	
 	@Override
@@ -572,11 +567,12 @@ public final class SemanticRules implements Visitor {
 	
 	/**
 	 * 
-	 * @param negation
+	 * @param assignment
 	 * <br> not null
 	 */
 	private final void checkRule15(AssignmentStatement assignment) {
-		
+//		String type = this.getCurrentScope().get(assignment.getLocation());
+//		if (assignment.getLocation().getType().equals(assignment.getExpression().getType())
 	}
 	
 	/**
