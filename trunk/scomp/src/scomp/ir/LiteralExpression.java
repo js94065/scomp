@@ -36,12 +36,7 @@ public final class LiteralExpression extends AbstractExpression {
 	public final AbstractLiteral getLiteral(){
 		return this.literal;
 	}
-	
-	@Override
-	public final boolean isLocation() {
-		return false;
-	}
-	
+
 	@Override
 	public final Class<?> getType() {
 		return this.getLiteral().getType();
@@ -69,9 +64,4 @@ public final class LiteralExpression extends AbstractExpression {
 				this.getLiteral().equals(that.getLiteral());
 	}
 
-	@Override
-	public boolean isMethodCall() {
-		return false;
-	}
-	
 }

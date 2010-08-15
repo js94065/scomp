@@ -20,12 +20,7 @@ public final class MinusExpression extends AbstractExpression {
 	public MinusExpression(final AbstractExpression expression) {
 		this.expression = expression;
 	}
-	
-	@Override
-	public final boolean isLocation() {
-		return this.getExpression().isLocation();
-	}
-	
+
 	@Override
 	public final void accept(final Visitor visitor) {
 		visitor.visit(this);
@@ -41,9 +36,15 @@ public final class MinusExpression extends AbstractExpression {
 		return this.expression;
 	}
 	
+	private Class<?> type;
+	
+	public void setType(Class<?> type) {
+		this.type = type;
+	}
+	
 	@Override
 	public final Class<?> getType() {
-		return this.getExpression().getType();
+		return this.type;
 	}
 	
 	@Override
@@ -67,9 +68,4 @@ public final class MinusExpression extends AbstractExpression {
 				this.getExpression().equals(that.getExpression());
 	}
 
-	@Override
-	public boolean isMethodCall() {
-		return false;
-	}
-	
 }
