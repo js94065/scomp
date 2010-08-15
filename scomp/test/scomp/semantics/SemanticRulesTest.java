@@ -140,10 +140,12 @@ public final class SemanticRulesTest {
 		
 		program.accept(new SemanticRules());
 		
-		/*
+		
 		assertEquals(Arrays.asList(
+				"If condition should have type boolean.",
+				"While condition should have type boolean."
 				), this.recorder.getMessages());
-				*/
+				
 	}
 	
 	@Test
@@ -362,7 +364,19 @@ public final class SemanticRulesTest {
 		"class Program {\n" +
 		"\n" +
 		"	void main() {\n" +
-		"		// Deliberatly left empty\n" +
+		"		int x;\n" +
+		"		if (4 < 3) {\n" +
+		"			x= 1;" +
+		"		}\n" +
+		"		if (3) {\n" +
+		"			x= 1;" +
+		"		}\n" +
+		"		while (4<3) {\n" +
+		"			x=1;" +
+		"		}\n" +
+		"		while (4) {\n" +
+		"			x=1;" +
+		"		}\n" +
 		"	}\n" +
 		"\n" +
 		"}";
