@@ -180,7 +180,6 @@ public final class SemanticRulesTest {
 				"Operand of conditional operations and logical not must have type boolean.",
 				"Operand of conditional operations and logical not must have type boolean."
 				), this.recorder.getMessages());
-		
 	}
 	
 	/**
@@ -375,7 +374,7 @@ public final class SemanticRulesTest {
 		"		boolean z;\n" +
 		"		y = 4;\n" +
 		"		x = y + 2;\n" +
-		"		x = -z + 2;\n" +
+		"		x = z + 2;\n" +
 		"	}\n" +
 		"\n" +
 		"	void main() {\n" +

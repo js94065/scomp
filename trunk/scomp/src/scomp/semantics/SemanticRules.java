@@ -561,10 +561,11 @@ public final class SemanticRules implements Visitor {
 	 * <br> not null
 	 */
 	private final void checkRule14(NegationExpression negation) {
-		if (negation.getType()!=null){
-			if (!negation.getType().equals(boolean.class)) {
-				this.logError("Operand of conditional operations and logical not must have type boolean.");
-			}
+		if (!negation.getExpression().getType().equals(boolean.class)) {
+			this.logError("Operand of conditional operations and logical not must have type boolean.");
+		}
+		if (!negation.getType().equals(boolean.class)) {
+			this.logError("Operand of conditional operations and logical not must have type boolean.");
 		}
 	}
 	
