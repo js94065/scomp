@@ -186,32 +186,6 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	@Override
-	public final void visit(final MethodCallExpression methodCallExpression) {
-		
-		// Set MethodCallExpression types
-		String identifier = methodCallExpression.getMethodCall().getMethodName();
-		for (String s: this.getCurrentScope().keySet()) {
-			if (s.equals(identifier)) {
-				methodCallExpression.setType(this.getCurrentScope().get(s).getType());
-			}
-		}
-		
-		this.checkRule6(methodCallExpression);
-		
-		methodCallExpression.getMethodCall().accept(this);
-	}
-	
-	@Override
-	public final void visit(final MethodCall methodCall) {
-		this.checkRule2(methodCall);
-		this.checkRule5(methodCall);
-		
-		for (final AbstractExpression argument : methodCall.getArguments()) {
-			argument.accept(this);
-		}
-	}
-	
-	@Override
 	public final void visit(final IntLiteral literal) {
 		// TODO
 		debugPrint("TODO");
@@ -256,7 +230,7 @@ public final class SemanticRules implements Visitor {
 	public void visit(MinusExpression minusExpression) {
 		
 		// visit child first, then we can use the child's
-		// type as the minus expression's type.
+		// type as the expression's type.
 		minusExpression.getExpression().accept(this);
 		
 		minusExpression.setType(minusExpression.getExpression().getType());
@@ -269,14 +243,52 @@ public final class SemanticRules implements Visitor {
             System.out.println("NegationExpression has null arguments");
 	    }
 	    
+		// visit child first, then we can use the child's
+		// type as the expression's type.
+		
 	    operation.getExpression().accept(this);
 	    
 	    operation.setType(operation.getExpression().getType());
 
 		this.checkRule14(operation);
 		
+	}
+	
+	@Override
+	public void visit(LiteralExpression literalExpression) {
+		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public final void visit(final MethodCallExpression methodCallExpression) {
+		
+		// Set MethodCallExpression types
+		String identifier = methodCallExpression.getMethodCall().getMethodName();
+		for (String s: this.getCurrentScope().keySet()) {
+			if (s.equals(identifier)) {
+				methodCallExpression.setType(this.getCurrentScope().get(s).getType());
+			}
+		}
+		
+		this.checkRule6(methodCallExpression);
+		
+		methodCallExpression.getMethodCall().accept(this);
+	}
+	
+	@Override
+	public final void visit(final MethodCall methodCall) {
+		this.checkRule2(methodCall);
+		this.checkRule5(methodCall);
+		
+		for (final AbstractExpression argument : methodCall.getArguments()) {
+			argument.accept(this);
+		}
+	}
+	
+
+	
+	
 	
 	/**
 	 * 
@@ -759,12 +771,6 @@ public final class SemanticRules implements Visitor {
 
 	@Override
 	public void visit(ExpressionCalloutArgument expressionCalloutArgument) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void visit(LiteralExpression literalExpression) {
 		// TODO Auto-generated method stub
 		
 	}
