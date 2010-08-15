@@ -146,6 +146,7 @@ public final class SemanticRules implements Visitor {
 	public final void visit(final AssignmentStatement assignment) {
 		assignment.getLocation().accept(this);
 		assignment.getExpression().accept(this);
+		
 	}
 	
 	@Override
@@ -233,8 +234,6 @@ public final class SemanticRules implements Visitor {
 		// type as the expression's type.
 		minusExpression.getExpression().accept(this);
 		
-		minusExpression.setType(minusExpression.getExpression().getType());
-		
 	}
 	
 	@Override
@@ -248,8 +247,6 @@ public final class SemanticRules implements Visitor {
 		
 	    operation.getExpression().accept(this);
 	    
-	    operation.setType(operation.getExpression().getType());
-
 		this.checkRule14(operation);
 		
 	}
@@ -285,9 +282,6 @@ public final class SemanticRules implements Visitor {
 			argument.accept(this);
 		}
 	}
-	
-
-	
 	
 	
 	/**
@@ -510,7 +504,7 @@ public final class SemanticRules implements Visitor {
 							"have type int.");
 				}
 			}
-			
+
 		}
 	}
 	
@@ -574,6 +568,15 @@ public final class SemanticRules implements Visitor {
 				this.logError("Operand of conditional operations and logical not must have type boolean.");
 			}
 		}
+	}
+	
+	/**
+	 * 
+	 * @param negation
+	 * <br> not null
+	 */
+	private final void checkRule15(AssignmentStatement assignment) {
+		
 	}
 	
 	/**

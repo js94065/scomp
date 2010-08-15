@@ -40,16 +40,10 @@ public final class MinusExpression extends AbstractExpression {
 	public final AbstractExpression getExpression() {
 		return this.expression;
 	}
-	
-	private Class<?> type;
-	
-	public void setType(Class<?> type) {
-		this.type = type;
-	}
-	
+
 	@Override
 	public final Class<?> getType() {
-		return this.type;
+		return int.class;
 	}
 	
 	@Override

@@ -41,15 +41,9 @@ public final class NegationExpression extends AbstractExpression {
 		return this.expression;
 	}
 	
-	private Class<?> type;
-	
-	public void setType(Class<?> type) {
-		this.type = type;
-	}
-	
 	@Override
 	public final Class<?> getType() {
-		return this.type;
+		return boolean.class;
 	}
 	
 	@Override
