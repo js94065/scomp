@@ -1,5 +1,6 @@
 package scomp.ir;
 
+import scomp.DecafToken;
 import scomp.Tools;
 
 /**
@@ -10,15 +11,14 @@ import scomp.Tools;
  */
 public final class BooleanLiteral extends AbstractLiteral {
 	
-	private final boolean value;
-	
 	/**
 	 * 
-	 * @param value
-	 * <br>Range: any boolean
+	 * @param token
+	 * <br>Not null
+	 * <br>Shared
 	 */
-	public BooleanLiteral(final boolean value){
-		this.value = value;
+	public BooleanLiteral(final DecafToken token){
+		super(token);
 	}
 	
 	@Override
@@ -37,7 +37,7 @@ public final class BooleanLiteral extends AbstractLiteral {
 	 * <br>Range: any boolean
 	 */
 	public final boolean getValue(){
-		return this.value;
+		return (Boolean) this.getToken().getValue();
 	}
 	
 	@Override

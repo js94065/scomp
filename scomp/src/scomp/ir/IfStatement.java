@@ -1,5 +1,6 @@
 package scomp.ir;
 
+import scomp.DecafToken;
 import scomp.Tools;
 
 /**
@@ -18,6 +19,9 @@ public final class IfStatement extends AbstractStatement {
 	
 	/**
 	 * 
+	 * @param token 
+	 * <br>Not null
+	 * <br>Shared
 	 * @param condition
 	 * <br>Not null
 	 * <br>Shared
@@ -28,7 +32,8 @@ public final class IfStatement extends AbstractStatement {
 	 * <br>Maybe null
 	 * <br>Shared
 	 */
-	public IfStatement(final AbstractExpression condition, final Block thenBlock, final Block elseBlock) {
+	public IfStatement(final DecafToken token, final AbstractExpression condition, final Block thenBlock, final Block elseBlock) {
+		super(token);
 		this.condition = condition;
 		this.thenBlock = thenBlock;
 		this.elseBlock = elseBlock;

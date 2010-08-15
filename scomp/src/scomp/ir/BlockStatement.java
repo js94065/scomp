@@ -19,6 +19,7 @@ public final class BlockStatement extends AbstractStatement {
 	 * <br>Shared
 	 */
 	public BlockStatement(final Block block) {
+		super(block.getToken());
 		this.block = block;
 	}
 	

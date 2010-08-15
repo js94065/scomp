@@ -4,6 +4,7 @@ import static scomp.Tools.emptyIfNull;
 
 import java.util.List;
 
+import scomp.DecafToken;
 import scomp.Tools;
 
 /**
@@ -22,6 +23,9 @@ public abstract class AbstractMethodCall<A> extends AbstractNode {
 	
 	/**
 	 * 
+	 * @param token
+	 * <br>Not null
+	 * <br>Shared
 	 * @param methodName
 	 * <br>Not null
 	 * <br>Shared
@@ -29,7 +33,8 @@ public abstract class AbstractMethodCall<A> extends AbstractNode {
 	 * <br>Maybe null
 	 * <br>Shared
 	 */
-	public AbstractMethodCall(final String methodName, final List<A> arguments) {
+	public AbstractMethodCall(final DecafToken token, final String methodName, final List<A> arguments) {
+		super(token);
 		this.methodName = methodName;
 		this.arguments = emptyIfNull(arguments);
 	}

@@ -1,6 +1,7 @@
 package scomp.ir;
 
 import static scomp.Tools.*;
+import scomp.DecafToken;
 
 /**
  * This is the base class for all elements of the intermediate representation tree.
@@ -9,6 +10,46 @@ import static scomp.Tools.*;
  *
  */
 public abstract class AbstractNode {
+	
+	private final DecafToken token;
+	
+	/**
+	 * 
+	 * @param token
+	 * <br>Not null
+	 * <br>Shared
+	 */
+	public AbstractNode(final DecafToken token) {
+		this.token = token;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * <br>Not null
+	 * <br>Shared
+	 */
+	public final DecafToken getToken() {
+		return this.token;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * <br>Range: {@code [1 .. Integer.MAX_VALUE]}
+	 */
+	public final int getTokenRow() {
+		return this.token.getRow();
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * <br>Range: {@code [1 .. Integer.MAX_VALUE]}
+	 */
+	public final int getTokenColumn() {
+		return this.token.getColumn();
+	}
 	
 	@Override
 	public final int hashCode() {

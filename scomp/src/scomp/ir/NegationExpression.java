@@ -1,5 +1,6 @@
 package scomp.ir;
 
+import scomp.DecafToken;
 import scomp.Tools;
 
 /**
@@ -13,11 +14,15 @@ public final class NegationExpression extends AbstractExpression {
 	
 	/**
 	 * 
+	 * @param token
+	 * <br>Not null
+	 * <br>Shared
 	 * @param expression
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	public NegationExpression(final AbstractExpression expression) {
+	public NegationExpression(final DecafToken token, final AbstractExpression expression) {
+		super(token);
 		this.expression = expression;
 	}
 

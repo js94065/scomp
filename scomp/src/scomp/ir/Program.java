@@ -19,8 +19,6 @@ public final class Program extends AbstractNode {
 	
 	private final List<MethodDeclaration> methodDeclarations;
 	
-	private final DecafToken lastToken;
-	
 	/**
 	 * If {@code fieldDeclarations} or {@code methodDeclarations} is null, an empty list is used instead.
 	 * 
@@ -35,27 +33,9 @@ public final class Program extends AbstractNode {
 	 * <br>Shared
 	 */
 	public Program(final List<AbstractFieldDeclaration> fieldDeclarations, final List<MethodDeclaration> methodDeclarations, final DecafToken lastToken) {
+		super(lastToken);
 		this.fieldDeclarations = emptyIfNull(fieldDeclarations);
 		this.methodDeclarations = emptyIfNull(methodDeclarations);
-		this.lastToken = lastToken;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 * <br>Range: {@code [1 .. Integer.MAX_VALUE]}
-	 */
-	public final int getLastTokenRow() {
-		return this.lastToken.getRow();
-	}
-	
-	/**
-	 * 
-	 * @return
-	 * <br>Range: {@code [1 .. Integer.MAX_VALUE]}
-	 */
-	public final int getLastTokenColumn() {
-		return this.lastToken.getColumn();
 	}
 	
 	@Override

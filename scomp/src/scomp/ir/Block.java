@@ -4,6 +4,7 @@ import static scomp.Tools.*;
 
 import java.util.List;
 
+import scomp.DecafToken;
 import scomp.Tools;
 
 /**
@@ -20,6 +21,9 @@ public final class Block extends AbstractNode {
 	
 	/**
 	 * 
+	 * @param token
+	 * <br>Not null
+	 * <br>Shared
 	 * @param variableDeclarations
 	 * <br>Maybe null
 	 * <br>Shared
@@ -27,8 +31,9 @@ public final class Block extends AbstractNode {
 	 * <br>Maybe null
 	 * <br>Shared
 	 */
-	public Block(final List<VariableDeclaration> variableDeclarations, 
+	public Block(final DecafToken token, final List<VariableDeclaration> variableDeclarations, 
 			final List<AbstractStatement> abstractStatements) {
+		super(token);
 		this.variableDeclarations = emptyIfNull(variableDeclarations);
 		this.abstractStatements = emptyIfNull(abstractStatements);
 	}

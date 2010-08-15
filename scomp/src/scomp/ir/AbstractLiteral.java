@@ -1,5 +1,7 @@
 package scomp.ir;
 
+import scomp.DecafToken;
+
 /**
  * This is the base class for Decaf literals.
  * 
@@ -7,6 +9,16 @@ package scomp.ir;
  *
  */
 public abstract class AbstractLiteral extends AbstractNode {
+	
+	/**
+	 * 
+	 * @param token
+	 * <br>Not null
+	 * <br>Shared
+	 */
+	public AbstractLiteral(final DecafToken token) {
+		super(token);
+	}
 	
 	/**
 	 * 

@@ -1,5 +1,6 @@
 package scomp.ir;
 
+import scomp.DecafToken;
 import scomp.Tools;
 
 /**
@@ -10,16 +11,14 @@ import scomp.Tools;
  */
 public class StringCalloutArgument extends AbstractCalloutArgument {
 	
-	private final String string;
-	
 	/**
 	 * 
-	 * @param string
+	 * @param token
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	public StringCalloutArgument(final String string){
-		this.string = string;
+	public StringCalloutArgument(final DecafToken token){
+		super(token);
 	}
 	
 	@Override
@@ -34,7 +33,7 @@ public class StringCalloutArgument extends AbstractCalloutArgument {
 	 * <br>Shared
 	 */
 	public final String getString(){
-		return this.string;
+		return this.getToken().getValue().toString();
 	}
 	
 	@Override

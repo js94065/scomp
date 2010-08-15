@@ -20,7 +20,8 @@ public final class LocationExpression extends AbstractExpression {
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	public LocationExpression(final AbstractLocation location){
+	public LocationExpression(final AbstractLocation location) {
+		super(location.getToken());
 		this.location = location;
 	}
 

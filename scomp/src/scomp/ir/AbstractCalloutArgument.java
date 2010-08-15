@@ -1,5 +1,7 @@
 package scomp.ir;
 
+import scomp.DecafToken;
+
 /**
  * This class defines Decaf CalloutArgument.
  * 
@@ -7,5 +9,15 @@ package scomp.ir;
  * 
  */
 public abstract class AbstractCalloutArgument extends AbstractNode {
-	// Deliberately left empty
+	
+	/**
+	 * 
+	 * @param token
+	 * <br>Not null
+	 * <br>Shared
+	 */
+	public AbstractCalloutArgument(final DecafToken token) {
+		super(token);
+	}
+	
 }

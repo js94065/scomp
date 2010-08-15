@@ -17,6 +17,7 @@ public final class MethodCallStatement extends AbstractStatement {
 	 * <br>Shared
 	 */
 	public MethodCallStatement(final AbstractMethodCall<?> methodCall) {
+		super(methodCall.getToken());
 		this.methodCall = methodCall;
 	}
 	

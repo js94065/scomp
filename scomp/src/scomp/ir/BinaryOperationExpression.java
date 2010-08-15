@@ -30,6 +30,7 @@ public final class BinaryOperationExpression extends AbstractExpression {
 	 */
 	public BinaryOperationExpression(final AbstractExpression left,
 			final String operator, final AbstractExpression right) {
+		super(left.getToken());
 		this.left = left;
 		this.operator = operator;
 		this.right = right;

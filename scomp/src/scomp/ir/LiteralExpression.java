@@ -19,6 +19,7 @@ public final class LiteralExpression extends AbstractExpression {
 	 * <br>Shared
 	 */
 	public LiteralExpression(final AbstractLiteral literal) {
+		super(literal.getToken());
 		this.literal = literal;
 	}
 	
