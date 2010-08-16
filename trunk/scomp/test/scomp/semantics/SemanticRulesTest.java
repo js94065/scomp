@@ -135,6 +135,18 @@ public final class SemanticRulesTest {
 	}
 	
 	@Test
+	public final void testRule9() {
+		final Program program = parse(PROGRAM_WITH_UNDECLARED_IDENTIFIERS_2);
+		
+		program.accept(new SemanticRules());
+		
+		assertEquals(Arrays.asList(
+				"(:12:3) Undeclared identifier c",
+				"(:12:11) Undeclared identifier b"
+		), this.recorder.getMessages());
+	}
+	
+	@Test
 	public final void testRule11() {
 		final Program program = parse(PROGRAM_WITH_IF_AND_WHILE_STATEMENTS);
 		
@@ -176,6 +188,8 @@ public final class SemanticRulesTest {
 		final Program program = parse(PROGRAM_WITH_CONDITIONAL_OPERATORS_AND_LOGICAL_NOT);
 		
 		program.accept(new SemanticRules());
+		
+		System.out.println(this.recorder.getMessages());
 		
 		assertEquals(Arrays.asList(
 				"Operand of conditional operations and logical not must have type boolean.",
@@ -419,6 +433,27 @@ public final class SemanticRulesTest {
 		"		x = 2 && true;\n" +
 		"		y = 2 || true;\n" +
 		"		z = !3;\n" +
+		"	}\n" +
+		"\n" +
+		"	void main() {\n" +
+		"		// Deliberatly left empty\n" +
+		"	}\n" +
+		"\n" +
+		"}";
+	
+	public static final String PROGRAM_WITH_UNDECLARED_IDENTIFIERS_2 =
+		"class Program {\n" +
+		"\n" +
+		"	int x;\n" +
+		"\n" +
+		"	void y(boolean z) {\n" +
+		"		int a;\n" +
+		"		x = 1;\n" +
+		"		a = 2;\n" +
+		"		if(z == true) {\n" +
+		"			// Deliberatly left empty\n" +
+		"		}\n" +
+		"		c = a + b;\n" +
 		"	}\n" +
 		"\n" +
 		"	void main() {\n" +
