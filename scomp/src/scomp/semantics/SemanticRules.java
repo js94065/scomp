@@ -431,15 +431,15 @@ public final class SemanticRules implements Visitor {
 	 * <br> not null
 	 */
 	private final void checkRule10(ArrayLocation location) {
-		if(!this.getCurrentScope().get(location.getIdentifier()).getType().equals(ArrayLocation.class)) {
-			this.logError(location.getTokenRow(), location.getTokenColumn(),
-					"The variable " + location.getIdentifier() + " is not an array type");
-		}
-		
-		if(!location.getOffset().getType().equals(int.class)) {
-			this.logError(location.getTokenRow(), location.getTokenColumn(),
-					"The array offset is not an int type for array variable " + location.getIdentifier());
-		}
+//		if(!this.getCurrentScope().get(location.getIdentifier()).getType().equals(ArrayLocation.class)) {
+//			this.logError(location.getTokenRow(), location.getTokenColumn(),
+//					"The variable " + location.getIdentifier() + " is not an array type");
+//		}
+//		
+//		if(!location.getOffset().getType().equals(int.class)) {
+//			this.logError(location.getTokenRow(), location.getTokenColumn(),
+//					"The array offset is not an int type for array variable " + location.getIdentifier());
+//		}
 	}
 	
 	
