@@ -164,6 +164,7 @@ public final class SemanticRules implements Visitor {
 	@Override
 	public void visit(final ArrayLocation location) {
 		this.checkRule2(location);
+		this.checkRule10(location);
 		
 		location.getOffset().accept(this);
 	}
@@ -422,11 +423,31 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	/**
+	 * Rule 9 exactly like Rule 2
+	 */
+	
+	/**
+	 * @param location
+	 * <br> not null
+	 */
+	private final void checkRule10(ArrayLocation location) {
+		if(!this.getCurrentScope().get(location.getIdentifier()).getType().equals(ArrayLocation.class)) {
+			this.logError(location.getTokenRow(), location.getTokenColumn(),
+					"The variable " + location.getIdentifier() + " is not an array type");
+		}
+		
+		if(!location.getOffset().getType().equals(int.class)) {
+			this.logError(location.getTokenRow(), location.getTokenColumn(),
+					"The array offset is not an int type for array variable " + location.getIdentifier());
+		}
+	}
+	
+	
+	/**
 	 * 
 	 * @param ifStatement
 	 * <br> not null
 	 */
-	
 	private final void checkRule11(final IfStatement ifStatement) {
 		if (!ifStatement.getCondition().getType().equals(boolean.class)) {
 			this.logError("If condition should have type boolean.");
