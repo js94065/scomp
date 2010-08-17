@@ -147,6 +147,18 @@ public final class SemanticRulesTest {
 	}
 	
 	@Test
+	public final void testRule10() {
+		final Program program = parse(PROGRAM_WITH_IMPROPER_USE_OF_ARRAY_VARIABLE);
+		
+		program.accept(new SemanticRules());
+		
+		assertEquals(Arrays.asList(
+				"(:9:3) The variable x is not an array type",
+				"(:11:3) The array offset is not an int type"
+		), this.recorder.getMessages());
+	}
+	
+	@Test
 	public final void testRule11() {
 		final Program program = parse(PROGRAM_WITH_IF_AND_WHILE_STATEMENTS);
 		program.accept(new SemanticRules());
@@ -544,6 +556,24 @@ public final class SemanticRulesTest {
 		"\n" +
 		"	void main() {\n" +
 		"		// Deliberatly left empty\n" +
+		"	}\n" +
+		"\n" +
+		"}";
+	
+	public static final String PROGRAM_WITH_IMPROPER_USE_OF_ARRAY_VARIABLE = 
+		"class Program {\n" +
+		"	int a[2];\n" +
+		"	int x;\n" +
+		"\n" +
+		"	int y() {\n" +
+		"		return 1;" +
+		"	}\n" +
+		"\n" +
+		"	void main() {\n" +
+		"		x[0] = 2;\n" +
+		"		a[0 + 1] = 1;\n" +
+		"		a[true] = 0;\n" +
+		"		a[y()] = 3;\n" +
 		"	}\n" +
 		"\n" +
 		"}";
