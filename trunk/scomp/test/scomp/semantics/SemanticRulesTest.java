@@ -107,7 +107,7 @@ public final class SemanticRulesTest {
 		
 		assertEquals(Arrays.asList(
 				"(:14:7) The method f has type void and cannot be used as an expression",
-				"Operand of arithmetic and relational operations must have type int."
+				"(:14:7) Operand of arithmetic and relational operations must have type int."
 		), this.recorder.getMessages());
 	}
 	
@@ -149,13 +149,13 @@ public final class SemanticRulesTest {
 	@Test
 	public final void testRule11() {
 		final Program program = parse(PROGRAM_WITH_IF_AND_WHILE_STATEMENTS);
-		
 		program.accept(new SemanticRules());
 		
-		
 		assertEquals(Arrays.asList(
-				"If condition should have type boolean.",
-				"While condition should have type boolean."
+				"(:6:3) If condition should have type boolean.",
+				"(:12:3) If condition should have type boolean.",
+				"(:16:3) While condition should have type boolean.",
+				"(:18:3) While condition should have type boolean."
 				), this.recorder.getMessages());
 				
 	}
@@ -167,7 +167,7 @@ public final class SemanticRulesTest {
 		program.accept(new SemanticRules());
 		
 		assertEquals(Arrays.asList(
-				"Operand of arithmetic and relational operations must have type int."
+				"(:8:7) Operand of arithmetic and relational operations must have type int."
 				), this.recorder.getMessages());
 	}
 
@@ -178,8 +178,8 @@ public final class SemanticRulesTest {
 		program.accept(new SemanticRules());
 		
 		assertEquals(Arrays.asList(
-				"Operand of equality operator must have same type, either int or boolean.",
-				"Operand of equality operator must have same type, either int or boolean."
+				"(:5:7) Operand of equality operations must have same type, either int or boolean.",
+				"(:6:7) Operand of equality operations must have same type, either int or boolean."
 				), this.recorder.getMessages());
 	}
 	
@@ -189,12 +189,37 @@ public final class SemanticRulesTest {
 		
 		program.accept(new SemanticRules());
 		
-		System.out.println(this.recorder.getMessages());
+		assertEquals(Arrays.asList(
+				"(:5:7) Operand of conditional operations must have type boolean.",
+				"(:6:7) Operand of conditional operations must have type boolean.",
+				"(:7:7) Operand of negation operations must have type boolean.",
+				"(:8:7) Operand of conditional operations must have type boolean.",
+				"(:9:7) Operand of conditional operations must have type boolean.",
+				"(:10:7) Operand of negation operations must have type boolean."
+				), this.recorder.getMessages());
+	}
+	
+	@Test
+	public final void testRule15() {
+		final Program program = parse(TEST_RULE_15);
+		
+		program.accept(new SemanticRules());
 		
 		assertEquals(Arrays.asList(
-				"Operand of conditional operations and logical not must have type boolean.",
-				"Operand of conditional operations and logical not must have type boolean.",
-				"Operand of conditional operations and logical not must have type boolean."
+				"(:11:3) Assignment location and expression have different types.",
+				"(:12:3) Assignment location and expression have different types."
+				), this.recorder.getMessages());
+	}
+	
+	@Test
+	public final void testRule16() {
+		final Program program = parse(TEST_RULE_16);
+		
+		program.accept(new SemanticRules());
+		
+		assertEquals(Arrays.asList(
+				"(:8:3) Break statement is not contained within the body of a loop.",
+				"(:12:3) Continue statement is not contained within the body of a loop."
 				), this.recorder.getMessages());
 	}
 	
@@ -379,6 +404,13 @@ public final class SemanticRulesTest {
 		"\n" +
 		"	void main() {\n" +
 		"		int x;\n" +
+		"		boolean y;\n" +
+		"		if (x) {\n" +
+		"			x= 1;" +
+		"		}\n" +
+		"		if (y) {\n" +
+		"			x= 1;" +
+		"		}\n" +
 		"		if (4 < 3) {\n" +
 		"			x= 1;" +
 		"		}\n" +
@@ -391,6 +423,12 @@ public final class SemanticRulesTest {
 		"		while (4) {\n" +
 		"			x=1;" +
 		"		}\n" +
+		"		while (x) {\n" +
+		"			x= 1;" +
+		"		}\n" +
+		"		while (y) {\n" +
+		"			x= 1;" +
+		"		}\n" +
 		"	}\n" +
 		"\n" +
 		"}";
@@ -401,6 +439,7 @@ public final class SemanticRulesTest {
 		"		int x,y;\n" +
 		"		boolean z;\n" +
 		"		y = 4;\n" +
+		"		z = true;\n" +
 		"		x = y + 2;\n" +
 		"		x = z + 2;\n" +
 		"	}\n" +
@@ -417,7 +456,7 @@ public final class SemanticRulesTest {
 		"		boolean x,y,z;\n" +
 		"		x = 3 == 2;\n" +
 		"		y = true == 2;\n" +
-		"		z = 'c' == 2;\n" +
+		"		z = x == 2;\n" +
 		"	}\n" +
 		"\n" +
 		"	void main() {\n" +
@@ -429,10 +468,57 @@ public final class SemanticRulesTest {
 	public static final String PROGRAM_WITH_CONDITIONAL_OPERATORS_AND_LOGICAL_NOT = 
 		"class Program {\n" +
 		"	boolean f() {\n" +
-		"		boolean x,y,z;\n" +
+		"		boolean x;\n" +
+		"		int a;\n" +
 		"		x = 2 && true;\n" +
-		"		y = 2 || true;\n" +
-		"		z = !3;\n" +
+		"		x = 2 || true;\n" +
+		"		x = !3;\n" +
+		"		x = a && true;\n" +
+		"		x = a || true;\n" +
+		"		x = !a;\n" +
+		"	}\n" +
+		"\n" +
+		"	void main() {\n" +
+		"		// Deliberatly left empty\n" +
+		"	}\n" +
+		"\n" +
+		"}";
+	
+	public static final String TEST_RULE_15 = 
+		"class Program {\n" +
+		"	boolean f() {\n" +
+		"		boolean x,y;\n" +
+		"		int a,b;\n" +
+		"		x = true;\n" +
+		"		y = false;\n" +
+		"		a = 2;\n" +
+		"		b = 3;\n" +
+		"		x = y;\n" +
+		"		a = b;\n" +
+		"		x = 2;\n" +
+		"		x = a;\n" +
+		"	}\n" +
+		"\n" +
+		"	void main() {\n" +
+		"		// Deliberatly left empty\n" +
+		"	}\n" +
+		"\n" +
+		"}";
+	
+	public static final String TEST_RULE_16 = 
+		"class Program {\n" +
+		"	boolean f() {\n" +
+		"		int a;\n" +
+		"		a=0;\n" +
+		"		while (a<3) {\n" +
+		"			break;\n" +
+		"		}\n" +
+		"		break;\n" +
+		"		while (a<3) {\n" +
+		"			a=a+1;" +
+		"			continue;\n" +
+		"		}\n" +
+		"		continue;\n" +
 		"	}\n" +
 		"\n" +
 		"	void main() {\n" +
@@ -461,5 +547,4 @@ public final class SemanticRulesTest {
 		"	}\n" +
 		"\n" +
 		"}";
-
 }
