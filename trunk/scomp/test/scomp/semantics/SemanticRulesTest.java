@@ -136,13 +136,17 @@ public final class SemanticRulesTest {
 	
 	@Test
 	public final void testRule9() {
-		final Program program = parse(PROGRAM_WITH_UNDECLARED_IDENTIFIERS_2);
+		final Program program = parse(PROGRAM_WITH_METHOD_USED_AS_VARIABLE);
 		
 		program.accept(new SemanticRules());
 		
 		assertEquals(Arrays.asList(
-				"(:12:3) Undeclared identifier c",
-				"(:12:11) Undeclared identifier b"
+				"(:10:11) The method y cannot be used as a variable",
+				"(:10:11) Assignment location and expression have different types.",
+				"(:11:7) Undeclared identifier Program", 
+				"(:11:7) Cannot used the reserved identifier Program as a variable",
+				"(:12:7) The method y cannot be used as a variable", 
+				"(:12:3) Assignment location and expression have different types."
 		), this.recorder.getMessages());
 	}
 	
@@ -539,23 +543,20 @@ public final class SemanticRulesTest {
 		"\n" +
 		"}";
 	
-	public static final String PROGRAM_WITH_UNDECLARED_IDENTIFIERS_2 =
+	public static final String PROGRAM_WITH_METHOD_USED_AS_VARIABLE =
 		"class Program {\n" +
 		"\n" +
-		"	int x;\n" +
+		"	int v;\n" +
+		"	boolean x;\n" +
 		"\n" +
-		"	void y(boolean z) {\n" +
-		"		int a;\n" +
-		"		x = 1;\n" +
-		"		a = 2;\n" +
-		"		if(z == true) {\n" +
-		"			// Deliberatly left empty\n" +
-		"		}\n" +
-		"		c = a + b;\n" +
+		"	void y() {\n" +
 		"	}\n" +
 		"\n" +
 		"	void main() {\n" +
-		"		// Deliberatly left empty\n" +
+		"		v = 1;" +
+		"		y = 1;\n" +
+		"		x = Program;\n" +
+		"		v = y;\n" +
 		"	}\n" +
 		"\n" +
 		"}";

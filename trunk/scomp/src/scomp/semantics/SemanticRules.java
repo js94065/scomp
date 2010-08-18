@@ -172,6 +172,7 @@ public final class SemanticRules implements Visitor {
 	@Override
 	public final void visit(final IdentifierLocation location) {
 		this.checkRule2(location);
+		this.checkRule9(location);
 	}
 	
 	@Override
@@ -423,8 +424,25 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	/**
-	 * Rule 9 exactly like Rule 2
+	 * @param location
+	 * <br> not null
 	 */
+	private final void checkRule9(IdentifierLocation identifierLocation) {
+		String identifier = identifierLocation.getIdentifier();
+		
+		if(identifier.equals("Program")) {
+			this.logError(identifierLocation.getTokenRow(), identifierLocation.getTokenColumn(),
+					"Cannot used the reserved identifier Program as a variable");
+		}
+		
+		if(this.getCurrentScope().containsKey(identifier)) {
+			if(this.getCurrentScope().get(identifier).getClass().equals(MethodDeclaration.class)) {
+				this.logError(identifierLocation.getTokenRow(), identifierLocation.getTokenColumn(),
+						"The method " + identifier + " cannot be used as a variable");
+			}
+		}
+		
+	}
 	
 	/**
 	 * @param location
