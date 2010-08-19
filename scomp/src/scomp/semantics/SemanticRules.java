@@ -62,10 +62,13 @@ public final class SemanticRules implements Visitor {
 	
 	private String currentMethodName = "";
 	
+	private boolean methodScope;
+	
 	@SuppressWarnings("unchecked")
 	public SemanticRules() {
 		this.scopes = new NestingDictionary<String, AbstractTypedEntityDeclaration>((Class<? extends Map<?, ?>>) LinkedHashMap.class);
 		this.logger = Logger.getLogger(DecafParser.class.getName());
+		this.methodScope = false;
 	}
 	
 	@Override 
@@ -104,13 +107,13 @@ public final class SemanticRules implements Visitor {
 		
 		this.pushNewScope();
 		
+		this.methodScope = true;
+		
 		for (final ParameterDeclaration parameterDeclaration : method.getParameterDeclarations()) {
 			parameterDeclaration.accept(this);
 		}
 		
 		method.getBlock().accept(this);
-		
-		this.popCurrentScope();
 	}
 	
 	@Override
@@ -125,7 +128,11 @@ public final class SemanticRules implements Visitor {
 	
 	@Override
 	public final void visit(final Block block) {
-		this.pushNewScope();
+		if (!this.methodScope) {
+			this.pushNewScope();
+		}
+		
+		this.methodScope = false;
 		
 		for (final VariableDeclaration variableDeclaration : block.getVariableDeclarations()) {
 			variableDeclaration.accept(this);
