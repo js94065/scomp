@@ -239,6 +239,7 @@ public final class SemanticRulesTest {
 				"(:14:7) Undeclared identifier u",
 				"(:15:3) Undeclared identifier u"
 				), this.recorder.getMessages());
+				
 	}
 	
 	@Test
@@ -251,6 +252,19 @@ public final class SemanticRulesTest {
 				"(:10:3) Break statement is not contained within the body of a loop.",
 				"(:15:3) Continue statement is not contained within the body of a loop."
 				), this.recorder.getMessages());
+	}
+	
+	//@Test
+	public final void testRule17() {
+		final Program program = parse(PROGRAM_WITH_UNARY_MINUS);
+		
+		program.accept(new SemanticRules());
+		
+		assertEquals(Arrays.asList(
+				"(:12:7) Unary minus expression is not an int type", 
+				"(:13:7) Unary minus expression is not an int type"
+				), this.recorder.getMessages());
+				
 	}
 	
 	/**
@@ -602,6 +616,25 @@ public final class SemanticRulesTest {
 		"		a[0 + 1] = 1;\n" +
 		"		a[true] = 0;\n" +
 		"		a[y()] = 3;\n" +
+		"	}\n" +
+		"\n" +
+		"}";
+	
+	public static final String PROGRAM_WITH_UNARY_MINUS = 
+		"class Program {\n" +
+		"	int x, y;\n" +
+		"	boolean z;\n" +
+		"\n" +
+		"	int w() {\n" +
+		"		return 1;" +
+		"	}\n" +
+		"\n" +
+		"	void main() {\n" +
+		"		x = -2;\n" +
+		"		y = -x;\n" +
+		"		x = -w();\n" +
+		"		x = -z;\n" +
+		"		y = -true;" +
 		"	}\n" +
 		"\n" +
 		"}";
