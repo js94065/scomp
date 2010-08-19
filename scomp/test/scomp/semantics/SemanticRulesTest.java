@@ -38,6 +38,7 @@ public final class SemanticRulesTest {
 		
 		assertEquals(Arrays.asList(
 				"(:3:13) Duplicate identifier Program",
+				"(:7:10) Duplicate identifier x",
 				"(:9:7) Duplicate identifier x",
 				"(:9:24) Duplicate identifier z",
 				"(:10:11) Duplicate identifier a"
