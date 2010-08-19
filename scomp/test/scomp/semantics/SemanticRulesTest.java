@@ -37,6 +37,7 @@ public final class SemanticRulesTest {
 		program.accept(new SemanticRules());
 		
 		assertEquals(Arrays.asList(
+				"(:3:13) Duplicate identifier Program",
 				"(:9:7) Duplicate identifier x",
 				"(:9:24) Duplicate identifier z",
 				"(:10:11) Duplicate identifier a"
@@ -277,14 +278,14 @@ public final class SemanticRulesTest {
 	public static final String PROGRAM_WITH_DUPLICATE_IDENTIFIERS =
 		"class Program {\n" +
 		"\n" +
-		"	boolean y;\n" +
+		"	boolean y, Program;\n" +
 		"\n" +
 		"	int x, y;\n" +
 		"\n" +
 		"	boolean x[1];\n" +
 		"\n" +
 		"	void x(int z, boolean z, int a) {\n" +
-		"		boolean a, b, x;\n" +
+		"		boolean a, b, x, Program;\n" +
 		"	}\n" +
 		"\n" +
 		"	void main() {\n" +
