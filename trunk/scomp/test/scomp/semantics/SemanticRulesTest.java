@@ -170,8 +170,10 @@ public final class SemanticRulesTest {
 		assertEquals(Arrays.asList(
 				"(:6:3) If condition should have type boolean.",
 				"(:12:3) If condition should have type boolean.",
-				"(:16:3) While condition should have type boolean.",
-				"(:18:3) While condition should have type boolean."
+				"(:15:3) While condition should have type boolean.",
+				"(:21:3) While condition should have type boolean.",
+				"(:23:7) Undeclared identifier u",
+				"(:25:10) Undeclared identifier u"
 				), this.recorder.getMessages());
 				
 	}
@@ -183,7 +185,12 @@ public final class SemanticRulesTest {
 		program.accept(new SemanticRules());
 		
 		assertEquals(Arrays.asList(
-				"(:8:7) Operand of arithmetic and relational operations must have type int."
+				"(:8:7) Operand of arithmetic and relational operations must have type int.",
+				"(:9:11) Operand of arithmetic and relational operations must have type int.",
+				"(:10:7) Undeclared identifier u",
+				"(:10:11) Undeclared identifier u",
+				"(:11:7) Undeclared identifier u",
+				"(:11:11) Operand of arithmetic and relational operations must have type int."
 				), this.recorder.getMessages());
 	}
 
@@ -195,13 +202,15 @@ public final class SemanticRulesTest {
 		
 		assertEquals(Arrays.asList(
 				"(:5:7) Operand of equality operations must have same type, either int or boolean.",
-				"(:6:7) Operand of equality operations must have same type, either int or boolean."
+				"(:6:7) Operand of equality operations must have same type, either int or boolean.",
+				"(:7:7) Operand of equality operations must have same type, either int or boolean.",
+				"(:8:7) Undeclared identifier u"
 				), this.recorder.getMessages());
 	}
 	
 	@Test
 	public final void testRule14() {
-		final Program program = parse(PROGRAM_WITH_CONDITIONAL_OPERATORS_AND_LOGICAL_NOT);
+		final Program program = parse(PROGRAM_WITH_CONDITIONAL_OPERATORS_AND_NEGATION);
 		
 		program.accept(new SemanticRules());
 		
@@ -210,8 +219,11 @@ public final class SemanticRulesTest {
 				"(:6:7) Operand of conditional operations must have type boolean.",
 				"(:7:7) Operand of negation operations must have type boolean.",
 				"(:8:7) Operand of conditional operations must have type boolean.",
-				"(:9:7) Operand of conditional operations must have type boolean.",
-				"(:10:7) Operand of negation operations must have type boolean."
+				"(:9:15) Operand of conditional operations must have type boolean.",
+				"(:10:7) Operand of negation operations must have type boolean.",
+				"(:11:7) Undeclared identifier u",
+				"(:11:12) Undeclared identifier u",
+				"(:12:8) Undeclared identifier u"
 				), this.recorder.getMessages());
 	}
 	
@@ -223,7 +235,9 @@ public final class SemanticRulesTest {
 		
 		assertEquals(Arrays.asList(
 				"(:11:3) Assignment location and expression have different types.",
-				"(:12:3) Assignment location and expression have different types."
+				"(:12:3) Assignment location and expression have different types.",
+				"(:13:7) Undeclared identifier u",
+				"(:14:3) Undeclared identifier u"
 				), this.recorder.getMessages());
 	}
 	
@@ -422,28 +436,25 @@ public final class SemanticRulesTest {
 		"		int x;\n" +
 		"		boolean y;\n" +
 		"		if (x) {\n" +
-		"			x= 1;" +
 		"		}\n" +
 		"		if (y) {\n" +
-		"			x= 1;" +
 		"		}\n" +
 		"		if (4 < 3) {\n" +
-		"			x= 1;" +
 		"		}\n" +
 		"		if (3) {\n" +
-		"			x= 1;" +
 		"		}\n" +
-		"		while (4<3) {\n" +
-		"			x=1;" +
-		"		}\n" +
-		"		while (4) {\n" +
-		"			x=1;" +
-		"		}\n" +
+		"		\n" +
 		"		while (x) {\n" +
-		"			x= 1;" +
 		"		}\n" +
 		"		while (y) {\n" +
-		"			x= 1;" +
+		"		}\n" +
+		"		while (4<3) {\n" +
+		"		}\n" +
+		"		while (4) {\n" +
+		"		}\n" +
+		"		if (u) {\n" + // rule 2 compatibility check
+		"		}\n" +
+		"		while (u) {\n" +
 		"		}\n" +
 		"	}\n" +
 		"\n" +
@@ -458,6 +469,9 @@ public final class SemanticRulesTest {
 		"		z = true;\n" +
 		"		x = y + 2;\n" +
 		"		x = z + 2;\n" +
+		"		x = 2 + z;\n" +
+		"		x = u + u;\n" + // rule 2 compatibility check
+		"		x = u + true;\n" + // rule 2 compatibility check
 		"	}\n" +
 		"\n" +
 		"	void main() {\n" +
@@ -472,7 +486,9 @@ public final class SemanticRulesTest {
 		"		boolean x,y,z;\n" +
 		"		x = 3 == 2;\n" +
 		"		y = true == 2;\n" +
-		"		z = x == 2;\n" +
+		"		z = x != 2;\n" +
+		"		z = 2 != x;\n" +
+		"		z = u == 2;\n" + // rule 2 compatibility check
 		"	}\n" +
 		"\n" +
 		"	void main() {\n" +
@@ -481,7 +497,7 @@ public final class SemanticRulesTest {
 		"\n" +
 		"}";
 	
-	public static final String PROGRAM_WITH_CONDITIONAL_OPERATORS_AND_LOGICAL_NOT = 
+	public static final String PROGRAM_WITH_CONDITIONAL_OPERATORS_AND_NEGATION = 
 		"class Program {\n" +
 		"	boolean f() {\n" +
 		"		boolean x;\n" +
@@ -490,8 +506,10 @@ public final class SemanticRulesTest {
 		"		x = 2 || true;\n" +
 		"		x = !3;\n" +
 		"		x = a && true;\n" +
-		"		x = a || true;\n" +
+		"		x = true || a;\n" +
 		"		x = !a;\n" +
+		"		x = u && u;\n" + // rule 2 compatibility check
+		"		x = !u;\n" + 
 		"	}\n" +
 		"\n" +
 		"	void main() {\n" +
@@ -513,6 +531,8 @@ public final class SemanticRulesTest {
 		"		a = b;\n" +
 		"		x = 2;\n" +
 		"		x = a;\n" +
+		"		x = u;\n" + // rule 2 compatibility check
+		"		u = a;\n" + 
 		"	}\n" +
 		"\n" +
 		"	void main() {\n" +

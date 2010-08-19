@@ -475,6 +475,12 @@ public final class SemanticRules implements Visitor {
 		}
 	}
 	
+	/*
+	 * General comment about type checking.
+	 * if type == null, then undeclared identifier (rule 2)
+	 * if we see a violation of rule 2, then rule 2 takes precedence
+	 * and we do not indicate error for current rule
+	 */
 	
 	/**
 	 * 
@@ -482,7 +488,10 @@ public final class SemanticRules implements Visitor {
 	 * <br> not null
 	 */
 	private final void checkRule11(final IfStatement ifStatement) {
-		if (!ifStatement.getCondition().getType().equals(boolean.class)) {
+		if (ifStatement.getCondition().getType()==null) {
+			return;
+		}
+		if (!boolean.class.equals(ifStatement.getCondition().getType())) {
 			this.logError(ifStatement.getTokenRow(), ifStatement.getTokenColumn(),
 					"If condition should have type boolean.");
 		}
@@ -495,18 +504,14 @@ public final class SemanticRules implements Visitor {
 	 * <br> not null
 	 */
 	private final void checkRule11(final WhileStatement whileStatement) {
-		if (!whileStatement.getCondition().getType().equals(boolean.class)) {
+		if (whileStatement.getCondition().getType()==null) {
+			return;
+		}
+		if (!boolean.class.equals(whileStatement.getCondition().getType())) {
 			this.logError(whileStatement.getTokenRow(), whileStatement.getTokenColumn(),
 					"While condition should have type boolean.");
 		}
 	}
-	
-	/*
-	 * General comment about type checking.
-	 * if type == null, then undeclared identifier (rule 2)
-	 * if we see a violation of rule 2, then rule 2 takes precedence
-	 * and we do not indicate error for current rule
-	 */
 	
 	/**
 	 * 
@@ -514,9 +519,6 @@ public final class SemanticRules implements Visitor {
 	 * <br> not null
 	 */
 	private final void checkRule12(BinaryOperationExpression operation) {
-		if (operation.getLeft().getType() == null || operation.getRight().getType() == null) {
-			return;
-		}
 		if ( operation.getOperator().equals("+") ||
 				operation.getOperator().equals("-") ||
 				operation.getOperator().equals("*") ||
@@ -530,14 +532,20 @@ public final class SemanticRules implements Visitor {
 				operation.getOperator().equals("<=") ||
 				operation.getOperator().equals(">=") 
 			) {
-			if (!operation.getLeft().getType().equals(int.class)) {
-				this.logError(operation.getLeft().getTokenRow(), operation.getLeft().getTokenColumn(),
-						"Operand of arithmetic and relational operations must have type int.");
-			}
-			if (!operation.getRight().getType().equals(int.class)) {
-				this.logError(operation.getRight().getTokenRow(), operation.getRight().getTokenColumn(),
-						"Operand of arithmetic and relational operations must have type int.");
+			// first if is for rule 2 compatibility
+			// second if is for the actual type check 
+			if (operation.getLeft().getType() != null) {
+				if (!operation.getLeft().getType().equals(int.class)) {
+					this.logError(operation.getLeft().getTokenRow(), operation.getLeft().getTokenColumn(),
+							"Operand of arithmetic and relational operations must have type int.");
 				}
+			}
+			if (operation.getRight().getType() != null) {
+				if (!operation.getRight().getType().equals(int.class)) {
+					this.logError(operation.getRight().getTokenRow(), operation.getRight().getTokenColumn(),
+							"Operand of arithmetic and relational operations must have type int.");
+				}
+			}
 		}
 	}
 	
@@ -553,12 +561,12 @@ public final class SemanticRules implements Visitor {
 		}
 		if ( operation.getOperator().equals("==") ||
 				operation.getOperator().equals("!=") ) {
-			if (operation.getLeft().getType().equals(int.class) && 
-					operation.getRight().getType().equals(int.class)) {
+			if (int.class.equals(operation.getLeft().getType()) && 
+					int.class.equals(operation.getRight().getType())) {
 				// do nothing
 			} 
-			else if (operation.getLeft().getType().equals(boolean.class) && 
-					operation.getRight().getType().equals(boolean.class)) {
+			else if (boolean.class.equals(operation.getLeft().getType()) && 
+					boolean.class.equals(operation.getRight().getType())) {
 				// do nothing
 			} else {
 				this.logError(operation.getTokenRow(), operation.getTokenColumn(),
@@ -574,18 +582,21 @@ public final class SemanticRules implements Visitor {
 	 * <br> not null
 	 */
 	private final void checkRule14(BinaryOperationExpression operation) {
-		if (operation.getLeft().getType()==null || operation.getRight().getType()==null) {
-			return;
-		}
 		if ( operation.getOperator().equals("&&") ||
 				operation.getOperator().equals("||") ) {
-			if (!operation.getLeft().getType().equals(boolean.class) ) {
-				this.logError(operation.getLeft().getTokenRow(), operation.getLeft().getTokenColumn(),
-						"Operand of conditional operations must have type boolean.");
-			} 
-			if (!operation.getRight().getType().equals(boolean.class) ) { 
-				this.logError(operation.getRight().getTokenRow(), operation.getRight().getTokenColumn(),
-						"Operand of conditional operations must have type boolean.");
+			// first if is for rule 2 compatibility
+			// second if is for the actual type check 
+			if (operation.getLeft().getType() != null) {
+				if (!boolean.class.equals(operation.getLeft().getType()) ) {
+					this.logError(operation.getLeft().getTokenRow(), operation.getLeft().getTokenColumn(),
+							"Operand of conditional operations must have type boolean.");
+				} 
+			}
+			if (operation.getRight().getType() != null) {
+				if (!boolean.class.equals(operation.getRight().getType()) ) { 
+					this.logError(operation.getRight().getTokenRow(), operation.getRight().getTokenColumn(),
+							"Operand of conditional operations must have type boolean.");
+				}
 			}
 		}
 	}
@@ -596,7 +607,10 @@ public final class SemanticRules implements Visitor {
 	 * <br> not null
 	 */
 	private final void checkRule14(NegationExpression negation) {
-		if (!negation.getExpression().getType().equals(boolean.class)) {
+		if (negation.getExpression().getType() == null) {
+			return;
+		}
+		if (!boolean.class.equals(negation.getExpression().getType())) {
 			this.logError(negation.getTokenRow(), negation.getTokenColumn(),
 					"Operand of negation operations must have type boolean.");
 		}
