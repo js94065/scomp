@@ -2,7 +2,6 @@ package scomp.semantics;
 
 import static scomp.Tools.*;
 
-import java.util.Deque;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -57,14 +56,15 @@ import scomp.ir.WhileStatement;
  */
 public final class SemanticRules implements Visitor {
 	
-	private final Deque<Map<String, AbstractTypedEntityDeclaration>> scopes;
+	private final NestingDictionary<String, AbstractTypedEntityDeclaration> scopes;
 	
 	private final Logger logger;
 	
-	private String nameOfMethod = "";
+	private String currentMethodName = "";
 	
+	@SuppressWarnings("unchecked")
 	public SemanticRules() {
-		this.scopes = new LinkedList<Map<String,AbstractTypedEntityDeclaration>>();
+		this.scopes = new NestingDictionary<String, AbstractTypedEntityDeclaration>((Class<? extends Map<?, ?>>) LinkedHashMap.class);
 		this.logger = Logger.getLogger(DecafParser.class.getName());
 	}
 	
@@ -98,7 +98,8 @@ public final class SemanticRules implements Visitor {
 	
 	@Override
 	public final void visit(final MethodDeclaration method) {
-		this.nameOfMethod = method.getIdentifier();
+		this.currentMethodName = method.getIdentifier();
+		
 		this.checkRule1(method);
 		
 		this.pushNewScope();
@@ -249,8 +250,8 @@ public final class SemanticRules implements Visitor {
 		// Set MethodCallExpression types
 		final String identifier = methodCallExpression.getMethodCall().getMethodName();
 		
-		if (this.getCurrentScope().containsKey(identifier)) {
-			methodCallExpression.setType(this.getCurrentScope().get(identifier).getType());
+		if (this.getScopes().containsKey(identifier)) {
+			methodCallExpression.setType(this.getScopes().get(identifier).getType());
 		}
 		
 		this.checkRule6(methodCallExpression);
@@ -263,8 +264,8 @@ public final class SemanticRules implements Visitor {
 		// Set LocationExpression types
 		final String identifier = location.getLocation().getIdentifier();
 		
-		if (this.getCurrentScope().containsKey(identifier)) {
-			location.setType(this.getCurrentScope().get(identifier).getType());
+		if (this.getScopes().containsKey(identifier)) {
+			location.setType(this.getScopes().get(identifier).getType());
 		}
 		
 		location.getLocation().accept(this);
@@ -327,11 +328,11 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule1(final AbstractTypedEntityDeclaration entity) {
-		if (this.getCurrentScope().containsKey(entity.getIdentifier())) {
+		if (this.getScopes().containsLocalKey(entity.getIdentifier())) {
 			this.logError(entity.getTokenRow(), entity.getTokenColumn(),
 					"Duplicate identifier " + entity.getIdentifier());
 		} else {
-			this.getCurrentScope().put(entity.getIdentifier(), entity);
+			this.getScopes().put(entity.getIdentifier(), entity);
 		}
 	}
 	
@@ -342,7 +343,7 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule2(final AbstractLocation location) {
-		if (!this.getCurrentScope().containsKey(location.getIdentifier())) {
+		if (!this.getScopes().containsKey(location.getIdentifier())) {
 			this.logError(location.getTokenRow(), location.getTokenColumn(),
 					"Undeclared identifier " + location.getIdentifier());
 		}
@@ -355,7 +356,7 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule2(final MethodCall methodCall) {
-		if (!this.getCurrentScope().containsKey(methodCall.getMethodName())) {
+		if (!this.getScopes().containsKey(methodCall.getMethodName())) {
 			this.logError(methodCall.getMethodNameIdentifierRow(), methodCall.getMethodNameIdentifierColumn(),
 					"Undeclared identifier " + methodCall.getMethodName());
 		}
@@ -369,7 +370,7 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule3(final Program program) {
-		final MethodDeclaration mainMethod = cast(MethodDeclaration.class, this.getCurrentScope().get("main"));
+		final MethodDeclaration mainMethod = cast(MethodDeclaration.class, this.getScopes().get("main"));
 		
 		if (mainMethod == null || mainMethod.getParameterDeclarations().size() != 0) {
 			this.logError(program.getTokenRow(), program.getTokenColumn(),
@@ -399,7 +400,7 @@ public final class SemanticRules implements Visitor {
 	 */
 	private final void checkRule5(final MethodCall methodCall) {
 		final String methodName = methodCall.getMethodName();
-		final MethodDeclaration method = cast(MethodDeclaration.class, this.getCurrentScope().get(methodName));
+		final MethodDeclaration method = cast(MethodDeclaration.class, this.getScopes().get(methodName));
 		
 		if (method != null) {
 			final String expectedSignature = getSignature(method.getParameterDeclarations());
@@ -427,7 +428,7 @@ public final class SemanticRules implements Visitor {
 		}
 		
 		final String methodName = methodCall.getMethodName();
-		final MethodDeclaration method = cast(MethodDeclaration.class, this.getCurrentScope().get(methodName));
+		final MethodDeclaration method = cast(MethodDeclaration.class, this.getScopes().get(methodName));
 		
 		if (method != null && method.getType().equals(void.class)) {
 			this.logError(methodCall.getMethodNameIdentifierRow(), methodCall.getMethodNameIdentifierColumn(),
@@ -443,16 +444,16 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule7(final ReturnStatement returnStatement) {
-		final AbstractTypedEntityDeclaration method = this.getCurrentScope().get(this.nameOfMethod);
+		final AbstractTypedEntityDeclaration method = this.getScopes().get(this.currentMethodName);
 		
 		if (method.getType() == void.class && returnStatement.getExpression() != null) {
 			this.logError(method.getTokenRow(), method.getTokenColumn(),
-					"The method " + this.nameOfMethod + " cannot have a return value");
+					"The method " + this.currentMethodName + " cannot have a return value");
 		}
 		
 		if (method.getType() != void.class && returnStatement.getExpression() == null) {
 			this.logError(method.getTokenRow(), method.getTokenColumn(),
-					"The method " + this.nameOfMethod + " needs to have a return value");
+					"The method " + this.currentMethodName + " needs to have a return value");
 		}
 	}
 	
@@ -464,12 +465,12 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule8(final ReturnStatement returnStatement) {
-		final AbstractTypedEntityDeclaration method = this.getCurrentScope().get(this.nameOfMethod);
+		final AbstractTypedEntityDeclaration method = this.getScopes().get(this.currentMethodName);
 		
 		if (method.getType() != void.class && returnStatement.getExpression() != null) {
 			if (method.getType() != returnStatement.getExpression().getType() ) {
 				this.logError(method.getTokenRow(), method.getTokenColumn(),
-						"The method " + this.nameOfMethod + " return type does not match the return value");
+						"The method " + this.currentMethodName + " return type does not match the return value");
 			}
 		}
 	}
@@ -488,8 +489,8 @@ public final class SemanticRules implements Visitor {
 					"Cannot used the reserved identifier Program as a variable");
 		}
 		
-		if (this.getCurrentScope().containsKey(identifier)) {
-			if (this.getCurrentScope().get(identifier).getClass().equals(MethodDeclaration.class)) {
+		if (this.getScopes().containsKey(identifier)) {
+			if (this.getScopes().get(identifier).getClass().equals(MethodDeclaration.class)) {
 				this.logError(identifierLocation.getTokenRow(), identifierLocation.getTokenColumn(),
 						"The method " + identifier + " cannot be used as a variable");
 			}
@@ -505,8 +506,8 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule10(final ArrayLocation location) {
-		if (this.getCurrentScope().containsKey(location.getIdentifier())) {
-			if (!this.getCurrentScope().get(location.getIdentifier()).getClass().equals(ArrayFieldDeclaration.class)) {
+		if (this.getScopes().containsKey(location.getIdentifier())) {
+			if (!this.getScopes().get(location.getIdentifier()).getClass().equals(ArrayFieldDeclaration.class)) {
 				this.logError(location.getTokenRow(), location.getTokenColumn(),
 						"The variable " + location.getIdentifier() + " is not an array type");
 			}
@@ -516,7 +517,7 @@ public final class SemanticRules implements Visitor {
 			if (location.getOffset().getClass().equals(MethodCallExpression.class)) {
 				final String methodName = ((MethodCallExpression) location.getOffset()).getMethodCall().getMethodName();
 				
-				if (!this.getCurrentScope().get(methodName).getType().equals(int.class)) {
+				if (!this.getScopes().get(methodName).getType().equals(int.class)) {
 					this.logError(location.getTokenRow(), location.getTokenColumn(),
 							"The array offset is not an int type");
 				}
@@ -691,8 +692,8 @@ public final class SemanticRules implements Visitor {
 		Class<?> locationType = null;
 		final Class<?> expressionType;
 		
-		if (this.getCurrentScope().containsKey(assignment.getLocation().getIdentifier())) {
-			locationType = this.getCurrentScope().get(assignment.getLocation().getIdentifier()).getType();
+		if (this.getScopes().containsKey(assignment.getLocation().getIdentifier())) {
+			locationType = this.getScopes().get(assignment.getLocation().getIdentifier()).getType();
 		}
 		
 		expressionType = assignment.getExpression().getType();
@@ -770,15 +771,11 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	private final void pushNewScope() {
-		if (this.scopes.isEmpty()) {
-			this.scopes.push(new LinkedHashMap<String, AbstractTypedEntityDeclaration>());
-		} else {
-			this.scopes.push(new LinkedHashMap<String, AbstractTypedEntityDeclaration>(this.getCurrentScope()));
-		}
+		this.getScopes().push();
 	}
 	
 	private final void popCurrentScope() {
-		this.scopes.pop();
+		this.getScopes().pop();
 	}
 	
 	/**
@@ -787,8 +784,8 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	private final Map<String, AbstractTypedEntityDeclaration> getCurrentScope() {
-		return this.scopes.peek();
+	private final NestingDictionary<String, AbstractTypedEntityDeclaration> getScopes() {
+		return this.scopes;
 	}
 	
 	/**
@@ -802,6 +799,136 @@ public final class SemanticRules implements Visitor {
 	 */
 	private static final String getSignature(final Iterable<?> parametersOrArguments) {
 		return "(" + join(",", invoke(invoke(parametersOrArguments, "getType"), "getSimpleName")) + ")";
+	}
+	
+	/**
+	 * 
+	 * @author codistmonk (creation 2010-08-20)
+	 *
+	 * @param <K> The type of the keys
+	 * @param <V> The type of the values
+	 */
+	public static final class NestingDictionary<K, V> {
+		
+		private final LinkedList<Map<K, V>> maps;
+		
+		private final Class<? extends Map<K, V>> mapClass;
+		
+		/**
+		 * 
+		 * @param mapClass
+		 * <br>Not null
+		 * <br>Shared
+		 * @throws RuntimeException If a new instance cannot be created using {@code this.mapClass}
+		 */
+		@SuppressWarnings("unchecked")
+		public NestingDictionary(final Class<? extends Map<?, ?>> mapClass) {
+			this.maps = new LinkedList<Map<K,V>>();
+			this.mapClass = (Class<? extends Map<K, V>>) mapClass;
+			
+			this.push();
+		}
+		
+		/**
+		 * 
+		 * @throws RuntimeException If a new instance cannot be created using {@code this.mapClass}
+		 */
+		public final void push() {
+			this.maps.push(newInstance(this.mapClass));
+		}
+		
+		public final void pop() {
+			this.maps.pop();
+		}
+		
+		/**
+		 * 
+		 * @param key
+		 * <br>Maybe null
+		 * @return
+		 * <br>Range: any boolean
+		 */
+		public final boolean containsLocalKey(final K key) {
+			return this.maps.get(0).containsKey(key);
+		}
+		
+		/**
+		 * 
+		 * @param key
+		 * <br>Maybe null
+		 * @return
+		 * <br>Range: any boolean
+		 */
+		public final boolean containsKey(final K key) {
+			for (final Map<K, V> map : this.maps) {
+				if (map.containsKey(key)) {
+					return true;
+				}
+			}
+			
+			return false;
+		}
+		
+		/**
+		 * 
+		 * @param key
+		 * <br>Maybe null
+		 * @return The value to which {@code key} is mapped, or {@code null} if the the local map contains no mapping for the key
+		 * <br>Maybe null
+		 * <br>Shared
+		 */
+		public final V getLocal(final K key) {
+			return this.maps.get(0).get(key);
+		}
+		
+		/**
+		 * 
+		 * @param key
+		 * <br>Maybe null
+		 * @return The value to which {@code key} is mapped, or {@code null} if there is no mapping for the key
+		 * <br>Maybe null
+		 * <br>Shared
+		 */
+		public final V get(final K key) {
+			for (final Map<K, V> map : this.maps) {
+				if (map.containsKey(key)) {
+					return map.get(key);
+				}
+			}
+			
+			return null;
+		}
+		
+		/**
+		 * 
+		 * @param key
+		 * <br>Maybe null
+		 * @param value
+		 * <br>Maybe null
+		 * <br>Shared
+		 */
+		public final void put(final K key, final V value) {
+			this.maps.peek().put(key, value);
+		}
+		
+		/**
+		 * 
+		 * @param <T> The result type
+		 * @param cls
+		 * <br>Not null
+		 * @return
+		 * <br>Not null
+		 * <br>New
+		 * @throws RuntimeException If a new instance cannot be created
+		 */
+		private static final <T> T newInstance(final Class<T> cls) {
+			try {
+				return cls.newInstance();
+			} catch (final Exception exception) {
+				throw unchecked(exception);
+			}
+		}
+		
 	}
 	
 }
