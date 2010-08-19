@@ -49,7 +49,6 @@ public final class SemanticRulesTest {
 	
 	@Test
 	public final void testRule2() {
-		
 		final Program program = parse(PROGRAM_WITH_UNDECLARED_IDENTIFIERS);
 		
 		program.accept(new SemanticRules());
@@ -254,7 +253,7 @@ public final class SemanticRulesTest {
 				), this.recorder.getMessages());
 	}
 	
-	//@Test
+	@Test
 	public final void testRule17() {
 		final Program program = parse(PROGRAM_WITH_UNARY_MINUS);
 		
@@ -265,6 +264,15 @@ public final class SemanticRulesTest {
 				"(:13:7) Unary minus expression is not an int type"
 				), this.recorder.getMessages());
 				
+	}
+	
+	@Test
+	public final void testProgramWithNoError() {
+		final Program program = parse(PROGRAM_WITH_NO_ERROR);
+		
+		program.accept(new SemanticRules());
+		
+		assertEquals(Arrays.asList(), this.recorder.getMessages());
 	}
 	
 	/**
@@ -397,7 +405,7 @@ public final class SemanticRulesTest {
 	
 	/**
 	 * {@value}.
-	 * */
+	 */
 	public static final String PROGRAM_WITH_VOID_METHOD_THAT_RETURNS_VALUE =
 		"class Program {\n" +
 		"\n" +
@@ -440,9 +448,11 @@ public final class SemanticRulesTest {
 		"		// Deliberatly left empty\n" +
 		"	}\n" +
 		"\n" +
-		"}"
-		;
+		"}";
 	
+	/**
+	 * {@value}.
+	 */
 	public static final String PROGRAM_WITH_IF_AND_WHILE_STATEMENTS = 
 		"class Program {\n" +
 		"\n" +
@@ -475,6 +485,9 @@ public final class SemanticRulesTest {
 		"\n" +
 		"}";
 	
+	/**
+	 * {@value}.
+	 */
 	public static final String PROGRAM_WITH_MISMATCH_ARITHMETIC_OPERATOR=
 		"class Program {\n" +
 		"\n" +
@@ -495,7 +508,10 @@ public final class SemanticRulesTest {
 		"	}\n" +
 		"\n" +
 		"}";
-
+	
+	/**
+	 * {@value}.
+	 */
 	public static final String PROGRAM_WITH_MANY_EQUALITY_STATEMENTS =
 		"class Program {\n" +
 		"\n" +
@@ -514,6 +530,9 @@ public final class SemanticRulesTest {
 		"\n" +
 		"}";
 	
+	/**
+	 * {@value}.
+	 */
 	public static final String PROGRAM_WITH_CONDITIONAL_OPERATORS_AND_NEGATION = 
 		"class Program {\n" +
 		"\n" +
@@ -536,6 +555,9 @@ public final class SemanticRulesTest {
 		"\n" +
 		"}";
 	
+	/**
+	 * {@value}.
+	 */
 	public static final String TEST_RULE_15 = 
 		"class Program {\n" +
 		"\n" +
@@ -560,6 +582,9 @@ public final class SemanticRulesTest {
 		"\n" +
 		"}";
 	
+	/**
+	 * {@value}.
+	 */
 	public static final String TEST_RULE_16 = 
 		"class Program {\n" +
 		"\n" +
@@ -584,6 +609,9 @@ public final class SemanticRulesTest {
 		"\n" +
 		"}";
 	
+	/**
+	 * {@value}.
+	 */
 	public static final String PROGRAM_WITH_METHOD_USED_AS_VARIABLE =
 		"class Program {\n" +
 		"\n" +
@@ -602,6 +630,9 @@ public final class SemanticRulesTest {
 		"\n" +
 		"}";
 	
+	/**
+	 * {@value}.
+	 */
 	public static final String PROGRAM_WITH_IMPROPER_USE_OF_ARRAY_VARIABLE = 
 		"class Program {\n" +
 		"	int a[2];\n" +
@@ -620,6 +651,9 @@ public final class SemanticRulesTest {
 		"\n" +
 		"}";
 	
+	/**
+	 * {@value}.
+	 */
 	public static final String PROGRAM_WITH_UNARY_MINUS = 
 		"class Program {\n" +
 		"	int x, y;\n" +
@@ -638,4 +672,27 @@ public final class SemanticRulesTest {
 		"	}\n" +
 		"\n" +
 		"}";
+	
+	/**
+	 * {@value}.
+	 */
+	public static final String PROGRAM_WITH_NO_ERROR =
+		"class Program {\n" +
+		"\n" +
+		"	void main() {\n" +
+		"		int main;\n" +
+		"\n" +
+		"		main = 0;\n" +
+		"\n" +
+		"		while (true) {\n" +
+		"			if (true) {" +
+		"				break;\n" +
+		"			}\n" +
+		"		}\n" +
+		"\n" +
+		"		return;" +
+		"	}\n" +
+		"\n" +
+		"}";
+	
 }

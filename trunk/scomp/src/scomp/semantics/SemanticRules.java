@@ -6,7 +6,6 @@ import java.util.Deque;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -52,6 +51,8 @@ import scomp.ir.WhileStatement;
  * This is the visitor responsible for checking the Decaf semantic rules.
  * 
  * @author codistmonk (creation 2010-07-28)
+ * @author Wilson
+ * @author js94065
  *
  */
 public final class SemanticRules implements Visitor {
@@ -141,7 +142,6 @@ public final class SemanticRules implements Visitor {
 		block.getBlock().accept(this);
 	}
 	
-	
 	@Override
 	public final void visit(final AssignmentStatement assignment) {
 		assignment.getLocation().accept(this);
@@ -158,7 +158,6 @@ public final class SemanticRules implements Visitor {
 		if (returnStatement.getExpression() != null) {
 			returnStatement.getExpression().accept(this);
 		}
-		
 	}
 	
 	@Override
@@ -168,7 +167,7 @@ public final class SemanticRules implements Visitor {
 		
 		location.getOffset().accept(this);
 	}
-
+	
 	@Override
 	public final void visit(final IdentifierLocation location) {
 		this.checkRule2(location);
@@ -177,8 +176,7 @@ public final class SemanticRules implements Visitor {
 	
 	@Override
 	public final void visit(final IntLiteral literal) {
-		// TODO
-		debugPrint("TODO");
+		// Do nothing
 	}
 	
 	@Override
@@ -214,22 +212,20 @@ public final class SemanticRules implements Visitor {
 	public final void visit(final BinaryOperationExpression operation) {
 		// for locations and method calls we must get set the type using 
 		// the scopes
-		
 		operation.getLeft().accept(this);
 		operation.getRight().accept(this);
 		
 		this.checkRule12(operation);
 		this.checkRule13(operation);
 		this.checkRule14(operation);
-		
 	}
 	
-
 	@Override
-	public void visit(MinusExpression minusExpression) {
+	public final void visit(final MinusExpression minusExpression) {
 		// visit child first, then we can use the child's
 		// type as the expression's type.
 		minusExpression.getExpression().accept(this);
+		
 		this.checkRule17(minusExpression);
 	}
 	
@@ -237,7 +233,6 @@ public final class SemanticRules implements Visitor {
 	public final void visit(final NegationExpression operation) {
 		// visit child first, then we can use the child's
 		// type as the expression's type.
-		
 	    operation.getExpression().accept(this);
 	    
 		this.checkRule14(operation);
@@ -245,15 +240,15 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	@Override
-	public void visit(LiteralExpression literalExpression) {
-		// TODO Auto-generated method stub
-		
+	public final void visit(final LiteralExpression literalExpression) {
+		// Do nothing
 	}
 	
 	@Override
 	public final void visit(final MethodCallExpression methodCallExpression) {
 		// Set MethodCallExpression types
-		String identifier = methodCallExpression.getMethodCall().getMethodName();
+		final String identifier = methodCallExpression.getMethodCall().getMethodName();
+		
 		if (this.getCurrentScope().containsKey(identifier)) {
 			methodCallExpression.setType(this.getCurrentScope().get(identifier).getType());
 		}
@@ -263,12 +258,11 @@ public final class SemanticRules implements Visitor {
 		methodCallExpression.getMethodCall().accept(this);
 	}
 	
-	
 	@Override
 	public final void visit(final LocationExpression location) {
-		
 		// Set LocationExpression types
-		String identifier = location.getLocation().getIdentifier();
+		final String identifier = location.getLocation().getIdentifier();
+		
 		if (this.getCurrentScope().containsKey(identifier)) {
 			location.setType(this.getCurrentScope().get(identifier).getType());
 		}
@@ -286,8 +280,48 @@ public final class SemanticRules implements Visitor {
 		}
 	}
 	
+	@Override
+	public final void visit(final BreakStatement breakStatement) {
+		checkRule16(breakStatement);
+	}
+	
+	@Override
+	public final void visit(final ContinueStatement continueStatement) {
+		checkRule16(continueStatement);
+	}
+	
+	@Override
+	public final void visit(final BooleanLiteral booleanLiteral) {
+		// Do nothing
+	}
+	
+	@Override
+	public final void visit(final CharLiteral charLiteral) {
+		// Do nothing
+	}
+	
+	@Override
+	public final void visit(final ExpressionCalloutArgument expressionCalloutArgument) {
+		// Do nothing
+	}
+	
+	@Override
+	public final void visit(final MethodCallStatement methodCallStatement) {
+		methodCallStatement.getMethodCall().accept(this);
+	}
+	
+	@Override
+	public final void visit(final MethodCallout methodCallout) {
+		// Do nothing
+	}
+	
+	@Override
+	public final void visit(final StringCalloutArgument stringCalloutArgument) {
+		// Do nothing
+	}
 	
 	/**
+	 * Rule: No identifier is declared twice in the same scope.
 	 * 
 	 * @param entity
 	 * <br>Not null
@@ -302,6 +336,7 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	/**
+	 * Rule: No identifier is used before it is declared.
 	 * 
 	 * @param location
 	 * <br>Not null
@@ -314,6 +349,7 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	/**
+	 * Rule: No identifier is used before it is declared.
 	 * 
 	 * @param methodCall
 	 * <br>Not null
@@ -326,6 +362,8 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	/**
+	 * Rule: The program contains a definition for a method called main that has no parameters
+	 * (note that since execution starts at method main, any methods defined after main will never be executed).
 	 * 
 	 * @param program
 	 * <br>Not null
@@ -340,6 +378,7 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	/**
+	 * Rule: The &lt;int_literal> in an array declaration must be greater than 0.
 	 * 
 	 * @param field
 	 * <br>Not null
@@ -352,6 +391,8 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	/**
+	 * Rule: The number and types of arguments in a method call must be the same as the number and types of the formals
+	 * i.e., the signatures must be identical.
 	 * 
 	 * @param methodCall
 	 * <br>Not null
@@ -373,6 +414,7 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	/**
+	 * Rule: If a method call is used as an expression, the method must return a result.
 	 * 
 	 * @param methodCallExpression
 	 * <br>Not null
@@ -394,34 +436,38 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	/**
+	 * Rule: A return statement must not have a return value unless it appears in the body of a method
+	 * that is declared to return a value.
 	 * 
 	 * @param returnStatement
-	 * <br> not null
+	 * <br>Not null
 	 */
 	private final void checkRule7(final ReturnStatement returnStatement) {
-		AbstractTypedEntityDeclaration method = this.getCurrentScope().get(this.nameOfMethod);
+		final AbstractTypedEntityDeclaration method = this.getCurrentScope().get(this.nameOfMethod);
 		
-		if( (method.getType() == void.class) && (returnStatement.getExpression() != null) ) {
+		if (method.getType() == void.class && returnStatement.getExpression() != null) {
 			this.logError(method.getTokenRow(), method.getTokenColumn(),
 					"The method " + this.nameOfMethod + " cannot have a return value");
 		}
 		
-		if( (method.getType() != void.class) && (returnStatement.getExpression() == null) ) {
+		if (method.getType() != void.class && returnStatement.getExpression() == null) {
 			this.logError(method.getTokenRow(), method.getTokenColumn(),
 					"The method " + this.nameOfMethod + " needs to have a return value");
 		}
 	}
 	
 	/**
+	 * Rule: The expression in a return statement must have the same type as the declared result type
+	 * of the enclosing method definition.
 	 * 
 	 * @param returnStatement
-	 * <br> not null
+	 * <br>Not null
 	 */
 	private final void checkRule8(final ReturnStatement returnStatement) {
-		AbstractTypedEntityDeclaration method = this.getCurrentScope().get(this.nameOfMethod);
+		final AbstractTypedEntityDeclaration method = this.getCurrentScope().get(this.nameOfMethod);
 		
-		if( (method.getType() != void.class) && (returnStatement.getExpression() != null) ) {
-			if( method.getType() != returnStatement.getExpression().getType() ) {
+		if (method.getType() != void.class && returnStatement.getExpression() != null) {
+			if (method.getType() != returnStatement.getExpression().getType() ) {
 				this.logError(method.getTokenRow(), method.getTokenColumn(),
 						"The method " + this.nameOfMethod + " return type does not match the return value");
 			}
@@ -429,52 +475,55 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	/**
-	 * @param location
-	 * <br> not null
+	 * Rule: An &lt;id> used as a &lt;location> must name a declared local/global variable or formal parameter.
+	 * 
+	 * @param identifierLocation
+	 * <br>Not null
 	 */
-	private final void checkRule9(IdentifierLocation identifierLocation) {
-		String identifier = identifierLocation.getIdentifier();
+	private final void checkRule9(final IdentifierLocation identifierLocation) {
+		final String identifier = identifierLocation.getIdentifier();
 		
-		if(identifier.equals("Program")) {
+		if (identifier.equals("Program")) {
 			this.logError(identifierLocation.getTokenRow(), identifierLocation.getTokenColumn(),
 					"Cannot used the reserved identifier Program as a variable");
 		}
 		
-		if(this.getCurrentScope().containsKey(identifier)) {
-			if(this.getCurrentScope().get(identifier).getClass().equals(MethodDeclaration.class)) {
+		if (this.getCurrentScope().containsKey(identifier)) {
+			if (this.getCurrentScope().get(identifier).getClass().equals(MethodDeclaration.class)) {
 				this.logError(identifierLocation.getTokenRow(), identifierLocation.getTokenColumn(),
 						"The method " + identifier + " cannot be used as a variable");
 			}
 		}
-		
 	}
 	
 	/**
+	 * Rule: For all locations of the form &lt;id>[&lt;expr>]
+	 * <br>(a) &lt;id> must be an array variable, and
+	 * <br>(b) the type of &lt;expr> must be int.
+	 * 
 	 * @param location
-	 * <br> not null
+	 * <br>Not null
 	 */
-	private final void checkRule10(ArrayLocation location) {
-
-		if(this.getCurrentScope().containsKey(location.getIdentifier())) {
-			
-			if(!this.getCurrentScope().get(location.getIdentifier()).getClass().equals(ArrayFieldDeclaration.class)) {
+	private final void checkRule10(final ArrayLocation location) {
+		if (this.getCurrentScope().containsKey(location.getIdentifier())) {
+			if (!this.getCurrentScope().get(location.getIdentifier()).getClass().equals(ArrayFieldDeclaration.class)) {
 				this.logError(location.getTokenRow(), location.getTokenColumn(),
 						"The variable " + location.getIdentifier() + " is not an array type");
 			}
 			
 			/* TODO temporary solution when getOffset() returns a MethodCallExpression.getType() == null 
 			 */ 
-			if(location.getOffset().getClass().equals(MethodCallExpression.class)) {
-				String methodName = ((MethodCallExpression)location.getOffset()).getMethodCall().getMethodName();
-				if(!this.getCurrentScope().get(methodName).getType().equals(int.class)) {
+			if (location.getOffset().getClass().equals(MethodCallExpression.class)) {
+				final String methodName = ((MethodCallExpression) location.getOffset()).getMethodCall().getMethodName();
+				
+				if (!this.getCurrentScope().get(methodName).getType().equals(int.class)) {
 					this.logError(location.getTokenRow(), location.getTokenColumn(),
-						"The array offset is not an int type");
+							"The array offset is not an int type");
 				}
-			}
-			else {
-				if(!location.getOffset().getType().equals(int.class)) {
+			} else {
+				if (!location.getOffset().getType().equals(int.class)) {
 					this.logError(location.getTokenRow(), location.getTokenColumn(),
-						"The array offset is not an int type");
+							"The array offset is not an int type");
 				}
 			}
 		}
@@ -488,14 +537,16 @@ public final class SemanticRules implements Visitor {
 	 */
 	
 	/**
+	 * Rule: The &lt;expr> in if and while statements must have type boolean.
 	 * 
 	 * @param ifStatement
-	 * <br> not null
+	 * <br>Not null
 	 */
 	private final void checkRule11(final IfStatement ifStatement) {
-		if (ifStatement.getCondition().getType()==null) {
+		if (ifStatement.getCondition().getType() == null) {
 			return;
 		}
+		
 		if (!boolean.class.equals(ifStatement.getCondition().getType())) {
 			this.logError(ifStatement.getTokenRow(), ifStatement.getTokenColumn(),
 					"If condition should have type boolean.");
@@ -504,14 +555,16 @@ public final class SemanticRules implements Visitor {
 	
 	
 	/**
+	 * Rule: The &lt;expr> in if and while statements must have type boolean.
 	 * 
 	 * @param whileStatement
-	 * <br> not null
+	 * <br>Not null
 	 */
 	private final void checkRule11(final WhileStatement whileStatement) {
-		if (whileStatement.getCondition().getType()==null) {
+		if (whileStatement.getCondition().getType() == null) {
 			return;
 		}
+		
 		if (!boolean.class.equals(whileStatement.getCondition().getType())) {
 			this.logError(whileStatement.getTokenRow(), whileStatement.getTokenColumn(),
 					"While condition should have type boolean.");
@@ -519,12 +572,13 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	/**
+	 * Rule: The operands of &lt;arith_op>s and &lt;rel_op>s must have type int.
 	 * 
 	 * @param operation
-	 * <br> not null
+	 * <br>Not null
 	 */
-	private final void checkRule12(BinaryOperationExpression operation) {
-		if ( operation.getOperator().equals("+") ||
+	private final void checkRule12(final BinaryOperationExpression operation) {
+		if (operation.getOperator().equals("+") ||
 				operation.getOperator().equals("-") ||
 				operation.getOperator().equals("*") ||
 				operation.getOperator().equals("/") ||
@@ -545,6 +599,7 @@ public final class SemanticRules implements Visitor {
 							"Operand of arithmetic and relational operations must have type int.");
 				}
 			}
+			
 			if (operation.getRight().getType() != null) {
 				if (!operation.getRight().getType().equals(int.class)) {
 					this.logError(operation.getRight().getTokenRow(), operation.getRight().getTokenColumn(),
@@ -556,21 +611,22 @@ public final class SemanticRules implements Visitor {
 	
 	
 	/**
+	 * Rule: The operands of &lt;eq_op>s must have the same type, either int or boolean.
 	 * 
 	 * @param operation
-	 * <br> not null
+	 * <br>Not null
 	 */
-	private final void checkRule13(BinaryOperationExpression operation) {
-		if (operation.getLeft().getType()==null || operation.getRight().getType()==null) {
+	private final void checkRule13(final BinaryOperationExpression operation) {
+		if (operation.getLeft().getType() == null || operation.getRight().getType() == null) {
 			return;
 		}
-		if ( operation.getOperator().equals("==") ||
-				operation.getOperator().equals("!=") ) {
+		
+		if (operation.getOperator().equals("==") ||
+				operation.getOperator().equals("!=")) {
 			if (int.class.equals(operation.getLeft().getType()) && 
 					int.class.equals(operation.getRight().getType())) {
 				// do nothing
-			} 
-			else if (boolean.class.equals(operation.getLeft().getType()) && 
+			} else if (boolean.class.equals(operation.getLeft().getType()) && 
 					boolean.class.equals(operation.getRight().getType())) {
 				// do nothing
 			} else {
@@ -582,13 +638,14 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	/**
+	 * Rule: The operands of &lt;cond_op>s and the operand of logical not (!) must have type boolean.
 	 * 
 	 * @param operation
-	 * <br> not null
+	 * <br>Not null
 	 */
-	private final void checkRule14(BinaryOperationExpression operation) {
-		if ( operation.getOperator().equals("&&") ||
-				operation.getOperator().equals("||") ) {
+	private final void checkRule14(final BinaryOperationExpression operation) {
+		if (operation.getOperator().equals("&&") ||
+				operation.getOperator().equals("||")) {
 			// first if is for rule 2 compatibility
 			// second if is for the actual type check 
 			if (operation.getLeft().getType() != null) {
@@ -597,6 +654,7 @@ public final class SemanticRules implements Visitor {
 							"Operand of conditional operations must have type boolean.");
 				} 
 			}
+			
 			if (operation.getRight().getType() != null) {
 				if (!boolean.class.equals(operation.getRight().getType()) ) { 
 					this.logError(operation.getRight().getTokenRow(), operation.getRight().getTokenColumn(),
@@ -607,14 +665,16 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	/**
+	 * Rule: The operands of &lt;cond_op>s and the operand of logical not (!) must have type boolean.
 	 * 
 	 * @param negation
-	 * <br> not null
+	 * <br>Not null
 	 */
-	private final void checkRule14(NegationExpression negation) {
+	private final void checkRule14(final NegationExpression negation) {
 		if (negation.getExpression().getType() == null) {
 			return;
 		}
+		
 		if (!boolean.class.equals(negation.getExpression().getType())) {
 			this.logError(negation.getTokenRow(), negation.getTokenColumn(),
 					"Operand of negation operations must have type boolean.");
@@ -622,56 +682,70 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	/**
+	 * Rule: The &lt;location> and the &lt;expr> in an assignment, &lt;location> = &lt;expr>, must have the same type.
 	 * 
 	 * @param assignment
-	 * <br> not null
+	 * <br>Not null
 	 */
-	private final void checkRule15(AssignmentStatement assignment) {
+	private final void checkRule15(final AssignmentStatement assignment) {
 		Class<?> locationType = null;
-		Class<?> expressionType = null;
+		final Class<?> expressionType;
+		
 		if (this.getCurrentScope().containsKey(assignment.getLocation().getIdentifier())) {
 			locationType = this.getCurrentScope().get(assignment.getLocation().getIdentifier()).getType();
 		}
+		
 		expressionType = assignment.getExpression().getType();
 		
-		if (locationType==null || expressionType == null) {
+		if (locationType == null || expressionType == null) {
 			// if null -> rule 2 violation 
 			return;
 		}
-		else if (!locationType.equals(expressionType)) {
+		
+		if (!locationType.equals(expressionType)) {
 			this.logError(assignment.getTokenRow(), assignment.getTokenColumn(),
 					"Assignment location and expression have different types.");
 		}
-		
 	}
 	
-	private final void checkRule16(BreakStatement breakStatement) {
-		if (breakStatement.getLoop()==null) {
+	/**
+	 * Rule: All break and continue statements must be contained within the body of a loop.
+	 * 
+	 * @param breakStatement
+	 * <br>Not null
+	 */
+	private final void checkRule16(final BreakStatement breakStatement) {
+		if (breakStatement.getLoop() == null) {
 			this.logError(breakStatement.getTokenRow(), breakStatement.getTokenColumn(),
 					"Break statement is not contained within the body of a loop.");
 		}
 	}
 	
-	private final void checkRule16(ContinueStatement continueStatement) {
-		if (continueStatement.getLoop()==null) {
+	/**
+	 * Rule: All break and continue statements must be contained within the body of a loop.
+	 * 
+	 * @param continueStatement
+	 * <br>Not null
+	 */
+	private final void checkRule16(final ContinueStatement continueStatement) {
+		if (continueStatement.getLoop() == null) {
 			this.logError(continueStatement.getTokenRow(), continueStatement.getTokenColumn(),
 					"Continue statement is not contained within the body of a loop.");
 		}
 	}
 	
 	/**
+	 * Rule: The operand of the unary minus (-) must have type int.
 	 * 
 	 * @param minusExpression
-	 * <br> not null
+	 * <br>Not null
 	 */
-	private final void checkRule17(MinusExpression minusExpression) {
-		if(!minusExpression.getExpression().getType().equals(int.class)) {
-			this.logError(minusExpression.getTokenRow(), 
-					minusExpression.getTokenColumn(),
+	private final void checkRule17(final MinusExpression minusExpression) {
+		if (!minusExpression.getExpression().getType().equals(int.class)) {
+			this.logError(minusExpression.getTokenRow(), minusExpression.getTokenColumn(),
 					"Unary minus expression is not an int type");
 		}
 	}
-	
 	
 	/**
 	 * 
@@ -728,53 +802,6 @@ public final class SemanticRules implements Visitor {
 	 */
 	private static final String getSignature(final Iterable<?> parametersOrArguments) {
 		return "(" + join(",", invoke(invoke(parametersOrArguments, "getType"), "getSimpleName")) + ")";
-	}
-	
-
-	@Override
-	public void visit(BreakStatement breakStatement) {
-		checkRule16(breakStatement);
-	}
-
-	@Override
-	public void visit(ContinueStatement continueStatement) {
-		checkRule16(continueStatement);
-	}
-
-	
-	@Override
-	public void visit(BooleanLiteral booleanLiteral) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void visit(CharLiteral charLiteral) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void visit(ExpressionCalloutArgument expressionCalloutArgument) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void visit(MethodCallStatement methodCallStatement) {
-		methodCallStatement.getMethodCall().accept(this);
-	}
-
-	@Override
-	public void visit(MethodCallout methodCallout) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void visit(StringCalloutArgument stringCalloutArgument) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 }

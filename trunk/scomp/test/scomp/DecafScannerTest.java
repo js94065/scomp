@@ -1,13 +1,13 @@
 package scomp;
 
 import static scomp.DecafParserSymbols.*;
+import static scomp.Tools.createScanner;
 
 import static org.junit.Assert.assertArrayEquals;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -222,18 +222,6 @@ public class DecafScannerTest {
 	 */
 	public static final DecafToken token(final int symbolId) {
 		return token(symbolId, null);
-	}
-	
-	/**
-	 * 
-	 * @param input
-	 * <br>Should not be null
-	 * @return
-	 * <br>A non-null value
-	 * <br>A new value
-	 */
-	public static final Yylex createScanner(final String input) {
-		return new Yylex(new ByteArrayInputStream(input.getBytes()));
 	}
 	
 }

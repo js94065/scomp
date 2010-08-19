@@ -146,25 +146,75 @@ public interface Visitor {
 	 * <br>Not null
 	 */
 	public abstract void visit(NegationExpression negation);
-
+	
+	/**
+	 * 
+	 * @param booleanLiteral
+	 * <br>Not null
+	 */
 	public abstract void visit(BooleanLiteral booleanLiteral);
-
+	
+	/**
+	 * 
+	 * @param breakStatement
+	 * <br>Not null
+	 */
 	public abstract void visit(BreakStatement breakStatement);
-
+	
+	/**
+	 * 
+	 * @param charLiteral
+	 * <br>Not null
+	 */
 	public abstract void visit(CharLiteral charLiteral);
-
+	
+	/**
+	 * 
+	 * @param continueStatement
+	 * <br>Not null
+	 */
 	public abstract void visit(ContinueStatement continueStatement);
-
+	
+	/**
+	 * 
+	 * @param expressionCalloutArgument
+	 * <br>Not null
+	 */
 	public abstract void visit(ExpressionCalloutArgument expressionCalloutArgument);
-
+	
+	/**
+	 * 
+	 * @param literalExpression
+	 * <br>Not null
+	 */
 	public abstract void visit(LiteralExpression literalExpression);
-
+	
+	/**
+	 * 
+	 * @param methodCallStatement
+	 * <br>Not null
+	 */
 	public abstract void visit(MethodCallStatement methodCallStatement);
-
+	
+	/**
+	 * 
+	 * @param methodCallout
+	 * <br>Not null
+	 */
 	public abstract void visit(MethodCallout methodCallout);
-
+	
+	/**
+	 * 
+	 * @param minusExpression
+	 * <br>Not null
+	 */
 	public abstract void visit(MinusExpression minusExpression);
-
+	
+	/**
+	 * 
+	 * @param stringCalloutArgument
+	 * <br>Not null
+	 */
 	public abstract void visit(StringCalloutArgument stringCalloutArgument);
-
+	
 }
