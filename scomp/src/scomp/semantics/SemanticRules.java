@@ -12,6 +12,7 @@ import scomp.DecafParser;
 import scomp.ir.AbstractExpression;
 import scomp.ir.AbstractFieldDeclaration;
 import scomp.ir.AbstractLocation;
+import scomp.ir.AbstractNode;
 import scomp.ir.AbstractStatement;
 import scomp.ir.AbstractTypedEntityDeclaration;
 import scomp.ir.ArrayFieldDeclaration;
@@ -56,7 +57,7 @@ import scomp.ir.WhileStatement;
  */
 public final class SemanticRules implements Visitor {
 	
-	private final NestingDictionary<String, AbstractTypedEntityDeclaration> scopes;
+	private final NestingDictionary<String, AbstractNode> scopes;
 	
 	private final Logger logger;
 	
@@ -66,7 +67,7 @@ public final class SemanticRules implements Visitor {
 	
 	@SuppressWarnings("unchecked")
 	public SemanticRules() {
-		this.scopes = new NestingDictionary<String, AbstractTypedEntityDeclaration>((Class<? extends Map<?, ?>>) LinkedHashMap.class);
+		this.scopes = new NestingDictionary<String, AbstractNode>((Class<? extends Map<?, ?>>) LinkedHashMap.class);
 		this.logger = Logger.getLogger(DecafParser.class.getName());
 		this.methodScope = false;
 	}
@@ -258,7 +259,7 @@ public final class SemanticRules implements Visitor {
 		final String identifier = methodCallExpression.getMethodCall().getMethodName();
 		
 		if (this.getScopes().containsKey(identifier)) {
-			methodCallExpression.setType(this.getScopes().get(identifier).getType());
+			methodCallExpression.setType(this.getType(identifier));
 		}
 		
 		this.checkRule6(methodCallExpression);
@@ -272,7 +273,7 @@ public final class SemanticRules implements Visitor {
 		final String identifier = location.getLocation().getIdentifier();
 		
 		if (this.getScopes().containsKey(identifier)) {
-			location.setType(this.getScopes().get(identifier).getType());
+			location.setType(this.getType(identifier));
 		}
 		
 		location.getLocation().accept(this);
@@ -451,7 +452,7 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule7(final ReturnStatement returnStatement) {
-		final AbstractTypedEntityDeclaration method = this.getScopes().get(this.currentMethodName);
+		final AbstractTypedEntityDeclaration method = (AbstractTypedEntityDeclaration) this.getScopes().get(this.currentMethodName);
 		
 		if (method.getType() == void.class && returnStatement.getExpression() != null) {
 			this.logError(method.getTokenRow(), method.getTokenColumn(),
@@ -472,7 +473,7 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule8(final ReturnStatement returnStatement) {
-		final AbstractTypedEntityDeclaration method = this.getScopes().get(this.currentMethodName);
+		final AbstractTypedEntityDeclaration method = (AbstractTypedEntityDeclaration) this.getScopes().get(this.currentMethodName);
 		
 		if (method.getType() != void.class && returnStatement.getExpression() != null) {
 			if (method.getType() != returnStatement.getExpression().getType() ) {
@@ -524,7 +525,7 @@ public final class SemanticRules implements Visitor {
 			if (location.getOffset().getClass().equals(MethodCallExpression.class)) {
 				final String methodName = ((MethodCallExpression) location.getOffset()).getMethodCall().getMethodName();
 				
-				if (!this.getScopes().get(methodName).getType().equals(int.class)) {
+				if (!this.getType(methodName).equals(int.class)) {
 					this.logError(location.getTokenRow(), location.getTokenColumn(),
 							"The array offset is not an int type");
 				}
@@ -700,7 +701,7 @@ public final class SemanticRules implements Visitor {
 		final Class<?> expressionType;
 		
 		if (this.getScopes().containsKey(assignment.getLocation().getIdentifier())) {
-			locationType = this.getScopes().get(assignment.getLocation().getIdentifier()).getType();
+			locationType = this.getType(assignment.getLocation().getIdentifier());
 		}
 		
 		expressionType = assignment.getExpression().getType();
@@ -791,8 +792,20 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	private final NestingDictionary<String, AbstractTypedEntityDeclaration> getScopes() {
+	private final NestingDictionary<String, AbstractNode> getScopes() {
 		return this.scopes;
+	}
+	
+	/**
+	 * 
+	 * @param identifier
+	 * <br>Maybe null
+	 * @return
+	 * <br>Maybe null
+	 * <br>Shared
+	 */
+	private final Class<?> getType(final String identifier) {
+		return ((AbstractTypedEntityDeclaration) this.getScopes().get(identifier)).getType();
 	}
 	
 	/**
