@@ -168,12 +168,12 @@ public final class SemanticRulesTest {
 		program.accept(new SemanticRules());
 		
 		assertEquals(Arrays.asList(
-				"(:6:3) If condition should have type boolean.",
-				"(:12:3) If condition should have type boolean.",
-				"(:15:3) While condition should have type boolean.",
-				"(:21:3) While condition should have type boolean.",
-				"(:23:7) Undeclared identifier u",
-				"(:25:10) Undeclared identifier u"
+				"(:7:3) If condition should have type boolean.",
+				"(:13:3) If condition should have type boolean.",
+				"(:16:3) While condition should have type boolean.",
+				"(:22:3) While condition should have type boolean.",
+				"(:24:7) Undeclared identifier u",
+				"(:26:10) Undeclared identifier u"
 				), this.recorder.getMessages());
 				
 	}
@@ -185,12 +185,12 @@ public final class SemanticRulesTest {
 		program.accept(new SemanticRules());
 		
 		assertEquals(Arrays.asList(
-				"(:8:7) Operand of arithmetic and relational operations must have type int.",
-				"(:9:11) Operand of arithmetic and relational operations must have type int.",
-				"(:10:7) Undeclared identifier u",
-				"(:10:11) Undeclared identifier u",
+				"(:9:7) Operand of arithmetic and relational operations must have type int.",
+				"(:10:11) Operand of arithmetic and relational operations must have type int.",
 				"(:11:7) Undeclared identifier u",
-				"(:11:11) Operand of arithmetic and relational operations must have type int."
+				"(:11:11) Undeclared identifier u",
+				"(:12:7) Undeclared identifier u",
+				"(:12:11) Operand of arithmetic and relational operations must have type int."
 				), this.recorder.getMessages());
 	}
 
@@ -201,10 +201,10 @@ public final class SemanticRulesTest {
 		program.accept(new SemanticRules());
 		
 		assertEquals(Arrays.asList(
-				"(:5:7) Operand of equality operations must have same type, either int or boolean.",
 				"(:6:7) Operand of equality operations must have same type, either int or boolean.",
 				"(:7:7) Operand of equality operations must have same type, either int or boolean.",
-				"(:8:7) Undeclared identifier u"
+				"(:8:7) Operand of equality operations must have same type, either int or boolean.",
+				"(:9:7) Undeclared identifier u"
 				), this.recorder.getMessages());
 	}
 	
@@ -215,15 +215,15 @@ public final class SemanticRulesTest {
 		program.accept(new SemanticRules());
 		
 		assertEquals(Arrays.asList(
-				"(:5:7) Operand of conditional operations must have type boolean.",
 				"(:6:7) Operand of conditional operations must have type boolean.",
-				"(:7:7) Operand of negation operations must have type boolean.",
-				"(:8:7) Operand of conditional operations must have type boolean.",
-				"(:9:15) Operand of conditional operations must have type boolean.",
-				"(:10:7) Operand of negation operations must have type boolean.",
-				"(:11:7) Undeclared identifier u",
-				"(:11:12) Undeclared identifier u",
-				"(:12:8) Undeclared identifier u"
+				"(:7:7) Operand of conditional operations must have type boolean.",
+				"(:8:7) Operand of negation operations must have type boolean.",
+				"(:9:7) Operand of conditional operations must have type boolean.",
+				"(:10:15) Operand of conditional operations must have type boolean.",
+				"(:11:7) Operand of negation operations must have type boolean.",
+				"(:12:7) Undeclared identifier u",
+				"(:12:12) Undeclared identifier u",
+				"(:13:8) Undeclared identifier u"
 				), this.recorder.getMessages());
 	}
 	
@@ -234,10 +234,10 @@ public final class SemanticRulesTest {
 		program.accept(new SemanticRules());
 		
 		assertEquals(Arrays.asList(
-				"(:11:3) Assignment location and expression have different types.",
 				"(:12:3) Assignment location and expression have different types.",
-				"(:13:7) Undeclared identifier u",
-				"(:14:3) Undeclared identifier u"
+				"(:13:3) Assignment location and expression have different types.",
+				"(:14:7) Undeclared identifier u",
+				"(:15:3) Undeclared identifier u"
 				), this.recorder.getMessages());
 	}
 	
@@ -248,8 +248,8 @@ public final class SemanticRulesTest {
 		program.accept(new SemanticRules());
 		
 		assertEquals(Arrays.asList(
-				"(:8:3) Break statement is not contained within the body of a loop.",
-				"(:12:3) Continue statement is not contained within the body of a loop."
+				"(:10:3) Break statement is not contained within the body of a loop.",
+				"(:15:3) Continue statement is not contained within the body of a loop."
 				), this.recorder.getMessages());
 	}
 	
@@ -435,6 +435,7 @@ public final class SemanticRulesTest {
 		"	void main() {\n" +
 		"		int x;\n" +
 		"		boolean y;\n" +
+		"		y = false;\n" +
 		"		if (x) {\n" +
 		"		}\n" +
 		"		if (y) {\n" +
@@ -462,6 +463,7 @@ public final class SemanticRulesTest {
 	
 	public static final String PROGRAM_WITH_MISMATCH_ARITHMETIC_OPERATOR=
 		"class Program {\n" +
+		"\n" +
 		"	boolean f() {\n" +
 		"		int x,y;\n" +
 		"		boolean z;\n" +
@@ -482,6 +484,7 @@ public final class SemanticRulesTest {
 
 	public static final String PROGRAM_WITH_MANY_EQUALITY_STATEMENTS =
 		"class Program {\n" +
+		"\n" +
 		"	boolean f() {\n" +
 		"		boolean x,y,z;\n" +
 		"		x = 3 == 2;\n" +
@@ -499,6 +502,7 @@ public final class SemanticRulesTest {
 	
 	public static final String PROGRAM_WITH_CONDITIONAL_OPERATORS_AND_NEGATION = 
 		"class Program {\n" +
+		"\n" +
 		"	boolean f() {\n" +
 		"		boolean x;\n" +
 		"		int a;\n" +
@@ -520,6 +524,7 @@ public final class SemanticRulesTest {
 	
 	public static final String TEST_RULE_15 = 
 		"class Program {\n" +
+		"\n" +
 		"	boolean f() {\n" +
 		"		boolean x,y;\n" +
 		"		int a,b;\n" +
@@ -543,15 +548,17 @@ public final class SemanticRulesTest {
 	
 	public static final String TEST_RULE_16 = 
 		"class Program {\n" +
+		"\n" +
 		"	boolean f() {\n" +
 		"		int a;\n" +
 		"		a=0;\n" +
 		"		while (a<3) {\n" +
+		"			a=a+1;\n" +
 		"			break;\n" +
 		"		}\n" +
 		"		break;\n" +
 		"		while (a<3) {\n" +
-		"			a=a+1;" +
+		"			a=a+1;\n" +
 		"			continue;\n" +
 		"		}\n" +
 		"		continue;\n" +
