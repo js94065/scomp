@@ -37,13 +37,9 @@ public final class SemanticRulesTest {
 		program.accept(new SemanticRules());
 		
 		assertEquals(Arrays.asList(
-				"(:5:9) Duplicate identifier y",
-				"(:7:10) Duplicate identifier x",
 				"(:9:7) Duplicate identifier x",
 				"(:9:24) Duplicate identifier z",
-				"(:10:11) Duplicate identifier a",
-				"(:17:12) Duplicate identifier y",
-				"(:17:15) Duplicate identifier main"
+				"(:10:11) Duplicate identifier a"
 		), this.recorder.getMessages());
 	}
 	
@@ -288,14 +284,14 @@ public final class SemanticRulesTest {
 		"	boolean x[1];\n" +
 		"\n" +
 		"	void x(int z, boolean z, int a) {\n" +
-		"		boolean a, b;\n" +
+		"		boolean a, b, x;\n" +
 		"	}\n" +
 		"\n" +
 		"	void main() {\n" +
 		"		boolean a, b;\n" +
 		"\n" +
 		"		{\n" +
-		"			boolean y, main;\n" +
+		"			boolean y, main, a;\n" +
 		"		}\n" +
 		"	}\n" +
 		"\n" +
