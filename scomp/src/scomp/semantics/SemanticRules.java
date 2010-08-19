@@ -74,7 +74,7 @@ public final class SemanticRules implements Visitor {
 	
 	@Override 
 	public final void visit(final Program program) {
-		this.pushNewScope();
+		this.getScopes().put("Program", program);
 		
 		for (final AbstractFieldDeclaration fieldDeclaration : program.getFieldDeclarations()) {
 			fieldDeclaration.accept(this);
@@ -85,8 +85,6 @@ public final class SemanticRules implements Visitor {
 		}
 		
 		this.checkRule3(program);
-		
-		this.popCurrentScope();
 	}
 	
 	@Override
@@ -805,7 +803,13 @@ public final class SemanticRules implements Visitor {
 	 * <br>Shared
 	 */
 	private final Class<?> getType(final String identifier) {
-		return ((AbstractTypedEntityDeclaration) this.getScopes().get(identifier)).getType();
+		final AbstractNode entity = this.getScopes().get(identifier);
+		
+		if (entity instanceof AbstractTypedEntityDeclaration) {
+			return ((AbstractTypedEntityDeclaration) this.getScopes().get(identifier)).getType();
+		}
+		
+		return null;
 	}
 	
 	/**

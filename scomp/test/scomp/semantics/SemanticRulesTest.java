@@ -141,7 +141,6 @@ public final class SemanticRulesTest {
 		assertEquals(Arrays.asList(
 				"(:10:11) The method y cannot be used as a variable",
 				"(:10:11) Assignment location and expression have different types.",
-				"(:11:7) Undeclared identifier Program", 
 				"(:11:7) Cannot used the reserved identifier Program as a variable",
 				"(:12:7) The method y cannot be used as a variable", 
 				"(:12:3) Assignment location and expression have different types."
