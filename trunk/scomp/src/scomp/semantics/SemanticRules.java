@@ -230,7 +230,7 @@ public final class SemanticRules implements Visitor {
 		// visit child first, then we can use the child's
 		// type as the expression's type.
 		minusExpression.getExpression().accept(this);
-		
+		this.checkRule17(minusExpression);
 	}
 	
 	@Override
@@ -405,6 +405,11 @@ public final class SemanticRules implements Visitor {
 			this.logError(method.getTokenRow(), method.getTokenColumn(),
 					"The method " + this.nameOfMethod + " cannot have a return value");
 		}
+		
+		if( (method.getType() != void.class) && (returnStatement.getExpression() == null) ) {
+			this.logError(method.getTokenRow(), method.getTokenColumn(),
+					"The method " + this.nameOfMethod + " needs to have a return value");
+		}
 	}
 	
 	/**
@@ -457,7 +462,7 @@ public final class SemanticRules implements Visitor {
 						"The variable " + location.getIdentifier() + " is not an array type");
 			}
 			
-			/* TODO temporary solution when getOffset() returns a MethodCallExpression.getType() == null object
+			/* TODO temporary solution when getOffset() returns a MethodCallExpression.getType() == null 
 			 */ 
 			if(location.getOffset().getClass().equals(MethodCallExpression.class)) {
 				String methodName = ((MethodCallExpression)location.getOffset()).getMethodCall().getMethodName();
@@ -653,6 +658,20 @@ public final class SemanticRules implements Visitor {
 					"Continue statement is not contained within the body of a loop.");
 		}
 	}
+	
+	/**
+	 * 
+	 * @param minusExpression
+	 * <br> not null
+	 */
+	private final void checkRule17(MinusExpression minusExpression) {
+		if(!minusExpression.getExpression().getType().equals(int.class)) {
+			this.logError(minusExpression.getTokenRow(), 
+					minusExpression.getTokenColumn(),
+					"Unary minus expression is not an int type");
+		}
+	}
+	
 	
 	/**
 	 * 
