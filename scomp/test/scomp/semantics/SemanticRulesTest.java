@@ -675,6 +675,8 @@ public final class SemanticRulesTest {
 	
 	/**
 	 * {@value}.
+	 * <br>This test case was designed to make some of the checks fail
+	 * after reading their implementation in r315.
 	 */
 	public static final String PROGRAM_WITH_NO_ERROR =
 		"class Program {\n" +
@@ -685,8 +687,10 @@ public final class SemanticRulesTest {
 		"		main = 0;\n" +
 		"\n" +
 		"		while (true) {\n" +
-		"			if (true) {" +
+		"			if (true) {\n" +
 		"				break;\n" +
+		"			} else {\n" +
+		"				continue;\n" +
 		"			}\n" +
 		"		}\n" +
 		"\n" +
