@@ -1,5 +1,6 @@
 package scomp;
 
+import java.io.ByteArrayInputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -242,7 +243,7 @@ public final class Tools {
 	 */
 	@SuppressWarnings("unchecked")
 	public static final <T> T parse(final String input) {
-		final DecafParser parser = new DecafParser(DecafScannerTest.createScanner(input));
+		final DecafParser parser = new DecafParser(createScanner(input));
 		try {
 			final Symbol parseResult = parser.parse();
 			
@@ -250,6 +251,18 @@ public final class Tools {
 		} catch (final Exception exception) {
 			throw unchecked(exception);
 		}
+	}
+	
+	/**
+	 * 
+	 * @param input
+	 * <br>Should not be null
+	 * @return
+	 * <br>A non-null value
+	 * <br>A new value
+	 */
+	public static final Yylex createScanner(final String input) {
+		return new Yylex(new ByteArrayInputStream(input.getBytes()));
 	}
 	
 	/**
