@@ -471,7 +471,7 @@ public final class SemanticRulesTest {
 		"		x = z + 2;\n" +
 		"		x = 2 + z;\n" +
 		"		x = u + u;\n" + // rule 2 compatibility check
-		"		x = u + true;\n" + // rule 2 compatibility check
+		"		x = u + true;\n" + 
 		"	}\n" +
 		"\n" +
 		"	void main() {\n" +
