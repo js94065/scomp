@@ -59,7 +59,7 @@ public final class SemanticRulesTest {
 				"(:12:6) Undeclared identifier d",
 				"(:12:11) Undeclared identifier f",
 				"(:13:4) Undeclared identifier main",
-				"(:16:10) Undeclared identifier a"
+				"(:16:12) Undeclared identifier a"
 		), this.recorder.getMessages());
 	}
 	
@@ -320,7 +320,7 @@ public final class SemanticRulesTest {
 		"			main();\n" +
 		"		}\n" +
 		"\n" +
-		"		return a + w + z;\n" +
+		"		return (-a) + w + z;\n" +
 		"	}\n" +
 		"\n" +
 		"	void main() {\n" +
