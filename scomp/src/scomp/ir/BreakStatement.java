@@ -21,18 +21,6 @@ public final class BreakStatement extends AbstractStatement {
 		super(token);
 	}
 	
-	// This is used for Semantic rule 16.  Break Statements
-	// should always be inside a loop.
-	private AbstractStatement loop;
-	
-	public final void setLoop(AbstractStatement loop) {
-		this.loop = loop;
-	}
-	
-	public final AbstractStatement getLoop() {
-		return this.loop;
-	}
-	
 	@Override
 	public final void accept(final Visitor visitor) {
 		visitor.visit(this);
