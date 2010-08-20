@@ -157,9 +157,10 @@ public final class SemanticRules implements Visitor {
 	@Override
 	public void visit(final ArrayLocation location) {
 		this.checkRule2(location);
-		this.checkRule10(location);
 		
 		this.visitChildren(location);
+		
+		this.checkRule10(location);
 	}
 	
 	@Override
@@ -648,26 +649,16 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule10(final ArrayLocation location) {
-		if (this.getScope().containsKey(location.getIdentifier())) {
-			if (!this.getScope().get(location.getIdentifier()).getClass().equals(ArrayFieldDeclaration.class)) {
-				this.logError(location,
-						"The variable " + location.getIdentifier() + " is not an array type");
-			}
-			
-			/* TODO temporary solution when getOffset() returns a MethodCallExpression.getType() == null 
-			 */ 
-			if (location.getOffset().getClass().equals(MethodCallExpression.class)) {
-				final String methodName = ((MethodCallExpression) location.getOffset()).getMethodCall().getMethodName();
-				
-				if (!this.getType(methodName).equals(int.class)) {
-					this.logError(location,
-							"The array offset is not an int type");
-				}
-			} else if (!location.getOffset().getType().equals(int.class)) {
-					this.logError(location,
-							"The array offset is not an int type");
-			}
+		final String identifier = location.getIdentifier();
+		
+		if (this.getScope().containsKey(identifier) &&
+				!(this.getScope().get(identifier) instanceof ArrayFieldDeclaration)) {
+			this.logError(location,
+					"The variable " + identifier + " is not an array type");
 		}
+		
+		this.checkType(location.getOffset(), int.class, location,
+				"The array offset is not an int type");
 	}
 	
 	/*
