@@ -246,8 +246,8 @@ public final class SemanticRulesTest {
 		program.accept(new SemanticRules());
 		
 		assertEquals(Arrays.asList(
-				"(:10:3) Break statement is not contained within the body of a loop.",
-				"(:15:3) Continue statement is not contained within the body of a loop."
+				"(:9:3) Break statement is not contained within the body of a loop.",
+				"(:14:3) Continue statement is not contained within the body of a loop."
 				), this.recorder.getMessages());
 	}
 	
@@ -590,7 +590,6 @@ public final class SemanticRulesTest {
 		"		int a;\n" +
 		"		a=0;\n" +
 		"		while (a<3) {\n" +
-		"			a=a+1;\n" +
 		"			break;\n" +
 		"		}\n" +
 		"		break;\n" +
@@ -599,9 +598,9 @@ public final class SemanticRulesTest {
 		"			continue;\n" +
 		"		}\n" +
 		"		continue;\n" +
-		"		while (false) {\n" +
-		"			while (false) {\n" +
-		"				while (false) {\n " +
+		"		while (true) {\n" +
+		"			while (true) {\n" +
+		"				while (true) {\n " +
 		"					break;\n" +
 		"				}\n" +
 		"				break;\n" +
@@ -610,7 +609,9 @@ public final class SemanticRulesTest {
 		"		}\n" +
 		"		while (false) {\n" +
 		"			if (false) {\n" +
-		"				continue;\n" +
+		"				while (false) {\n" +
+		"					continue;\n" +
+		"				}\n" +
 		"			}\n" +
 		"		}\n" +
 		"	}\n" +
