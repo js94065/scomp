@@ -599,6 +599,20 @@ public final class SemanticRulesTest {
 		"			continue;\n" +
 		"		}\n" +
 		"		continue;\n" +
+		"		while (false) {\n" +
+		"			while (false) {\n" +
+		"				while (false) {\n " +
+		"					break;\n" +
+		"				}\n" +
+		"				break;\n" +
+		"			}\n" +
+		"			break;\n" +
+		"		}\n" +
+		"		while (false) {\n" +
+		"			if (false) {\n" +
+		"				continue;\n" +
+		"			}\n" +
+		"		}\n" +
 		"	}\n" +
 		"\n" +
 		"	void main() {\n" +

@@ -65,6 +65,8 @@ public final class SemanticRules implements Visitor {
 	
 	private boolean methodScope;
 	
+	int loopCount = 0;
+	
 	@SuppressWarnings("unchecked")
 	public SemanticRules() {
 		this.scopes = new NestingDictionary<String, AbstractNode>((Class<? extends Map<?, ?>>) LinkedHashMap.class);
@@ -196,22 +198,15 @@ public final class SemanticRules implements Visitor {
 		
 		this.checkRule11(ifStatement);
 	}
-	
+
 	@Override
 	public final void visit(final WhileStatement whileStatement) {
-		for (AbstractStatement s: whileStatement.getBlock().getStatements()) {
-			if (BreakStatement.class.equals(s.getClass())) {
-				BreakStatement b = (BreakStatement) s;
-				b.setLoop(s);
-			}
-			if (ContinueStatement.class.equals(s.getClass())) {
-				ContinueStatement b = (ContinueStatement) s;
-				b.setLoop(s);
-			}
-		}
+		this.loopCount++;
+		
 		whileStatement.getCondition().accept(this);
 		whileStatement.getBlock().accept(this);
 		
+		this.loopCount--;
 		this.checkRule11(whileStatement);
 	}
 	
@@ -722,9 +717,9 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule16(final BreakStatement breakStatement) {
-		if (breakStatement.getLoop() == null) {
+		if (this.loopCount == 0) {
 			this.logError(breakStatement.getTokenRow(), breakStatement.getTokenColumn(),
-					"Break statement is not contained within the body of a loop.");
+				"Break statement is not contained within the body of a loop.");
 		}
 	}
 	
@@ -735,9 +730,9 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule16(final ContinueStatement continueStatement) {
-		if (continueStatement.getLoop() == null) {
+		if (this.loopCount == 0) {
 			this.logError(continueStatement.getTokenRow(), continueStatement.getTokenColumn(),
-					"Continue statement is not contained within the body of a loop.");
+				"Continue statement is not contained within the body of a loop.");
 		}
 	}
 	
