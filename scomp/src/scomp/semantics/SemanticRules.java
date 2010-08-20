@@ -104,9 +104,7 @@ public final class SemanticRules implements Visitor {
 		
 		this.checkRule1(method);
 		
-		this.pushNewScope();
-		
-		this.methodScope = true;
+		this.pushNewScope(true);
 		
 		this.visitChildren(method);
 	}
@@ -123,11 +121,7 @@ public final class SemanticRules implements Visitor {
 	
 	@Override
 	public final void visit(final Block block) {
-		if (!this.methodScope) {
-			this.pushNewScope();
-		}
-		
-		this.methodScope = false;
+		this.pushNewScope(false);
 		
 		this.visitChildren(block);
 		
@@ -522,7 +516,7 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	/**
-	 * Rule: The &lt;int_literal> in an array declaration must be greater than 0.
+	 * Rule: The &lt;int_literal&gt; in an array declaration must be greater than 0.
 	 * 
 	 * @param field
 	 * <br>Not null
@@ -611,7 +605,7 @@ public final class SemanticRules implements Visitor {
 		final AbstractTypedEntityDeclaration method = (AbstractTypedEntityDeclaration) this.getScope().get(this.currentMethodName);
 		
 		if (method.getType() != void.class && returnStatement.getExpression() != null) {
-			if (method.getType() != returnStatement.getExpression().getType() ) {
+			if (method.getType() != returnStatement.getExpression().getType()) {
 				this.logError(method,
 						"The method " + this.currentMethodName + " return type does not match the return value");
 			}
@@ -642,7 +636,7 @@ public final class SemanticRules implements Visitor {
 	
 	/**
 	 * Rule: For all locations of the form &lt;id&gt;[&lt;expr&gt;]
-	 * <br>(a) &lt;id> must be an array variable, and
+	 * <br>(a) &lt;id&gt; must be an array variable, and
 	 * <br>(b) the type of &lt;expr&gt; must be int.
 	 * 
 	 * @param location
@@ -651,10 +645,11 @@ public final class SemanticRules implements Visitor {
 	private final void checkRule10(final ArrayLocation location) {
 		final String identifier = location.getIdentifier();
 		
-		if (this.getScope().containsKey(identifier) &&
-				!(this.getScope().get(identifier) instanceof ArrayFieldDeclaration)) {
-			this.logError(location,
-					"The variable " + identifier + " is not an array type");
+		if (this.getScope().containsKey(identifier)) {
+			if (!(this.getScope().get(identifier) instanceof ArrayFieldDeclaration)) {
+				this.logError(location,
+						"The variable " + identifier + " is not an array type");
+			}
 		}
 		
 		this.checkType(location.getOffset(), int.class, location,
@@ -881,8 +876,17 @@ public final class SemanticRules implements Visitor {
 		this.logger.log(Level.SEVERE, message);
 	}
 	
-	private final void pushNewScope() {
-		this.getScope().push();
+	/**
+	 * 
+	 * @param methodScope
+	 * <br>Range: any boolean
+	 */
+	private final void pushNewScope(final boolean methodScope) {
+		if (!this.methodScope) {
+			this.getScope().push();
+		}
+		
+		this.methodScope = methodScope;
 	}
 	
 	private final void popCurrentScope() {
