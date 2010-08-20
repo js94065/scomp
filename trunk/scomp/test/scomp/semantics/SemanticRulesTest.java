@@ -17,6 +17,8 @@ import scomp.ir.Program;
 /**
  * 
  * @author codistmonk (creation 2010-07-28)
+ * @author Wilson
+ * @author js94065
  *
  */
 public final class SemanticRulesTest {

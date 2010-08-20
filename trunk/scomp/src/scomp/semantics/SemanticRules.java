@@ -61,30 +61,26 @@ public final class SemanticRules implements Visitor {
 	
 	private final Logger logger;
 	
-	private String currentMethodName = "";
+	private String currentMethodName;
 	
 	private boolean methodScope;
 	
-	int loopCount = 0;
+	private int loopCount;
 	
 	@SuppressWarnings("unchecked")
 	public SemanticRules() {
 		this.scopes = new NestingDictionary<String, AbstractNode>((Class<? extends Map<?, ?>>) LinkedHashMap.class);
 		this.logger = Logger.getLogger(DecafParser.class.getName());
+		this.currentMethodName = "";
 		this.methodScope = false;
+		this.loopCount = 0;
 	}
 	
 	@Override 
 	public final void visit(final Program program) {
 		this.getScopes().put("Program", program);
 		
-		for (final AbstractFieldDeclaration fieldDeclaration : program.getFieldDeclarations()) {
-			fieldDeclaration.accept(this);
-		}
-		
-		for (final MethodDeclaration methodDeclaration : program.getMethodDeclarations()) {
-			methodDeclaration.accept(this);
-		}
+		this.visitChildren(program);
 		
 		this.checkRule3(program);
 	}
@@ -110,11 +106,7 @@ public final class SemanticRules implements Visitor {
 		
 		this.methodScope = true;
 		
-		for (final ParameterDeclaration parameterDeclaration : method.getParameterDeclarations()) {
-			parameterDeclaration.accept(this);
-		}
-		
-		method.getBlock().accept(this);
+		this.visitChildren(method);
 	}
 	
 	@Override
@@ -135,26 +127,19 @@ public final class SemanticRules implements Visitor {
 		
 		this.methodScope = false;
 		
-		for (final VariableDeclaration variableDeclaration : block.getVariableDeclarations()) {
-			variableDeclaration.accept(this);
-		}
-		
-		for (final AbstractStatement statement : block.getStatements()) {
-			statement.accept(this);
-		}
+		this.visitChildren(block);
 		
 		this.popCurrentScope();
 	}
 	
 	@Override
 	public final void visit(final BlockStatement block) {
-		block.getBlock().accept(this);
+		this.visitChildren(block);
 	}
 	
 	@Override
 	public final void visit(final AssignmentStatement assignment) {
-		assignment.getLocation().accept(this);
-		assignment.getExpression().accept(this);
+		this.visitChildren(assignment);
 		
 		checkRule15(assignment);
 	}
@@ -164,9 +149,7 @@ public final class SemanticRules implements Visitor {
 		this.checkRule7(returnStatement);
 		this.checkRule8(returnStatement);
 		
-		if (returnStatement.getExpression() != null) {
-			returnStatement.getExpression().accept(this);
-		}
+		this.visitChildren(returnStatement);
 	}
 	
 	@Override
@@ -174,7 +157,7 @@ public final class SemanticRules implements Visitor {
 		this.checkRule2(location);
 		this.checkRule10(location);
 		
-		location.getOffset().accept(this);
+		this.visitChildren(location);
 	}
 	
 	@Override
@@ -190,23 +173,19 @@ public final class SemanticRules implements Visitor {
 	
 	@Override
 	public final void visit(final IfStatement ifStatement) {
-		ifStatement.getCondition().accept(this);
-		ifStatement.getThenBlock().accept(this);
-		if (ifStatement.getElseBlock()!= null) {
-			ifStatement.getElseBlock().accept(this);
-		}
+		this.visitChildren(ifStatement);
 		
 		this.checkRule11(ifStatement);
 	}
-
+	
 	@Override
 	public final void visit(final WhileStatement whileStatement) {
-		this.loopCount++;
+		++this.loopCount;
 		
-		whileStatement.getCondition().accept(this);
-		whileStatement.getBlock().accept(this);
+		this.visitChildren(whileStatement);
 		
-		this.loopCount--;
+		--this.loopCount;
+		
 		this.checkRule11(whileStatement);
 	}
 	
@@ -214,8 +193,7 @@ public final class SemanticRules implements Visitor {
 	public final void visit(final BinaryOperationExpression operation) {
 		// for locations and method calls we must get set the type using 
 		// the scopes
-		operation.getLeft().accept(this);
-		operation.getRight().accept(this);
+		this.visitChildren(operation);
 		
 		this.checkRule12(operation);
 		this.checkRule13(operation);
@@ -226,19 +204,18 @@ public final class SemanticRules implements Visitor {
 	public final void visit(final MinusExpression minusExpression) {
 		// visit child first, then we can use the child's
 		// type as the expression's type.
-		minusExpression.getExpression().accept(this);
+		this.visitChildren(minusExpression);
 		
 		this.checkRule17(minusExpression);
 	}
 	
 	@Override
-	public final void visit(final NegationExpression operation) {
+	public final void visit(final NegationExpression negation) {
 		// visit child first, then we can use the child's
 		// type as the expression's type.
-	    operation.getExpression().accept(this);
+		this.visitChildren(negation);
 	    
-		this.checkRule14(operation);
-		
+		this.checkRule14(negation);
 	}
 	
 	@Override
@@ -247,17 +224,17 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	@Override
-	public final void visit(final MethodCallExpression methodCallExpression) {
+	public final void visit(final MethodCallExpression methodCall) {
 		// Set MethodCallExpression types
-		final String identifier = methodCallExpression.getMethodCall().getMethodName();
+		final String identifier = methodCall.getMethodCall().getMethodName();
 		
 		if (this.getScopes().containsKey(identifier)) {
-			methodCallExpression.setType(this.getType(identifier));
+			methodCall.setType(this.getType(identifier));
 		}
 		
-		this.checkRule6(methodCallExpression);
+		this.checkRule6(methodCall);
 		
-		methodCallExpression.getMethodCall().accept(this);
+		this.visitChildren(methodCall);
 	}
 	
 	@Override
@@ -269,7 +246,7 @@ public final class SemanticRules implements Visitor {
 			location.setType(this.getType(identifier));
 		}
 		
-		location.getLocation().accept(this);
+		this.visitChildren(location);
 	}
 	
 	@Override
@@ -277,9 +254,7 @@ public final class SemanticRules implements Visitor {
 		this.checkRule2(methodCall);
 		this.checkRule5(methodCall);
 		
-		for (final AbstractExpression argument : methodCall.getArguments()) {
-			argument.accept(this);
-		}
+		this.visitChildren(methodCall);
 	}
 	
 	@Override
@@ -309,7 +284,7 @@ public final class SemanticRules implements Visitor {
 	
 	@Override
 	public final void visit(final MethodCallStatement methodCallStatement) {
-		methodCallStatement.getMethodCall().accept(this);
+		this.visitChildren(methodCallStatement);
 	}
 	
 	@Override
@@ -320,6 +295,182 @@ public final class SemanticRules implements Visitor {
 	@Override
 	public final void visit(final StringCalloutArgument stringCalloutArgument) {
 		// Do nothing
+	}
+	
+	/**
+	 * 
+	 * @param program
+	 * <br>Not null
+	 */
+	private final void visitChildren(final Program program) {
+		for (final AbstractFieldDeclaration fieldDeclaration : program.getFieldDeclarations()) {
+			fieldDeclaration.accept(this);
+		}
+		
+		for (final MethodDeclaration methodDeclaration : program.getMethodDeclarations()) {
+			methodDeclaration.accept(this);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param method
+	 * <br>Not null
+	 */
+	private final void visitChildren(final MethodDeclaration method) {
+		for (final ParameterDeclaration parameterDeclaration : method.getParameterDeclarations()) {
+			parameterDeclaration.accept(this);
+		}
+		
+		method.getBlock().accept(this);
+	}
+	
+	/**
+	 * 
+	 * @param block
+	 * <br>Not null
+	 */
+	private final void visitChildren(final Block block) {
+		for (final VariableDeclaration variableDeclaration : block.getVariableDeclarations()) {
+			variableDeclaration.accept(this);
+		}
+		
+		for (final AbstractStatement statement : block.getStatements()) {
+			statement.accept(this);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param block
+	 * <br>Not null
+	 */
+	private final void visitChildren(final BlockStatement block) {
+		block.getBlock().accept(this);
+	}
+	
+	/**
+	 * 
+	 * @param assignment
+	 * <br>Not null
+	 */
+	private final void visitChildren(final AssignmentStatement assignment) {
+		assignment.getLocation().accept(this);
+		
+		assignment.getExpression().accept(this);
+	}
+	
+	/**
+	 * 
+	 * @param returnStatement
+	 * <br>Not null
+	 */
+	private final void visitChildren(final ReturnStatement returnStatement) {
+		if (returnStatement.getExpression() != null) {
+			returnStatement.getExpression().accept(this);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param location
+	 * <br>Not null
+	 */
+	private final void visitChildren(final ArrayLocation location) {
+		location.getOffset().accept(this);
+	}
+	
+	/**
+	 * 
+	 * @param ifStatement
+	 * <br>Not null
+	 */
+	private final void visitChildren(final IfStatement ifStatement) {
+		ifStatement.getCondition().accept(this);
+		
+		ifStatement.getThenBlock().accept(this);
+		
+		if (ifStatement.getElseBlock() != null) {
+			ifStatement.getElseBlock().accept(this);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param whileStatement
+	 * <br>Not null
+	 */
+	private final void visitChildren(final WhileStatement whileStatement) {
+		whileStatement.getCondition().accept(this);
+		
+		whileStatement.getBlock().accept(this);
+	}
+	
+	/**
+	 * 
+	 * @param operation
+	 * <br>Not null
+	 */
+	private final void visitChildren(final BinaryOperationExpression operation) {
+		operation.getLeft().accept(this);
+		
+		operation.getRight().accept(this);
+	}
+	
+	/**
+	 * 
+	 * @param minusExpression
+	 * <br>Not null
+	 */
+	private final void visitChildren(final MinusExpression minusExpression) {
+		minusExpression.getOperand().accept(this);
+	}
+	
+	/**
+	 * 
+	 * @param negation
+	 * <br>Not null
+	 */
+	private final void visitChildren(final NegationExpression negation) {
+		negation.getOperand().accept(this);
+	}
+	
+	/**
+	 * 
+	 * @param methodCall
+	 * <br>Not null
+	 */
+	private final void visitChildren(final MethodCallExpression methodCall) {
+		methodCall.getMethodCall().accept(this);
+	}
+	
+	/**
+	 * 
+	 * @param location
+	 * <br>Not null
+	 */
+	private final void visitChildren(final LocationExpression location) {
+		location.getLocation().accept(this);
+	}
+	
+	/**
+	 * 
+	 * @param methodCall
+	 * <br>Not null
+	 */
+	private final void visitChildren(final MethodCall methodCall) {
+		for (final AbstractExpression argument : methodCall.getArguments()) {
+			argument.accept(this);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param methodCallStatement
+	 * <br>Not null
+	 */
+	private final void visitChildren(final MethodCallStatement methodCallStatement) {
+		methodCallStatement.getMethodCall().accept(this);
 	}
 	
 	/**
@@ -673,11 +824,11 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule14(final NegationExpression negation) {
-		if (negation.getExpression().getType() == null) {
+		if (negation.getOperand().getType() == null) {
 			return;
 		}
 		
-		if (!boolean.class.equals(negation.getExpression().getType())) {
+		if (!boolean.class.equals(negation.getOperand().getType())) {
 			this.logError(negation.getTokenRow(), negation.getTokenColumn(),
 					"Operand of negation operations must have type boolean.");
 		}
@@ -743,7 +894,7 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule17(final MinusExpression minusExpression) {
-		if (!minusExpression.getExpression().getType().equals(int.class)) {
+		if (!minusExpression.getOperand().getType().equals(int.class)) {
 			this.logError(minusExpression.getTokenRow(), minusExpression.getTokenColumn(),
 					"Unary minus expression is not an int type");
 		}
