@@ -104,9 +104,13 @@ public final class SemanticRules implements Visitor {
 		
 		this.checkRule1(method);
 		
+		// The method scope and the method block scope are merged
 		this.pushNewScope(true);
 		
 		this.visitChildren(method);
+		
+		// No need to pop the current scope, because it is done
+		// in the method block
 	}
 	
 	@Override
