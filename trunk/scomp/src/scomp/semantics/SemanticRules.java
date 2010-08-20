@@ -1,6 +1,8 @@
 package scomp.semantics;
 
 import static scomp.Tools.*;
+import static scomp.ir.BinaryOperationExpression.EQUALITY_OPERATORS;
+import static scomp.ir.BinaryOperationExpression.OPERATORS_WITH_INT_OPERANDS;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -704,19 +706,7 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule12(final BinaryOperationExpression operation) {
-		if (operation.getOperator().equals("+") ||
-				operation.getOperator().equals("-") ||
-				operation.getOperator().equals("*") ||
-				operation.getOperator().equals("/") ||
-				operation.getOperator().equals("%") ||
-				operation.getOperator().equals("<<") ||
-				operation.getOperator().equals(">>") ||
-				operation.getOperator().equals(">>>") || 
-				operation.getOperator().equals("<") ||
-				operation.getOperator().equals(">") ||
-				operation.getOperator().equals("<=") ||
-				operation.getOperator().equals(">=") 
-			) {
+		if (OPERATORS_WITH_INT_OPERANDS.contains(operation.getOperator())) {
 			this.checkType(operation.getLeft(), int.class,
 					"Operand of arithmetic and relational operations must have type int.");
 			
@@ -724,7 +714,6 @@ public final class SemanticRules implements Visitor {
 					"Operand of arithmetic and relational operations must have type int.");
 		}
 	}
-	
 	
 	/**
 	 * Rule: The operands of &lt;eq_op&gt;s must have the same type, either int or boolean.
@@ -737,8 +726,7 @@ public final class SemanticRules implements Visitor {
 			return;
 		}
 		
-		if (operation.getOperator().equals("==") ||
-				operation.getOperator().equals("!=")) {
+		if (EQUALITY_OPERATORS.contains(operation.getOperator())) {
 			if (int.class.equals(operation.getLeft().getType()) && 
 					int.class.equals(operation.getRight().getType())) {
 				// do nothing
