@@ -10,20 +10,20 @@ import scomp.Tools;
  */
 public final class NegationExpression extends AbstractExpression {
 	
-	private final AbstractExpression expression;
+	private final AbstractExpression operand;
 	
 	/**
 	 * 
 	 * @param token
 	 * <br>Not null
 	 * <br>Shared
-	 * @param expression
+	 * @param operand
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	public NegationExpression(final DecafToken token, final AbstractExpression expression) {
+	public NegationExpression(final DecafToken token, final AbstractExpression operand) {
 		super(token);
-		this.expression = expression;
+		this.operand = operand;
 	}
 
 	@Override
@@ -37,8 +37,8 @@ public final class NegationExpression extends AbstractExpression {
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	public final AbstractExpression getExpression() {
-		return this.expression;
+	public final AbstractExpression getOperand() {
+		return this.operand;
 	}
 	
 	@Override
@@ -49,13 +49,13 @@ public final class NegationExpression extends AbstractExpression {
 	@Override
 	public final String toString() {
 		return this.getClass().getSimpleName() + "{" +
-				"expression{" + this.getExpression() + "}" +
+				"expression{" + this.getOperand() + "}" +
 				"}";
 	}
 	
 	@Override
 	protected final int doHashCode() {
-		return this.getExpression().hashCode();
+		return this.getOperand().hashCode();
 	}
 	
 	@Override
@@ -64,7 +64,7 @@ public final class NegationExpression extends AbstractExpression {
 		
 		return this == that ||
 				that != null &&
-				this.getExpression().equals(that.getExpression());
+				this.getOperand().equals(that.getOperand());
 	}
 
 }
