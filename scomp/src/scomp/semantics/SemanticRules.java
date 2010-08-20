@@ -57,7 +57,7 @@ import scomp.ir.WhileStatement;
  */
 public final class SemanticRules implements Visitor {
 	
-	private final NestingDictionary<String, AbstractNode> scopes;
+	private final NestingDictionary<String, AbstractNode> scope;
 	
 	private final Logger logger;
 	
@@ -69,7 +69,7 @@ public final class SemanticRules implements Visitor {
 	
 	@SuppressWarnings("unchecked")
 	public SemanticRules() {
-		this.scopes = new NestingDictionary<String, AbstractNode>((Class<? extends Map<?, ?>>) LinkedHashMap.class);
+		this.scope = new NestingDictionary<String, AbstractNode>((Class<? extends Map<?, ?>>) LinkedHashMap.class);
 		this.logger = Logger.getLogger(DecafParser.class.getName());
 		this.currentMethodName = "";
 		this.methodScope = false;
@@ -78,7 +78,7 @@ public final class SemanticRules implements Visitor {
 	
 	@Override 
 	public final void visit(final Program program) {
-		this.getScopes().put("Program", program);
+		this.getScope().put("Program", program);
 		
 		this.visitChildren(program);
 		
@@ -191,8 +191,6 @@ public final class SemanticRules implements Visitor {
 	
 	@Override
 	public final void visit(final BinaryOperationExpression operation) {
-		// for locations and method calls we must get set the type using 
-		// the scopes
 		this.visitChildren(operation);
 		
 		this.checkRule12(operation);
@@ -225,12 +223,7 @@ public final class SemanticRules implements Visitor {
 	
 	@Override
 	public final void visit(final MethodCallExpression methodCall) {
-		// Set MethodCallExpression types
-		final String identifier = methodCall.getMethodCall().getMethodName();
-		
-		if (this.getScopes().containsKey(identifier)) {
-			methodCall.setType(this.getType(identifier));
-		}
+		methodCall.setType(this.getType(methodCall.getMethodCall().getMethodName()));
 		
 		this.checkRule6(methodCall);
 		
@@ -239,12 +232,7 @@ public final class SemanticRules implements Visitor {
 	
 	@Override
 	public final void visit(final LocationExpression location) {
-		// Set LocationExpression types
-		final String identifier = location.getLocation().getIdentifier();
-		
-		if (this.getScopes().containsKey(identifier)) {
-			location.setType(this.getType(identifier));
-		}
+		location.setType(this.getType(location.getLocation().getIdentifier()));
 		
 		this.visitChildren(location);
 	}
@@ -480,11 +468,11 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule1(final AbstractTypedEntityDeclaration entity) {
-		if (this.getScopes().containsLocalKey(entity.getIdentifier())) {
-			this.logError(entity.getTokenRow(), entity.getTokenColumn(),
+		if (this.getScope().containsLocalKey(entity.getIdentifier())) {
+			this.logError(entity,
 					"Duplicate identifier " + entity.getIdentifier());
 		} else {
-			this.getScopes().put(entity.getIdentifier(), entity);
+			this.getScope().put(entity.getIdentifier(), entity);
 		}
 	}
 	
@@ -495,8 +483,8 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule2(final AbstractLocation location) {
-		if (!this.getScopes().containsKey(location.getIdentifier())) {
-			this.logError(location.getTokenRow(), location.getTokenColumn(),
+		if (!this.getScope().containsKey(location.getIdentifier())) {
+			this.logError(location,
 					"Undeclared identifier " + location.getIdentifier());
 		}
 	}
@@ -508,8 +496,8 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule2(final MethodCall methodCall) {
-		if (!this.getScopes().containsKey(methodCall.getMethodName())) {
-			this.logError(methodCall.getMethodNameIdentifierRow(), methodCall.getMethodNameIdentifierColumn(),
+		if (!this.getScope().containsKey(methodCall.getMethodName())) {
+			this.logError(methodCall,
 					"Undeclared identifier " + methodCall.getMethodName());
 		}
 	}
@@ -522,10 +510,10 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule3(final Program program) {
-		final MethodDeclaration mainMethod = cast(MethodDeclaration.class, this.getScopes().get("main"));
+		final MethodDeclaration mainMethod = cast(MethodDeclaration.class, this.getScope().get("main"));
 		
 		if (mainMethod == null || mainMethod.getParameterDeclarations().size() != 0) {
-			this.logError(program.getTokenRow(), program.getTokenColumn(),
+			this.logError(program,
 					"Missing method main(<no argument>)");
 		}
 	}
@@ -538,7 +526,7 @@ public final class SemanticRules implements Visitor {
 	 */
 	private final void checkRule4(final ArrayFieldDeclaration field) {
 		if (field.getElementCount().getValue() <= 0) {
-			this.logError(field.getElementCount().getTokenRow(), field.getElementCount().getTokenColumn(),
+			this.logError(field.getElementCount(),
 					"Array size must be greater than 0");
 		}
 	}
@@ -552,14 +540,14 @@ public final class SemanticRules implements Visitor {
 	 */
 	private final void checkRule5(final MethodCall methodCall) {
 		final String methodName = methodCall.getMethodName();
-		final MethodDeclaration method = cast(MethodDeclaration.class, this.getScopes().get(methodName));
+		final MethodDeclaration method = cast(MethodDeclaration.class, this.getScope().get(methodName));
 		
 		if (method != null) {
 			final String expectedSignature = getSignature(method.getParameterDeclarations());
 			final String actualSignature = getSignature(methodCall.getArguments());
 			
 			if (!expectedSignature.equals(actualSignature)) {
-				this.logError(methodCall.getMethodNameIdentifierRow(), methodCall.getMethodNameIdentifierColumn(),
+				this.logError(methodCall,
 						"The method " + methodName + expectedSignature +
 						" is not applicable for the arguments " + actualSignature);
 			}
@@ -580,10 +568,10 @@ public final class SemanticRules implements Visitor {
 		}
 		
 		final String methodName = methodCall.getMethodName();
-		final MethodDeclaration method = cast(MethodDeclaration.class, this.getScopes().get(methodName));
+		final MethodDeclaration method = cast(MethodDeclaration.class, this.getScope().get(methodName));
 		
 		if (method != null && method.getType().equals(void.class)) {
-			this.logError(methodCall.getMethodNameIdentifierRow(), methodCall.getMethodNameIdentifierColumn(),
+			this.logError(methodCall,
 					"The method " + methodName + " has type void and cannot be used as an expression");
 		}
 	}
@@ -596,15 +584,15 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule7(final ReturnStatement returnStatement) {
-		final AbstractTypedEntityDeclaration method = (AbstractTypedEntityDeclaration) this.getScopes().get(this.currentMethodName);
+		final AbstractTypedEntityDeclaration method = (AbstractTypedEntityDeclaration) this.getScope().get(this.currentMethodName);
 		
 		if (method.getType() == void.class && returnStatement.getExpression() != null) {
-			this.logError(method.getTokenRow(), method.getTokenColumn(),
+			this.logError(method,
 					"The method " + this.currentMethodName + " cannot have a return value");
 		}
 		
 		if (method.getType() != void.class && returnStatement.getExpression() == null) {
-			this.logError(method.getTokenRow(), method.getTokenColumn(),
+			this.logError(method,
 					"The method " + this.currentMethodName + " needs to have a return value");
 		}
 	}
@@ -617,18 +605,18 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule8(final ReturnStatement returnStatement) {
-		final AbstractTypedEntityDeclaration method = (AbstractTypedEntityDeclaration) this.getScopes().get(this.currentMethodName);
+		final AbstractTypedEntityDeclaration method = (AbstractTypedEntityDeclaration) this.getScope().get(this.currentMethodName);
 		
 		if (method.getType() != void.class && returnStatement.getExpression() != null) {
 			if (method.getType() != returnStatement.getExpression().getType() ) {
-				this.logError(method.getTokenRow(), method.getTokenColumn(),
+				this.logError(method,
 						"The method " + this.currentMethodName + " return type does not match the return value");
 			}
 		}
 	}
 	
 	/**
-	 * Rule: An &lt;id> used as a &lt;location> must name a declared local/global variable or formal parameter.
+	 * Rule: An &lt;id&gt; used as a &lt;location&gt; must name a declared local/global variable or formal parameter.
 	 * 
 	 * @param identifierLocation
 	 * <br>Not null
@@ -637,30 +625,30 @@ public final class SemanticRules implements Visitor {
 		final String identifier = identifierLocation.getIdentifier();
 		
 		if (identifier.equals("Program")) {
-			this.logError(identifierLocation.getTokenRow(), identifierLocation.getTokenColumn(),
+			this.logError(identifierLocation,
 					"Cannot used the reserved identifier Program as a variable");
 		}
 		
-		if (this.getScopes().containsKey(identifier)) {
-			if (this.getScopes().get(identifier).getClass().equals(MethodDeclaration.class)) {
-				this.logError(identifierLocation.getTokenRow(), identifierLocation.getTokenColumn(),
+		if (this.getScope().containsKey(identifier)) {
+			if (this.getScope().get(identifier).getClass().equals(MethodDeclaration.class)) {
+				this.logError(identifierLocation,
 						"The method " + identifier + " cannot be used as a variable");
 			}
 		}
 	}
 	
 	/**
-	 * Rule: For all locations of the form &lt;id>[&lt;expr>]
+	 * Rule: For all locations of the form &lt;id&gt;[&lt;expr&gt;]
 	 * <br>(a) &lt;id> must be an array variable, and
-	 * <br>(b) the type of &lt;expr> must be int.
+	 * <br>(b) the type of &lt;expr&gt; must be int.
 	 * 
 	 * @param location
 	 * <br>Not null
 	 */
 	private final void checkRule10(final ArrayLocation location) {
-		if (this.getScopes().containsKey(location.getIdentifier())) {
-			if (!this.getScopes().get(location.getIdentifier()).getClass().equals(ArrayFieldDeclaration.class)) {
-				this.logError(location.getTokenRow(), location.getTokenColumn(),
+		if (this.getScope().containsKey(location.getIdentifier())) {
+			if (!this.getScope().get(location.getIdentifier()).getClass().equals(ArrayFieldDeclaration.class)) {
+				this.logError(location,
 						"The variable " + location.getIdentifier() + " is not an array type");
 			}
 			
@@ -670,12 +658,12 @@ public final class SemanticRules implements Visitor {
 				final String methodName = ((MethodCallExpression) location.getOffset()).getMethodCall().getMethodName();
 				
 				if (!this.getType(methodName).equals(int.class)) {
-					this.logError(location.getTokenRow(), location.getTokenColumn(),
+					this.logError(location,
 							"The array offset is not an int type");
 				}
 			} else {
 				if (!location.getOffset().getType().equals(int.class)) {
-					this.logError(location.getTokenRow(), location.getTokenColumn(),
+					this.logError(location,
 							"The array offset is not an int type");
 				}
 			}
@@ -690,7 +678,7 @@ public final class SemanticRules implements Visitor {
 	 */
 	
 	/**
-	 * Rule: The &lt;expr> in if and while statements must have type boolean.
+	 * Rule: The &lt;expr&gt; in if and while statements must have type boolean.
 	 * 
 	 * @param ifStatement
 	 * <br>Not null
@@ -701,14 +689,14 @@ public final class SemanticRules implements Visitor {
 		}
 		
 		if (!boolean.class.equals(ifStatement.getCondition().getType())) {
-			this.logError(ifStatement.getTokenRow(), ifStatement.getTokenColumn(),
+			this.logError(ifStatement,
 					"If condition should have type boolean.");
 		}
 	}
 	
 	
 	/**
-	 * Rule: The &lt;expr> in if and while statements must have type boolean.
+	 * Rule: The &lt;expr&gt; in if and while statements must have type boolean.
 	 * 
 	 * @param whileStatement
 	 * <br>Not null
@@ -719,13 +707,13 @@ public final class SemanticRules implements Visitor {
 		}
 		
 		if (!boolean.class.equals(whileStatement.getCondition().getType())) {
-			this.logError(whileStatement.getTokenRow(), whileStatement.getTokenColumn(),
+			this.logError(whileStatement,
 					"While condition should have type boolean.");
 		}
 	}
 	
 	/**
-	 * Rule: The operands of &lt;arith_op>s and &lt;rel_op>s must have type int.
+	 * Rule: The operands of &lt;arith_op&gt;s and &lt;rel_op&gt;s must have type int.
 	 * 
 	 * @param operation
 	 * <br>Not null
@@ -748,14 +736,14 @@ public final class SemanticRules implements Visitor {
 			// second if is for the actual type check 
 			if (operation.getLeft().getType() != null) {
 				if (!operation.getLeft().getType().equals(int.class)) {
-					this.logError(operation.getLeft().getTokenRow(), operation.getLeft().getTokenColumn(),
+					this.logError(operation.getLeft(),
 							"Operand of arithmetic and relational operations must have type int.");
 				}
 			}
 			
 			if (operation.getRight().getType() != null) {
 				if (!operation.getRight().getType().equals(int.class)) {
-					this.logError(operation.getRight().getTokenRow(), operation.getRight().getTokenColumn(),
+					this.logError(operation.getRight(),
 							"Operand of arithmetic and relational operations must have type int.");
 				}
 			}
@@ -764,7 +752,7 @@ public final class SemanticRules implements Visitor {
 	
 	
 	/**
-	 * Rule: The operands of &lt;eq_op>s must have the same type, either int or boolean.
+	 * Rule: The operands of &lt;eq_op&gt;s must have the same type, either int or boolean.
 	 * 
 	 * @param operation
 	 * <br>Not null
@@ -783,7 +771,7 @@ public final class SemanticRules implements Visitor {
 					boolean.class.equals(operation.getRight().getType())) {
 				// do nothing
 			} else {
-				this.logError(operation.getTokenRow(), operation.getTokenColumn(),
+				this.logError(operation,
 						"Operand of equality operations must have same type, " +
 						"either int or boolean.");
 			}
@@ -791,7 +779,7 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	/**
-	 * Rule: The operands of &lt;cond_op>s and the operand of logical not (!) must have type boolean.
+	 * Rule: The operands of &lt;cond_op&gt;s and the operand of logical not (!) must have type boolean.
 	 * 
 	 * @param operation
 	 * <br>Not null
@@ -803,14 +791,14 @@ public final class SemanticRules implements Visitor {
 			// second if is for the actual type check 
 			if (operation.getLeft().getType() != null) {
 				if (!boolean.class.equals(operation.getLeft().getType()) ) {
-					this.logError(operation.getLeft().getTokenRow(), operation.getLeft().getTokenColumn(),
+					this.logError(operation.getLeft(),
 							"Operand of conditional operations must have type boolean.");
 				} 
 			}
 			
 			if (operation.getRight().getType() != null) {
 				if (!boolean.class.equals(operation.getRight().getType()) ) { 
-					this.logError(operation.getRight().getTokenRow(), operation.getRight().getTokenColumn(),
+					this.logError(operation.getRight(),
 							"Operand of conditional operations must have type boolean.");
 				}
 			}
@@ -818,7 +806,7 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	/**
-	 * Rule: The operands of &lt;cond_op>s and the operand of logical not (!) must have type boolean.
+	 * Rule: The operands of &lt;cond_op&gt;s and the operand of logical not (!) must have type boolean.
 	 * 
 	 * @param negation
 	 * <br>Not null
@@ -829,13 +817,13 @@ public final class SemanticRules implements Visitor {
 		}
 		
 		if (!boolean.class.equals(negation.getOperand().getType())) {
-			this.logError(negation.getTokenRow(), negation.getTokenColumn(),
+			this.logError(negation,
 					"Operand of negation operations must have type boolean.");
 		}
 	}
 	
 	/**
-	 * Rule: The &lt;location> and the &lt;expr> in an assignment, &lt;location> = &lt;expr>, must have the same type.
+	 * Rule: The &lt;location> and the &lt;expr&gt; in an assignment, &lt;location&gt; = &lt;expr&gt;, must have the same type.
 	 * 
 	 * @param assignment
 	 * <br>Not null
@@ -844,7 +832,7 @@ public final class SemanticRules implements Visitor {
 		Class<?> locationType = null;
 		final Class<?> expressionType;
 		
-		if (this.getScopes().containsKey(assignment.getLocation().getIdentifier())) {
+		if (this.getScope().containsKey(assignment.getLocation().getIdentifier())) {
 			locationType = this.getType(assignment.getLocation().getIdentifier());
 		}
 		
@@ -856,7 +844,7 @@ public final class SemanticRules implements Visitor {
 		}
 		
 		if (!locationType.equals(expressionType)) {
-			this.logError(assignment.getTokenRow(), assignment.getTokenColumn(),
+			this.logError(assignment,
 					"Assignment location and expression have different types.");
 		}
 	}
@@ -869,7 +857,7 @@ public final class SemanticRules implements Visitor {
 	 */
 	private final void checkRule16(final BreakStatement breakStatement) {
 		if (this.loopCount == 0) {
-			this.logError(breakStatement.getTokenRow(), breakStatement.getTokenColumn(),
+			this.logError(breakStatement,
 				"Break statement is not contained within the body of a loop.");
 		}
 	}
@@ -882,7 +870,7 @@ public final class SemanticRules implements Visitor {
 	 */
 	private final void checkRule16(final ContinueStatement continueStatement) {
 		if (this.loopCount == 0) {
-			this.logError(continueStatement.getTokenRow(), continueStatement.getTokenColumn(),
+			this.logError(continueStatement,
 				"Continue statement is not contained within the body of a loop.");
 		}
 	}
@@ -895,9 +883,20 @@ public final class SemanticRules implements Visitor {
 	 */
 	private final void checkRule17(final MinusExpression minusExpression) {
 		if (!minusExpression.getOperand().getType().equals(int.class)) {
-			this.logError(minusExpression.getTokenRow(), minusExpression.getTokenColumn(),
+			this.logError(minusExpression,
 					"Unary minus expression is not an int type");
 		}
+	}
+	
+	/**
+	 * 
+	 * @param node
+	 * <br>Not null
+	 * @param message
+	 * <br>Maybe null
+	 */
+	private final void logError(final AbstractNode node, final String message) {
+		this.logError(node.getTokenRow(), node.getTokenColumn(), message);
 	}
 	
 	/**
@@ -923,11 +922,11 @@ public final class SemanticRules implements Visitor {
 	}
 	
 	private final void pushNewScope() {
-		this.getScopes().push();
+		this.getScope().push();
 	}
 	
 	private final void popCurrentScope() {
-		this.getScopes().pop();
+		this.getScope().pop();
 	}
 	
 	/**
@@ -936,8 +935,8 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 * <br>Shared
 	 */
-	private final NestingDictionary<String, AbstractNode> getScopes() {
-		return this.scopes;
+	private final NestingDictionary<String, AbstractNode> getScope() {
+		return this.scope;
 	}
 	
 	/**
@@ -949,10 +948,10 @@ public final class SemanticRules implements Visitor {
 	 * <br>Shared
 	 */
 	private final Class<?> getType(final String identifier) {
-		final AbstractNode entity = this.getScopes().get(identifier);
+		final AbstractNode entity = this.getScope().get(identifier);
 		
 		if (entity instanceof AbstractTypedEntityDeclaration) {
-			return ((AbstractTypedEntityDeclaration) this.getScopes().get(identifier)).getType();
+			return ((AbstractTypedEntityDeclaration) this.getScope().get(identifier)).getType();
 		}
 		
 		return null;
