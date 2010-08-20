@@ -661,11 +661,9 @@ public final class SemanticRules implements Visitor {
 					this.logError(location,
 							"The array offset is not an int type");
 				}
-			} else {
-				if (!location.getOffset().getType().equals(int.class)) {
+			} else if (!location.getOffset().getType().equals(int.class)) {
 					this.logError(location,
 							"The array offset is not an int type");
-				}
 			}
 		}
 	}
@@ -684,12 +682,9 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule11(final IfStatement ifStatement) {
-		if (notEquals(ifStatement.getCondition().getType(), boolean.class)) {
-			this.logError(ifStatement,
-					"If condition should have type boolean.");
-		}
+		this.checkType(ifStatement.getCondition(), boolean.class, ifStatement,
+				"If condition should have type boolean.");
 	}
-	
 	
 	/**
 	 * Rule: The &lt;expr&gt; in if and while statements must have type boolean.
@@ -698,10 +693,8 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule11(final WhileStatement whileStatement) {
-		if (notEquals(whileStatement.getCondition().getType(), boolean.class)) {
-			this.logError(whileStatement,
-					"While condition should have type boolean.");
-		}
+		this.checkType(whileStatement.getCondition(), boolean.class, whileStatement,
+				"While condition should have type boolean.");
 	}
 	
 	/**
@@ -724,15 +717,11 @@ public final class SemanticRules implements Visitor {
 				operation.getOperator().equals("<=") ||
 				operation.getOperator().equals(">=") 
 			) {
-			if (notEquals(operation.getLeft().getType(), int.class)) {
-				this.logError(operation.getLeft(),
-						"Operand of arithmetic and relational operations must have type int.");
-			}
+			this.checkType(operation.getLeft(), int.class,
+					"Operand of arithmetic and relational operations must have type int.");
 			
-			if (notEquals(operation.getRight().getType(), int.class)) {
-				this.logError(operation.getRight(),
-						"Operand of arithmetic and relational operations must have type int.");
-			}
+			this.checkType(operation.getRight(), int.class,
+					"Operand of arithmetic and relational operations must have type int.");
 		}
 	}
 	
@@ -773,15 +762,11 @@ public final class SemanticRules implements Visitor {
 	private final void checkRule14(final BinaryOperationExpression operation) {
 		if (operation.getOperator().equals("&&") ||
 				operation.getOperator().equals("||")) {
-			if (notEquals(operation.getLeft().getType(), boolean.class)) {
-				this.logError(operation.getLeft(),
-						"Operand of conditional operations must have type boolean.");
-			}
+			this.checkType(operation.getLeft(), boolean.class,
+					"Operand of conditional operations must have type boolean.");
 			
-			if (notEquals(operation.getRight().getType(), boolean.class)) {
-				this.logError(operation.getRight(),
-						"Operand of conditional operations must have type boolean.");
-			}
+			this.checkType(operation.getRight(), boolean.class,
+					"Operand of conditional operations must have type boolean.");
 		}
 	}
 	
@@ -792,10 +777,8 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule14(final NegationExpression negation) {
-		if (notEquals(negation.getOperand().getType(), boolean.class)) {
-			this.logError(negation,
-					"Operand of negation operations must have type boolean.");
-		}
+		this.checkType(negation.getOperand(), boolean.class, negation,
+				"Operand of negation operations must have type boolean.");
 	}
 	
 	/**
@@ -852,10 +835,38 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule17(final MinusExpression minusExpression) {
-		if (notEquals(minusExpression.getOperand().getType(), int.class)) {
-			this.logError(minusExpression,
-					"Unary minus expression is not an int type");
+		this.checkType(minusExpression.getOperand(), int.class, minusExpression,
+				"Unary minus expression is not an int type");
+	}
+	
+	/**
+	 * 
+	 * @param expression
+	 * <br>Not null
+	 * @param expectedType
+	 * <br>Not null
+	 * @param errorNode 
+	 * <br>Not null
+	 * @param errorMessage
+	 * <br>Not null
+	 */
+	private final void checkType(final AbstractExpression expression, final Class<?> expectedType, final AbstractNode errorNode, final String errorMessage) {
+		if (notEquals(expression.getType(), expectedType)) {
+			this.logError(errorNode, errorMessage);
 		}
+	}
+	
+	/**
+	 * 
+	 * @param expression
+	 * <br>Not null
+	 * @param expectedType
+	 * <br>Not null
+	 * @param errorMessage
+	 * <br>Not null
+	 */
+	private final void checkType(final AbstractExpression expression, final Class<?> expectedType, final String errorMessage) {
+		this.checkType(expression, expectedType, expression, errorMessage);
 	}
 	
 	/**
