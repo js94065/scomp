@@ -684,11 +684,7 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule11(final IfStatement ifStatement) {
-		if (ifStatement.getCondition().getType() == null) {
-			return;
-		}
-		
-		if (!boolean.class.equals(ifStatement.getCondition().getType())) {
+		if (notEquals(ifStatement.getCondition().getType(), boolean.class)) {
 			this.logError(ifStatement,
 					"If condition should have type boolean.");
 		}
@@ -702,11 +698,7 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule11(final WhileStatement whileStatement) {
-		if (whileStatement.getCondition().getType() == null) {
-			return;
-		}
-		
-		if (!boolean.class.equals(whileStatement.getCondition().getType())) {
+		if (notEquals(whileStatement.getCondition().getType(), boolean.class)) {
 			this.logError(whileStatement,
 					"While condition should have type boolean.");
 		}
@@ -732,20 +724,14 @@ public final class SemanticRules implements Visitor {
 				operation.getOperator().equals("<=") ||
 				operation.getOperator().equals(">=") 
 			) {
-			// first if is for rule 2 compatibility
-			// second if is for the actual type check 
-			if (operation.getLeft().getType() != null) {
-				if (!operation.getLeft().getType().equals(int.class)) {
-					this.logError(operation.getLeft(),
-							"Operand of arithmetic and relational operations must have type int.");
-				}
+			if (notEquals(operation.getLeft().getType(), int.class)) {
+				this.logError(operation.getLeft(),
+						"Operand of arithmetic and relational operations must have type int.");
 			}
 			
-			if (operation.getRight().getType() != null) {
-				if (!operation.getRight().getType().equals(int.class)) {
-					this.logError(operation.getRight(),
-							"Operand of arithmetic and relational operations must have type int.");
-				}
+			if (notEquals(operation.getRight().getType(), int.class)) {
+				this.logError(operation.getRight(),
+						"Operand of arithmetic and relational operations must have type int.");
 			}
 		}
 	}
@@ -787,20 +773,14 @@ public final class SemanticRules implements Visitor {
 	private final void checkRule14(final BinaryOperationExpression operation) {
 		if (operation.getOperator().equals("&&") ||
 				operation.getOperator().equals("||")) {
-			// first if is for rule 2 compatibility
-			// second if is for the actual type check 
-			if (operation.getLeft().getType() != null) {
-				if (!boolean.class.equals(operation.getLeft().getType()) ) {
-					this.logError(operation.getLeft(),
-							"Operand of conditional operations must have type boolean.");
-				} 
+			if (notEquals(operation.getLeft().getType(), boolean.class)) {
+				this.logError(operation.getLeft(),
+						"Operand of conditional operations must have type boolean.");
 			}
 			
-			if (operation.getRight().getType() != null) {
-				if (!boolean.class.equals(operation.getRight().getType()) ) { 
-					this.logError(operation.getRight(),
-							"Operand of conditional operations must have type boolean.");
-				}
+			if (notEquals(operation.getRight().getType(), boolean.class)) {
+				this.logError(operation.getRight(),
+						"Operand of conditional operations must have type boolean.");
 			}
 		}
 	}
@@ -812,11 +792,7 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule14(final NegationExpression negation) {
-		if (negation.getOperand().getType() == null) {
-			return;
-		}
-		
-		if (!boolean.class.equals(negation.getOperand().getType())) {
+		if (notEquals(negation.getOperand().getType(), boolean.class)) {
 			this.logError(negation,
 					"Operand of negation operations must have type boolean.");
 		}
@@ -829,14 +805,8 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule15(final AssignmentStatement assignment) {
-		Class<?> locationType = null;
-		final Class<?> expressionType;
-		
-		if (this.getScope().containsKey(assignment.getLocation().getIdentifier())) {
-			locationType = this.getType(assignment.getLocation().getIdentifier());
-		}
-		
-		expressionType = assignment.getExpression().getType();
+		final Class<?> locationType = this.getType(assignment.getLocation().getIdentifier());
+		final Class<?> expressionType = assignment.getExpression().getType();
 		
 		if (locationType == null || expressionType == null) {
 			// if null -> rule 2 violation 
@@ -882,7 +852,7 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule17(final MinusExpression minusExpression) {
-		if (!nullOrEquals(minusExpression.getOperand().getType(), int.class)) {
+		if (notEquals(minusExpression.getOperand().getType(), int.class)) {
 			this.logError(minusExpression,
 					"Unary minus expression is not an int type");
 		}
@@ -976,11 +946,11 @@ public final class SemanticRules implements Visitor {
 	 * <br>Maybe null
 	 * @param object2
 	 * <br>Maybe null
-	 * @return {@code object1 == null || object1.equals(object2)}
+	 * @return {@code object1 != null && !object1.equals(object2)}
 	 * <br>Range: any boolean
 	 */
-	private static final boolean nullOrEquals(final Object object1, final Object object2) {
-		return object1 == null || object1.equals(object2);
+	private static final boolean notEquals(final Object object1, final Object object2) {
+		return object1 != null && !object1.equals(object2);
 	}
 	
 	/**
