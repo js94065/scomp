@@ -882,7 +882,7 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule17(final MinusExpression minusExpression) {
-		if (!minusExpression.getOperand().getType().equals(int.class)) {
+		if (!nullOrEquals(minusExpression.getOperand().getType(), int.class)) {
 			this.logError(minusExpression,
 					"Unary minus expression is not an int type");
 		}
@@ -968,6 +968,19 @@ public final class SemanticRules implements Visitor {
 	 */
 	private static final String getSignature(final Iterable<?> parametersOrArguments) {
 		return "(" + join(",", invoke(invoke(parametersOrArguments, "getType"), "getSimpleName")) + ")";
+	}
+	
+	/**
+	 * 
+	 * @param object1
+	 * <br>Maybe null
+	 * @param object2
+	 * <br>Maybe null
+	 * @return {@code object1 == null || object1.equals(object2)}
+	 * <br>Range: any boolean
+	 */
+	private static final boolean nullOrEquals(final Object object1, final Object object2) {
+		return object1 == null || object1.equals(object2);
 	}
 	
 	/**
