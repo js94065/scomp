@@ -64,6 +64,7 @@ public final class SemanticRules implements Visitor {
 	private final Logger logger;
 	
 	private String currentMethodName;
+	private Class<?> currentMethodType;
 	
 	private boolean methodScope;
 	
@@ -101,6 +102,7 @@ public final class SemanticRules implements Visitor {
 	@Override
 	public final void visit(final MethodDeclaration method) {
 		this.currentMethodName = method.getIdentifier();
+		this.currentMethodType = method.getType();
 		
 		this.checkRule1(method);
 		
@@ -585,16 +587,13 @@ public final class SemanticRules implements Visitor {
 	 * <br>Not null
 	 */
 	private final void checkRule7(final ReturnStatement returnStatement) {
-		final AbstractTypedEntityDeclaration method = (AbstractTypedEntityDeclaration) this.getScope().get(this.currentMethodName);
+		Class<?> methodType = this.getScope().get(this.currentMethodName) instanceof MethodDeclaration ? 
+				((MethodDeclaration)this.getScope().get(this.currentMethodName)).getType() : this.currentMethodType;
 		
-		if (method.getType() == void.class && returnStatement.getExpression() != null) {
-			this.logError(method,
-					"The method " + this.currentMethodName + " cannot have a return value");
-		}
-		
-		if (method.getType() != void.class && returnStatement.getExpression() == null) {
-			this.logError(method,
-					"The method " + this.currentMethodName + " needs to have a return value");
+		if ( (methodType == void.class && returnStatement.getExpression() != null) ||
+				(methodType != void.class && returnStatement.getExpression() == null) ) {
+					this.logError(this.getScope().get(this.currentMethodName),
+							"The method " + this.currentMethodName + " cannot have a return value");
 		}
 	}
 	
