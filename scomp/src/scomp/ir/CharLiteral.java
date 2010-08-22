@@ -28,7 +28,7 @@ public final class CharLiteral extends AbstractLiteral{
 	
 	@Override
 	public final Class<?> getType() {
-		return char.class;
+		return int.class;
 	}
 	
 	/**
@@ -36,8 +36,8 @@ public final class CharLiteral extends AbstractLiteral{
 	 * @return
 	 * <br>Range: any char
 	 */
-	public final char getValue(){
-		return (Character) this.getToken().getValue();
+	public final int getValue() {
+		return Character.getNumericValue((Character) this.getToken().getValue());
 	}
 	
 	@Override
@@ -50,7 +50,7 @@ public final class CharLiteral extends AbstractLiteral{
 	
 	@Override
 	protected final int doHashCode() {
-		return Character.valueOf(this.getValue()).hashCode();
+		return this.getValue();
 	}
 	
 	@Override
