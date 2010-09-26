@@ -1,6 +1,6 @@
 # call_macosx.s
 # FILE=call_macosx; gcc $FILE.s -o $FILE && ./$FILE
-# Applied rules: 1, 3, 4, 2, 18
+# Applied rules: 1, 3, 4, 19, 2, 18
 
 STRING_0:
 	.ascii "42\12\0"
@@ -20,7 +20,10 @@ decaf_print:
 	pushq %rax
 	callq callout_printf_1
 	addq $(8 * 1), %rsp
+	movq $0, %rax
 	leaveq
+	retq
+  	leaveq
 	retq
 
 decaf_main:
@@ -29,6 +32,9 @@ _main:
 	enterq $(8 * 0), $0
 	callq decaf_print
 	addq $(8 * 0), %rsp
+	movq $0, %rax
+	leaveq
+	retq
 	movq $0, %rax
 	leaveq
 	retq
