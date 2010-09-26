@@ -1,5 +1,11 @@
 package scomp.x86.translator;
 
+import static org.junit.Assert.assertEquals;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 import org.junit.Test;
 
 import scomp.Tools;
@@ -13,167 +19,167 @@ public abstract class AbstractTranslatorTestBase {
 	
 	@Test
 	public final void testSimple() {
-		test("simple");
+		this.test("simple");
 	}
 	
 	@Test
 	public final void testPrint42() {
-		test("print42");
+		this.test("print42");
 	}
 	
 	@Test
 	public final void testPrintA() {
-		test("printa");
+		this.test("printa");
 	}
 	
 	@Test
 	public final void testPrintAB() {
-		test("printab");
+		this.test("printab");
 	}
 	
 	@Test
 	public final void testCall() {
-		test("call");
+		this.test("call");
 	}
 	
 	@Test
 	public final void testReturn() {
-		test("return");
+		this.test("return");
 	}
 	
 	@Test
 	public final void testUnaryMinus() {
-		test("unaryminus");
+		this.test("unaryminus");
 	}
 	
 	@Test
 	public final void testAddition() {
-		test("addition");
+		this.test("addition");
 	}
 	
 	@Test
 	public final void testSubtraction() {
-		test("subtraction");
+		this.test("subtraction");
 	}
 	
 	@Test
 	public final void testMultiplication() {
-		test("multiplication");
+		this.test("multiplication");
 	}
 	
 	@Test
 	public final void testDivision() {
-		test("division");
+		this.test("division");
 	}
 	
 	@Test
 	public final void testModulo() {
-		test("modulo");
+		this.test("modulo");
 	}
 	
 	@Test
 	public final void testShiftLeft() {
-		test("shiftleft");
+		this.test("shiftleft");
 	}
 	
 	@Test
 	public final void testShiftRight() {
-		test("shiftright");
+		this.test("shiftright");
 	}
 	
 	@Test
 	public final void testRotateRight() {
-		test("rotateright");
+		this.test("rotateright");
 	}
 	
 	@Test
 	public final void testLess() {
-		test("less");
+		this.test("less");
 	}
 	
 	@Test
 	public final void testLessOrEqual() {
-		test("lessorequal");
+		this.test("lessorequal");
 	}
 	
 	@Test
 	public final void testGreater() {
-		test("greater");
+		this.test("greater");
 	}
 	
 	@Test
 	public final void testGreaterOrEqual() {
-		test("greaterorequal");
+		this.test("greaterorequal");
 	}
 	
 	@Test
 	public final void testIntEqual() {
-		test("intequal");
+		this.test("intequal");
 	}
 	
 	@Test
 	public final void testIntNotEqual() {
-		test("intnotequal");
+		this.test("intnotequal");
 	}
 	
 	@Test
 	public final void testNegation() {
-		test("negation");
+		this.test("negation");
 	}
 	
 	@Test
 	public final void testAnd() {
-		test("and");
+		this.test("and");
 	}
 	
 	@Test
 	public final void testAndShortCircuit() {
-		test("andshortcircuit");
+		this.test("andshortcircuit");
 	}
 	
 	@Test
 	public final void testOr() {
-		test("or");
+		this.test("or");
 	}
 	
 	@Test
 	public final void testOrShortCircuit() {
-		test("orshortcircuit");
+		this.test("orshortcircuit");
 	}
 	
 	@Test
 	public final void testBooleanEqual() {
-		test("booleanequal");
+		this.test("booleanequal");
 	}
 	
 	@Test
 	public final void testBooleanNotEqual() {
-		test("booleannotequal");
+		this.test("booleannotequal");
 	}
 	
 	@Test
 	public final void testArguments() {
-		test("arguments");
+		this.test("arguments");
 	}
 	
 	@Test
 	public final void testIfElse() {
-		test("ifelse");
+		this.test("ifelse");
 	}
 	
 	@Test
 	public final void testWhile() {
-		test("while");
+		this.test("while");
 	}
 	
 	@Test
 	public final void testBreakContinue() {
-		test("breakcontinue");
+		this.test("breakcontinue");
 	}
 	
 	@Test
 	public final void testRecursive() {
-		test("recursive");
+		this.test("recursive");
 	}
 	
 	/**
@@ -188,9 +194,22 @@ public abstract class AbstractTranslatorTestBase {
 	 * @param testName
 	 * <br>Not null
 	 */
-	private static final void test(final String testName) {
-		// TODO
-		parseTestFile(testName);
+	private final void test(final String testName) {
+		final AbstractTranslator translator = this.newTranslator();
+		
+		translator.visit(parseTestFile(testName));
+		
+		assertEquals(getSimplifiedString(testName + "_" + this.getOSName()), translator.getProgram().toString());
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private final AbstractTranslator newTranslator() {
+		return TranslatorFactory.newTranslator(this.getOSName());
 	}
 	
 	/**
@@ -201,7 +220,58 @@ public abstract class AbstractTranslatorTestBase {
 	 * <br>Maybe null
 	 */
 	private static final scomp.ir.Program parseTestFile(final String testName) {
-		return Tools.parseFile("test/scomp/data/decaf/" + testName + ".decaf");
+		return Tools.parseFile(getDecafTestFilePath(testName));
 	}
 	
+	/**
+	 * Returns a string containing the non-comment and non-empty lines
+	 * of the x86 test file corresponding to {@code osSpecificTestName}.
+	 * 
+	 * @param osSpecificTestName
+	 * <br>Not null
+	 * @return
+	 * <br>Not null
+	 */
+	private static final String getSimplifiedString(final String osSpecificTestName) {
+		try {
+			final StringBuilder result = new StringBuilder();
+			final Scanner scanner = new Scanner(new File(getX86TestFilePath(osSpecificTestName)));
+			
+			while (scanner.hasNext()) {
+				final String line = scanner.nextLine().trim();
+				
+				if (!line.isEmpty() && !line.startsWith("#")) {
+					result.append(line + "\n");
+				}
+			}
+			
+			return result.toString();
+		} catch (final FileNotFoundException exception) {
+			throw Tools.unchecked(exception);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param testName
+	 * <br>Not null
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final String getDecafTestFilePath(final String testName) {
+		return "test/scomp/data/decaf/" + testName + ".decaf";
+	}
+	
+	/**
+	 * 
+	 * @param osSpecificTestName
+	 * <br>Not null
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	private static final String getX86TestFilePath(final String osSpecificTestName) {
+		return "test/scomp/data/x86/" + osSpecificTestName + ".s";
+	}
 }

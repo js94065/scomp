@@ -28,8 +28,23 @@ public final class Tools {
 	private Tools() {
 		// Do nothing
 	}
-	
+    
     public static final int DEBUG_STACK_OFFSET = JLexTools.DEBUG_STACK_OFFSET;
+    
+    /**
+     * {@value}.
+     */
+    public static final String MAC_OS_X = "macosx";
+    
+    /**
+     * {@value}.
+     */
+    public static final String LINUX = "linux";
+    
+    /**
+     * {@value}.
+     */
+    public static final String WINDOWS = "windows";
 	
 	/**
 	 * 
