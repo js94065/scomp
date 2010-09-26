@@ -1,0 +1,13 @@
+// return.decaf
+
+class Program {
+
+	int get42() {
+		return 42;
+	}
+
+	void main() {
+		callout("printf", "%d\n", get42());
+	}
+
+}

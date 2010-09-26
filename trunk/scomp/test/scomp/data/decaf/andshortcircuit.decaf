@@ -1,0 +1,24 @@
+// andshortcircuit.decaf
+
+class Program {
+
+	boolean t() {
+		callout("printf", "t\n");
+
+		return true;
+	}
+
+	boolean f() {
+		callout("printf", "f\n");
+
+		return false;
+	}
+
+	void main() {
+		callout("printf", "1 && 1 = %d\n", t() && t());
+		callout("printf", "1 && 0 = %d\n", t() && f());
+		callout("printf", "0 && 1 = %d\n", f() && t());
+		callout("printf", "0 && 0 = %d\n", f() && f());
+	}
+
+}

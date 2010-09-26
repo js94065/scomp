@@ -1,0 +1,15 @@
+// modulo.decaf
+
+class Program {
+
+	void main() {
+		int x, y;
+
+		x = 2;
+		y = 7;
+
+		callout("printf", "%d %% %d = %d\n", x, y, x % y);
+		callout("printf", "%d %% %d = %d\n", x, y, y % x);
+	}
+
+}
