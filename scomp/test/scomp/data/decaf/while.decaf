@@ -1,0 +1,17 @@
+// while.decaf
+
+class Program {
+
+	void main() {
+		int i;
+
+		i = 0;
+
+		while (i < 5) {
+			callout(ÒprintfÓ, Ò%d\nÓ, i);
+
+			i = i + 1;
+		}
+	}
+
+}

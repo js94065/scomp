@@ -1,0 +1,22 @@
+// printab.decaf
+
+class Program {
+
+	int a[1], b;
+
+	void main() {
+		a[0] = 'C';
+		b = 68;
+
+		{
+			int b;
+
+			b = 'A';
+
+			callout("printf", "%c%c\n", b, a[0]);
+		}
+
+		callout("printf", "%c%c\n", b, a[0]);
+	}
+
+}

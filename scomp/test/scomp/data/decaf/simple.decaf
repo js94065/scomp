@@ -1,0 +1,9 @@
+// simple.decaf
+
+class Program {
+
+	void main() {
+		// Deliberately left empty
+	}
+
+}

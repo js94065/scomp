@@ -1,0 +1,15 @@
+// negation.decaf
+
+class Program {
+
+	void main() {
+		boolean x, y;
+
+		x = true;
+		y = false;
+
+		callout("printf", "!%d = %d\n", x, !x);
+		callout("printf", "!%d = %d\n", y, !y);
+	}
+
+}

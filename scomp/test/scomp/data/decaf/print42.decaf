@@ -1,0 +1,9 @@
+// print42.decaf
+
+class Program {
+
+	void main() {
+		callout("printf", "%d\n", 42);
+	}
+
+}

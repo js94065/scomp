@@ -1,0 +1,18 @@
+// ifelse.decaf
+
+class Program {
+
+	void compare(int x, int y) {
+		if (x < y) {
+			callout("printf", "%d < %d\n", x, y);
+		} else {
+			callout("printf", "%d >= %d\n", x, y);
+		}
+	}
+
+	void main() {
+		compare(1, 2);
+		compare(2, 1);
+	}
+
+}

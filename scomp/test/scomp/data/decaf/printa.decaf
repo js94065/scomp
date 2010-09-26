@@ -1,0 +1,13 @@
+// printa.decaf
+
+class Program {
+
+	void main() {
+		int a;
+
+		a = 42;
+
+		callout("printf", "%d\n", 42);
+	}
+
+}

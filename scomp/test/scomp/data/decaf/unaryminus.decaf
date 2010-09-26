@@ -1,0 +1,13 @@
+// call.decaf
+
+class Program {
+
+	void print() {
+		callout("printf", "42\n");
+	}
+
+	void main() {
+		print();
+	}
+
+}
