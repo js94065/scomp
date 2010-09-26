@@ -15,11 +15,11 @@ class Program {
 
 		n = 0;
 
-		callout(“printf”, “%d! = %d\n”, n, factorial(n));
+		callout("printf", "%d! = %d\n", n, factorial(n));
 
 		n = 5;
 
-		callout(“printf”, “%d! = %d\n”, n, factorial(n));
+		callout("printf", "%d! = %d\n", n, factorial(n));
 	}
 
 }
