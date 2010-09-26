@@ -1,6 +1,7 @@
 package scomp;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -245,6 +246,27 @@ public final class Tools {
 	public static final <T> T parse(final String input) {
 		final DecafParser parser = new DecafParser(createScanner(input));
 		try {
+			final Symbol parseResult = parser.parse();
+			
+			return (T) (parseResult == null ? null : parseResult.value);
+		} catch (final Exception exception) {
+			throw unchecked(exception);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param <T> The expected return type
+	 * @param inputFilePath
+	 * <br>Not null
+	 * @return
+	 * <br>Maybe null
+	 * @throws RuntimeException If an error occurs
+	 */
+	@SuppressWarnings("unchecked")
+	public static final <T> T parseFile(final String inputFilePath) {
+		try {
+			final DecafParser parser = new DecafParser(new Yylex(new FileInputStream(inputFilePath)));
 			final Symbol parseResult = parser.parse();
 			
 			return (T) (parseResult == null ? null : parseResult.value);

@@ -8,7 +8,7 @@ class Program {
 		i = 0;
 
 		while (i < 5) {
-			callout(ÒprintfÓ, Ò%d\nÓ, i);
+			callout("printf", "%d\n", i);
 
 			i = i + 1;
 		}
