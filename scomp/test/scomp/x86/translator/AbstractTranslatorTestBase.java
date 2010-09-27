@@ -23,18 +23,18 @@ public abstract class AbstractTranslatorTestBase {
 	}
 	
 	@Test
-	public final void testPrint42() {
-		this.test("print42");
+	public final void testCallout() {
+		this.test("callout");
 	}
 	
 	@Test
-	public final void testPrintA() {
-		this.test("printa");
+	public final void testLocalVariable() {
+		this.test("localvariable");
 	}
 	
 	@Test
-	public final void testPrintAB() {
-		this.test("printab");
+	public final void testGlobalVariableArray() {
+		this.test("globalvariablearray");
 	}
 	
 	@Test

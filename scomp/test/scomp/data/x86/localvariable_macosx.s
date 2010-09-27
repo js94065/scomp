@@ -1,5 +1,5 @@
-# printa_macosx.s
-# FILE=printa_macosx; gcc $FILE.s -o $FILE && ./$FILE
+# localvariable_macosx.s
+# FILE=localvariable_macosx; gcc $FILE.s -o $FILE && ./$FILE
 # Applied rules: 2, 5, 6, 8, 3, 7, 4
 
 STRING_0:

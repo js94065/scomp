@@ -1,5 +1,5 @@
-# print42_macosx.s
-# FILE=print42_macosx; gcc $FILE.s -o $FILE && ./$FILE
+# callout_macosx.s
+# FILE=callout_macosx; gcc $FILE.s -o $FILE && ./$FILE
 # Applied rules: 2, 3, 8, 4
 
 STRING_0:
