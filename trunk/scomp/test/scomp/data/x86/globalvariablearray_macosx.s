@@ -1,5 +1,5 @@
-# printab_macosx.s
-# FILE=printab_macosx; gcc $FILE.s -o $FILE && ./$FILE
+# globalvariablearray_macosx.s
+# FILE=globalvariablearray_macosx; gcc $FILE.s -o $FILE && ./$FILE
 # Applied rules: 15, 12, 2, 16, 11, 8, 13, 5, 6, 3, 7, 17, 4, 14
 
 STRING_0:
