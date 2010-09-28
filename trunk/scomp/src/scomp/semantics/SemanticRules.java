@@ -12,11 +12,10 @@ import java.util.logging.Logger;
 
 import scomp.DecafParser;
 import scomp.ir.AbstractExpression;
-import scomp.ir.AbstractFieldDeclaration;
 import scomp.ir.AbstractLocation;
 import scomp.ir.AbstractNode;
-import scomp.ir.AbstractStatement;
 import scomp.ir.AbstractTypedEntityDeclaration;
+import scomp.ir.AbstractVisitor;
 import scomp.ir.ArrayFieldDeclaration;
 import scomp.ir.ArrayLocation;
 import scomp.ir.AssignmentStatement;
@@ -46,7 +45,6 @@ import scomp.ir.Program;
 import scomp.ir.ReturnStatement;
 import scomp.ir.StringCalloutArgument;
 import scomp.ir.VariableDeclaration;
-import scomp.ir.Visitor;
 import scomp.ir.WhileStatement;
 
 /**
@@ -57,7 +55,7 @@ import scomp.ir.WhileStatement;
  * @author js94065
  *
  */
-public final class SemanticRules implements Visitor {
+public final class SemanticRules extends AbstractVisitor {
 	
 	private final NestingDictionary<String, AbstractNode> scope;
 	
@@ -286,182 +284,6 @@ public final class SemanticRules implements Visitor {
 	@Override
 	public final void visit(final StringCalloutArgument stringCalloutArgument) {
 		// Do nothing
-	}
-	
-	/**
-	 * 
-	 * @param program
-	 * <br>Not null
-	 */
-	private final void visitChildren(final Program program) {
-		for (final AbstractFieldDeclaration fieldDeclaration : program.getFieldDeclarations()) {
-			fieldDeclaration.accept(this);
-		}
-		
-		for (final MethodDeclaration methodDeclaration : program.getMethodDeclarations()) {
-			methodDeclaration.accept(this);
-		}
-	}
-	
-	/**
-	 * 
-	 * @param method
-	 * <br>Not null
-	 */
-	private final void visitChildren(final MethodDeclaration method) {
-		for (final ParameterDeclaration parameterDeclaration : method.getParameterDeclarations()) {
-			parameterDeclaration.accept(this);
-		}
-		
-		method.getBlock().accept(this);
-	}
-	
-	/**
-	 * 
-	 * @param block
-	 * <br>Not null
-	 */
-	private final void visitChildren(final Block block) {
-		for (final VariableDeclaration variableDeclaration : block.getVariableDeclarations()) {
-			variableDeclaration.accept(this);
-		}
-		
-		for (final AbstractStatement statement : block.getStatements()) {
-			statement.accept(this);
-		}
-	}
-	
-	/**
-	 * 
-	 * @param block
-	 * <br>Not null
-	 */
-	private final void visitChildren(final BlockStatement block) {
-		block.getBlock().accept(this);
-	}
-	
-	/**
-	 * 
-	 * @param assignment
-	 * <br>Not null
-	 */
-	private final void visitChildren(final AssignmentStatement assignment) {
-		assignment.getLocation().accept(this);
-		
-		assignment.getExpression().accept(this);
-	}
-	
-	/**
-	 * 
-	 * @param returnStatement
-	 * <br>Not null
-	 */
-	private final void visitChildren(final ReturnStatement returnStatement) {
-		if (returnStatement.getExpression() != null) {
-			returnStatement.getExpression().accept(this);
-		}
-	}
-	
-	/**
-	 * 
-	 * @param location
-	 * <br>Not null
-	 */
-	private final void visitChildren(final ArrayLocation location) {
-		location.getOffset().accept(this);
-	}
-	
-	/**
-	 * 
-	 * @param ifStatement
-	 * <br>Not null
-	 */
-	private final void visitChildren(final IfStatement ifStatement) {
-		ifStatement.getCondition().accept(this);
-		
-		ifStatement.getThenBlock().accept(this);
-		
-		if (ifStatement.getElseBlock() != null) {
-			ifStatement.getElseBlock().accept(this);
-		}
-	}
-	
-	/**
-	 * 
-	 * @param whileStatement
-	 * <br>Not null
-	 */
-	private final void visitChildren(final WhileStatement whileStatement) {
-		whileStatement.getCondition().accept(this);
-		
-		whileStatement.getBlock().accept(this);
-	}
-	
-	/**
-	 * 
-	 * @param operation
-	 * <br>Not null
-	 */
-	private final void visitChildren(final BinaryOperationExpression operation) {
-		operation.getLeft().accept(this);
-		
-		operation.getRight().accept(this);
-	}
-	
-	/**
-	 * 
-	 * @param minusExpression
-	 * <br>Not null
-	 */
-	private final void visitChildren(final MinusExpression minusExpression) {
-		minusExpression.getOperand().accept(this);
-	}
-	
-	/**
-	 * 
-	 * @param negation
-	 * <br>Not null
-	 */
-	private final void visitChildren(final NegationExpression negation) {
-		negation.getOperand().accept(this);
-	}
-	
-	/**
-	 * 
-	 * @param methodCall
-	 * <br>Not null
-	 */
-	private final void visitChildren(final MethodCallExpression methodCall) {
-		methodCall.getMethodCall().accept(this);
-	}
-	
-	/**
-	 * 
-	 * @param location
-	 * <br>Not null
-	 */
-	private final void visitChildren(final LocationExpression location) {
-		location.getLocation().accept(this);
-	}
-	
-	/**
-	 * 
-	 * @param methodCall
-	 * <br>Not null
-	 */
-	private final void visitChildren(final MethodCall methodCall) {
-		for (final AbstractExpression argument : methodCall.getArguments()) {
-			argument.accept(this);
-		}
-	}
-	
-	/**
-	 * 
-	 * @param methodCallStatement
-	 * <br>Not null
-	 */
-	private final void visitChildren(final MethodCallStatement methodCallStatement) {
-		methodCallStatement.getMethodCall().accept(this);
 	}
 	
 	/**

@@ -1,5 +1,7 @@
 package scomp.x86.translator;
 
+import scomp.x86.ir.AbstractInstruction;
+
 /**
  * This is the Linux implementation of the Decaf -&gt; x86 translator.
  * 
@@ -7,5 +9,10 @@ package scomp.x86.translator;
  *
  */
 public final class LinuxTranslator extends AbstractTranslator {
-	// TODO
+	
+	@Override
+	protected final String getDefaultSizeSuffix() {
+		return AbstractInstruction.SIZE_SUFFIX_64;
+	}
+	
 }
