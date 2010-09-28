@@ -166,6 +166,8 @@ public final class SemanticRules extends AbstractVisitor {
 	public final void visit(final IdentifierLocation location) {
 		this.checkRule2(location);
 		this.checkRule9(location);
+		
+		location.setDeclaration((AbstractTypedEntityDeclaration) this.getScope().get(location.getIdentifier()));
 	}
 	
 	@Override
@@ -313,6 +315,8 @@ public final class SemanticRules extends AbstractVisitor {
 			this.logError(location,
 					"Undeclared identifier " + location.getIdentifier());
 		}
+		
+		location.setDeclaration((AbstractTypedEntityDeclaration) this.getScope().get(location.getIdentifier()));
 	}
 	
 	/**
@@ -326,6 +330,8 @@ public final class SemanticRules extends AbstractVisitor {
 			this.logError(methodCall,
 					"Undeclared identifier " + methodCall.getMethodName());
 		}
+		
+		methodCall.setDeclaration((MethodDeclaration) this.getScope().get(methodCall.getMethodName()));
 	}
 	
 	/**

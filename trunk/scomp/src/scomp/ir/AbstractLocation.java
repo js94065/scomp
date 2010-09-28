@@ -11,6 +11,8 @@ import scomp.Tools;
  */
 public abstract class AbstractLocation extends AbstractNode {
 	
+	private AbstractTypedEntityDeclaration declaration;
+	
 	/**
 	 * 
 	 * @param identifier
@@ -19,6 +21,26 @@ public abstract class AbstractLocation extends AbstractNode {
 	 */
 	public AbstractLocation(final DecafToken identifier) {
 		super(identifier);
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * <br>Maybe null
+	 * <br>Shared
+	 */
+	public final AbstractTypedEntityDeclaration getDeclaration() {
+		return this.declaration;
+	}
+	
+	/**
+	 * 
+	 * @param declaration
+	 * <br>Maybe null
+	 * <br>Shared
+	 */
+	public final void setDeclaration(final AbstractTypedEntityDeclaration declaration) {
+		this.declaration = declaration;
 	}
 	
 	/**
