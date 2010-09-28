@@ -62,6 +62,7 @@ public final class SemanticRules extends AbstractVisitor {
 	private final Logger logger;
 	
 	private String currentMethodName;
+	
 	private Class<?> currentMethodType;
 	
 	private boolean methodScope;

@@ -52,4 +52,12 @@ public final class ExpressionCalloutArgument extends AbstractCalloutArgument {
 				this.getExpression().equals(that.getExpression());
 	}
 	
+	@Override
+	public final String toString() {
+		return
+				this.getClass().getSimpleName() + "{" +
+				"expression{" + this.getExpression() + "} " +
+				"}";
+	}
+	
 }
