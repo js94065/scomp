@@ -5,8 +5,11 @@ import static scomp.x86.ir.AbstractInstruction.SIZE_SUFFIX_64;
 import static scomp.x86.ir.Register.Name.*;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
+import scomp.Tools;
 import scomp.ir.AbstractVisitor;
 import scomp.ir.ArrayFieldDeclaration;
 import scomp.ir.ArrayLocation;
@@ -39,6 +42,7 @@ import scomp.ir.VariableDeclaration;
 import scomp.ir.WhileStatement;
 import scomp.x86.ir.AbstractInstruction;
 import scomp.x86.ir.AbstractProgramElement;
+import scomp.x86.ir.Ascii;
 import scomp.x86.ir.CompositeIntegerValue;
 import scomp.x86.ir.Enter;
 import scomp.x86.ir.Globl;
@@ -58,11 +62,17 @@ import scomp.x86.ir.Register.Name;
  *
  */
 public abstract class AbstractTranslator extends AbstractVisitor {
-
+	
+	private final List<AbstractProgramElement> stringSection;
+	
 	private final List<AbstractProgramElement> procedureSection;
 	
+	private final Map<String, String> stringLabelNames;
+	
 	protected AbstractTranslator() {
+		this.stringSection = new ArrayList<AbstractProgramElement>();
 		this.procedureSection = new ArrayList<AbstractProgramElement>();
+		this.stringLabelNames = new LinkedHashMap<String, String>();
 	}
 	
 	/**
@@ -73,7 +83,7 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	public final Program getProgram() {
 		final Program result = new Program();
 		
-		result.getElements().addAll(this.getProcedureSection());
+		this.addSectionsToProgram(result.getElements());
 		
 		return result;
 	}
@@ -134,14 +144,13 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	@Override
 	public final void visit(final Block block) {
-		// TODO Auto-generated method stub
+		this.visitChildren(block);
 		
 	}
 	
 	@Override
 	public final void visit(final BlockStatement block) {
-		// TODO Auto-generated method stub
-		
+		this.visitChildren(block);
 	}
 	
 	@Override
@@ -176,14 +185,12 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	@Override
 	public final void visit(final MethodCallExpression methodCall) {
-		// TODO Auto-generated method stub
-		
+		this.visitChildren(methodCall);
 	}
 	
 	@Override
 	public final void visit(final MethodCall methodCall) {
-		// TODO Auto-generated method stub
-		
+		this.visitChildren(methodCall);
 	}
 	
 	@Override
@@ -248,14 +255,14 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	@Override
 	public final void visit(final MethodCallStatement methodCallStatement) {
-		// TODO Auto-generated method stub
-		
+		this.visitChildren(methodCallStatement);
 	}
 	
 	@Override
 	public final void visit(final MethodCallout methodCallout) {
-		// TODO Auto-generated method stub
+		this.visitChildren(methodCallout);
 		
+		this.afterChildren(methodCallout);
 	}
 	
 	@Override
@@ -266,8 +273,36 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	@Override
 	public final void visit(final StringCalloutArgument stringCalloutArgument) {
-		// TODO Auto-generated method stub
+		final String string = stringCalloutArgument.getString();
+		String stringLabelName = this.stringLabelNames.get(string);
 		
+		if (stringLabelName == null) {
+			this.stringLabelNames.put(string, stringLabelName = "STRING_" + this.stringLabelNames.size());
+			this.getStringSection().add(new Label(stringLabelName));
+			this.getStringSection().add(new Ascii(string));
+		}
+	}
+	
+	/**
+	 * 
+	 * @param result
+	 * <br>Not null
+	 * <br>Shared
+	 * <br>Input-output
+	 */
+	protected void addSectionsToProgram(final List<AbstractProgramElement> result) {
+		result.addAll(this.getStringSection());
+		result.addAll(this.getProcedureSection());
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * <br>Not null
+	 * <br>Shared
+	 */
+	protected final List<AbstractProgramElement> getStringSection() {
+		return this.stringSection;
 	}
 	
 	/**
@@ -279,6 +314,13 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	protected final List<AbstractProgramElement> getProcedureSection() {
 		return this.procedureSection;
 	}
+	
+	/**
+	 * 
+	 * @param methodCallout
+	 * <br>Not null
+	 */
+	protected abstract void afterChildren(final MethodCallout methodCallout);
 	
 	/**
 	 * 

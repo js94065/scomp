@@ -36,4 +36,12 @@ public final class MethodCallStatement extends AbstractStatement {
 		return this.methodCall;
 	}
 	
+	@Override
+	public final String toString() {
+		return
+				this.getClass().getSimpleName() + "{" +
+				"methodCall{" + this.getMethodCall() + "} " +
+				"}";
+	}
+	
 }

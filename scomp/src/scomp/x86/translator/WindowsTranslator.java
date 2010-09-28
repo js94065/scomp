@@ -1,5 +1,6 @@
 package scomp.x86.translator;
 
+import scomp.ir.MethodCallout;
 import scomp.x86.ir.AbstractInstruction;
 
 /**
@@ -9,6 +10,12 @@ import scomp.x86.ir.AbstractInstruction;
  *
  */
 public final class WindowsTranslator extends AbstractTranslator {
+	
+	@Override
+	protected final void afterChildren(final MethodCallout methodCallout) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	@Override
 	protected final String getDefaultSizeSuffix() {

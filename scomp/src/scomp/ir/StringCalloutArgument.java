@@ -50,4 +50,12 @@ public class StringCalloutArgument extends AbstractCalloutArgument {
 				this.getString().equals(that.getString());
 	}
 	
+	@Override
+	public final String toString() {
+		return
+				this.getClass().getSimpleName() + "{" +
+				"string{" + this.getString() + "} " +
+				"}";
+	}
+	
 }
