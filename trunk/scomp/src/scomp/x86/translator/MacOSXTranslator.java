@@ -1,5 +1,6 @@
 package scomp.x86.translator;
 
+import static scomp.x86.ir.Register.Name.RAX;
 import static scomp.x86.ir.Register.Name.RSP;
 
 import java.util.ArrayList;
@@ -13,13 +14,18 @@ import scomp.ir.MethodCallout;
 import scomp.x86.ir.AbstractInstruction;
 import scomp.x86.ir.AbstractProgramElement;
 import scomp.x86.ir.Add;
+import scomp.x86.ir.And;
 import scomp.x86.ir.Call;
 import scomp.x86.ir.CompositeIntegerValue;
+import scomp.x86.ir.Enter;
+import scomp.x86.ir.IntegerValue;
 import scomp.x86.ir.Label;
 import scomp.x86.ir.LabelOperand;
 import scomp.x86.ir.Leave;
+import scomp.x86.ir.Mov;
 import scomp.x86.ir.Register;
 import scomp.x86.ir.Ret;
+import scomp.x86.ir.Register.Name;
 
 /**
  * This is the Mac OS X implementation of the Decaf -&gt; x86 translator.
@@ -55,6 +61,10 @@ public final class MacOSXTranslator extends AbstractTranslator {
 			final List<AbstractProgramElement> callout = new ArrayList<AbstractProgramElement>();
 			
 			callout.add(new Label(callName));
+			callout.add(new Enter(this.getDefaultSizeSuffix(), new CompositeIntegerValue(this.getDefaultVariableByteCount(), 0), new IntegerValue(0)));
+			callout.add(new And(this.getDefaultSizeSuffix(), new IntegerValue(-16), new Register(RSP)));
+			callout.add(new Mov(this.getDefaultSizeSuffix(), new IntegerValue(0), new Register(RAX)));
+			callout.add(new Call(this.getDefaultSizeSuffix(), new LabelOperand("_" + methodCallout.getMethodName())));
 			callout.add(new Leave(this.getDefaultSizeSuffix()));
 			callout.add(new Ret(this.getDefaultSizeSuffix()));
 			
