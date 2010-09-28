@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import scomp.Tools;
+import scomp.ir.AbstractCalloutArgument;
 import scomp.ir.AbstractVisitor;
 import scomp.ir.ArrayFieldDeclaration;
 import scomp.ir.ArrayLocation;
@@ -51,6 +52,7 @@ import scomp.x86.ir.Label;
 import scomp.x86.ir.Leave;
 import scomp.x86.ir.Mov;
 import scomp.x86.ir.Program;
+import scomp.x86.ir.Push;
 import scomp.x86.ir.Register;
 import scomp.x86.ir.Ret;
 import scomp.x86.ir.Register.Name;
@@ -101,8 +103,7 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	@Override
 	public final void visit(final IntLiteral literal) {
-		// TODO Auto-generated method stub
-		
+		this.getProcedureSection().add(new Push(this.getDefaultSizeSuffix(), new IntegerValue(literal.getValue())));
 	}
 	
 	@Override
@@ -243,14 +244,12 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	@Override
 	public final void visit(final ExpressionCalloutArgument expressionCalloutArgument) {
-		// TODO Auto-generated method stub
-		
+		this.visitChildren(expressionCalloutArgument);
 	}
 	
 	@Override
 	public final void visit(final LiteralExpression literalExpression) {
-		// TODO Auto-generated method stub
-		
+		this.visitChildren(literalExpression);
 	}
 	
 	@Override
@@ -280,6 +279,35 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 			this.stringLabelNames.put(string, stringLabelName = "STRING_" + this.stringLabelNames.size());
 			this.getStringSection().add(new Label(stringLabelName));
 			this.getStringSection().add(new Ascii(string));
+		}
+	}
+	
+	/**
+	 * 
+	 * @param expressionCalloutArgument
+	 * <br>Not null
+	 */
+	protected final void visitChildren(final ExpressionCalloutArgument expressionCalloutArgument) {
+		expressionCalloutArgument.getExpression().accept(this);
+	}
+	
+	/**
+	 * 
+	 * @param literalExpression
+	 * <br>Not null
+	 */
+	protected final void visitChildren(final LiteralExpression literalExpression) {
+		literalExpression.getLiteral().accept(this);
+	}
+	
+	/**
+	 * 
+	 * @param methodCallout
+	 * <br>Not null
+	 */
+	protected final void visitChildren(final MethodCallout methodCallout) {
+		for (int i = methodCallout.getArguments().size() - 1; i >= 0; --i) {
+			methodCallout.getArguments().get(i).accept(this);
 		}
 	}
 	

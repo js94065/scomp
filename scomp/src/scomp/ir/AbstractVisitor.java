@@ -184,15 +184,4 @@ public abstract class AbstractVisitor implements Visitor {
 		methodCallStatement.getMethodCall().accept(this);
 	}
 	
-	/**
-	 * 
-	 * @param methodCallout
-	 * <br>Not null
-	 */
-	protected final void visitChildren(final MethodCallout methodCallout) {
-		for (final AbstractCalloutArgument argument : methodCallout.getArguments()) {
-			argument.accept(this);
-		}
-	}
-	
 }
