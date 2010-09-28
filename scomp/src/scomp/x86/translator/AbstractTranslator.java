@@ -9,8 +9,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import scomp.Tools;
-import scomp.ir.AbstractCalloutArgument;
 import scomp.ir.AbstractVisitor;
 import scomp.ir.ArrayFieldDeclaration;
 import scomp.ir.ArrayLocation;
@@ -280,6 +278,8 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 			this.getStringSection().add(new Label(stringLabelName));
 			this.getStringSection().add(new Ascii(string));
 		}
+		
+		this.addPushLabel(stringLabelName);
 	}
 	
 	/**
@@ -310,6 +310,13 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 			methodCallout.getArguments().get(i).accept(this);
 		}
 	}
+	
+	/**
+	 * 
+	 * @param labelName
+	 * <br>Not null
+	 */
+	protected abstract void addPushLabel(final String labelName);
 	
 	/**
 	 * 
@@ -383,24 +390,7 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	 * <br>Not null
 	 */
 	protected final Name getResizedName(final Name name) {
-		if (SIZE_SUFFIX_32.equals(this.getDefaultSizeSuffix())) {
-			switch (name) {
-			case RAX:
-				return EAX;
-			case RCX:
-				return ECX;
-			case RSP:
-				return ESP;
-			case RBP:
-				return EBP;
-			case RIP:
-				return EIP;
-			default:
-				break;
-			}
-		}
-		
-		return name;
+		return AbstractInstruction.getResizedName(name, this.getDefaultSizeSuffix());
 	}
 	
 }

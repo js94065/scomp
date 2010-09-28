@@ -1,13 +1,10 @@
 package scomp.x86.translator;
 
-import static scomp.x86.ir.Register.Name.RAX;
-import static scomp.x86.ir.Register.Name.RSP;
+import static scomp.x86.ir.Register.Name.*;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 import scomp.ir.MethodCallout;
@@ -21,11 +18,14 @@ import scomp.x86.ir.Enter;
 import scomp.x86.ir.IntegerValue;
 import scomp.x86.ir.Label;
 import scomp.x86.ir.LabelOperand;
+import scomp.x86.ir.LabelRelativeAddress;
+import scomp.x86.ir.Lea;
 import scomp.x86.ir.Leave;
 import scomp.x86.ir.Mov;
+import scomp.x86.ir.Push;
 import scomp.x86.ir.Register;
+import scomp.x86.ir.RegisterRelativeAddress;
 import scomp.x86.ir.Ret;
-import scomp.x86.ir.Register.Name;
 
 /**
  * This is the Mac OS X implementation of the Decaf -&gt; x86 translator.
@@ -39,6 +39,12 @@ public final class MacOSXTranslator extends AbstractTranslator {
 	
 	public MacOSXTranslator() {
 		this.callouts = new TreeMap<String, List<AbstractProgramElement>>();
+	}
+	
+	@Override
+	protected final void addPushLabel(final String labelName) {
+		this.getProcedureSection().add(new Lea(this.getDefaultSizeSuffix(), new LabelRelativeAddress(this.getDefaultSizeSuffix(), labelName), new Register(RAX)));
+		this.getProcedureSection().add(new Push(this.getDefaultSizeSuffix(), new Register(RAX)));
 	}
 	
 	@Override
@@ -63,6 +69,27 @@ public final class MacOSXTranslator extends AbstractTranslator {
 			callout.add(new Label(callName));
 			callout.add(new Enter(this.getDefaultSizeSuffix(), new CompositeIntegerValue(this.getDefaultVariableByteCount(), 0), new IntegerValue(0)));
 			callout.add(new And(this.getDefaultSizeSuffix(), new IntegerValue(-16), new Register(RSP)));
+			if (argumentCount >= 7) {
+				// TODO
+			}
+			if (argumentCount >= 6) {
+				callout.add(new Mov(this.getDefaultSizeSuffix(), new RegisterRelativeAddress(this.getDefaultSizeSuffix(), 56, RBP), new Register(R9)));
+			}
+			if (argumentCount >= 5) {
+				callout.add(new Mov(this.getDefaultSizeSuffix(), new RegisterRelativeAddress(this.getDefaultSizeSuffix(), 48, RBP), new Register(R8)));
+			}
+			if (argumentCount >= 4) {
+				callout.add(new Mov(this.getDefaultSizeSuffix(), new RegisterRelativeAddress(this.getDefaultSizeSuffix(), 40, RBP), new Register(RCX)));
+			}
+			if (argumentCount >= 3) {
+				callout.add(new Mov(this.getDefaultSizeSuffix(), new RegisterRelativeAddress(this.getDefaultSizeSuffix(), 32, RBP), new Register(RDX)));
+			}
+			if (argumentCount >= 2) {
+				callout.add(new Mov(this.getDefaultSizeSuffix(), new RegisterRelativeAddress(this.getDefaultSizeSuffix(), 24, RBP), new Register(RSI)));
+			}
+			if (argumentCount >= 1) {
+				callout.add(new Mov(this.getDefaultSizeSuffix(), new RegisterRelativeAddress(this.getDefaultSizeSuffix(), 16, RBP), new Register(RDI)));
+			}
 			callout.add(new Mov(this.getDefaultSizeSuffix(), new IntegerValue(0), new Register(RAX)));
 			callout.add(new Call(this.getDefaultSizeSuffix(), new LabelOperand("_" + methodCallout.getMethodName())));
 			callout.add(new Leave(this.getDefaultSizeSuffix()));

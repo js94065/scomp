@@ -12,6 +12,12 @@ import scomp.x86.ir.AbstractInstruction;
 public final class LinuxTranslator extends AbstractTranslator {
 	
 	@Override
+	protected final void addPushLabel(final String labelName) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
 	protected final void afterChildren(final MethodCallout methodCallout) {
 		// TODO Auto-generated method stub
 		

@@ -1,7 +1,7 @@
 package scomp.x86.ir;
 
 /**
- * This class represents simple x86 immediate integer operands (in base 10).
+ * This class represents x86 label operands.
  * 
  * @author codistmonk (creation 2010-09-28)
  *
