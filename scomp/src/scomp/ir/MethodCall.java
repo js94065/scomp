@@ -12,7 +12,7 @@ import scomp.DecafToken;
  */
 public final class MethodCall extends AbstractMethodCall<AbstractExpression> {
 	
-	private final DecafToken methodNameIdentifier;
+	private MethodDeclaration declaration;
 	
 	/**
 	 * 
@@ -25,25 +25,26 @@ public final class MethodCall extends AbstractMethodCall<AbstractExpression> {
 	 */
 	public MethodCall(final DecafToken methodNameIdentifier, final List<AbstractExpression> arguments) {
 		super(methodNameIdentifier, methodNameIdentifier.getValue().toString(), arguments);
-		this.methodNameIdentifier = methodNameIdentifier;
 	}
 	
 	/**
 	 * 
 	 * @return
-	 * <br>Range: {@code [1 .. Integer.MAX_VALUE]}
+	 * <br>Maybe null
+	 * <br>Shared
 	 */
-	public final int getMethodNameIdentifierRow() {
-		return this.methodNameIdentifier.getRow();
+	public final MethodDeclaration getDeclaration() {
+		return this.declaration;
 	}
 	
 	/**
 	 * 
-	 * @return
-	 * <br>Range: {@code [1 .. Integer.MAX_VALUE]}
+	 * @param declaration
+	 * <br>Maybe null
+	 * <br>Shared
 	 */
-	public final int getMethodNameIdentifierColumn() {
-		return this.methodNameIdentifier.getColumn();
+	public final void setDeclaration(MethodDeclaration declaration) {
+		this.declaration = declaration;
 	}
 	
 	@Override

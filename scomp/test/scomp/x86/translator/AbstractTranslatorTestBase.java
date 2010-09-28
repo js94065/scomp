@@ -9,6 +9,7 @@ import java.util.Scanner;
 import org.junit.Test;
 
 import scomp.Tools;
+import scomp.semantics.SemanticRules;
 
 /**
  * 
@@ -196,8 +197,10 @@ public abstract class AbstractTranslatorTestBase {
 	 */
 	private final void test(final String testName) {
 		final AbstractTranslator translator = this.newTranslator();
-		
-		translator.visit(parseTestFile(testName));
+		final scomp.ir.Program program = parseTestFile(testName);
+
+		new SemanticRules().visit(program);
+		translator.visit(program);
 		
 		assertEquals(getSimplifiedString(testName + "_" + this.getOSName()), translator.getProgram().toString());
 	}

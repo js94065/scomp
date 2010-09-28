@@ -1,6 +1,5 @@
 package scomp.x86.ir;
 
-import static scomp.x86.ir.Register.Name.RIP;
 import scomp.x86.ir.Register.Name;
 
 /**

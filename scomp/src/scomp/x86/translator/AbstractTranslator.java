@@ -5,7 +5,9 @@ import static scomp.x86.ir.AbstractInstruction.SIZE_SUFFIX_64;
 import static scomp.x86.ir.Register.Name.*;
 
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -69,10 +71,15 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	private final Map<String, String> stringLabelNames;
 	
+	private final Deque<List<AbstractProgramElement>> procedureSectionStack;
+	
+	private int localVariableCount;
+	
 	protected AbstractTranslator() {
 		this.stringSection = new ArrayList<AbstractProgramElement>();
 		this.procedureSection = new ArrayList<AbstractProgramElement>();
 		this.stringLabelNames = new LinkedHashMap<String, String>();
+		this.procedureSectionStack = new LinkedList<List<AbstractProgramElement>>();
 	}
 	
 	/**
@@ -112,6 +119,7 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	@Override
 	public final void visit(final MethodDeclaration method) {
+		this.localVariableCount = 0;
 		this.getProcedureSection().add(new Label("decaf_" + method.getIdentifier()));
 		
 		if ("main".equals(method.getIdentifier())) {
@@ -119,14 +127,36 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 			this.getProcedureSection().add(new Label("_main"));
 		}
 		
-		this.getProcedureSection().add(new Enter(this.getDefaultSizeSuffix(),
-				new CompositeIntegerValue(this.getDefaultVariableByteCount(), 0), new IntegerValue(0)));
-		
+		this.pushProcedureSection();
 		this.visitChildren(method);
+		this.peekProcedureSection().add(new Enter(this.getDefaultSizeSuffix(),
+				new CompositeIntegerValue(this.getDefaultVariableByteCount(), this.localVariableCount), new IntegerValue(0)));
+		this.updateAndPopProcedureSection();
 		
 		this.getProcedureSection().add(new Mov(this.getDefaultSizeSuffix(), new IntegerValue(0), new Register(this.getResizedName(RAX))));
 		this.getProcedureSection().add(new Leave(this.getDefaultSizeSuffix()));
 		this.getProcedureSection().add(new Ret(this.getDefaultSizeSuffix()));
+	}
+	
+	private final void pushProcedureSection() {
+		this.procedureSectionStack.push(new ArrayList<AbstractProgramElement>(this.getProcedureSection()));
+		this.getProcedureSection().clear();
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * <br>Not null
+	 * <br>Shared
+	 */
+	private final List<AbstractProgramElement> peekProcedureSection() {
+		return this.procedureSectionStack.peek();
+	}
+	
+	private final void updateAndPopProcedureSection() {
+		this.peekProcedureSection().addAll(this.getProcedureSection());
+		this.getProcedureSection().clear();
+		this.getProcedureSection().addAll(this.procedureSectionStack.pop());
 	}
 	
 	@Override
@@ -137,8 +167,7 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	@Override
 	public final void visit(final VariableDeclaration variable) {
-		// TODO Auto-generated method stub
-		
+		++this.localVariableCount;
 	}
 	
 	@Override
@@ -154,8 +183,7 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	@Override
 	public final void visit(final AssignmentStatement assignment) {
-		// TODO Auto-generated method stub
-		
+		this.visitChildren(assignment);
 	}
 	
 	@Override
@@ -166,14 +194,12 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	@Override
 	public final void visit(final ArrayLocation location) {
-		// TODO Auto-generated method stub
-		
+		this.visitChildren(location);
 	}
 	
 	@Override
 	public final void visit(final LocationExpression location) {
-		// TODO Auto-generated method stub
-		
+		this.visitChildren(location);
 	}
 	
 	@Override
