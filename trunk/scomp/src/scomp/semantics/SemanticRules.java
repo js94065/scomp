@@ -166,8 +166,6 @@ public final class SemanticRules extends AbstractVisitor {
 	public final void visit(final IdentifierLocation location) {
 		this.checkRule2(location);
 		this.checkRule9(location);
-		
-		location.setDeclaration((AbstractTypedEntityDeclaration) this.getScope().get(location.getIdentifier()));
 	}
 	
 	@Override
@@ -271,7 +269,7 @@ public final class SemanticRules extends AbstractVisitor {
 	
 	@Override
 	public final void visit(final ExpressionCalloutArgument expressionCalloutArgument) {
-		// Do nothing
+		this.visitChildren(expressionCalloutArgument);
 	}
 	
 	@Override
@@ -281,7 +279,7 @@ public final class SemanticRules extends AbstractVisitor {
 	
 	@Override
 	public final void visit(final MethodCallout methodCallout) {
-		// Do nothing
+		this.visitChildren(methodCallout);
 	}
 	
 	@Override
@@ -316,7 +314,9 @@ public final class SemanticRules extends AbstractVisitor {
 					"Undeclared identifier " + location.getIdentifier());
 		}
 		
-		location.setDeclaration((AbstractTypedEntityDeclaration) this.getScope().get(location.getIdentifier()));
+		if (this.getScope().get(location.getIdentifier()) instanceof AbstractTypedEntityDeclaration) {
+			location.setDeclaration((AbstractTypedEntityDeclaration) this.getScope().get(location.getIdentifier()));
+		}
 	}
 	
 	/**
@@ -416,13 +416,13 @@ public final class SemanticRules extends AbstractVisitor {
 	 * <br>Not null
 	 */
 	private final void checkRule7(final ReturnStatement returnStatement) {
-		Class<?> methodType = this.getScope().get(this.currentMethodName) instanceof MethodDeclaration ? 
-				((MethodDeclaration)this.getScope().get(this.currentMethodName)).getType() : this.currentMethodType;
+		final Class<?> methodType = this.getScope().get(this.currentMethodName) instanceof MethodDeclaration ? 
+				((MethodDeclaration) this.getScope().get(this.currentMethodName)).getType() : this.currentMethodType;
 		
-		if ( (methodType == void.class && returnStatement.getExpression() != null) ||
+		if ((methodType == void.class && returnStatement.getExpression() != null) ||
 				(methodType != void.class && returnStatement.getExpression() == null) ) {
-					this.logError(this.getScope().get(this.currentMethodName),
-							"The method " + this.currentMethodName + " cannot have a return value");
+			this.logError(this.getScope().get(this.currentMethodName),
+					"The method " + this.currentMethodName + " cannot have a return value");
 		}
 	}
 	

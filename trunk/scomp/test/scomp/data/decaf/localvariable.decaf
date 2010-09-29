@@ -7,7 +7,7 @@ class Program {
 
 		a = 42;
 
-		callout("printf", "%d\n", 42);
+		callout("printf", "%d\n", a);
 	}
 
 }
