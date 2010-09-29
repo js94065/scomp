@@ -78,6 +78,8 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	private final Map<VariableDeclaration, Integer> localVariables;
 	
+	private MethodDeclaration currentMethod;
+	
 	protected AbstractTranslator() {
 		this.stringSection = new ArrayList<AbstractProgramElement>();
 		this.procedureSection = new ArrayList<AbstractProgramElement>();
@@ -123,6 +125,7 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	@Override
 	public final void visit(final MethodDeclaration method) {
+		this.currentMethod = method;
 		this.localVariables.clear();
 		this.getProcedureSection().add(new Label("decaf_" + method.getIdentifier()));
 		
@@ -141,7 +144,9 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 		}
 		this.updateAndPopProcedureSection();
 		
-		this.getProcedureSection().add(new Mov(this.getDefaultSizeSuffix(), new IntegerValue(0), new Register(this.getResizedName(RAX))));
+		if ("main".equals(method.getIdentifier())) {
+			this.getProcedureSection().add(new Mov(this.getDefaultSizeSuffix(), new IntegerValue(0), new Register(this.getResizedName(RAX))));
+		}
 		this.getProcedureSection().add(new Leave(this.getDefaultSizeSuffix()));
 		this.getProcedureSection().add(new Ret(this.getDefaultSizeSuffix()));
 	}
@@ -176,6 +181,8 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 			this.getProcedureSection().add(new Pop(this.getDefaultSizeSuffix(),
 					new RegisterRelativeAddress(this.getDefaultSizeSuffix(),
 							-this.getDefaultVariableByteCount() * (this.localVariables.get(assignment.getLocation().getDeclaration()) + 1), RBP)));
+		} else {
+			// TODO parameter, global, array
 		}
 	}
 	
@@ -198,7 +205,32 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 			this.getProcedureSection().add(new Push(this.getDefaultSizeSuffix(),
 					new RegisterRelativeAddress(this.getDefaultSizeSuffix(),
 							-this.getDefaultVariableByteCount() * (this.localVariables.get(location.getLocation().getDeclaration()) + 1), RBP)));
+		} else if (location.getLocation().getDeclaration() instanceof ParameterDeclaration) {
+			this.getProcedureSection().add(new Push(this.getDefaultSizeSuffix(),
+					new RegisterRelativeAddress(this.getDefaultSizeSuffix(),
+							this.getDefaultVariableByteCount() * (indexOf(this.currentMethod.getParameterDeclarations(), location.getLocation().getDeclaration()) + 2), RBP)));
+		} else {
+			// TODO global, array
 		}
+	}
+	
+	/**
+	 * 
+	 * @param list
+	 * <br>Not null
+	 * @param element
+	 * <br>Maybe null
+	 * @return
+	 * <br>Range: {@code [-1 .. list.size() - 1]}
+	 */
+	private static final int indexOf(final List<?> list, final Object element) {
+		for (int result = 0; result < list.size(); ++result) {
+			if (list.get(result) == element) {
+				return result;
+			}
+		}
+		
+		return -1;
 	}
 	
 	@Override
