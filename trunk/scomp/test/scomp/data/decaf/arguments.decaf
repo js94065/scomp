@@ -3,10 +3,12 @@
 class Program {
 
 	void f0() {
-		callout("printf", "0\n");
+		callout("printf", "%d\n", callout("atoi", "0"));
 	}
 
 	void f1(int x1) {
+		x1 = x1;
+
 		callout("printf", "%d\n", x1);
 	}
 
