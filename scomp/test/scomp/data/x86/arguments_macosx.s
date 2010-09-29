@@ -30,7 +30,6 @@ callout_printf_2:
 	movq 16(%rbp), %rdi
 	movq $0, %rax
 	callq _printf
-	addq $(8 * 0), %rsp
 	leaveq
 	retq
 
@@ -69,7 +68,6 @@ decaf_f0:
 	leaq STRING_0(%rip), %rax
 	pushq %rax
 	callq callout_printf_1
-	addq $(8 * 1), %rsp
 	addq $(8 * 1), %rsp
 	leaveq
 	retq

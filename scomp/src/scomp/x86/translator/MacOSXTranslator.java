@@ -1,8 +1,10 @@
 package scomp.x86.translator;
 
+import static scomp.Tools.array;
 import static scomp.x86.ir.Register.Name.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -38,7 +40,19 @@ public final class MacOSXTranslator extends AbstractTranslator {
 	private final Map<String, List<AbstractProgramElement>> callouts;
 	
 	public MacOSXTranslator() {
-		this.callouts = new TreeMap<String, List<AbstractProgramElement>>();
+		this.callouts = new TreeMap<String, List<AbstractProgramElement>>(new Comparator<String>() {
+			
+			@Override
+			public final int compare(final String s1, final String s2) {
+				final Object[] split1 = split(s1);
+				final Object[] split2 = split(s2);
+				
+				final int result = split1[0].toString().compareTo(split2[0].toString());
+				
+				return result != 0 ? result : ((Integer) split1[1]).compareTo((Integer) split2[1]);
+			}
+			
+		});
 	}
 	
 	@Override
@@ -67,10 +81,19 @@ public final class MacOSXTranslator extends AbstractTranslator {
 			final List<AbstractProgramElement> callout = new ArrayList<AbstractProgramElement>();
 			
 			callout.add(new Label(callName));
-			callout.add(new Enter(this.getDefaultSizeSuffix(), new CompositeIntegerValue(this.getDefaultVariableByteCount(), 0), new IntegerValue(0)));
-			callout.add(new And(this.getDefaultSizeSuffix(), new IntegerValue(-16), new Register(RSP)));
 			if (argumentCount >= 7) {
-				// TODO
+				final int stackArgumentCount = argumentCount - 6;
+				
+				callout.add(new Enter(this.getDefaultSizeSuffix(), new CompositeIntegerValue(this.getDefaultVariableByteCount(), stackArgumentCount), new IntegerValue(0)));
+				callout.add(new And(this.getDefaultSizeSuffix(), new IntegerValue(-16), new Register(RSP)));
+				callout.add(new Add(this.getDefaultSizeSuffix(), new CompositeIntegerValue(this.getDefaultVariableByteCount(), stackArgumentCount), new Register(RSP)));
+				
+				for (int argumentOffset = 8 * (argumentCount + 1); argumentOffset >= 64; argumentOffset -= 8) {
+					callout.add(new Push(this.getDefaultSizeSuffix(), new RegisterRelativeAddress(this.getDefaultSizeSuffix(), argumentOffset, RBP)));
+				}
+			} else {
+				callout.add(new Enter(this.getDefaultSizeSuffix(), new CompositeIntegerValue(this.getDefaultVariableByteCount(), 0), new IntegerValue(0)));
+				callout.add(new And(this.getDefaultSizeSuffix(), new IntegerValue(-16), new Register(RSP)));
 			}
 			if (argumentCount >= 6) {
 				callout.add(new Mov(this.getDefaultSizeSuffix(), new RegisterRelativeAddress(this.getDefaultSizeSuffix(), 56, RBP), new Register(R9)));
@@ -106,6 +129,24 @@ public final class MacOSXTranslator extends AbstractTranslator {
 	@Override
 	protected final String getDefaultSizeSuffix() {
 		return AbstractInstruction.SIZE_SUFFIX_64;
+	}
+	
+	/**
+	 * Splits a string of the form "callout_&lt;C function name&gt;_&lt;argument count&lt;" into 2 parts:<ul>
+	 * 	<li>the beginning of the string (everything up to the last "_");
+	 * 	<li>the parsed argument count (Integer).
+	 * </ul>
+	 * 
+	 * @param callName
+	 * <br>Not null
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	static final Object[] split(final String callName) {
+		final int argumentCountIndex = callName.lastIndexOf("_") + 1;
+		
+		return array((Object) callName.substring(0, argumentCountIndex), Integer.parseInt(callName.substring(argumentCountIndex)));
 	}
 	
 }
