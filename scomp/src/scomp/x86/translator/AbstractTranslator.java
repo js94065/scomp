@@ -6,6 +6,7 @@ import static scomp.x86.ir.Register.Name.*;
 
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -51,9 +52,11 @@ import scomp.x86.ir.IntegerValue;
 import scomp.x86.ir.Label;
 import scomp.x86.ir.Leave;
 import scomp.x86.ir.Mov;
+import scomp.x86.ir.Pop;
 import scomp.x86.ir.Program;
 import scomp.x86.ir.Push;
 import scomp.x86.ir.Register;
+import scomp.x86.ir.RegisterRelativeAddress;
 import scomp.x86.ir.Ret;
 import scomp.x86.ir.Register.Name;
 
@@ -73,13 +76,14 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	private final Deque<List<AbstractProgramElement>> procedureSectionStack;
 	
-	private int localVariableCount;
+	private final Map<VariableDeclaration, Integer> localVariables;
 	
 	protected AbstractTranslator() {
 		this.stringSection = new ArrayList<AbstractProgramElement>();
 		this.procedureSection = new ArrayList<AbstractProgramElement>();
 		this.stringLabelNames = new LinkedHashMap<String, String>();
 		this.procedureSectionStack = new LinkedList<List<AbstractProgramElement>>();
+		this.localVariables = new IdentityHashMap<VariableDeclaration, Integer>();
 	}
 	
 	/**
@@ -119,7 +123,7 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	@Override
 	public final void visit(final MethodDeclaration method) {
-		this.localVariableCount = 0;
+		this.localVariables.clear();
 		this.getProcedureSection().add(new Label("decaf_" + method.getIdentifier()));
 		
 		if ("main".equals(method.getIdentifier())) {
@@ -130,33 +134,16 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 		this.pushProcedureSection();
 		this.visitChildren(method);
 		this.peekProcedureSection().add(new Enter(this.getDefaultSizeSuffix(),
-				new CompositeIntegerValue(this.getDefaultVariableByteCount(), this.localVariableCount), new IntegerValue(0)));
+				new CompositeIntegerValue(this.getDefaultVariableByteCount(), this.localVariables.size()), new IntegerValue(0)));
+		for (int i = 0; i < this.localVariables.size(); ++i) {
+			this.peekProcedureSection().add(new Mov(this.getDefaultSizeSuffix(), new IntegerValue(0),
+					new RegisterRelativeAddress(this.getDefaultSizeSuffix(), -this.getDefaultVariableByteCount() * (i + 1), RBP)));
+		}
 		this.updateAndPopProcedureSection();
 		
 		this.getProcedureSection().add(new Mov(this.getDefaultSizeSuffix(), new IntegerValue(0), new Register(this.getResizedName(RAX))));
 		this.getProcedureSection().add(new Leave(this.getDefaultSizeSuffix()));
 		this.getProcedureSection().add(new Ret(this.getDefaultSizeSuffix()));
-	}
-	
-	private final void pushProcedureSection() {
-		this.procedureSectionStack.push(new ArrayList<AbstractProgramElement>(this.getProcedureSection()));
-		this.getProcedureSection().clear();
-	}
-	
-	/**
-	 * 
-	 * @return
-	 * <br>Not null
-	 * <br>Shared
-	 */
-	private final List<AbstractProgramElement> peekProcedureSection() {
-		return this.procedureSectionStack.peek();
-	}
-	
-	private final void updateAndPopProcedureSection() {
-		this.peekProcedureSection().addAll(this.getProcedureSection());
-		this.getProcedureSection().clear();
-		this.getProcedureSection().addAll(this.procedureSectionStack.pop());
 	}
 	
 	@Override
@@ -167,7 +154,7 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	@Override
 	public final void visit(final VariableDeclaration variable) {
-		++this.localVariableCount;
+		this.localVariables.put(variable, this.localVariables.size());
 	}
 	
 	@Override
@@ -184,6 +171,12 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	@Override
 	public final void visit(final AssignmentStatement assignment) {
 		this.visitChildren(assignment);
+		
+		if (assignment.getLocation().getDeclaration() instanceof VariableDeclaration) {
+			this.getProcedureSection().add(new Pop(this.getDefaultSizeSuffix(),
+					new RegisterRelativeAddress(this.getDefaultSizeSuffix(),
+							-this.getDefaultVariableByteCount() * (this.localVariables.get(assignment.getLocation().getDeclaration()) + 1), RBP)));
+		}
 	}
 	
 	@Override
@@ -200,6 +193,12 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	@Override
 	public final void visit(final LocationExpression location) {
 		this.visitChildren(location);
+		
+		if (location.getLocation().getDeclaration() instanceof VariableDeclaration) {
+			this.getProcedureSection().add(new Push(this.getDefaultSizeSuffix(),
+					new RegisterRelativeAddress(this.getDefaultSizeSuffix(),
+							-this.getDefaultVariableByteCount() * (this.localVariables.get(location.getLocation().getDeclaration()) + 1), RBP)));
+		}
 	}
 	
 	@Override
@@ -310,31 +309,11 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	/**
 	 * 
-	 * @param expressionCalloutArgument
-	 * <br>Not null
-	 */
-	protected final void visitChildren(final ExpressionCalloutArgument expressionCalloutArgument) {
-		expressionCalloutArgument.getExpression().accept(this);
-	}
-	
-	/**
-	 * 
 	 * @param literalExpression
 	 * <br>Not null
 	 */
 	protected final void visitChildren(final LiteralExpression literalExpression) {
 		literalExpression.getLiteral().accept(this);
-	}
-	
-	/**
-	 * 
-	 * @param methodCallout
-	 * <br>Not null
-	 */
-	protected final void visitChildren(final MethodCallout methodCallout) {
-		for (int i = methodCallout.getArguments().size() - 1; i >= 0; --i) {
-			methodCallout.getArguments().get(i).accept(this);
-		}
 	}
 	
 	/**
@@ -417,6 +396,27 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	 */
 	protected final Name getResizedName(final Name name) {
 		return AbstractInstruction.getResizedName(name, this.getDefaultSizeSuffix());
+	}
+	
+	private final void pushProcedureSection() {
+		this.procedureSectionStack.push(new ArrayList<AbstractProgramElement>(this.getProcedureSection()));
+		this.getProcedureSection().clear();
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * <br>Not null
+	 * <br>Shared
+	 */
+	private final List<AbstractProgramElement> peekProcedureSection() {
+		return this.procedureSectionStack.peek();
+	}
+	
+	private final void updateAndPopProcedureSection() {
+		this.peekProcedureSection().addAll(this.getProcedureSection());
+		this.getProcedureSection().clear();
+		this.getProcedureSection().addAll(this.procedureSectionStack.pop());
 	}
 	
 }

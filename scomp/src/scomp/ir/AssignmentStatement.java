@@ -3,7 +3,7 @@ package scomp.ir;
 import scomp.Tools;
 
 /**
- * This class defines a Decaf location statement.
+ * This class defines a Decaf assignment statement.
  * 
  * @author js94065 (creation 2010-07-17)
  *

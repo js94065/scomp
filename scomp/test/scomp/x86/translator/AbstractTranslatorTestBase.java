@@ -199,8 +199,8 @@ public abstract class AbstractTranslatorTestBase {
 		final AbstractTranslator translator = this.newTranslator();
 		final scomp.ir.Program program = parseTestFile(testName);
 
-		new SemanticRules().visit(program);
-		translator.visit(program);
+		program.accept(new SemanticRules());
+		program.accept(translator);
 		
 		assertEquals(getSimplifiedString(testName + "_" + this.getOSName()), translator.getProgram().toString());
 	}

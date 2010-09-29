@@ -13,7 +13,7 @@ public abstract class AbstractVisitor implements Visitor {
 	 * @param program
 	 * <br>Not null
 	 */
-	protected final void visitChildren(final Program program) {
+	protected void visitChildren(final Program program) {
 		for (final AbstractFieldDeclaration fieldDeclaration : program.getFieldDeclarations()) {
 			fieldDeclaration.accept(this);
 		}
@@ -28,7 +28,7 @@ public abstract class AbstractVisitor implements Visitor {
 	 * @param method
 	 * <br>Not null
 	 */
-	protected final void visitChildren(final MethodDeclaration method) {
+	protected void visitChildren(final MethodDeclaration method) {
 		for (final ParameterDeclaration parameterDeclaration : method.getParameterDeclarations()) {
 			parameterDeclaration.accept(this);
 		}
@@ -41,7 +41,7 @@ public abstract class AbstractVisitor implements Visitor {
 	 * @param block
 	 * <br>Not null
 	 */
-	protected final void visitChildren(final Block block) {
+	protected void visitChildren(final Block block) {
 		for (final VariableDeclaration variableDeclaration : block.getVariableDeclarations()) {
 			variableDeclaration.accept(this);
 		}
@@ -56,7 +56,7 @@ public abstract class AbstractVisitor implements Visitor {
 	 * @param block
 	 * <br>Not null
 	 */
-	protected final void visitChildren(final BlockStatement block) {
+	protected void visitChildren(final BlockStatement block) {
 		block.getBlock().accept(this);
 	}
 	
@@ -65,7 +65,7 @@ public abstract class AbstractVisitor implements Visitor {
 	 * @param assignment
 	 * <br>Not null
 	 */
-	protected final void visitChildren(final AssignmentStatement assignment) {
+	protected void visitChildren(final AssignmentStatement assignment) {
 		assignment.getLocation().accept(this);
 		
 		assignment.getExpression().accept(this);
@@ -76,7 +76,7 @@ public abstract class AbstractVisitor implements Visitor {
 	 * @param returnStatement
 	 * <br>Not null
 	 */
-	protected final void visitChildren(final ReturnStatement returnStatement) {
+	protected void visitChildren(final ReturnStatement returnStatement) {
 		if (returnStatement.getExpression() != null) {
 			returnStatement.getExpression().accept(this);
 		}
@@ -87,7 +87,7 @@ public abstract class AbstractVisitor implements Visitor {
 	 * @param location
 	 * <br>Not null
 	 */
-	protected final void visitChildren(final ArrayLocation location) {
+	protected void visitChildren(final ArrayLocation location) {
 		location.getOffset().accept(this);
 	}
 	
@@ -96,7 +96,7 @@ public abstract class AbstractVisitor implements Visitor {
 	 * @param ifStatement
 	 * <br>Not null
 	 */
-	protected final void visitChildren(final IfStatement ifStatement) {
+	protected void visitChildren(final IfStatement ifStatement) {
 		ifStatement.getCondition().accept(this);
 		
 		ifStatement.getThenBlock().accept(this);
@@ -111,7 +111,7 @@ public abstract class AbstractVisitor implements Visitor {
 	 * @param whileStatement
 	 * <br>Not null
 	 */
-	protected final void visitChildren(final WhileStatement whileStatement) {
+	protected void visitChildren(final WhileStatement whileStatement) {
 		whileStatement.getCondition().accept(this);
 		
 		whileStatement.getBlock().accept(this);
@@ -122,7 +122,7 @@ public abstract class AbstractVisitor implements Visitor {
 	 * @param operation
 	 * <br>Not null
 	 */
-	protected final void visitChildren(final BinaryOperationExpression operation) {
+	protected void visitChildren(final BinaryOperationExpression operation) {
 		operation.getLeft().accept(this);
 		
 		operation.getRight().accept(this);
@@ -133,7 +133,7 @@ public abstract class AbstractVisitor implements Visitor {
 	 * @param minusExpression
 	 * <br>Not null
 	 */
-	protected final void visitChildren(final MinusExpression minusExpression) {
+	protected void visitChildren(final MinusExpression minusExpression) {
 		minusExpression.getOperand().accept(this);
 	}
 	
@@ -142,7 +142,7 @@ public abstract class AbstractVisitor implements Visitor {
 	 * @param negation
 	 * <br>Not null
 	 */
-	protected final void visitChildren(final NegationExpression negation) {
+	protected void visitChildren(final NegationExpression negation) {
 		negation.getOperand().accept(this);
 	}
 	
@@ -151,7 +151,7 @@ public abstract class AbstractVisitor implements Visitor {
 	 * @param methodCall
 	 * <br>Not null
 	 */
-	protected final void visitChildren(final MethodCallExpression methodCall) {
+	protected void visitChildren(final MethodCallExpression methodCall) {
 		methodCall.getMethodCall().accept(this);
 	}
 	
@@ -160,7 +160,7 @@ public abstract class AbstractVisitor implements Visitor {
 	 * @param location
 	 * <br>Not null
 	 */
-	protected final void visitChildren(final LocationExpression location) {
+	protected void visitChildren(final LocationExpression location) {
 		location.getLocation().accept(this);
 	}
 	
@@ -169,7 +169,7 @@ public abstract class AbstractVisitor implements Visitor {
 	 * @param methodCall
 	 * <br>Not null
 	 */
-	protected final void visitChildren(final MethodCall methodCall) {
+	protected void visitChildren(final MethodCall methodCall) {
 		for (final AbstractExpression argument : methodCall.getArguments()) {
 			argument.accept(this);
 		}
@@ -180,8 +180,28 @@ public abstract class AbstractVisitor implements Visitor {
 	 * @param methodCallStatement
 	 * <br>Not null
 	 */
-	protected final void visitChildren(final MethodCallStatement methodCallStatement) {
+	protected void visitChildren(final MethodCallStatement methodCallStatement) {
 		methodCallStatement.getMethodCall().accept(this);
+	}
+	
+	/**
+	 * 
+	 * @param expressionCalloutArgument
+	 * <br>Not null
+	 */
+	protected void visitChildren(final ExpressionCalloutArgument expressionCalloutArgument) {
+		expressionCalloutArgument.getExpression().accept(this);
+	}
+	
+	/**
+	 * 
+	 * @param methodCallout
+	 * <br>Not null
+	 */
+	protected void visitChildren(final MethodCallout methodCallout) {
+		for (int i = methodCallout.getArguments().size() - 1; i >= 0; --i) {
+			methodCallout.getArguments().get(i).accept(this);
+		}
 	}
 	
 }
