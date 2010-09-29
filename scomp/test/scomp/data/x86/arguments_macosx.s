@@ -1,9 +1,9 @@
 # arguments_macosx.s
 # FILE=arguments_macosx; gcc $FILE.s -o $FILE && ./$FILE
-# Applied rules: 1, 3, 4, 40, 2, 18, 8
+# Applied rules: 1, 3, 21, 4, 45, 40, 2, 18, 8
 
 STRING_0:
-	.ascii "0\12\0"
+	.ascii "0\0"
 
 STRING_1:
 	.ascii "%d\12\0"
@@ -14,12 +14,12 @@ STRING_2:
 STRING_3:
 	.ascii "%d %d %d %d %d %d %d %d %d\12\0"
 
-callout_printf_1:
+callout_atoi_1:
 	enterq $(8 * 0), $0
 	andq $-16, %rsp
 	movq 16(%rbp), %rdi
 	movq $0, %rax
-	callq _printf
+	callq _atoi
 	leaveq
 	retq
 
@@ -67,13 +67,20 @@ decaf_f0:
 	enterq $(8 * 0), $0
 	leaq STRING_0(%rip), %rax
 	pushq %rax
-	callq callout_printf_1
+	callq callout_atoi_1
 	addq $(8 * 1), %rsp
+	pushq %rax
+	leaq STRING_1(%rip), %rax
+	pushq %rax
+	callq callout_printf_2
+	addq $(8 * 2), %rsp
 	leaveq
 	retq
 
 decaf_f1:
 	enterq $(8 * 0), $0
+	pushq 16(%rbp)
+	popq 16(%rbp)
 	pushq 16(%rbp)
 	leaq STRING_1(%rip), %rax
 	pushq %rax

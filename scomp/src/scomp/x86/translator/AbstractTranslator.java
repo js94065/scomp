@@ -44,12 +44,15 @@ import scomp.ir.VariableDeclaration;
 import scomp.ir.WhileStatement;
 import scomp.x86.ir.AbstractInstruction;
 import scomp.x86.ir.AbstractProgramElement;
+import scomp.x86.ir.Add;
 import scomp.x86.ir.Ascii;
+import scomp.x86.ir.Call;
 import scomp.x86.ir.CompositeIntegerValue;
 import scomp.x86.ir.Enter;
 import scomp.x86.ir.Globl;
 import scomp.x86.ir.IntegerValue;
 import scomp.x86.ir.Label;
+import scomp.x86.ir.LabelOperand;
 import scomp.x86.ir.Leave;
 import scomp.x86.ir.Mov;
 import scomp.x86.ir.Pop;
@@ -181,8 +184,12 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 			this.getProcedureSection().add(new Pop(this.getDefaultSizeSuffix(),
 					new RegisterRelativeAddress(this.getDefaultSizeSuffix(),
 							-this.getDefaultVariableByteCount() * (this.localVariables.get(assignment.getLocation().getDeclaration()) + 1), RBP)));
+		} else if (assignment.getLocation().getDeclaration() instanceof ParameterDeclaration) {
+			this.getProcedureSection().add(new Pop(this.getDefaultSizeSuffix(),
+					new RegisterRelativeAddress(this.getDefaultSizeSuffix(),
+							this.getDefaultVariableByteCount() * (indexOf(this.currentMethod.getParameterDeclarations(), assignment.getLocation().getDeclaration()) + 2), RBP)));
 		} else {
-			// TODO parameter, global, array
+			// TODO global, array
 		}
 	}
 	
@@ -242,11 +249,16 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	@Override
 	public final void visit(final MethodCallExpression methodCall) {
 		this.visitChildren(methodCall);
+		
+		this.getProcedureSection().add(new Push(this.getDefaultSizeSuffix(), new Register(this.getResizedName(RAX))));
 	}
 	
 	@Override
 	public final void visit(final MethodCall methodCall) {
 		this.visitChildren(methodCall);
+		
+		this.getProcedureSection().add(new Call(this.getDefaultSizeSuffix(), new LabelOperand("decaf_" + methodCall.getMethodName())));
+		this.getProcedureSection().add(new Add(this.getDefaultSizeSuffix(), new CompositeIntegerValue(this.getDefaultVariableByteCount(), methodCall.getArguments().size()), new Register(this.getResizedName(RSP))));
 	}
 	
 	@Override

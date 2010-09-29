@@ -170,8 +170,8 @@ public abstract class AbstractVisitor implements Visitor {
 	 * <br>Not null
 	 */
 	protected void visitChildren(final MethodCall methodCall) {
-		for (final AbstractExpression argument : methodCall.getArguments()) {
-			argument.accept(this);
+		for (int i = methodCall.getArguments().size() - 1; i >= 0; --i) {
+			methodCall.getArguments().get(i).accept(this);
 		}
 	}
 	
