@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import scomp.Tools;
 import scomp.ir.AbstractTypedEntityDeclaration;
 import scomp.ir.AbstractVisitor;
 import scomp.ir.ArrayFieldDeclaration;
@@ -231,13 +230,8 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 		} else if (declaration instanceof ParameterDeclaration) {
 			this.x86POP(indexOf(this.currentMethod.getParameterDeclarations(), declaration) + 2, RBP);
 		} else if (declaration instanceof FieldDeclaration) {
-			this.x86MOV("decaf_" + assignment.getLocation().getIdentifier(), RAX);
 			this.x86POP(0, RAX);
 		} else if (declaration instanceof ArrayFieldDeclaration) {
-			this.x86POP(RCX);
-			this.x86IMUL(8, RCX);
-			this.x86MOV("decaf_" + assignment.getLocation().getIdentifier(), RAX);
-			this.x86ADD(RCX, RAX);
 			this.x86POP(0, RAX);
 		}
 	}
@@ -258,6 +252,11 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	@Override
 	public final void visit(final ArrayLocation location) {
 		this.visitChildren(location);
+		
+		this.x86POP(RCX);
+		this.x86IMUL(8, RCX);
+		this.x86MOV("decaf_" + location.getIdentifier(), RAX);
+		this.x86ADD(RCX, RAX);
 	}
 	
 	@Override
@@ -271,18 +270,17 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 		} else if (declaration instanceof ParameterDeclaration) {
 			this.x86PUSH(indexOf(this.currentMethod.getParameterDeclarations(), declaration) + 2, RBP);
 		} else if (declaration instanceof FieldDeclaration) {
-			Tools.debugPrint("TODO");
-			// TODO
+			this.x86PUSH(0, RAX);
 		} else if (declaration instanceof ArrayFieldDeclaration) {
-			Tools.debugPrint("TODO");
-			// TODO
+			this.x86PUSH(0, RAX);
 		}
 	}
 	
 	@Override
 	public final void visit(final IdentifierLocation location) {
-		// TODO Auto-generated method stub
-		
+		if (location.getDeclaration() instanceof FieldDeclaration) {
+			this.x86MOV("decaf_" + location.getIdentifier(), RAX);
+		}
 	}
 	
 	@Override
