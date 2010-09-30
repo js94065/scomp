@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import scomp.Tools;
 import scomp.ir.AbstractTypedEntityDeclaration;
 import scomp.ir.AbstractVisitor;
 import scomp.ir.ArrayFieldDeclaration;
@@ -53,9 +54,13 @@ import scomp.x86.ir.Call;
 import scomp.x86.ir.CompositeIntegerValue;
 import scomp.x86.ir.Enter;
 import scomp.x86.ir.Globl;
+import scomp.x86.ir.Imul;
 import scomp.x86.ir.IntegerValue;
 import scomp.x86.ir.Label;
 import scomp.x86.ir.LabelOperand;
+import scomp.x86.ir.LabelRelativeAddress;
+import scomp.x86.ir.Lcomm;
+import scomp.x86.ir.Lea;
 import scomp.x86.ir.Leave;
 import scomp.x86.ir.Mov;
 import scomp.x86.ir.Pop;
@@ -94,6 +99,8 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	 */
 	private final Deque<List<AbstractProgramElement>> procedureSectionStack;
 	
+	private final List<AbstractProgramElement> globalSection;
+	
 	/**
 	 * This map associates each local variable declaration with its index.
 	 * <br>It is reset at the beginning of each method declaration.
@@ -106,6 +113,7 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 		this.stringSection = new ArrayList<AbstractProgramElement>();
 		this.stringLabelNames = new LinkedHashMap<String, String>();
 		this.procedureSectionStack = new LinkedList<List<AbstractProgramElement>>();
+		this.globalSection = new ArrayList<AbstractProgramElement>();
 		this.localVariables = new IdentityHashMap<VariableDeclaration, Integer>();
 		
 		this.procedureSectionStack.push(new ArrayList<AbstractProgramElement>());
@@ -131,8 +139,11 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	@Override
 	public final void visit(final ArrayFieldDeclaration field) {
-		// TODO Auto-generated method stub
+		this.pushProcedureSection();
 		
+		this.x86LCOMM("decaf_" + field.getIdentifier(), field.getElementCount().getValue());
+		
+		this.getGlobalSection().addAll(this.popProcedureSection());
 	}
 	
 	@Override
@@ -142,8 +153,11 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	@Override
 	public final void visit(final FieldDeclaration field) {
-		// TODO Auto-generated method stub
+		this.pushProcedureSection();
 		
+		this.x86LCOMM("decaf_" + field.getIdentifier(), null);
+		
+		this.getGlobalSection().addAll(this.popProcedureSection());
 	}
 	
 	@Override
@@ -216,8 +230,15 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 			this.x86POP(-(this.localVariables.get(declaration) + 1), RBP);
 		} else if (declaration instanceof ParameterDeclaration) {
 			this.x86POP(indexOf(this.currentMethod.getParameterDeclarations(), declaration) + 2, RBP);
-		} else {
-			// TODO global, array
+		} else if (declaration instanceof FieldDeclaration) {
+			this.x86MOV("decaf_" + assignment.getLocation().getIdentifier(), RAX);
+			this.x86POP(0, RAX);
+		} else if (declaration instanceof ArrayFieldDeclaration) {
+			this.x86POP(RCX);
+			this.x86IMUL(8, RCX);
+			this.x86MOV("decaf_" + assignment.getLocation().getIdentifier(), RAX);
+			this.x86ADD(RCX, RAX);
+			this.x86POP(0, RAX);
 		}
 	}
 	
@@ -249,8 +270,12 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 			this.x86PUSH(-(this.localVariables.get(declaration) + 1), RBP);
 		} else if (declaration instanceof ParameterDeclaration) {
 			this.x86PUSH(indexOf(this.currentMethod.getParameterDeclarations(), declaration) + 2, RBP);
-		} else {
-			// TODO global, array
+		} else if (declaration instanceof FieldDeclaration) {
+			Tools.debugPrint("TODO");
+			// TODO
+		} else if (declaration instanceof ArrayFieldDeclaration) {
+			Tools.debugPrint("TODO");
+			// TODO
 		}
 	}
 	
@@ -313,8 +338,7 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	@Override
 	public final void visit(final CharLiteral charLiteral) {
-		// TODO Auto-generated method stub
-		
+		this.x86PUSH(charLiteral.getValue());
 	}
 	
 	@Override
@@ -358,8 +382,13 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 		
 		if (stringLabelName == null) {
 			this.stringLabelNames.put(string, stringLabelName = "STRING_" + this.stringLabelNames.size());
-			this.getStringSection().add(new Label(stringLabelName));
-			this.getStringSection().add(new Ascii(string));
+			
+			this.pushProcedureSection();
+			
+			this.x86LABEL(stringLabelName);
+			this.x86ASCII(string);
+			
+			this.getStringSection().addAll(this.popProcedureSection());
 		}
 		
 		this.x86PUSH(stringLabelName);
@@ -376,12 +405,35 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	/**
 	 * 
+	 * @param string
+	 * <br>Not null
+	 * <br>Shared
+	 */
+	protected final void x86ASCII(final String string) {
+		this.getProcedureSection().add(new Ascii(string));
+	}
+	
+	/**
+	 * 
 	 * @param labelName
 	 * <br>Not null
 	 * <br>Shared
 	 */
 	protected final void x86GLOBL(final String labelName) {
 		this.getProcedureSection().add(new Globl(labelName));
+	}
+	
+	/**
+	 * 
+	 * @param globalName
+	 * <br>Not null
+	 * <br>Shared
+	 * @param variableCount
+	 * <br>Maybe null
+	 * <br>Shared
+	 */
+	protected final void x86LCOMM(final String globalName, final Integer variableCount) {
+		this.getProcedureSection().add(new Lcomm(this.getDefaultVariableByteCount(), globalName, variableCount));
 	}
 	
 	/**
@@ -398,11 +450,99 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	 * 
 	 * @param variableCount
 	 * <br>Range: {@code [0 .. Integer.MAX_VALUE]}
+	 * @param registerName
+	 * <br>Not null
+	 */
+	protected final void x86ADD(final int variableCount, final Name registerName) {
+		this.getProcedureSection().add(new Add(this.getDefaultSizeSuffix(),
+				new CompositeIntegerValue(this.getDefaultVariableByteCount(), variableCount),
+				new Register(this.getResizedName(registerName))));
+	}
+	
+	/**
+	 * 
+	 * @param sourceRegisterName
+	 * <br>Not null
+	 * @param destinationRegisterName
+	 * <br>Not null
+	 */
+	protected final void x86ADD(final Name sourceRegisterName, final Name destinationRegisterName) {
+		this.getProcedureSection().add(new Add(this.getDefaultSizeSuffix(),
+				new Register(this.getResizedName(sourceRegisterName)),
+				new Register(this.getResizedName(destinationRegisterName))));
+	}
+	
+	/**
+	 * 
+	 * @param value
+	 * <br>Range: any integer
+	 * @param registerName
+	 * <br>Not null
+	 * <br>Shared
+	 */
+	protected final void x86AND(final int value, final Name registerName) {
+		this.getProcedureSection().add(new And(this.getDefaultSizeSuffix(),
+				new IntegerValue(value),
+				new Register(this.getResizedName(registerName))));
+	}
+	
+	/**
+	 * 
+	 * @param callName
+	 * <br>Not null
+	 */
+	protected final void x86CALL(final String callName) {
+		this.getProcedureSection().add(new Call(this.getDefaultSizeSuffix(), new LabelOperand(callName)));
+	}
+	
+	/**
+	 * 
+	 * @param variableCount
+	 * <br>Range: {@code [0 .. Integer.MAX_VALUE]}
 	 */
 	protected final void x86ENTER(final int variableCount) {
 		this.getProcedureSection().add(new Enter(this.getDefaultSizeSuffix(),
 				new CompositeIntegerValue(this.getDefaultVariableByteCount(), variableCount), new IntegerValue(0)));
 	}
+	
+	/**
+	 * 
+	 * @param value
+	 * <br>Range: any integer
+	 * @param registerName
+	 * <br>Not null
+	 */
+	protected final void x86IMUL(final int value, final Name registerName) {
+		this.getProcedureSection().add(new Imul(this.getDefaultSizeSuffix(),
+				new IntegerValue(value), new Register(this.getResizedName(registerName))));
+	}
+	
+	/**
+	 * 
+	 * @param labelName
+	 * <br>Not null
+	 * <br>Shared
+	 * @param registerName
+	 * <br>Not null
+	 */
+	protected final void x86LEA(final String labelName, final Name registerName) {
+		this.getProcedureSection().add(new Lea(this.getDefaultSizeSuffix(),
+				new LabelRelativeAddress(this.getDefaultSizeSuffix(), labelName),
+				new Register(this.getResizedName(registerName))));
+	}
+	
+	protected final void x86LEAVE() {
+		this.getProcedureSection().add(new Leave(this.getDefaultSizeSuffix()));
+	}
+	
+	/**
+	 * 
+	 * @param labelName
+	 * <br>Not null
+	 * @param registerName
+	 * <br>Not null
+	 */
+	protected abstract void x86MOV(final String labelName, final Name registerName);
 	
 	/**
 	 * 
@@ -428,12 +568,11 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	 * <br>Shared
 	 * @param destinationRegisterName
 	 * <br>Not null
-	 * <br>Shared
 	 */
 	protected final void x86MOV(final int sourceOffset, final Name sourceRegisterName, final Name destinationRegisterName) {
 		this.getProcedureSection().add(new Mov(this.getDefaultSizeSuffix(),
 				new RegisterRelativeAddress(this.getDefaultSizeSuffix(), sourceOffset, sourceRegisterName),
-				new Register(destinationRegisterName)));
+				new Register(this.getResizedName(destinationRegisterName))));
 	}
 	
 	/**
@@ -445,15 +584,8 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	 * <br>Shared
 	 */
 	protected final void x86MOV(final int value, final Name registerName) {
-		this.getProcedureSection().add(new Mov(this.getDefaultSizeSuffix(), new IntegerValue(value), new Register(this.getResizedName(registerName))));
-	}
-	
-	protected final void x86LEAVE() {
-		this.getProcedureSection().add(new Leave(this.getDefaultSizeSuffix()));
-	}
-	
-	protected final void x86RET() {
-		this.getProcedureSection().add(new Ret(this.getDefaultSizeSuffix()));
+		this.getProcedureSection().add(new Mov(this.getDefaultSizeSuffix(),
+				new IntegerValue(value), new Register(this.getResizedName(registerName))));
 	}
 	
 	/**
@@ -473,9 +605,42 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	 * <br>Not null
 	 * <br>Shared
 	 */
+	protected final void x86POP(final int variableIndex, final Name registerName) {
+		this.getProcedureSection().add(new Pop(this.getDefaultSizeSuffix(),
+				new RegisterRelativeAddress(this.getDefaultSizeSuffix(), this.getDefaultVariableByteCount() * variableIndex, registerName)));
+	}
+	
+	/**
+	 * 
+	 * @param registerName
+	 * <br>Not null
+	 */
+	protected final void x86POP(final Name registerName) {
+		this.getProcedureSection().add(new Pop(this.getDefaultSizeSuffix(),
+				new Register(this.getResizedName(registerName))));
+	}
+	
+	/**
+	 * 
+	 * @param variableIndex
+	 * <br>Range: any integer
+	 * @param registerName
+	 * <br>Not null
+	 * <br>Shared
+	 */
 	protected final void x86PUSH(final int variableIndex, final Name registerName) {
 		this.getProcedureSection().add(new Push(this.getDefaultSizeSuffix(),
 				new RegisterRelativeAddress(this.getDefaultSizeSuffix(), this.getDefaultVariableByteCount() * variableIndex, registerName)));
+	}
+	
+	/**
+	 * 
+	 * @param registerName
+	 * <br>Not null
+	 */
+	protected final void x86PUSH(final Name registerName) {
+		this.getProcedureSection().add(new Push(this.getDefaultSizeSuffix(),
+				new Register(this.getResizedName(registerName))));
 	}
 	
 	/**
@@ -487,65 +652,8 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	 */
 	protected abstract void x86PUSH(final String labelName);
 	
-	/**
-	 * 
-	 * @param variableIndex
-	 * <br>Range: any integer
-	 * @param registerName
-	 * <br>Not null
-	 * <br>Shared
-	 */
-	protected final void x86POP(final int variableIndex, final Name registerName) {
-		this.getProcedureSection().add(new Pop(this.getDefaultSizeSuffix(),
-				new RegisterRelativeAddress(this.getDefaultSizeSuffix(), this.getDefaultVariableByteCount() * variableIndex, registerName)));
-	}
-	
-	/**
-	 * 
-	 * @param registerName
-	 * <br>Not null
-	 * <br>Shared
-	 */
-	protected final void x86POP(final Name registerName) {
-		this.getProcedureSection().add(new Pop(this.getDefaultSizeSuffix(),
-				new Register(this.getResizedName(registerName))));
-	}
-	
-	/**
-	 * 
-	 * @param callName
-	 * <br>Not null
-	 */
-	protected final void x86CALL(final String callName) {
-		this.getProcedureSection().add(new Call(this.getDefaultSizeSuffix(), new LabelOperand(callName)));
-	}
-	
-	/**
-	 * 
-	 * @param variableCount
-	 * <br>Range: {@code [0 .. Integer.MAX_VALUE]}
-	 * @param registerName
-	 * <br>Not null
-	 * <br>Shared
-	 */
-	protected final void x86ADD(final int variableCount, final Name registerName) {
-		this.getProcedureSection().add(new Add(this.getDefaultSizeSuffix(),
-				new CompositeIntegerValue(this.getDefaultVariableByteCount(), variableCount),
-				new Register(this.getResizedName(registerName))));
-	}
-	
-	/**
-	 * 
-	 * @param value
-	 * <br>Range: any integer
-	 * @param registerName
-	 * <br>Not null
-	 * <br>Shared
-	 */
-	protected final void x86AND(final int value, final Name registerName) {
-		this.getProcedureSection().add(new And(this.getDefaultSizeSuffix(),
-				new IntegerValue(value),
-				new Register(this.getResizedName(registerName))));
+	protected final void x86RET() {
+		this.getProcedureSection().add(new Ret(this.getDefaultSizeSuffix()));
 	}
 	
 	/**
@@ -558,6 +666,7 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	protected void addSectionsToProgram(final List<AbstractProgramElement> result) {
 		result.addAll(this.getStringSection());
 		result.addAll(this.getProcedureSection());
+		result.addAll(this.getGlobalSection());
 	}
 	
 	/**
@@ -578,6 +687,16 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	 */
 	protected final List<AbstractProgramElement> getProcedureSection() {
 		return this.procedureSectionStack.peek();
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * <br>Not null
+	 * <br>Shared
+	 */
+	protected final List<AbstractProgramElement> getGlobalSection() {
+		return this.globalSection;
 	}
 	
 	/**

@@ -15,10 +15,8 @@ import scomp.x86.ir.Add;
 import scomp.x86.ir.Call;
 import scomp.x86.ir.CompositeIntegerValue;
 import scomp.x86.ir.LabelOperand;
-import scomp.x86.ir.LabelRelativeAddress;
-import scomp.x86.ir.Lea;
-import scomp.x86.ir.Push;
 import scomp.x86.ir.Register;
+import scomp.x86.ir.Register.Name;
 
 /**
  * This is the Mac OS X implementation of the Decaf -&gt; x86 translator.
@@ -47,9 +45,14 @@ public final class MacOSXTranslator extends AbstractTranslator {
 	}
 	
 	@Override
+	protected final void x86MOV(final String labelName, final Name registerName) {
+		this.x86LEA(labelName, registerName);
+	}
+	
+	@Override
 	protected final void x86PUSH(final String labelName) {
-		this.getProcedureSection().add(new Lea(this.getDefaultSizeSuffix(), new LabelRelativeAddress(this.getDefaultSizeSuffix(), labelName), new Register(RAX)));
-		this.getProcedureSection().add(new Push(this.getDefaultSizeSuffix(), new Register(RAX)));
+		this.x86LEA(labelName, RAX);
+		this.x86PUSH(RAX);
 	}
 	
 	@Override
@@ -61,6 +64,7 @@ public final class MacOSXTranslator extends AbstractTranslator {
 		}
 		
 		result.addAll(this.getProcedureSection());
+		result.addAll(this.getGlobalSection());
 	}
 	
 	@Override

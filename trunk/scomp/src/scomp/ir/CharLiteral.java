@@ -34,10 +34,10 @@ public final class CharLiteral extends AbstractLiteral{
 	/**
 	 * 
 	 * @return
-	 * <br>Range: any char
+	 * <br>Range: any integer
 	 */
 	public final int getValue() {
-		return Character.getNumericValue((Character) this.getToken().getValue());
+		return (Character) this.getToken().getValue();
 	}
 	
 	@Override
