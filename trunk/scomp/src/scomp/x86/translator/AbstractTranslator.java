@@ -201,8 +201,15 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	@Override
 	public final void visit(final ReturnStatement returnStatement) {
-		// TODO Auto-generated method stub
+		this.visitChildren(returnStatement);
 		
+		if (returnStatement.getExpression() == null) {
+			this.x86MOV(0, RAX);
+		} else {
+			this.x86POP(RAX);
+		}
+		this.x86LEAVE();
+		this.x86RET();
 	}
 	
 	@Override
@@ -467,6 +474,17 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	protected final void x86POP(final int variableIndex, final Name registerName) {
 		this.getProcedureSection().add(new Pop(this.getDefaultSizeSuffix(),
 				new RegisterRelativeAddress(this.getDefaultSizeSuffix(), this.getDefaultVariableByteCount() * variableIndex, registerName)));
+	}
+	
+	/**
+	 * 
+	 * @param registerName
+	 * <br>Not null
+	 * <br>Shared
+	 */
+	protected final void x86POP(final Name registerName) {
+		this.getProcedureSection().add(new Pop(this.getDefaultSizeSuffix(),
+				new Register(this.getResizedName(registerName))));
 	}
 	
 	/**
