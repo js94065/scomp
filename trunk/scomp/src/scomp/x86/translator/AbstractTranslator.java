@@ -68,6 +68,10 @@ import scomp.x86.ir.Register.Name;
 
 /**
  * This is the base class for the OS-specific translators.
+ * <br>A generated x86 program is a list of labels, directives and instructions.
+ * <br>In our project, this list can be broken up into sections: strings, callouts (Mac OS X), procedures, globals.
+ * <br>The role of the visit() methods is to fill those sections, and then getProgram() combines them into the final list.
+ * <br>This separation is necessary because the elements belonging to each section do not appear chronologically while visiting a Decaf IR tree.
  * 
  * @author codistmonk (creation 2010-09-26)
  *
@@ -76,10 +80,24 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	private final List<AbstractProgramElement> stringSection;
 	
+	/**
+	 * This map associates each Decaf string callout argument to its label name.
+	 * <br>This way duplications are avoided.
+	 */
 	private final Map<String, String> stringLabelNames;
 	
+	/**
+	 * <br>The x86*() methods (convenience methods that make it easier to generate the x86 IR) all work on the object returned by getProcedureSection().
+	 * <br>getProcedureSection() actually returns the top of a stack, which makes it possible to use the x86*() methods for any sections by manipulating
+	 * the procedure section stack.
+	 * <br>This stack also makes it possible to reorder parts of the generated code, like in visit(MethodDeclaration).
+	 */
 	private final Deque<List<AbstractProgramElement>> procedureSectionStack;
 	
+	/**
+	 * This map associates each local variable declaration with its index.
+	 * <br>It is reset at the beginning of each method declaration.
+	 */
 	private final Map<VariableDeclaration, Integer> localVariables;
 	
 	private MethodDeclaration currentMethod;
@@ -140,20 +158,22 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 			this.x86LABEL("_main");
 		}
 		
+		// The "enter" instruction needs to be written before writing the children's code,
+		// but the information needed (local variable count) is not available until after the children
+		// have been visited
+		// A solution is to make the children write into a temporary procedure section,
+		// and then concatenate the original procedure section with the "enter" instruction and finally
+		// the children's code
+		
 		this.pushProcedureSection();
 		
 		this.visitChildren(method);
 		
-		this.pushProcedureSection();
+		final List<AbstractProgramElement> childrenCode = this.popProcedureSection();
 		
 		this.x86ENTER(this.localVariables.size());
 		
-		for (int i = 0; i < this.localVariables.size(); ++i) {
-			this.x86MOV(0, i, RBP);
-		}
-		
-		this.popAndPrependProcedureSection();
-		this.popAndAppendProcedureSection();
+		this.getProcedureSection().addAll(childrenCode);
 		
 		if ("main".equals(method.getIdentifier())) {
 			this.x86MOV(0, RAX);
@@ -171,6 +191,8 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	@Override
 	public final void visit(final VariableDeclaration variable) {
 		this.localVariables.put(variable, this.localVariables.size());
+		
+		this.x86MOV(0, this.localVariables.get(variable), RBP);
 	}
 	
 	@Override
@@ -457,6 +479,8 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	}
 	
 	/**
+	 * Generates the code that pushes the address of a label onto the stack.
+	 * <br>It may generate several instructions if a simple "push" is not possible (Mac OS X).
 	 * 
 	 * @param labelName
 	 * <br>Not null
@@ -557,6 +581,9 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	}
 	
 	/**
+	 * Generates the callout x86 code.
+	 * <br>Due to the C calling convention on Mac OS X, callouts are done with intermediate procedures.
+	 * <br>But on Windows normal calls can be used.
 	 * 
 	 * @param methodCallout
 	 * <br>Not null
@@ -612,18 +639,6 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	 */
 	protected final List<AbstractProgramElement> popProcedureSection() {
 		return this.procedureSectionStack.pop();
-	}
-	
-	protected final void popAndAppendProcedureSection() {
-		final List<AbstractProgramElement> procedureSection = this.popProcedureSection();
-		
-		this.getProcedureSection().addAll(procedureSection);
-	}
-	
-	protected final void popAndPrependProcedureSection() {
-		final List<AbstractProgramElement> procedureSection = this.popProcedureSection();
-		
-		this.getProcedureSection().addAll(0, procedureSection);
 	}
 	
 	/**
