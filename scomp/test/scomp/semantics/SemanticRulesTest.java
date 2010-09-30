@@ -55,9 +55,9 @@ public final class SemanticRulesTest {
 		program.accept(new SemanticRules());
 		
 		assertEquals(Arrays.asList(
+				"(:12:11) Undeclared identifier f",
 				"(:12:4) Undeclared identifier b",
 				"(:12:6) Undeclared identifier d",
-				"(:12:11) Undeclared identifier f",
 				"(:13:4) Undeclared identifier main",
 				"(:16:12) Undeclared identifier a"
 		), this.recorder.getMessages());
