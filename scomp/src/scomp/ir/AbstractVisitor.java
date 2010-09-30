@@ -66,9 +66,8 @@ public abstract class AbstractVisitor implements Visitor {
 	 * <br>Not null
 	 */
 	protected void visitChildren(final AssignmentStatement assignment) {
-		assignment.getLocation().accept(this);
-		
 		assignment.getExpression().accept(this);
+		assignment.getLocation().accept(this);
 	}
 	
 	/**
