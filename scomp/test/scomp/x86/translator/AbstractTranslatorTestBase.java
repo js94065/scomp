@@ -1,14 +1,20 @@
 package scomp.x86.translator;
 
 import static org.junit.Assert.assertEquals;
+import static scomp.Tools.setHandler;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Collections;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
+import org.junit.Before;
 import org.junit.Test;
 
+import scomp.DecafParser;
 import scomp.Tools;
+import scomp.Tools.MessageRecorder;
 import scomp.semantics.SemanticRules;
 
 /**
@@ -17,6 +23,15 @@ import scomp.semantics.SemanticRules;
  *
  */
 public abstract class AbstractTranslatorTestBase {
+	
+	private MessageRecorder recorder;
+	
+	@Before
+	public final void beforeEachTest() {
+		this.recorder = new MessageRecorder();
+		
+		setHandler(Logger.getLogger(DecafParser.class.getName()), this.recorder);
+	}
 	
 	@Test
 	public final void testSimple() {
@@ -34,8 +49,8 @@ public abstract class AbstractTranslatorTestBase {
 	}
 	
 	@Test
-	public final void testGlobalVariableArray() {
-		this.test("globalvariablearray");
+	public final void testArguments() {
+		this.test("arguments");
 	}
 	
 	@Test
@@ -46,6 +61,11 @@ public abstract class AbstractTranslatorTestBase {
 	@Test
 	public final void testReturn() {
 		this.test("return");
+	}
+	
+	@Test
+	public final void testGlobalVariableArray() {
+		this.test("globalvariablearray");
 	}
 	
 	@Test
@@ -159,11 +179,6 @@ public abstract class AbstractTranslatorTestBase {
 	}
 	
 	@Test
-	public final void testArguments() {
-		this.test("arguments");
-	}
-	
-	@Test
 	public final void testIfElse() {
 		this.test("ifelse");
 	}
@@ -200,6 +215,9 @@ public abstract class AbstractTranslatorTestBase {
 		final scomp.ir.Program program = parseTestFile(testName);
 
 		program.accept(new SemanticRules());
+		
+		assertEquals(Collections.EMPTY_LIST, this.recorder.getMessages());
+		
 		program.accept(translator);
 		
 		assertEquals(getSimplifiedString(testName + "_" + this.getOSName()), translator.getProgram().toString());
