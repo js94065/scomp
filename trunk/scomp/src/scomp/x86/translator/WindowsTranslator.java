@@ -12,7 +12,7 @@ import scomp.x86.ir.AbstractInstruction;
 public final class WindowsTranslator extends AbstractTranslator {
 	
 	@Override
-	protected final void addPushLabel(final String labelName) {
+	protected final void x86PUSH(final String labelName) {
 		// TODO Auto-generated method stub
 		
 	}
