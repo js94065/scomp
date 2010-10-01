@@ -21,7 +21,6 @@ decaf_main:
 .globl _main
 _main:
 	enterq $(8 * 2), $0
-	movq $0, %rax
 	movq $0, -8(%rbp)
 	movq $0, -16(%rbp)
 	pushq $2
@@ -54,6 +53,7 @@ _main:
 	pushq %rax
 	callq callout_printf_4
 	addq $(8 * 4), %rsp
+	movq $0, %rax
 	leaveq
 	retq
 

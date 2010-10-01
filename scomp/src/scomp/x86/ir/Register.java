@@ -45,7 +45,7 @@ public final class Register extends AbstractOperand {
 		RAX, EAX,
 		RDI,
 		RSI,
-		RDX,
+		RDX, EDX,
 		RCX, ECX, CL,
 		R8,
 		R9,

@@ -3,6 +3,7 @@ package scomp.x86.ir;
 import static scomp.x86.ir.Register.Name.EAX;
 import static scomp.x86.ir.Register.Name.EBP;
 import static scomp.x86.ir.Register.Name.ECX;
+import static scomp.x86.ir.Register.Name.EDX;
 import static scomp.x86.ir.Register.Name.EIP;
 import static scomp.x86.ir.Register.Name.ESP;
 
@@ -70,6 +71,8 @@ public abstract class AbstractInstruction extends AbstractProgramElement {
 				return EAX;
 			case RCX:
 				return ECX;
+			case RDX:
+				return EDX;
 			case RSP:
 				return ESP;
 			case RBP:
