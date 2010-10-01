@@ -1,5 +1,6 @@
 package scomp.x86.translator;
 
+import static scomp.Tools.set;
 import static scomp.x86.ir.AbstractInstruction.SIZE_SUFFIX_32;
 import static scomp.x86.ir.AbstractInstruction.SIZE_SUFFIX_64;
 import static scomp.x86.ir.Register.Name.*;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import scomp.Tools;
 import scomp.ir.AbstractTypedEntityDeclaration;
 import scomp.ir.AbstractVisitor;
 import scomp.ir.ArrayFieldDeclaration;
@@ -53,6 +55,7 @@ import scomp.x86.ir.Call;
 import scomp.x86.ir.CompositeIntegerValue;
 import scomp.x86.ir.Enter;
 import scomp.x86.ir.Globl;
+import scomp.x86.ir.Idiv;
 import scomp.x86.ir.Imul;
 import scomp.x86.ir.IntegerValue;
 import scomp.x86.ir.Label;
@@ -313,8 +316,33 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	@Override
 	public final void visit(final BinaryOperationExpression operation) {
-		// TODO Auto-generated method stub
+		final String operator = operation.getOperator();
 		
+		if (BinaryOperationExpression.OPERATORS_WITH_INT_OPERANDS.contains(operator)) {
+			this.visitChildren(operation);
+			
+			this.x86POP(RCX);
+			this.x86POP(RAX);
+			
+			if (set("/", "%").contains(operator)) {
+				this.x86MOV(0, RDX);
+			}
+			
+			if ("+".equals(operator)) {
+				this.x86ADD32(RCX, RAX);
+			} else if ("-".equals(operator)) {
+				this.x86SUB32(RCX, RAX);
+			} else if ("*".equals(operator)) {
+				this.x86IMUL32(RCX, RAX);
+			} else if ("/".equals(operator)) {
+				this.x86IDIV32(RCX, RAX);
+			} else if ("%".equals(operator)) {
+				this.x86IDIV32(RCX, RAX);
+			}
+			
+			this.x86PUSH("%".equals(operator) ? RDX : RAX);
+		}
+		// TODO
 	}
 	
 	@Override
@@ -477,6 +505,19 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	/**
 	 * 
+	 * @param sourceRegisterName
+	 * <br>Not null
+	 * @param destinationRegisterName
+	 * <br>Not null
+	 */
+	protected final void x86ADD32(final Name sourceRegisterName, final Name destinationRegisterName) {
+		this.getProcedureSection().add(new Add(SIZE_SUFFIX_32,
+				new Register(AbstractInstruction.getResizedName(sourceRegisterName, SIZE_SUFFIX_32)),
+				new Register(AbstractInstruction.getResizedName(destinationRegisterName, SIZE_SUFFIX_32))));
+	}
+	
+	/**
+	 * 
 	 * @param value
 	 * <br>Range: any integer
 	 * @param registerName
@@ -510,6 +551,19 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	/**
 	 * 
+	 * @param sourceRegisterName
+	 * <br>Not null
+	 * @param destinationRegisterName
+	 * <br>Not null
+	 */
+	protected final void x86IDIV32(final Name sourceRegisterName, final Name destinationRegisterName) {
+		this.getProcedureSection().add(new Idiv(SIZE_SUFFIX_32,
+				new Register(AbstractInstruction.getResizedName(sourceRegisterName, SIZE_SUFFIX_32)),
+				new Register(AbstractInstruction.getResizedName(destinationRegisterName, SIZE_SUFFIX_32))));
+	}
+	
+	/**
+	 * 
 	 * @param value
 	 * <br>Range: any integer
 	 * @param registerName
@@ -518,6 +572,19 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	protected final void x86IMUL(final int value, final Name registerName) {
 		this.getProcedureSection().add(new Imul(this.getDefaultSizeSuffix(),
 				new IntegerValue(value), new Register(this.getResizedName(registerName))));
+	}
+	
+	/**
+	 * 
+	 * @param sourceRegisterName
+	 * <br>Not null
+	 * @param destinationRegisterName
+	 * <br>Not null
+	 */
+	protected final void x86IMUL32(final Name sourceRegisterName, final Name destinationRegisterName) {
+		this.getProcedureSection().add(new Imul(SIZE_SUFFIX_32,
+				new Register(AbstractInstruction.getResizedName(sourceRegisterName, SIZE_SUFFIX_32)),
+				new Register(AbstractInstruction.getResizedName(destinationRegisterName, SIZE_SUFFIX_32))));
 	}
 	
 	/**

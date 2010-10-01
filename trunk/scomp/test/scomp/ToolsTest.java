@@ -4,8 +4,10 @@ import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -33,6 +35,14 @@ public class ToolsTest {
 		assertSame(array, Tools.array(array));
 		assertArrayEquals(array, Tools.array(42, 33));
     }
+	
+	@Test
+	public final void testSet() {
+		final Set<Integer> set = Tools.set(42, 33);
+		final List<Integer> list = Arrays.asList(42, 33);
+		
+		assertTrue(set.containsAll(list));
+	}
 	
 	@Test
 	public final void testEmptyIfNull() {

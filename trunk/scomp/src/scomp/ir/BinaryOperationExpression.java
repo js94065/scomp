@@ -1,8 +1,7 @@
 package scomp.ir;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashSet;
+import static scomp.Tools.set;
+
 import java.util.Set;
 
 import scomp.Tools;
@@ -121,18 +120,5 @@ public final class BinaryOperationExpression extends AbstractExpression {
 	 * {"==", "!="}.
 	 */
 	public static final Set<String> EQUALITY_OPERATORS = set("==", "!=");
-	
-	/**
-	 * 
-	 * @param <T> The common type of the elements
-	 * @param elements
-	 * <br>Not null
-	 * @return
-	 * <br>Not null
-	 * <br>New
-	 */
-	private static final <T> Set<T> set(final T... elements) {
-		return Collections.unmodifiableSet(new LinkedHashSet<T>(Arrays.asList(elements)));
-	}
 	
 }

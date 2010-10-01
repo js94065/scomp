@@ -4,9 +4,12 @@ import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
@@ -134,6 +137,19 @@ public final class Tools {
 	 */
 	public static final <T> T[] array(final T... array) {
 		return array;
+	}
+	
+	/**
+	 * 
+	 * @param <T> The common type of the elements
+	 * @param elements
+	 * <br>Not null
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	public static final <T> Set<T> set(final T... elements) {
+		return Collections.unmodifiableSet(new LinkedHashSet<T>(Arrays.asList(elements)));
 	}
 	
 	/**
