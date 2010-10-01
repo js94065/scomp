@@ -40,6 +40,15 @@ public abstract class AbstractInstruction extends AbstractProgramElement {
 	}
 	
 	/**
+	 * 
+	 * @return
+	 * <br>Not null
+	 */
+	protected String getSuffix() {
+		return this.getSizeSuffix();
+	}
+	
+	/**
 	 * {@value}.
 	 */
 	public static final String SIZE_SUFFIX_UNSPECIFIED = "";

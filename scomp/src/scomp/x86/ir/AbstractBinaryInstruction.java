@@ -57,13 +57,4 @@ public abstract class AbstractBinaryInstruction extends AbstractInstruction {
 				" " + this.getFirstOperand() + ", " + this.getSecondOperand();
 	}
 	
-	/**
-	 * 
-	 * @return
-	 * <br>Not null
-	 */
-	protected String getSuffix() {
-		return this.getSizeSuffix();
-	}
-	
 }

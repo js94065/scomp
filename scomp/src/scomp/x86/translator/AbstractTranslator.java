@@ -8,6 +8,7 @@ import static scomp.x86.ir.Register.Name.*;
 
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -61,6 +62,7 @@ import scomp.x86.ir.Globl;
 import scomp.x86.ir.Idiv;
 import scomp.x86.ir.Imul;
 import scomp.x86.ir.IntegerValue;
+import scomp.x86.ir.J;
 import scomp.x86.ir.Label;
 import scomp.x86.ir.LabelOperand;
 import scomp.x86.ir.LabelRelativeAddress;
@@ -92,6 +94,8 @@ import scomp.x86.ir.Sub;
  */
 public abstract class AbstractTranslator extends AbstractVisitor {
 	
+	private final Map<String, Integer> labelCounts;
+	
 	private final List<AbstractProgramElement> stringSection;
 	
 	/**
@@ -119,6 +123,7 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	private MethodDeclaration currentMethod;
 	
 	protected AbstractTranslator() {
+		this.labelCounts = new HashMap<String, Integer>();
 		this.stringSection = new ArrayList<AbstractProgramElement>();
 		this.stringLabelNames = new LinkedHashMap<String, String>();
 		this.procedureSectionStack = new LinkedList<List<AbstractProgramElement>>();
@@ -326,6 +331,9 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	public final void visit(final BinaryOperationExpression operation) {
 		final String operator = operation.getOperator();
 		
+		// XXX The boolean equality operators will also be handled here
+		// This may pose a problem in the future if we decide to change
+		// our x86 representation for booleans
 		if (ALL_OPERATORS_WITH_INT_OPERANDS.contains(operator)) {
 			this.visitChildren(operation);
 			
@@ -356,10 +364,24 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 				this.x86CMP32(ECX, EAX);
 				this.x86MOV(0, RAX);
 				this.x86MOV(1, RCX);
-				this.x86CMOVX(operator, RCX, RAX);
+				this.x86CMOV(operator, RCX, RAX);
 			}
 			
 			this.x86PUSH("%".equals(operator) ? RDX : RAX);
+		} else if (BOOLEAN_OPERATORS.contains(operator)) {
+			operation.getLeft().accept(this);
+			
+			final String endLabel = this.newLabelName("end_" + ("&&".equals(operator) ? "and" : "or") + "_");
+			
+			this.x86POP(RAX);
+			this.x86CMP(0, RAX);
+			this.x86J(operator, endLabel);
+			
+			operation.getRight().accept(this);
+			
+			this.x86POP(RAX);
+			this.x86LABEL(endLabel);
+			this.x86PUSH(RAX);
 		}
 		// TODO
 	}
@@ -540,6 +562,35 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	/**
 	 * 
+	 * @param operator
+	 * <br>Not null
+	 * <br>Range: { "&lt;", "&lt;=", "&gt;" "&gt;=", "==", "!=" }
+	 * @param sourceRegisterName
+	 * <br>Not null
+	 * @param destinationRegisterName
+	 * <br>Not null
+	 */
+	protected final void x86CMOV(final String operator, final Name sourceRegisterName, final Name destinationRegisterName) {
+		this.getProcedureSection().add(new Cmov(getConditionSuffix(operator), this.getDefaultSizeSuffix(),
+				new Register(this.getResizedName(sourceRegisterName)),
+				new Register(this.getResizedName(destinationRegisterName))));
+	}
+	
+	/**
+	 * 
+	 * @param value
+	 * <br>Range: any integer
+	 * @param destinationRegisterName
+	 * <br>Not null
+	 */
+	protected final void x86CMP(final int value, final Name destinationRegisterName) {
+		this.getProcedureSection().add(new Cmp(this.getDefaultSizeSuffix(),
+				new IntegerValue(value),
+				new Register(this.getResizedName(destinationRegisterName))));
+	}
+	
+	/**
+	 * 
 	 * @param sourceRegisterName
 	 * <br>Not null
 	 * @param destinationRegisterName
@@ -549,53 +600,6 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 		this.getProcedureSection().add(new Cmp(SIZE_SUFFIX_32,
 				new Register(AbstractInstruction.getResizedName(sourceRegisterName, SIZE_SUFFIX_32)),
 				new Register(AbstractInstruction.getResizedName(destinationRegisterName, SIZE_SUFFIX_32))));
-	}
-	
-	/**
-	 * 
-	 * @param operator
-	 * <br>Not null
-	 * <br>Range: { "&lt;", "&lt;=", "&gt;" "&gt;=", "==", "!=" }
-	 * @param sourceRegisterName
-	 * <br>Not null
-	 * @param destinationRegisterName
-	 * <br>Not null
-	 */
-	protected final void x86CMOVX(final String operator, final Name sourceRegisterName, final Name destinationRegisterName) {
-		this.getProcedureSection().add(new Cmov(getConditionSuffix(operator), this.getDefaultSizeSuffix(),
-				new Register(this.getResizedName(sourceRegisterName)),
-				new Register(this.getResizedName(destinationRegisterName))));
-	}
-	
-	/**
-	 * 
-	 * @param operator
-	 * <br>Not null
-	 * <br>Range: { "&lt;", "&lt;=", "&gt;" "&gt;=", "==", "!=" }
-	 * @return
-	 * <br>Not null
-	 */
-	private static final ConditionSuffix getConditionSuffix(final String operator) {
-		if ("<".equals(operator)) {
-			return ConditionSuffix.L;
-		}
-		if ("<=".equals(operator)) {
-			return ConditionSuffix.LE;
-		}
-		if (">".equals(operator)) {
-			return ConditionSuffix.G;
-		}
-		if (">=".equals(operator)) {
-			return ConditionSuffix.GE;
-		}
-		if ("==".equals(operator)) {
-			return ConditionSuffix.E;
-		}
-		if ("!=".equals(operator)) {
-			return ConditionSuffix.NE;
-		}
-		
-		throw new IllegalArgumentException("Unsupported operator: " + operator);
 	}
 	
 	/**
@@ -667,6 +671,18 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 		this.getProcedureSection().add(new Imul(SIZE_SUFFIX_32,
 				new Register(AbstractInstruction.getResizedName(sourceRegisterName, SIZE_SUFFIX_32)),
 				new Register(AbstractInstruction.getResizedName(destinationRegisterName, SIZE_SUFFIX_32))));
+	}
+	
+	/**
+	 * 
+	 * @param operator
+	 * <br>Not null
+	 * <br>Range: { "&&", "||" }
+	 * @param labelName
+	 * <br>Not null
+	 */
+	protected final void x86J(final String operator, final String labelName) {
+		this.getProcedureSection().add(new J(getConditionSuffix(operator), new LabelOperand(labelName)));
 	}
 	
 	/**
@@ -875,6 +891,26 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	/**
 	 * 
+	 * @param labelBase
+	 * <br>Not null
+	 * <br>Shared
+	 * @return
+	 * <br>Not null
+	 */
+	protected final String newLabelName(final String labelBase) {
+		Integer count = this.labelCounts.get(labelBase);
+		
+		if (count == null) {
+			count = 0;
+		}
+		
+		this.labelCounts.put(labelBase, count + 1);
+		
+		return labelBase + count;
+	}
+	
+	/**
+	 * 
 	 * @param result
 	 * <br>Not null
 	 * <br>Shared
@@ -994,6 +1030,43 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 		}
 		
 		return -1;
+	}
+	
+	/**
+	 * 
+	 * @param operator
+	 * <br>Not null
+	 * <br>Range: { "&lt;", "&lt;=", "&gt;" "&gt;=", "==", "!=", "&&", "||" }
+	 * @return
+	 * <br>Not null
+	 */
+	private static final ConditionSuffix getConditionSuffix(final String operator) {
+		if ("<".equals(operator)) {
+			return ConditionSuffix.L;
+		}
+		if ("<=".equals(operator)) {
+			return ConditionSuffix.LE;
+		}
+		if (">".equals(operator)) {
+			return ConditionSuffix.G;
+		}
+		if (">=".equals(operator)) {
+			return ConditionSuffix.GE;
+		}
+		if ("==".equals(operator)) {
+			return ConditionSuffix.E;
+		}
+		if ("!=".equals(operator)) {
+			return ConditionSuffix.NE;
+		}
+		if ("&&".equals(operator)) {
+			return ConditionSuffix.E;
+		}
+		if ("||".equals(operator)) {
+			return ConditionSuffix.NE;
+		}
+		
+		throw new IllegalArgumentException("Unsupported operator: " + operator);
 	}
 	
 }

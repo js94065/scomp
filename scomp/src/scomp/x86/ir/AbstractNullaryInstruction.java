@@ -20,7 +20,7 @@ public abstract class AbstractNullaryInstruction extends AbstractInstruction {
 	
 	@Override
 	public final String toString() {
-		return this.getClass().getSimpleName().toLowerCase() + this.getSizeSuffix();
+		return this.getClass().getSimpleName().toLowerCase() + this.getSuffix();
 	}
 	
 }
