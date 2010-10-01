@@ -71,7 +71,10 @@ import scomp.x86.ir.Push;
 import scomp.x86.ir.Register;
 import scomp.x86.ir.RegisterRelativeAddress;
 import scomp.x86.ir.Ret;
+import scomp.x86.ir.Ror;
+import scomp.x86.ir.Sar;
 import scomp.x86.ir.Register.Name;
+import scomp.x86.ir.Sal;
 import scomp.x86.ir.Sub;
 
 /**
@@ -329,15 +332,21 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 			}
 			
 			if ("+".equals(operator)) {
-				this.x86ADD32(RCX, RAX);
+				this.x86ADD32(ECX, EAX);
 			} else if ("-".equals(operator)) {
-				this.x86SUB32(RCX, RAX);
+				this.x86SUB32(ECX, EAX);
 			} else if ("*".equals(operator)) {
-				this.x86IMUL32(RCX, RAX);
+				this.x86IMUL32(ECX, EAX);
 			} else if ("/".equals(operator)) {
-				this.x86IDIV32(RCX, RAX);
+				this.x86IDIV32(ECX, EAX);
 			} else if ("%".equals(operator)) {
-				this.x86IDIV32(RCX, RAX);
+				this.x86IDIV32(ECX, EAX);
+			} else if ("<<".equals(operator)) {
+				this.x86SAL32(CL, EAX);
+			} else if (">>".equals(operator)) {
+				this.x86SAR32(CL, EAX);
+			} else if (">>>".equals(operator)) {
+				this.x86ROR32(CL, EAX);
 			}
 			
 			this.x86PUSH("%".equals(operator) ? RDX : RAX);
@@ -724,6 +733,45 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	protected final void x86RET() {
 		this.getProcedureSection().add(new Ret(this.getDefaultSizeSuffix()));
+	}
+	
+	/**
+	 * 
+	 * @param sourceRegisterName
+	 * <br>Not null
+	 * @param destinationRegisterName
+	 * <br>Not null
+	 */
+	protected final void x86ROR32(final Name sourceRegisterName, final Name destinationRegisterName) {
+		this.getProcedureSection().add(new Ror(SIZE_SUFFIX_32,
+				new Register(AbstractInstruction.getResizedName(sourceRegisterName, SIZE_SUFFIX_32)),
+				new Register(AbstractInstruction.getResizedName(destinationRegisterName, SIZE_SUFFIX_32))));
+	}
+	
+	/**
+	 * 
+	 * @param sourceRegisterName
+	 * <br>Not null
+	 * @param destinationRegisterName
+	 * <br>Not null
+	 */
+	protected final void x86SAL32(final Name sourceRegisterName, final Name destinationRegisterName) {
+		this.getProcedureSection().add(new Sal(SIZE_SUFFIX_32,
+				new Register(AbstractInstruction.getResizedName(sourceRegisterName, SIZE_SUFFIX_32)),
+				new Register(AbstractInstruction.getResizedName(destinationRegisterName, SIZE_SUFFIX_32))));
+	}
+	
+	/**
+	 * 
+	 * @param sourceRegisterName
+	 * <br>Not null
+	 * @param destinationRegisterName
+	 * <br>Not null
+	 */
+	protected final void x86SAR32(final Name sourceRegisterName, final Name destinationRegisterName) {
+		this.getProcedureSection().add(new Sar(SIZE_SUFFIX_32,
+				new Register(AbstractInstruction.getResizedName(sourceRegisterName, SIZE_SUFFIX_32)),
+				new Register(AbstractInstruction.getResizedName(destinationRegisterName, SIZE_SUFFIX_32))));
 	}
 	
 	/**
