@@ -63,6 +63,7 @@ import scomp.x86.ir.Idiv;
 import scomp.x86.ir.Imul;
 import scomp.x86.ir.IntegerValue;
 import scomp.x86.ir.J;
+import scomp.x86.ir.Jmp;
 import scomp.x86.ir.Label;
 import scomp.x86.ir.LabelOperand;
 import scomp.x86.ir.LabelRelativeAddress;
@@ -317,8 +318,23 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	@Override
 	public final void visit(final IfStatement ifStatement) {
-		// TODO Auto-generated method stub
+		ifStatement.getCondition().accept(this);
 		
+		final String elseLabel = this.newLabelName("else_");
+		final String endLabel = this.newLabelName("end_if_");
+		
+		this.x86POP(RAX);
+		this.x86CMP(0, RAX);
+		this.x86J("==", elseLabel);
+		
+		ifStatement.getThenBlock().accept(this);
+		
+		this.x86Jmp(endLabel);
+		this.x86LABEL(elseLabel);
+		
+		ifStatement.getElseBlock().accept(this);
+		
+		this.x86LABEL(endLabel);
 	}
 	
 	@Override
@@ -456,7 +472,7 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 		String stringLabelName = this.stringLabelNames.get(string);
 		
 		if (stringLabelName == null) {
-			this.stringLabelNames.put(string, stringLabelName = "STRING_" + this.stringLabelNames.size());
+			this.stringLabelNames.put(string, stringLabelName = this.newLabelName("STRING_"));
 			
 			this.pushNewProcedureSection();
 			
@@ -683,6 +699,15 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	 */
 	protected final void x86J(final String operator, final String labelName) {
 		this.getProcedureSection().add(new J(getConditionSuffix(operator), new LabelOperand(labelName)));
+	}
+	
+	/**
+	 * 
+	 * @param labelName
+	 * <br>Not null
+	 */
+	protected final void x86Jmp(final String labelName) {
+		this.getProcedureSection().add(new Jmp(new LabelOperand(labelName)));
 	}
 	
 	/**
