@@ -148,7 +148,7 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	@Override
 	public final void visit(final ArrayFieldDeclaration field) {
-		this.pushProcedureSection();
+		this.pushNewProcedureSection();
 		
 		this.x86LCOMM("decaf_" + field.getIdentifier(), field.getElementCount().getValue());
 		
@@ -162,7 +162,7 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	@Override
 	public final void visit(final FieldDeclaration field) {
-		this.pushProcedureSection();
+		this.pushNewProcedureSection();
 		
 		this.x86LCOMM("decaf_" + field.getIdentifier(), null);
 		
@@ -188,7 +188,7 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 		// and then concatenate the original procedure section with the "enter" instruction and finally
 		// the children's code
 		
-		this.pushProcedureSection();
+		this.pushNewProcedureSection();
 		
 		this.visitChildren(method);
 		
@@ -366,14 +366,17 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	@Override
 	public final void visit(final NegationExpression negation) {
+		this.visitChildren(negation);
 		// TODO Auto-generated method stub
-		
+		this.x86POP(RCX);
+		this.x86MOV(1, RAX);
+		this.x86SUB(RCX, RAX);
+		this.x86PUSH(RAX);
 	}
 	
 	@Override
 	public final void visit(final BooleanLiteral booleanLiteral) {
-		// TODO Auto-generated method stub
-		
+		this.x86PUSH(booleanLiteral.getValue() ? 1 : 0);
 	}
 	
 	@Override
@@ -433,7 +436,7 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 		if (stringLabelName == null) {
 			this.stringLabelNames.put(string, stringLabelName = "STRING_" + this.stringLabelNames.size());
 			
-			this.pushProcedureSection();
+			this.pushNewProcedureSection();
 			
 			this.x86LABEL(stringLabelName);
 			this.x86ASCII(string);
@@ -959,7 +962,7 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 		return AbstractInstruction.getResizedName(name, this.getDefaultSizeSuffix());
 	}
 	
-	protected final void pushProcedureSection() {
+	protected final void pushNewProcedureSection() {
 		this.procedureSectionStack.push(new ArrayList<AbstractProgramElement>(this.getProcedureSection()));
 		this.getProcedureSection().clear();
 	}
