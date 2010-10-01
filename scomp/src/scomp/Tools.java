@@ -154,6 +154,25 @@ public final class Tools {
 	
 	/**
 	 * 
+	 * @param <T> The common type of the elements
+	 * @param sets
+	 * <br>Not null
+	 * @return
+	 * <br>Not null
+	 * <br>New
+	 */
+	public static final <T> Set<T> union(final Set<T>... sets) {
+		final Set<T> result = new LinkedHashSet<T>();
+		
+		for (final Set<T> set : sets) {
+			result.addAll(set);
+		}
+		
+		return Collections.unmodifiableSet(result);
+	}
+	
+	/**
+	 * 
 	 * @param <T> The type of the elements
 	 * @param list
 	 * <br>Maybe null
