@@ -68,13 +68,7 @@ decaf_f:
 decaf_main:
 .globl _main
 _main:
-	enterq $(8 * 2), $0
-	movq $0, -8(%rbp)
-	movq $0, -16(%rbp)
-	pushq $1
-	popq -8(%rbp)
-	pushq $0
-	popq -16(%rbp)
+	enterq $(8 * 0), $0
 	callq decaf_t
 	addq $(8 * 0), %rsp
 	pushq %rax

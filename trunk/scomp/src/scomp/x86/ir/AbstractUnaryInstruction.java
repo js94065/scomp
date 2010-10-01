@@ -36,7 +36,7 @@ public abstract class AbstractUnaryInstruction extends AbstractInstruction {
 	
 	@Override
 	public final String toString() {
-		return this.getClass().getSimpleName().toLowerCase() + this.getSizeSuffix() + " " + this.getOperand();
+		return this.getClass().getSimpleName().toLowerCase() + this.getSuffix() + " " + this.getOperand();
 	}
 	
 }
