@@ -1,6 +1,7 @@
 package scomp.x86.translator;
 
 import static scomp.Tools.set;
+import static scomp.ir.BinaryOperationExpression.*;
 import static scomp.x86.ir.AbstractInstruction.SIZE_SUFFIX_32;
 import static scomp.x86.ir.AbstractInstruction.SIZE_SUFFIX_64;
 import static scomp.x86.ir.Register.Name.*;
@@ -14,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import scomp.Tools;
 import scomp.ir.AbstractTypedEntityDeclaration;
 import scomp.ir.AbstractVisitor;
 import scomp.ir.ArrayFieldDeclaration;
@@ -52,7 +52,10 @@ import scomp.x86.ir.Add;
 import scomp.x86.ir.And;
 import scomp.x86.ir.Ascii;
 import scomp.x86.ir.Call;
+import scomp.x86.ir.Cmov;
+import scomp.x86.ir.Cmp;
 import scomp.x86.ir.CompositeIntegerValue;
+import scomp.x86.ir.ConditionSuffix;
 import scomp.x86.ir.Enter;
 import scomp.x86.ir.Globl;
 import scomp.x86.ir.Idiv;
@@ -198,6 +201,7 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 		if ("main".equals(method.getIdentifier())) {
 			this.x86MOV(0, RAX);
 		}
+		
 		this.x86LEAVE();
 		this.x86RET();
 	}
@@ -252,6 +256,7 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 		} else {
 			this.x86POP(RAX);
 		}
+		
 		this.x86LEAVE();
 		this.x86RET();
 	}
@@ -321,7 +326,7 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	public final void visit(final BinaryOperationExpression operation) {
 		final String operator = operation.getOperator();
 		
-		if (BinaryOperationExpression.OPERATORS_WITH_INT_OPERANDS.contains(operator)) {
+		if (ALL_OPERATORS_WITH_INT_OPERANDS.contains(operator)) {
 			this.visitChildren(operation);
 			
 			this.x86POP(RCX);
@@ -347,6 +352,11 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 				this.x86SAR32(CL, EAX);
 			} else if (">>>".equals(operator)) {
 				this.x86ROR32(CL, EAX);
+			} else if (ALL_INT_COMPARISON_OPERATORS.contains(operator)) {
+				this.x86CMP32(ECX, EAX);
+				this.x86MOV(0, RAX);
+				this.x86MOV(1, RCX);
+				this.x86CMOVX(operator, RCX, RAX);
 			}
 			
 			this.x86PUSH("%".equals(operator) ? RDX : RAX);
@@ -523,6 +533,66 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 		this.getProcedureSection().add(new Add(SIZE_SUFFIX_32,
 				new Register(AbstractInstruction.getResizedName(sourceRegisterName, SIZE_SUFFIX_32)),
 				new Register(AbstractInstruction.getResizedName(destinationRegisterName, SIZE_SUFFIX_32))));
+	}
+	
+	/**
+	 * 
+	 * @param sourceRegisterName
+	 * <br>Not null
+	 * @param destinationRegisterName
+	 * <br>Not null
+	 */
+	protected final void x86CMP32(final Name sourceRegisterName, final Name destinationRegisterName) {
+		this.getProcedureSection().add(new Cmp(SIZE_SUFFIX_32,
+				new Register(AbstractInstruction.getResizedName(sourceRegisterName, SIZE_SUFFIX_32)),
+				new Register(AbstractInstruction.getResizedName(destinationRegisterName, SIZE_SUFFIX_32))));
+	}
+	
+	/**
+	 * 
+	 * @param operator
+	 * <br>Not null
+	 * <br>Range: { "&lt;", "&lt;=", "&gt;" "&gt;=", "==", "!=" }
+	 * @param sourceRegisterName
+	 * <br>Not null
+	 * @param destinationRegisterName
+	 * <br>Not null
+	 */
+	protected final void x86CMOVX(final String operator, final Name sourceRegisterName, final Name destinationRegisterName) {
+		this.getProcedureSection().add(new Cmov(getConditionSuffix(operator), this.getDefaultSizeSuffix(),
+				new Register(this.getResizedName(sourceRegisterName)),
+				new Register(this.getResizedName(destinationRegisterName))));
+	}
+	
+	/**
+	 * 
+	 * @param operator
+	 * <br>Not null
+	 * <br>Range: { "&lt;", "&lt;=", "&gt;" "&gt;=", "==", "!=" }
+	 * @return
+	 * <br>Not null
+	 */
+	private static final ConditionSuffix getConditionSuffix(final String operator) {
+		if ("<".equals(operator)) {
+			return ConditionSuffix.L;
+		}
+		if ("<=".equals(operator)) {
+			return ConditionSuffix.LE;
+		}
+		if (">".equals(operator)) {
+			return ConditionSuffix.G;
+		}
+		if (">=".equals(operator)) {
+			return ConditionSuffix.GE;
+		}
+		if ("==".equals(operator)) {
+			return ConditionSuffix.E;
+		}
+		if ("!=".equals(operator)) {
+			return ConditionSuffix.NE;
+		}
+		
+		throw new IllegalArgumentException("Unsupported operator: " + operator);
 	}
 	
 	/**

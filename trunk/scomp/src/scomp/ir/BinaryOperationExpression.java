@@ -1,6 +1,7 @@
 package scomp.ir;
 
 import static scomp.Tools.set;
+import static scomp.Tools.union;
 
 import java.util.Set;
 
@@ -107,18 +108,58 @@ public final class BinaryOperationExpression extends AbstractExpression {
 	}
 	
 	/**
-	 * {"<", ">", "<=", ">=", "==", "!=", "&&", "||"}.
+	 * { "+", "-", "*", "/", "%" }.
 	 */
-	public static final Set<String> OPERATORS_WITH_BOOLEAN_RESULT = set("<", ">", "<=", ">=", "==", "!=", "&&", "||");
+	public static final Set<String> ARITHMETIC_OPERATORS = set("+", "-", "*", "/", "%");
 	
 	/**
-	 * {"+", "-", "*", "/", "%", "<<", ">>", ">>>", "<", ">", "<=", ">="}.
+	 * { "<<", ">>", ">>>" }.
 	 */
-	public static final Set<String> OPERATORS_WITH_INT_OPERANDS = set("+", "-", "*", "/", "%", "<<", ">>", ">>>", "<", ">", "<=", ">=");
+	public static final Set<String> BITWISE_OPERATORS = set("<<", ">>", ">>>");
 	
 	/**
-	 * {"==", "!="}.
+	 * { "&lt;", "&lt;=", "&gt;", "&gt;=" }.
+	 */
+	public static final Set<String> INT_COMPARISON_OPERATORS = set("<", "<=", ">", ">=");
+	
+	/**
+	 * { "&&", "||" }.
+	 */
+	public static final Set<String> BOOLEAN_OPERATORS = set("&&", "||");
+	
+	/**
+	 * { "==", "!=" }.
 	 */
 	public static final Set<String> EQUALITY_OPERATORS = set("==", "!=");
+	
+	/**
+	 * { "&lt;", "&lt;=", "&gt;", "&gt;=", "==", "!=" }.
+	 */
+	@SuppressWarnings("unchecked")
+	public static final Set<String> ALL_INT_COMPARISON_OPERATORS = union(INT_COMPARISON_OPERATORS, EQUALITY_OPERATORS);
+	
+	/**
+	 * { "<", ">", "<=", ">=", "==", "!=", "&&", "||" }.
+	 */
+	@SuppressWarnings("unchecked")
+	public static final Set<String> OPERATORS_WITH_BOOLEAN_RESULT = union(ALL_INT_COMPARISON_OPERATORS, EQUALITY_OPERATORS, BOOLEAN_OPERATORS);
+	
+	/**
+	 * { "+", "-", "*", "/", "%", "<<", ">>", ">>>", "<", ">", "<=", ">=" }.
+	 */
+	@SuppressWarnings("unchecked")
+	public static final Set<String> OPERATORS_WITH_INT_OPERANDS = union(ARITHMETIC_OPERATORS, BITWISE_OPERATORS, INT_COMPARISON_OPERATORS);
+	
+	/**
+	 * { "+", "-", "*", "/", "%", "<<", ">>", ">>>", "<", ">", "<=", ">=", "==", "!=" }.
+	 */
+	@SuppressWarnings("unchecked")
+	public static final Set<String> ALL_OPERATORS_WITH_INT_OPERANDS = union(OPERATORS_WITH_INT_OPERANDS, EQUALITY_OPERATORS);
+	
+	/**
+	 * { "&&", "||", "==", "!=" }.
+	 */
+	@SuppressWarnings("unchecked")
+	public static final Set<String> ALL_BOOLEAN_OPERATORS = union(BOOLEAN_OPERATORS, EQUALITY_OPERATORS);
 	
 }

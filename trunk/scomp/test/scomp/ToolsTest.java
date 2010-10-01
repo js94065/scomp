@@ -45,6 +45,15 @@ public class ToolsTest {
 	}
 	
 	@Test
+	public final void testUnion() {
+		@SuppressWarnings("unchecked")
+		final Set<Integer> set = Tools.union(Tools.set(42), Tools.set(33));
+		final List<Integer> list = Arrays.asList(42, 33);
+		
+		assertTrue(set.containsAll(list));
+	}
+	
+	@Test
 	public final void testEmptyIfNull() {
 		final List<?> empty = Collections.emptyList();
 		
