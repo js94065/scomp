@@ -73,7 +73,7 @@ public final class MacOSXTranslator extends AbstractTranslator {
 		final String callName = "callout_" + methodCallout.getMethodName() + "_" + argumentCount;
 		
 		if (!this.callouts.containsKey(callName)) {
-			this.pushProcedureSection();
+			this.pushNewProcedureSection();
 
 			this.x86LABEL(callName);
 
