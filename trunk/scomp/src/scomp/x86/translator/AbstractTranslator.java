@@ -69,6 +69,7 @@ import scomp.x86.ir.Register;
 import scomp.x86.ir.RegisterRelativeAddress;
 import scomp.x86.ir.Ret;
 import scomp.x86.ir.Register.Name;
+import scomp.x86.ir.Sub;
 
 /**
  * This is the base class for the OS-specific translators.
@@ -369,8 +370,12 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	@Override
 	public final void visit(final MinusExpression minusExpression) {
-		// TODO Auto-generated method stub
+		this.visitChildren(minusExpression);
 		
+		this.x86POP(RCX);
+		this.x86MOV(0, RAX);
+		this.x86SUB32(RCX, RAX);
+		this.x86PUSH(RAX);
 	}
 	
 	@Override
@@ -652,6 +657,32 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	protected final void x86RET() {
 		this.getProcedureSection().add(new Ret(this.getDefaultSizeSuffix()));
+	}
+	
+	/**
+	 * 
+	 * @param sourceRegisterName
+	 * <br>Not null
+	 * @param destinationRegisterName
+	 * <br>Not null
+	 */
+	protected final void x86SUB(final Name sourceRegisterName, final Name destinationRegisterName) {
+		this.getProcedureSection().add(new Sub(this.getDefaultSizeSuffix(),
+				new Register(this.getResizedName(sourceRegisterName)),
+				new Register(this.getResizedName(destinationRegisterName))));
+	}
+	
+	/**
+	 * 
+	 * @param sourceRegisterName
+	 * <br>Not null
+	 * @param destinationRegisterName
+	 * <br>Not null
+	 */
+	protected final void x86SUB32(final Name sourceRegisterName, final Name destinationRegisterName) {
+		this.getProcedureSection().add(new Sub(SIZE_SUFFIX_32,
+				new Register(AbstractInstruction.getResizedName(sourceRegisterName, SIZE_SUFFIX_32)),
+				new Register(AbstractInstruction.getResizedName(destinationRegisterName, SIZE_SUFFIX_32))));
 	}
 	
 	/**
