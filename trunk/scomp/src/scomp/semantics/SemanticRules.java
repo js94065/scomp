@@ -242,9 +242,10 @@ public final class SemanticRules extends AbstractVisitor {
 	@Override
 	public final void visit(final MethodCall methodCall) {
 		this.checkRule2(methodCall);
-		this.checkRule5(methodCall);
 		
 		this.visitChildren(methodCall);
+		
+		this.checkRule5(methodCall);
 	}
 	
 	@Override
