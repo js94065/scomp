@@ -320,27 +320,42 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	public final void visit(final IfStatement ifStatement) {
 		ifStatement.getCondition().accept(this);
 		
-		final String elseLabel = this.newLabelName("else_");
-		final String endLabel = this.newLabelName("end_if_");
+		final String elseLabelName = this.newLabelName("else_");
+		final String endLabelName = this.newLabelName("end_if_");
 		
 		this.x86POP(RAX);
 		this.x86CMP(0, RAX);
-		this.x86J("==", elseLabel);
+		this.x86J("==", elseLabelName);
 		
 		ifStatement.getThenBlock().accept(this);
 		
-		this.x86Jmp(endLabel);
-		this.x86LABEL(elseLabel);
+		this.x86Jmp(endLabelName);
+		this.x86LABEL(elseLabelName);
 		
-		ifStatement.getElseBlock().accept(this);
+		if (ifStatement.getElseBlock() != null) {
+			ifStatement.getElseBlock().accept(this);
+		}
 		
-		this.x86LABEL(endLabel);
+		this.x86LABEL(endLabelName);
 	}
 	
 	@Override
 	public final void visit(final WhileStatement whileStatement) {
-		// TODO Auto-generated method stub
+		final String whileLabelName = this.newLabelName("while_");
+		final String endLabelName = this.newLabelName("end_while_");
 		
+		this.x86LABEL(whileLabelName);
+		
+		whileStatement.getCondition().accept(this);
+		
+		this.x86POP(RAX);
+		this.x86CMP(0, RAX);
+		this.x86J("==", endLabelName);
+		
+		whileStatement.getBlock().accept(this);
+		
+		this.x86Jmp(whileLabelName);
+		this.x86LABEL(endLabelName);
 	}
 	
 	@Override
@@ -387,16 +402,16 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 		} else if (BOOLEAN_OPERATORS.contains(operator)) {
 			operation.getLeft().accept(this);
 			
-			final String endLabel = this.newLabelName("end_" + ("&&".equals(operator) ? "and" : "or") + "_");
+			final String endLabelName = this.newLabelName("end_" + ("&&".equals(operator) ? "and" : "or") + "_");
 			
 			this.x86POP(RAX);
 			this.x86CMP(0, RAX);
-			this.x86J(operator, endLabel);
+			this.x86J(operator, endLabelName);
 			
 			operation.getRight().accept(this);
 			
 			this.x86POP(RAX);
-			this.x86LABEL(endLabel);
+			this.x86LABEL(endLabelName);
 			this.x86PUSH(RAX);
 		}
 		// TODO

@@ -12,7 +12,6 @@ callout_printf_2:
 	movq 16(%rbp), %rdi
 	movq $0, %rax
 	callq _printf
-	addq $(8 * 0), %rsp
 	leaveq
 	retq
 
