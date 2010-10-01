@@ -28,6 +28,18 @@ _main:
 	pushq $7
 	popq -16(%rbp)
 	pushq -8(%rbp)
+	pushq -8(%rbp)
+	popq %rcx
+	popq %rax
+	imull %ecx, %eax
+	pushq %rax
+	pushq -8(%rbp)
+	pushq -8(%rbp)
+	leaq STRING_0(%rip), %rax
+	pushq %rax
+	callq callout_printf_4
+	addq $(8 * 4), %rsp
+	pushq -8(%rbp)
 	pushq -16(%rbp)
 	popq %rcx
 	popq %rax
