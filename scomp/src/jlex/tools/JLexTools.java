@@ -30,7 +30,20 @@ public final class JLexTools {
 	 * <br>Not null
 	 */
 	public static final String getSourceDirectory(final String sourcesRoot) {
-		return (sourcesRoot + "." + getCallerClass().getPackage().getName() + ".").replace(".", File.separator);
+		return getFilePath(sourcesRoot + "." + getCallerClass().getPackage().getName() + ".");
+	}
+	
+	/**
+	 * Returns "package/name" ("package\\name" on Windows)
+	 * if the {@code packagePath} is of the form "package.name".
+	 * 
+	 * @param packagePath
+	 * <br>Not null
+	 * @return
+	 * <br>Not null
+	 */
+	public static final String getFilePath(final String packagePath) {
+		return packagePath.replace(".", File.separator);
 	}
 	
 	/**

@@ -1,13 +1,13 @@
-// call.decaf
+// unaryminus.decaf
 
 class Program {
 
-	void print() {
-		callout("printf", "42\n");
-	}
+ void main() {
+	 int x;
 
-	void main() {
-		print();
-	}
+	 x = 2;
+
+	 callout("printf", "-%d = %d\n", x, -x);
+ }
 
 }

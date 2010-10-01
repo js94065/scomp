@@ -1,6 +1,9 @@
 package scomp.x86.translator;
 
+import static jlex.tools.JLexTools.getFilePath;
+
 import static org.junit.Assert.assertEquals;
+
 import static scomp.Tools.setHandler;
 
 import java.io.File;
@@ -281,7 +284,7 @@ public abstract class AbstractTranslatorTestBase {
 	 * <br>New
 	 */
 	private static final String getDecafTestFilePath(final String testName) {
-		return "test/scomp/data/decaf/" + testName + ".decaf";
+		return getFilePath("test.scomp.data.decaf.") + testName + ".decaf";
 	}
 	
 	/**
@@ -293,6 +296,7 @@ public abstract class AbstractTranslatorTestBase {
 	 * <br>New
 	 */
 	private static final String getX86TestFilePath(final String osSpecificTestName) {
-		return "test/scomp/data/x86/" + osSpecificTestName + ".s";
+		return getFilePath("test.scomp.data.x86.") + osSpecificTestName + ".s";
 	}
+	
 }
