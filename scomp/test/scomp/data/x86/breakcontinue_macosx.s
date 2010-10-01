@@ -67,6 +67,7 @@ end_while_1:
 	cmpq $0, %rax
 	je else_1
 	jmp end_while_0
+	jmp end_if_1
 else_1:
 end_if_1:
 	jmp while_0

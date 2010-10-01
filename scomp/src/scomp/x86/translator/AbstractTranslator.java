@@ -123,6 +123,11 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	private MethodDeclaration currentMethod;
 	
+	/**
+	 * This stack is used to keep track of the while label name when processing nested blocks and while loops.
+	 */
+	private Deque<String> whileStack;
+	
 	protected AbstractTranslator() {
 		this.labelCounts = new HashMap<String, Integer>();
 		this.stringSection = new ArrayList<AbstractProgramElement>();
@@ -130,6 +135,7 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 		this.procedureSectionStack = new LinkedList<List<AbstractProgramElement>>();
 		this.globalSection = new ArrayList<AbstractProgramElement>();
 		this.localVariables = new IdentityHashMap<VariableDeclaration, Integer>();
+		this.whileStack = new LinkedList<String>();
 		
 		this.procedureSectionStack.push(new ArrayList<AbstractProgramElement>());
 	}
@@ -214,8 +220,7 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	@Override
 	public final void visit(final ParameterDeclaration parameter) {
-		// TODO Auto-generated method stub
-		
+		// Do nothing
 	}
 	
 	@Override
@@ -344,6 +349,8 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 		final String whileLabelName = this.newLabelName("while_");
 		final String endLabelName = this.newLabelName("end_while_");
 		
+		this.whileStack.push(whileLabelName);
+		
 		this.x86LABEL(whileLabelName);
 		
 		whileStatement.getCondition().accept(this);
@@ -356,6 +363,8 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 		
 		this.x86Jmp(whileLabelName);
 		this.x86LABEL(endLabelName);
+		
+		this.whileStack.pop();
 	}
 	
 	@Override
@@ -414,13 +423,12 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 			this.x86LABEL(endLabelName);
 			this.x86PUSH(RAX);
 		}
-		// TODO
 	}
 	
 	@Override
 	public final void visit(final NegationExpression negation) {
 		this.visitChildren(negation);
-		// TODO Auto-generated method stub
+		
 		this.x86POP(RCX);
 		this.x86MOV(1, RAX);
 		this.x86SUB(RCX, RAX);
@@ -434,8 +442,7 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	@Override
 	public final void visit(final BreakStatement breakStatement) {
-		// TODO Auto-generated method stub
-		
+		this.x86Jmp("end_" + this.whileStack.peek());
 	}
 	
 	@Override
@@ -445,8 +452,7 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 	
 	@Override
 	public final void visit(final ContinueStatement continueStatement) {
-		// TODO Auto-generated method stub
-		
+		this.x86Jmp(this.whileStack.peek());
 	}
 	
 	@Override
