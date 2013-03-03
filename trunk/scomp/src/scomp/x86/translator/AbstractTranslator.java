@@ -90,7 +90,7 @@ import scomp.x86.ir.Sub;
  * <br>The role of the visit() methods is to fill those sections, and then getProgram() combines them into the final list.
  * <br>This separation is necessary because the elements belonging to each section do not appear chronologically while visiting a Decaf IR tree.
  * 
- * @author codistmonk (creation 2010-09-26)
+ * @author codistmonk, js94065 (creation 2010-09-26)
  *
  */
 public abstract class AbstractTranslator extends AbstractVisitor {
@@ -277,7 +277,7 @@ public abstract class AbstractTranslator extends AbstractVisitor {
 		this.visitChildren(location);
 		
 		this.x86POP(RCX);
-		this.x86IMUL(8, RCX);
+		this.x86IMUL(this.getDefaultVariableByteCount(),RCX);
 		this.x86MOV("decaf_" + location.getIdentifier(), RAX);
 		this.x86ADD(RCX, RAX);
 	}
